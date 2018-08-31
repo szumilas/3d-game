@@ -7,7 +7,7 @@
 class Camera
 {
 public:
-	Camera() { x = 0; y = 10; z = -20;	rx = 0;	ry = 0; rz = 0; }
+	Camera() { x = 15; y = -40; z = 10;	rx = 0;	ry = 0; rz = 0; }
 
 	void moveX(float dx) { x += dx; }
 	void moveY(float dy) { y += dy; }
@@ -28,6 +28,77 @@ public:
 
 };
 
+class Car
+{
+public:
+
+	Car() { X = 15; Y = -15; Z = 0; a = 0; v = 0; };
+
+	void print()
+	{
+		glColor3f(0.8, 0.1, 0.1);
+
+		glBegin(GL_POLYGON);
+
+		glVertex3f(X, Y + 4, Z);
+		glVertex3f(X - 1, Y, Z);
+		glVertex3f(X + 1, Y, Z);
+
+		glEnd();
+
+		glColor3f(0.6, 0.1, 0.1);
+
+		glBegin(GL_POLYGON);
+
+		glVertex3f(X - 1, Y, Z);
+		glVertex3f(X + 1, Y, Z);
+		glVertex3f(X + 1, Y, Z + 0.5);
+		glVertex3f(X - 1, Y, Z + 0.5);
+
+		glEnd();
+
+		glColor3f(0.8, 0.1, 0.1);
+
+		glBegin(GL_POLYGON);
+
+		glVertex3f(X, Y + 4, Z + 0.5);
+		glVertex3f(X - 1, Y, Z + 0.5);
+		glVertex3f(X + 1, Y, Z + 0.5);
+
+		glEnd();
+
+	}
+	void move()
+	{
+		Y += v * 0.1;
+	}
+
+	void accelerate()
+	{
+		v += 0.01;
+		if (v > v_max)
+			v = v_max;
+	}
+
+	void slow()
+	{
+		v -= 0.01;
+		if (v < -v_max)
+			v = -v_max;
+	}
+
+	float X;
+	float Y;
+	float Z;
+
+	float a;
+	float v;
+
+	float v_max = 0.25;
+
+
+};
+
 void display();
 void reshape(int, int);
 void keyboard(unsigned char key, int x, int y);
@@ -39,6 +110,8 @@ void Update();
 void Cube(float a, float b, float c, float d, float h);
 
 Camera camera;
+Car car;
+
 GLboolean upPressed = false;
 GLboolean downPressed = false;
 GLboolean leftPressed = false;
@@ -62,7 +135,7 @@ int main(int argc, char**agrv)
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 
-	//glutKeyboardFunc(keyboard);
+	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(SpecialKeys);
 	glutSpecialUpFunc(SpecialKeysUp);
 	glutIdleFunc(Update);
@@ -83,22 +156,22 @@ void display()
 	//glRotated(camera.rx, camera.x, 1.0, camera.z);
 
 	gluLookAt(camera.x, camera.y, camera.z, //eye
-		camera.x + 1 * sin(camera.rx), camera.y, camera.z + 1 * cos(camera.rx), //center
-		0, 1, 0); //up
+		camera.x, camera.y + 1, camera.z, //center
+		0, 0, 1); //up
 
 	for (int X = -30; X < 30; X++)
 	{
-		for (int Z = -30; Z < 30; Z++)
+		for (int Y = -30; Y < 30; Y++)
 		{
-			if ((X + Z) % 2 == 0)
+			if ((X + Y) % 2 == 0)
 			{
 
 				glBegin(GL_POLYGON);
 				glColor3f(1, 1, 1);
-				glVertex3f(X + 0.0, 0.0, Z + 0.0);
-				glVertex3f(X + 1.0, 0.0, Z + 0.0);
-				glVertex3f(X + 1.0, 0.0, Z + 1.0);
-				glVertex3f(X + 0.0, 0.0, Z + 1.0);
+				glVertex3f(X + 0.0, Y + 0.0, 0.0);
+				glVertex3f(X + 1.0, Y + 0.0, 0.0);
+				glVertex3f(X + 1.0, Y + 1.0, 0.0);
+				glVertex3f(X + 0.0, Y + 1.0, 0.0);
 
 				glEnd();
 			}
@@ -113,7 +186,7 @@ void display()
 	Cube(0, 0, 1, 1, 8);
 	Cube(-5, 5, -6, 6, 4);
 
-
+	car.print();
 
 	glBegin(GL_LINES);
 
@@ -150,6 +223,15 @@ void reshape(int width, int height)
 
 void keyboard(unsigned char key, int x, int y)
 {
+	switch (key)
+	{
+	case 27: // Escape key
+		
+		exit(0);
+		break;
+	}
+
+
 	std::vector<bool> keys(100);
 	for (int q = 0; q < keys.size(); q++)
 		keys[q] = GetAsyncKeyState(q);
@@ -215,11 +297,12 @@ void SpecialKeysUp(int key, int x, int y)
 		leftPressed = false;
 	if (GLUT_KEY_RIGHT == key)
 		rightPressed = false;
+
 }
 
 void Update()
 {
-
+	/*
 	if (upPressed)
 		camera.moveZ(0.01);
 	if (downPressed)
@@ -228,8 +311,13 @@ void Update()
 		camera.moveX(0.01);
 	if (rightPressed)
 		camera.moveX(-0.01);
+	*/
+	if (upPressed)
+		car.accelerate();
+	if (downPressed)
+		car.slow();
 
-
+	car.move();
 
 	reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
@@ -282,3 +370,4 @@ void Cube(float a, float b, float c, float d, float h)
 
 
 }
+
