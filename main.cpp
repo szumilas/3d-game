@@ -7,7 +7,7 @@
 class Camera
 {
 public:
-	Camera() { x = 15; y = -40; z = 10;	rx = 0;	ry = 0; rz = 0; }
+	Camera() { x = 15; y = -30; z = 10;	rx = 0;	ry = 0; rz = 0; }
 
 	void moveX(float dx) { x += dx; }
 	void moveY(float dy) { y += dy; }
@@ -32,69 +32,94 @@ class Car
 {
 public:
 
-	Car() { X = 15; Y = -15; Z = 0; a = 0; v = 0; };
+	Car() { X = 15; Y = -15; Z = 0.01; rz = 0; a = 0; v = 0; };
 
 	void print()
 	{
-		glColor3f(0.8, 0.1, 0.1);
 
-		glBegin(GL_POLYGON);
+		glBegin(GL_TRIANGLES);
 
-		glVertex3f(X, Y + 4, Z);
-		glVertex3f(X - 1, Y, Z);
-		glVertex3f(X + 1, Y, Z);
+		glColor3f(0.5, 0.1, 0.1);
+		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z + 0);
+		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
+		glVertex3f(X, Y, Z + 2);
 
-		glEnd();
+		glColor3f(0.5, 0.5, 0.1);
+		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z + 0);
+		glVertex3f(X, Y, Z + 2);
+		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
 
-		glColor3f(0.6, 0.1, 0.1);
-
-		glBegin(GL_POLYGON);
-
-		glVertex3f(X - 1, Y, Z);
-		glVertex3f(X + 1, Y, Z);
-		glVertex3f(X + 1, Y, Z + 0.5);
-		glVertex3f(X - 1, Y, Z + 0.5);
-
-		glEnd();
 
 		glColor3f(0.8, 0.1, 0.1);
+		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z);
+		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
+		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
 
-		glBegin(GL_POLYGON);
 
-		glVertex3f(X, Y + 4, Z + 0.5);
-		glVertex3f(X - 1, Y, Z + 0.5);
-		glVertex3f(X + 1, Y, Z + 0.5);
+		glColor4f(0.3, 0.1, 0.3, 0.5);
+		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
+		glVertex3f(X, Y, Z + 2);
+		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
 
 		glEnd();
+		
+		glColor3f(0, 0, 0);
+		glBegin(GL_LINES);
+
+		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z + 0);
+		glVertex3f(X, Y, Z + 2);
+
+		glVertex3f(X, Y, Z + 2);
+		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
+
+		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
+		glVertex3f(X, Y, Z + 2);
+
+		glEnd();
+		
 
 	}
 	void move()
 	{
-		Y += v * 0.1;
+		Y -= v * sin(rz) * 0.1;
+		X += v * cos(rz) * 0.1;
 	}
 
 	void accelerate()
 	{
-		v += 0.01;
+		v += 0.001;
 		if (v > v_max)
 			v = v_max;
 	}
 
 	void slow()
 	{
-		v -= 0.01;
+		v -= 0.001;
 		if (v < -v_max)
 			v = -v_max;
+	}
+
+	void turnRight()
+	{
+		rz += 0.005;
+	}
+
+	void turnLeft()
+	{
+		rz -= 0.005;
 	}
 
 	float X;
 	float Y;
 	float Z;
+	float rz;
 
 	float a;
 	float v;
 
-	float v_max = 0.25;
+	float v_max = 0.15;
+	float L = 5;
+	float B = 1;
 
 
 };
@@ -120,17 +145,18 @@ GLboolean rightPressed = false;
 void init()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 int main(int argc, char**agrv)
 {
 	glutInit(&argc, agrv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
 
 	glutInitWindowPosition(10, 10);
 	glutInitWindowSize(1500, 750);
 
-	glutCreateWindow("3d game");
+	glutCreateWindow("3d game");	
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -142,6 +168,7 @@ int main(int argc, char**agrv)
 
 	init();
 
+
 	glutMainLoop();
 
 	return 0;
@@ -149,14 +176,17 @@ int main(int argc, char**agrv)
 
 void display()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	glLoadIdentity();
+
+	
 
 	//glTranslatef(camera.x, camera.y, camera.z);
 	//glRotated(camera.rx, camera.x, 1.0, camera.z);
 
 	gluLookAt(camera.x, camera.y, camera.z, //eye
-		camera.x, camera.y + 1, camera.z, //center
+		camera.x, camera.y + 1, camera.z - 0.5, //center
 		0, 0, 1); //up
 
 	for (int X = -30; X < 30; X++)
@@ -214,7 +244,7 @@ void reshape(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	gluPerspective(60, 1.0, 0, 150);
+	gluPerspective(60, 1.0, 0.5, 150);
 	glMatrixMode(GL_MODELVIEW);
 
 	display();
@@ -316,6 +346,10 @@ void Update()
 		car.accelerate();
 	if (downPressed)
 		car.slow();
+	if (leftPressed)
+		car.turnLeft();
+	if (rightPressed)
+		car.turnRight();
 
 	car.move();
 
@@ -337,7 +371,7 @@ void Cube(float a, float b, float c, float d, float h)
 
 	glColor3f(0.5, 0, 0);
 
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 
 	glVertex3f(a, 0.0, b);
 	glVertex3f(a, 0.0, d);
@@ -348,7 +382,7 @@ void Cube(float a, float b, float c, float d, float h)
 
 	glColor3f(0.5, 0, 0.5);
 
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 
 	glVertex3f(c, 0.0, b);
 	glVertex3f(c, 0.0, d);
@@ -359,7 +393,7 @@ void Cube(float a, float b, float c, float d, float h)
 
 	glColor3f(0.5, 0.5, 0);
 
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 
 	glVertex3f(a, 0.0, b);
 	glVertex3f(c, 0.0, b);
