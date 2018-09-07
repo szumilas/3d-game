@@ -337,7 +337,7 @@ void display()
 	//glRotated(camera.rx, camera.x, 1.0, camera.z);
 
 	gluLookAt(camera.x, camera.y, camera.z, //eye
-		camera.x, camera.y + 1, camera.z - 1, //center
+		camera.x, camera.y + 1, camera.z - 0.5, //center
 		0, 0, 1); //up
 
 	for (int X = -30; X < 30; X++)
@@ -362,10 +362,10 @@ void display()
 	}
 
 	Cube(5, 5, 6, 6, 3);
-	Cube(15, 8, 18, 12, 8);
+	Cube(15, 8, 18, 12, 4);
 	Cube(-25, -15, -16, -6, 4);
-	Cube(0, 0, 1, 1, 8);
-	Cube(-5, 5, -6, 6, 4);
+	Cube(0, 0, 1, 1, 6);
+	Cube(20, -5, 25, 5, 4);
 
 	car.print();
 
@@ -511,12 +511,12 @@ void Cube(float a, float b, float c, float d, float h)
 {
 	glColor3f(0, 0.5, 0);
 
-	glBegin(GL_POLYGON);
+	glBegin(GL_QUADS);
 
-	glVertex3f(c, 0.0, d);
-	glVertex3f(a, 0.0, d);
-	glVertex3f(a, h, d);
-	glVertex3f(c, h, d);
+	glVertex3f(c, d, 0);
+	glVertex3f(a, d, 0);
+	glVertex3f(a, d, h);
+	glVertex3f(c, d, h);
 
 	glEnd();
 
@@ -524,10 +524,10 @@ void Cube(float a, float b, float c, float d, float h)
 
 	glBegin(GL_QUADS);
 
-	glVertex3f(a, 0.0, b);
-	glVertex3f(a, 0.0, d);
-	glVertex3f(a, h, d);
-	glVertex3f(a, h, b);
+	glVertex3f(a, b, 0);
+	glVertex3f(a, d, 0);
+	glVertex3f(a, d, h);
+	glVertex3f(a, b, h);
 
 	glEnd();
 
@@ -535,10 +535,10 @@ void Cube(float a, float b, float c, float d, float h)
 
 	glBegin(GL_QUADS);
 
-	glVertex3f(c, 0.0, b);
-	glVertex3f(c, 0.0, d);
-	glVertex3f(c, h, d);
-	glVertex3f(c, h, b);
+	glVertex3f(c, b, 0);
+	glVertex3f(c, d, 0);
+	glVertex3f(c, d, h);
+	glVertex3f(c, b, h);
 
 	glEnd();
 
@@ -546,10 +546,21 @@ void Cube(float a, float b, float c, float d, float h)
 
 	glBegin(GL_QUADS);
 
-	glVertex3f(a, 0.0, b);
-	glVertex3f(c, 0.0, b);
-	glVertex3f(c, h, b);
-	glVertex3f(a, h, b);
+	glVertex3f(a, b, 0);
+	glVertex3f(c, b, 0);
+	glVertex3f(c, b, h);
+	glVertex3f(a, b, h);
+
+	glEnd();
+
+	glColor3f(0, 0.6, 0.6);
+
+	glBegin(GL_QUADS);
+
+	glVertex3f(a, b, h);
+	glVertex3f(c, b, h);
+	glVertex3f(c, d, h);
+	glVertex3f(a, d, h);
 
 	glEnd();
 
