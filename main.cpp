@@ -4,12 +4,10 @@
 
 #include <vector>
 
-struct Point
-{
-	float X;
-	float Y;
-	float Z;
-};
+#include "GlobalStructures.h"
+#include "Object3D.h"
+
+
 
 class Camera
 {
@@ -34,6 +32,8 @@ public:
 	float rz;
 
 };
+
+Object3D obj;
 
 class Car
 {
@@ -112,7 +112,7 @@ public:
 
 		for (auto& point : points_left)
 		{
-			glVertex3f(X + point.X * cos_rz - point.Y * sin_rz, Y + point.X * sin_rz + point.Y * cos_rz, Z + point.Z);
+			glVertex3f(X + point.x * cos_rz - point.y * sin_rz, Y + point.x * sin_rz + point.y * cos_rz, Z + point.z);
 		}
 
 		glEnd();
@@ -125,7 +125,7 @@ public:
 
 		for (auto& point : points_right)
 		{
-			glVertex3f(X + point.X * cos_rz - point.Y * sin_rz, Y + point.X * sin_rz + point.Y * cos_rz, Z + point.Z);
+			glVertex3f(X + point.x * cos_rz - point.y * sin_rz, Y + point.x * sin_rz + point.y * cos_rz, Z + point.z);
 		}
 
 		glEnd();
@@ -141,10 +141,10 @@ public:
 			auto point_left_next = points_left[q + 1];
 			auto point_right_next = points_right[q + 1];
 
-			glVertex3f(X + point_left.X * cos_rz - point_left.Y * sin_rz, Y + point_left.X * sin_rz + point_left.Y * cos_rz, Z + point_left.Z);
-			glVertex3f(X + point_left_next.X * cos_rz - point_left_next.Y * sin_rz, Y + point_left_next.X * sin_rz + point_left_next.Y * cos_rz, Z + point_left_next.Z);
-			glVertex3f(X + point_right_next.X * cos_rz - point_right_next.Y * sin_rz, Y + point_right_next.X * sin_rz + point_right_next.Y * cos_rz, Z + point_right_next.Z);
-			glVertex3f(X + point_right.X * cos_rz - point_right.Y * sin_rz, Y + point_right.X * sin_rz + point_right.Y * cos_rz, Z + point_right.Z);
+			glVertex3f(X + point_left.x * cos_rz - point_left.y * sin_rz, Y + point_left.x * sin_rz + point_left.y * cos_rz, Z + point_left.z);
+			glVertex3f(X + point_left_next.x * cos_rz - point_left_next.y * sin_rz, Y + point_left_next.x * sin_rz + point_left_next.y * cos_rz, Z + point_left_next.z);
+			glVertex3f(X + point_right_next.x * cos_rz - point_right_next.y * sin_rz, Y + point_right_next.x * sin_rz + point_right_next.y * cos_rz, Z + point_right_next.z);
+			glVertex3f(X + point_right.x * cos_rz - point_right.y * sin_rz, Y + point_right.x * sin_rz + point_right.y * cos_rz, Z + point_right.z);
 
 
 		}
@@ -301,6 +301,8 @@ void init()
 
 int main(int argc, char**agrv)
 {
+	obj.loadModel("j");
+
 	glutInit(&argc, agrv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
 
@@ -383,6 +385,7 @@ void display()
 
 	glEnd();
 
+	obj.printModel();
 
 
 	glutSwapBuffers();
