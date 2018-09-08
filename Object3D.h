@@ -12,7 +12,7 @@ class Object3D
 {
 public:
 	Object3D();
-	void loadModel(std::string path);
+	void loadModel();
 	void printModel();
 
 private:
@@ -29,9 +29,9 @@ protected:
 		int p2;
 		int p3;
 
-		/*float red;
+		float red;
 		float green;
-		float blue;*/
+		float blue;
 	};
 
 	Point position;

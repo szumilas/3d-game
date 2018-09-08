@@ -35,6 +35,7 @@ public:
 };
 
 Car obj;
+Wheel wheel;
 
 
 void display();
@@ -62,7 +63,8 @@ void init()
 
 int main(int argc, char**agrv)
 {
-	obj.loadModel("j");
+	obj.loadModel();
+	wheel.loadModel();
 
 	glutInit(&argc, agrv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
@@ -131,6 +133,8 @@ void display()
 	Cube(20, -5, 25, 5, 4);
 
 	obj.printModel();
+	obj.printWheels();
+	wheel.printModel();
 
 	glBegin(GL_LINES);
 
