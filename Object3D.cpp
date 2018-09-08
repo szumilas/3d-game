@@ -174,7 +174,7 @@ void Object3D::printModel()
 
 	for (auto& triangle : triangles)
 	{
-		if(q > 62)
+		if(q >= 62)
 			glColor3f(0.7, 0, 0);
 
 		glVertex3f(X + mesh[triangle.p1].x * cos_rz - mesh[triangle.p1].y * sin_rz, Y + mesh[triangle.p1].x * sin_rz + mesh[triangle.p1].y * cos_rz, Z + mesh[triangle.p1].z);

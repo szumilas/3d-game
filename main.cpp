@@ -6,6 +6,7 @@
 
 #include "GlobalStructures.h"
 #include "Object3D.h"
+#include "Car.h"
 
 
 
@@ -33,247 +34,8 @@ public:
 
 };
 
-Object3D obj;
+Car obj;
 
-class Car
-{
-public:
-
-	Car()
-	{
-		X = 15;
-		Y = -15;
-		Z = 0.01;
-		rz = 0;
-		a = 0;
-		v = 0;
-
-		/*points.push_back({ 2.0f, 0.7f, 0.0f });
-		points.push_back({ 2.0f, -0.7f, 0.0f });
-		points.push_back({ -2.0f, -0.7f, 0.0f });
-		points.push_back({ -2.0f, 0.7f, 0.0f });*/
-
-		points_left.push_back({ 2.0615f, 0.8175f, 0.281f });
-		points_left.push_back({ 1.6095f, 0.8175f, 0.241f });
-		points_left.push_back({ 1.5375f, 0.8175f, 0.509f });
-		points_left.push_back({ 1.2735f, 0.8175f, 0.625f });
-		points_left.push_back({ 1.0375f, 0.8175f, 0.513f });
-		points_left.push_back({ 0.9615f, 0.8175f, 0.257f });
-		points_left.push_back({ -0.2585f, 0.8175f, 0.277f });
-		points_left.push_back({ -0.8785f, 0.8175f, 0.229f });
-		points_left.push_back({ -0.9425f, 0.8175f, 0.477f });
-		points_left.push_back({ -1.2105f, 0.8175f, 0.617f });
-		points_left.push_back({ -1.4385f, 0.8175f, 0.525f });
-		points_left.push_back({ -1.5385f, 0.8175f, 0.313f });
-		points_left.push_back({ -2.0305f, 0.8175f, 0.333f });
-		points_left.push_back({ -2.1065f, 0.8175f, 0.545f });
-		points_left.push_back({ -2.0265f, 0.8175f, 0.629f });
-		points_left.push_back({ -2.0025f, 0.8175f, 0.941f });
-		points_left.push_back({ -1.2545f, 0.8175f, 1.369f });
-		points_left.push_back({ 0.2975f, 0.8175f, 1.369f });
-		points_left.push_back({ 1.0455f, 0.8175f, 0.937f });
-		points_left.push_back({ 1.9895f, 0.8175f, 0.745f });
-		points_left.push_back({ 2.1065f, 0.8175f, 0.505f });
-
-		points_right.push_back({ 2.0615f,  -0.8175f, 0.281f });
-		points_right.push_back({ 1.6095f,  -0.8175f, 0.241f });
-		points_right.push_back({ 1.5375f,  -0.8175f, 0.509f });
-		points_right.push_back({ 1.2735f,  -0.8175f, 0.625f });
-		points_right.push_back({ 1.0375f,  -0.8175f, 0.513f });
-		points_right.push_back({ 0.9615f,  -0.8175f, 0.257f });
-		points_right.push_back({ -0.2585f, -0.8175f, 0.277f });
-		points_right.push_back({ -0.8785f, -0.8175f, 0.229f });
-		points_right.push_back({ -0.9425f, -0.8175f, 0.477f });
-		points_right.push_back({ -1.2105f, -0.8175f, 0.617f });
-		points_right.push_back({ -1.4385f, -0.8175f, 0.525f });
-		points_right.push_back({ -1.5385f, -0.8175f, 0.313f });
-		points_right.push_back({ -2.0305f, -0.8175f, 0.333f });
-		points_right.push_back({ -2.1065f, -0.8175f, 0.545f });
-		points_right.push_back({ -2.0265f, -0.8175f, 0.629f });
-		points_right.push_back({ -2.0025f, -0.8175f, 0.941f });
-		points_right.push_back({ -1.2545f, -0.8175f, 1.369f });
-		points_right.push_back({ 0.2975f,  -0.8175f, 1.369f });
-		points_right.push_back({ 1.0455f,  -0.8175f, 0.937f });
-		points_right.push_back({ 1.9895f,  -0.8175f, 0.745f });
-		points_right.push_back({ 2.1065f,  -0.8175f, 0.505f });
-
-	
-	};
-
-	void print()
-	{
-		
-		
-		glBegin(GL_POLYGON);
-
-
-		glColor3f(0.1, 0.7, 0.1);
-
-
-		for (auto& point : points_left)
-		{
-			glVertex3f(X + point.x * cos_rz - point.y * sin_rz, Y + point.x * sin_rz + point.y * cos_rz, Z + point.z);
-		}
-
-		glEnd();
-
-		glBegin(GL_POLYGON);
-
-
-		glColor3f(0.1, 0.7, 0.1);
-
-
-		for (auto& point : points_right)
-		{
-			glVertex3f(X + point.x * cos_rz - point.y * sin_rz, Y + point.x * sin_rz + point.y * cos_rz, Z + point.z);
-		}
-
-		glEnd();
-
-		glColor3f(0.1, 0.8, 0.1);
-
-		glBegin(GL_QUADS);
-
-		for (size_t q = 0; q < points_left.size() - 1; q++)
-		{
-			auto point_left = points_left[q];
-			auto point_right = points_right[q];
-			auto point_left_next = points_left[q + 1];
-			auto point_right_next = points_right[q + 1];
-
-			glVertex3f(X + point_left.x * cos_rz - point_left.y * sin_rz, Y + point_left.x * sin_rz + point_left.y * cos_rz, Z + point_left.z);
-			glVertex3f(X + point_left_next.x * cos_rz - point_left_next.y * sin_rz, Y + point_left_next.x * sin_rz + point_left_next.y * cos_rz, Z + point_left_next.z);
-			glVertex3f(X + point_right_next.x * cos_rz - point_right_next.y * sin_rz, Y + point_right_next.x * sin_rz + point_right_next.y * cos_rz, Z + point_right_next.z);
-			glVertex3f(X + point_right.x * cos_rz - point_right.y * sin_rz, Y + point_right.x * sin_rz + point_right.y * cos_rz, Z + point_right.z);
-
-
-		}
-
-		glEnd();
-
-
-		/*
-		glVertex3f(X + 0.045, Y, Z + 0.281);
-		glVertex3f(X + 0.497, Y, Z + 0.241);
-		glVertex3f(X + 0.569, Y, Z + 0.509);
-		glVertex3f(X + 0.833, Y, Z + 0.625);
-		glVertex3f(X + 1.069, Y, Z + 0.513);
-		glVertex3f(X + 1.145, Y, Z + 0.257);
-		glVertex3f(X + 2.365, Y, Z + 0.277);
-		glVertex3f(X + 2.985, Y, Z + 0.229);
-		glVertex3f(X + 3.049, Y, Z + 0.477);
-		glVertex3f(X + 3.317, Y, Z + 0.617);
-		glVertex3f(X + 3.545, Y, Z + 0.525);
-		glVertex3f(X + 3.645, Y, Z + 0.313);
-		glVertex3f(X + 4.137, Y, Z + 0.333);
-		glVertex3f(X + 4.213, Y, Z + 0.545);
-		glVertex3f(X + 4.133, Y, Z + 0.629);
-		glVertex3f(X + 4.109, Y, Z + 0.941);
-		glVertex3f(X + 3.361, Y, Z + 1.369);
-		glVertex3f(X + 1.809, Y, Z + 1.369);
-		glVertex3f(X + 1.061, Y, Z + 0.937);
-		glVertex3f(X + 0.117, Y, Z + 0.745);
-		glVertex3f(X + 0, Y, Z + 0.505);
-		*/
-
-
-
-		/*
-		glBegin(GL_TRIANGLES);
-
-		glColor3f(0.5, 0.1, 0.1);
-		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z + 0);
-		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
-		glVertex3f(X, Y, Z + 2);
-
-		glColor3f(0.5, 0.5, 0.1);
-		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z + 0);
-		glVertex3f(X, Y, Z + 2);
-		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
-
-
-		glColor3f(0.8, 0.1, 0.1);
-		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z);
-		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
-		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
-
-
-		glColor4f(0.3, 0.1, 0.3, 0.5);
-		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
-		glVertex3f(X, Y, Z + 2);
-		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
-
-		glEnd();
-		
-		glColor3f(0, 0, 0);
-		glBegin(GL_LINES);
-
-		glVertex3f(X + cos(rz) * L, Y - sin(rz) * L, Z + 0);
-		glVertex3f(X, Y, Z + 2);
-
-		glVertex3f(X, Y, Z + 2);
-		glVertex3f(X + sin(rz) * B, Y + cos(rz) * B, Z);
-
-		glVertex3f(X - sin(rz) * B, Y - cos(rz) * B, Z);
-		glVertex3f(X, Y, Z + 2);
-
-		glEnd();
-		*/
-
-	}
-	void move()
-	{
-		sin_rz = sin(rz);
-		cos_rz = cos(rz);
-
-		X += v * cos(rz) * 0.1;
-		Y += v * sin(rz) * 0.1;
-	}
-
-	void accelerate()
-	{
-		v += 0.001;
-		if (v > v_max)
-			v = v_max;
-	}
-
-	void slow()
-	{
-		v -= 0.001;
-		if (v < -v_max)
-			v = -v_max;
-	}
-
-	void turnRight()
-	{
-		rz -= 0.005;
-	}
-
-	void turnLeft()
-	{
-		rz += 0.005;
-	}
-
-	float X;
-	float Y;
-	float Z;
-	float rz;
-
-	float sin_rz;
-	float cos_rz;
-
-	float a;
-	float v;
-
-	float v_max = 0.15;
-	float L = 5;
-	float B = 1;
-
-	std::vector<Point> points_left;
-	std::vector<Point> points_right;
-
-
-};
 
 void display();
 void reshape(int, int);
@@ -286,7 +48,6 @@ void Update();
 void Cube(float a, float b, float c, float d, float h);
 
 Camera camera;
-Car car;
 
 GLboolean upPressed = false;
 GLboolean downPressed = false;
@@ -369,7 +130,7 @@ void display()
 	Cube(0, 0, 1, 1, 6);
 	Cube(20, -5, 25, 5, 4);
 
-	car.print();
+	obj.printModel();
 
 	glBegin(GL_LINES);
 
@@ -497,15 +258,15 @@ void Update()
 		camera.moveX(-0.01);
 	*/
 	if (upPressed)
-		car.accelerate();
+		obj.accelerate();
 	if (downPressed)
-		car.slow();
+		obj.slow();
 	if (leftPressed)
-		car.turnLeft();
+		obj.turnLeft();
 	if (rightPressed)
-		car.turnRight();
+		obj.turnRight();
 
-	car.move();
+	obj.move();
 
 	reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }

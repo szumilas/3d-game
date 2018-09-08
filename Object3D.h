@@ -21,7 +21,7 @@ private:
 public:
 
 
-private:
+protected:
 
 	struct MeshTriangle
 	{
