@@ -20,6 +20,9 @@ public:
 
 	void printWheels();
 
+	Point getCameraCenter();
+	Point getCameraLookAt();
+
 private:
 
 
@@ -33,11 +36,14 @@ private:
 
 	float steeringWheelAngle;
 
-	float v_max = 0.15;
+	float v_max = 0.5;
 
 	std::vector<Wheel> wheels;
 	float wheelBaseOffset;
 	float wheelBase;
 	float track;
+
+	Point cameraCenter;
+	Point cameraLookAt;
 
 };

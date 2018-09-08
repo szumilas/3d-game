@@ -21,6 +21,9 @@ Car::Car()
 		wheel.loadModel();
 	}
 
+	cameraCenter = Point{-8, 0, 5};
+	cameraLookAt = Point{0, 0, 2};
+
 }
 
 void Car::loadModel()
@@ -212,14 +215,14 @@ void Car::move()
 
 void Car::accelerate()
 {
-	v += 0.001;
+	v += 0.0005;
 	if (v > v_max)
 		v = v_max;
 }
 
 void Car::slow()
 {
-	v -= 0.001;
+	v -= 0.0005;
 	if (v < -v_max)
 		v = -v_max;
 }
@@ -228,16 +231,16 @@ void Car::turnRight()
 {
 	//rz -= 0.005;
 	steeringWheelAngle -= 0.004;
-	if (steeringWheelAngle < -3.14 / 4)
-		steeringWheelAngle = -3.14 / 4;
+	if (steeringWheelAngle < -3.14 / 6)
+		steeringWheelAngle = -3.14 / 6;
 }
 
 void Car::turnLeft()
 {
 	//rz += 0.005;
 	steeringWheelAngle += 0.004;
-	if (steeringWheelAngle > 3.14 / 4)
-		steeringWheelAngle = 3.14 / 4;
+	if (steeringWheelAngle > 3.14 / 6)
+		steeringWheelAngle = 3.14 / 6;
 }
 
 void Car::printWheels()
@@ -246,4 +249,17 @@ void Car::printWheels()
 	{
 		wheel.printModel();
 	}
+}
+
+
+Point Car::getCameraCenter()
+{
+
+	return Point{ X + cameraCenter.x * cos(rz) - cameraCenter.y * sin(rz), Y + cameraCenter.x * sin(rz) + cameraCenter.y * cos(rz), cameraCenter.z };
+
+}
+
+Point Car::getCameraLookAt()
+{
+	return Point{ X + cameraLookAt.x * cos(rz) - cameraLookAt.y * sin(rz), Y + cameraLookAt.x * sin(rz) + cameraLookAt.y * cos(rz), cameraLookAt.z };
 }

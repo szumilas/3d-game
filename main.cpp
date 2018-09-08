@@ -13,24 +13,18 @@
 class Camera
 {
 public:
-	Camera() { x = 15; y = -30; z = 10;	rx = 0;	ry = 0; rz = 0; }
-
-	void moveX(float dx) { x += dx; }
-	void moveY(float dy) { y += dy; }
-	void moveZ(float dz) { z += dz; }
-
-	void rotateX(float drx) { rx += drx; }
-	void rotateY(float dry) { ry += dry; }
-	void rotateZ(float drz) { rz += drz; }
+	Camera() { center.x = 15; center.y = -30; center.z = 10;	 }
+	
+	void adjustCamera(Point icetner, Point ilookAt)
+	{
+		center = icetner;
+		lookAt = ilookAt;
+	}
 
 public:
-	float x;
-	float y;
-	float z;
-
-	float rx;
-	float ry;
-	float rz;
+	
+	Point center;
+	Point lookAt;
 
 };
 
@@ -65,6 +59,7 @@ int main(int argc, char**agrv)
 {
 	obj.loadModel();
 	wheel.loadModel();
+
 
 	glutInit(&argc, agrv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
@@ -101,8 +96,10 @@ void display()
 	//glTranslatef(camera.x, camera.y, camera.z);
 	//glRotated(camera.rx, camera.x, 1.0, camera.z);
 
-	gluLookAt(camera.x, camera.y, camera.z, //eye
-		camera.x, camera.y + 1, camera.z - 0.5, //center
+	camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
+
+	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
+		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
 
 	for (int X = -30; X < 30; X++)
@@ -186,7 +183,7 @@ void keyboard(unsigned char key, int x, int y)
 		keys[q] = GetAsyncKeyState(q);
 
 
-
+	/*
 	if (keys[65])
 		camera.rotateY(-0.02);
 
@@ -197,10 +194,10 @@ void keyboard(unsigned char key, int x, int y)
 		camera.rotateY(0.02);
 
 	if (keys[83])
-		camera.rotateX(0.02);
+		camera.rotateX(0.02);*/
 
 	//translate
-	if (keys[70]) //F
+	/*if (keys[70]) //F
 		camera.moveX(0.1);
 
 	if (keys[72]) //H
@@ -216,7 +213,7 @@ void keyboard(unsigned char key, int x, int y)
 		camera.moveY(0.1);
 
 	if (keys[89]) //Y
-		camera.moveY(-0.1);
+		camera.moveY(-0.1);*/
 
 	reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
