@@ -6,7 +6,7 @@ Car::Car()
 	Y = -16;
 	Z = 0.01;
 
-	rz = 3.14 / 4 * 3;
+	rz = 3.14 / 4 * 1;
 
 	steeringWheelAngle = 0;
 
@@ -179,8 +179,30 @@ void Car::move()
 	sin_rz = sin(rz);
 	cos_rz = cos(rz);
 
-	X += v * cos(rz) * 0.1;
-	Y += v * sin(rz) * 0.1;
+	//local
+	float vx = cos(steeringWheelAngle) * v;
+	float vy = sin(steeringWheelAngle) * v;
+
+	X += vx * cos(rz) * 0.1;
+	X -= vy * sin(rz) * 0.1;
+
+	Y += vy * cos(rz) * 0.1;
+	Y += vx * sin(rz) * 0.1;
+
+	rz += vy * 0.1;
+
+	if (v != 0)
+	{
+		if (steeringWheelAngle > 0)
+			steeringWheelAngle -= 0.002;
+		if (steeringWheelAngle < 0)
+			steeringWheelAngle += 0.002;
+
+		if (v > 0)
+			v -= 0.0001;
+		if (v < 0)
+			v += 0.0001;
+	}
 
 	wheels[0].adjustPosition(X, Y, rz, wheelBase / 2 + wheelBaseOffset, track / 2, steeringWheelAngle);
 	wheels[1].adjustPosition(X, Y, rz, wheelBase / 2 + wheelBaseOffset, -track / 2, steeringWheelAngle);
@@ -205,7 +227,7 @@ void Car::slow()
 void Car::turnRight()
 {
 	//rz -= 0.005;
-	steeringWheelAngle -= 0.005;
+	steeringWheelAngle -= 0.004;
 	if (steeringWheelAngle < -3.14 / 4)
 		steeringWheelAngle = -3.14 / 4;
 }
@@ -213,7 +235,7 @@ void Car::turnRight()
 void Car::turnLeft()
 {
 	//rz += 0.005;
-	steeringWheelAngle += 0.005;
+	steeringWheelAngle += 0.004;
 	if (steeringWheelAngle > 3.14 / 4)
 		steeringWheelAngle = 3.14 / 4;
 }
