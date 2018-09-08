@@ -31,6 +31,8 @@ private:
 	float a;
 	float v;
 
+	float steeringWheelAngle;
+
 	float v_max = 0.15;
 
 	std::vector<Wheel> wheels;
