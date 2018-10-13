@@ -36,7 +36,11 @@ private:
 
 	float steeringWheelAngle;
 
-	float v_max = 0.5;
+	float v_max = 30; //[m/s]
+	float acceleration = 3; //[m/s^s]
+
+	bool tryAccelerate;
+	bool trySlow;
 
 	std::vector<Wheel> wheels;
 	float wheelBaseOffset;

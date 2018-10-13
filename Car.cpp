@@ -21,7 +21,7 @@ Car::Car()
 		wheel.loadModel();
 	}
 
-	cameraCenter = Point{-8, 0, 5};
+	cameraCenter = Point{-8, -3, 5};
 	cameraLookAt = Point{0, 0, 2};
 
 }
@@ -179,20 +179,37 @@ void Car::loadModel()
 
 void Car::move()
 {
+	if (tryAccelerate)
+	{
+		v += acceleration / FPS;
+		if (v > v_max)
+			v = v_max;
+	}
+
+	if (trySlow)
+	{
+		v -= acceleration / FPS;
+		if (v < -v_max)
+			v = -v_max;
+	}
+
 	sin_rz = sin(rz);
 	cos_rz = cos(rz);
 
 	//local
-	float vx = cos(steeringWheelAngle) * v;
-	float vy = sin(steeringWheelAngle) * v;
+	float vx = cos(steeringWheelAngle) * v / FPS;
+	float vy = sin(steeringWheelAngle) * v / FPS;
 
-	X += vx * cos(rz) * 0.1;
-	X -= vy * sin(rz) * 0.1;
+	X += vx * cos(rz);
+	X -= vy * sin(rz);
 
-	Y += vy * cos(rz) * 0.1;
-	Y += vx * sin(rz) * 0.1;
+	Y += vy * cos(rz);
+	Y += vx * sin(rz);
 
-	rz += vy * 0.1;
+	rz += vy;
+
+	if (v > -0.0005 && v < 0.0005)
+		v = 0;
 
 	if (v != 0)
 	{
@@ -211,20 +228,19 @@ void Car::move()
 	wheels[1].adjustPosition(X, Y, rz, wheelBase / 2 + wheelBaseOffset, -track / 2, steeringWheelAngle);
 	wheels[2].adjustPosition(X, Y, rz, -wheelBase / 2 + wheelBaseOffset, track / 2);
 	wheels[3].adjustPosition(X, Y, rz, -wheelBase / 2 + wheelBaseOffset, -track / 2);
+
+	tryAccelerate = false;
+	trySlow = false;
 }
 
 void Car::accelerate()
 {
-	v += 0.0005;
-	if (v > v_max)
-		v = v_max;
+	tryAccelerate = true;
 }
 
 void Car::slow()
 {
-	v -= 0.0005;
-	if (v < -v_max)
-		v = -v_max;
+	trySlow = true;
 }
 
 void Car::turnRight()

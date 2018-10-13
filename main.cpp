@@ -2,13 +2,17 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include <vector>
+#include <iostream>
+#include <time.h>
 
 #include "GlobalStructures.h"
 #include "Object3D.h"
 #include "Car.h"
 
 
+int current_time;
+int previos_time = time(NULL);
+int noOfFrames = 0;
 
 class Camera
 {
@@ -35,6 +39,7 @@ Wheel wheel;
 void display();
 void reshape(int, int);
 void keyboard(unsigned char key, int x, int y);
+void timer(int);
 
 void SpecialKeys(int key, int x, int y);
 void SpecialKeysUp(int key, int x, int y);
@@ -75,7 +80,8 @@ int main(int argc, char**agrv)
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(SpecialKeys);
 	glutSpecialUpFunc(SpecialKeysUp);
-	glutIdleFunc(Update);
+	//glutIdleFunc(Update);
+	glutTimerFunc(0, timer, 0);
 
 	init();
 
@@ -166,6 +172,27 @@ void reshape(int width, int height)
 	display();
 }
 
+void timer(int)
+{
+	glutPostRedisplay();
+
+	//glutPostRedisplay();
+	//Update();
+	glutTimerFunc(1000 / FPS, timer, 0);
+
+	Update();
+	noOfFrames++;
+	current_time = time(NULL);
+	if (current_time - previos_time > 0)
+	{
+
+		std::cout << noOfFrames / (current_time - previos_time) << std::endl;
+		previos_time = time(NULL);
+		noOfFrames = 0;
+	}
+	//glutPostRedisplay();
+}
+
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -215,7 +242,7 @@ void keyboard(unsigned char key, int x, int y)
 	if (keys[89]) //Y
 		camera.moveY(-0.1);*/
 
-	reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
 
 void SpecialKeys(int key, int x, int y)
@@ -248,6 +275,7 @@ void SpecialKeysUp(int key, int x, int y)
 
 void Update()
 {
+	
 	/*
 	if (upPressed)
 		camera.moveZ(0.01);
@@ -269,7 +297,10 @@ void Update()
 
 	obj.move();
 
-	reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+
+	//glutPostRedisplay();
 }
 
 void Cube(float a, float b, float c, float d, float h)
