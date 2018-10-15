@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Car.cpp" />
+    <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Wheel.cpp" />
@@ -138,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="Car.h" />
     <ClInclude Include="GlobalStructures.h" />
+    <ClInclude Include="MapManager.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Wheel.h" />
   </ItemGroup>

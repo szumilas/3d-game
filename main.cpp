@@ -8,6 +8,8 @@
 #include "GlobalStructures.h"
 #include "Object3D.h"
 #include "Car.h"
+#include "MapManager.h"
+
 
 
 int current_time;
@@ -60,8 +62,25 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 }
 
+
+
 int main(int argc, char**agrv)
 {
+	MapManager mapManager;
+	mapManager.readMap("map.osm");
+
+	
+
+	return 0;
+	
+
+
+
+
+
+
+
+
 	obj.loadModel();
 	wheel.loadModel();
 
