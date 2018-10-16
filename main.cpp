@@ -5,7 +5,6 @@
 #include <iostream>
 #include <time.h>
 
-#include "GlobalStructures.h"
 #include "Object3D.h"
 #include "Car.h"
 #include "MapManager.h"
@@ -63,15 +62,15 @@ void init()
 }
 
 
+MapManager mapManager;
 
 int main(int argc, char**agrv)
 {
-	MapManager mapManager;
-	mapManager.readMap("map.osm");
-
+	mapManager.readMap("szczytnicka.osm");
+	mapManager.calculateNodesPositions();
 	
 
-	return 0;
+	//return 0;
 	
 
 
@@ -148,11 +147,77 @@ void display()
 		}
 	}
 
-	Cube(5, 5, 6, 6, 3);
+	/*Cube(5, 5, 6, 6, 3);
 	Cube(15, 8, 18, 12, 4);
 	Cube(-25, -15, -16, -6, 4);
 	Cube(0, 0, 1, 1, 6);
-	Cube(20, -5, 25, 5, 4);
+	Cube(20, -5, 25, 5, 4);*/
+
+	Cube(0, 0, 1, 1, 3);
+	Cube(10, 10, 11, 11, 3);
+	glLineWidth(2.5);
+	for (auto& building : mapManager.buildings)
+	{
+		for (size_t q = 0; q < building.size(); q++)
+		{
+			long long firstNodeRef = building[q];
+			long long secondNodeRef;
+
+			if (q < building.size() - 1)
+			{
+				secondNodeRef = building[q + 1];
+			}
+			else
+			{
+				secondNodeRef = building[0];
+			}
+
+			float posXfirst;
+			float posYfirst;
+			float posXsecond;
+			float posYsecond;
+
+			bool foundFirst = false;
+			bool foundSecond = false;
+
+			for (auto& checkRow : mapManager.nodes)
+			{
+				if (checkRow.id == firstNodeRef)
+				{
+					posXfirst = checkRow.posX;
+					posYfirst = checkRow.posY;
+					foundFirst = true;
+				}
+				if (checkRow.id == secondNodeRef)
+				{
+					posXsecond = checkRow.posX;
+					posYsecond = checkRow.posY;
+					foundSecond = true;
+				}
+
+				if (foundFirst && foundSecond)
+				{
+					break;
+				}
+			}
+
+			glBegin(GL_POLYGON);
+			glColor3f(0.5, 0.5, 0.5);
+			glVertex3f(posXfirst, posYfirst, 0);
+			glVertex3f(posXsecond, posYsecond, 0);
+			glVertex3f(posXsecond, posYsecond, 15);
+			glVertex3f(posXfirst, posYfirst, 15);
+			glEnd();
+
+			glBegin(GL_LINES);
+			glColor3f(0, 0, 0);
+			glVertex3f(posXfirst, posYfirst, 0);
+			glVertex3f(posXfirst, posYfirst, 15);
+			glEnd();
+		}
+
+		
+	}
 
 	obj.printModel();
 	obj.printWheels();

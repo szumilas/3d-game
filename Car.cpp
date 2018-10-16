@@ -2,8 +2,8 @@
 
 Car::Car()
 {
-	X = 15;
-	Y = -16;
+	X = 400;
+	Y = 400;
 	Z = 0.01;
 
 	rz = 3.14 / 4 * 1;
@@ -21,8 +21,8 @@ Car::Car()
 		wheel.loadModel();
 	}
 
-	cameraCenter = Point{-8, -3, 5};
-	cameraLookAt = Point{0, 0, 2};
+	cameraCenter = Point{-8, 0, 5};
+	cameraLookAt = Point{0, 0, 3};
 
 }
 
