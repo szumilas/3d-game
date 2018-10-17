@@ -40,6 +40,8 @@ Wheel wheel;
 void display();
 void reshape(int, int);
 void keyboard(unsigned char key, int x, int y);
+void mouse(int button, int state, int x, int y);
+void look(int x, int y);
 void timer(int);
 
 void SpecialKeys(int key, int x, int y);
@@ -54,6 +56,15 @@ GLboolean upPressed = false;
 GLboolean downPressed = false;
 GLboolean leftPressed = false;
 GLboolean rightPressed = false;
+
+GLboolean leftMouseButtonDown = false;
+GLboolean rightMouseButtonDown = false;
+GLboolean scrollMouseButtonDown = false;
+GLboolean scrollUpMouse = false;
+GLboolean scrollDownMouse = false;
+
+int mouseXPos;
+int mouseYPos;
 
 void init()
 {
@@ -98,6 +109,9 @@ int main(int argc, char**agrv)
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(SpecialKeys);
 	glutSpecialUpFunc(SpecialKeysUp);
+	glutMouseFunc(mouse);
+	glutPassiveMotionFunc(look);
+	glutMotionFunc(look);
 	//glutIdleFunc(Update);
 	glutTimerFunc(0, timer, 0);
 
@@ -258,6 +272,14 @@ void reshape(int width, int height)
 
 void timer(int)
 {
+	std::cout << mouseXPos << " " << mouseYPos << " "
+		<< (leftMouseButtonDown == true ? "x " : "  ")
+		<< (rightMouseButtonDown == true ? "x " : "  ")
+		<< (scrollMouseButtonDown == true ? "x " : "  ")
+		<< (scrollUpMouse == true ? "x " : "  ")
+		<< (scrollDownMouse == true ? "x " : "  ")
+		<< std::endl;
+
 	glutPostRedisplay();
 
 	//glutPostRedisplay();
@@ -329,6 +351,36 @@ void keyboard(unsigned char key, int x, int y)
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
 
+void mouse(int button, int state, int x, int y)
+{
+	if (button == GLUT_LEFT_BUTTON)
+	{
+		leftMouseButtonDown = (state == GLUT_DOWN);
+	}
+	else if (button == GLUT_RIGHT_BUTTON)
+	{
+		rightMouseButtonDown = (state == GLUT_DOWN);
+	}
+	else if (button == GLUT_MIDDLE_BUTTON)
+	{
+		scrollMouseButtonDown = (state == GLUT_DOWN);
+	}
+	else if (button == 3)
+	{
+		scrollUpMouse = true;
+	}
+	else if (button == 4)
+	{
+		scrollDownMouse = true;
+	}
+}
+
+void look(int x, int y)
+{
+	mouseXPos = x;
+	mouseYPos = y;
+}
+
 void SpecialKeys(int key, int x, int y)
 {
 
@@ -383,6 +435,8 @@ void Update()
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
+	scrollUpMouse = false;
+	scrollDownMouse = false;
 
 	//glutPostRedisplay();
 }
