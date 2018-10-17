@@ -7,6 +7,7 @@
 
 #include "Object3D.h"
 #include "Car.h"
+#include "Orbit.h"
 #include "MapManager.h"
 
 
@@ -35,6 +36,7 @@ public:
 
 Car obj;
 Wheel wheel;
+Orbit orbit;
 
 
 void display();
@@ -87,10 +89,6 @@ int main(int argc, char**agrv)
 
 
 
-
-
-
-
 	obj.loadModel();
 	wheel.loadModel();
 
@@ -134,7 +132,8 @@ void display()
 	//glTranslatef(camera.x, camera.y, camera.z);
 	//glRotated(camera.rx, camera.x, 1.0, camera.z);
 
-	camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
+	//camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
+	camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
 
 	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
@@ -264,7 +263,7 @@ void reshape(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	gluPerspective(45, width / height, 0.5, 150);
+	gluPerspective(45, width / height, 0.5, 300);
 	glMatrixMode(GL_MODELVIEW);
 
 	display();
@@ -434,6 +433,24 @@ void Update()
 	obj.move();
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+
+	if (scrollUpMouse)
+	{
+		orbit.zoomIn();
+	}
+	else if (scrollDownMouse)
+	{
+		orbit.zoomOut();
+	}
+	else if (leftMouseButtonDown)
+	{
+		orbit.rotate();
+	}
+	else if (rightMouseButtonDown)
+	{
+		orbit.changeAlpha();
+	}
+
 
 	scrollUpMouse = false;
 	scrollDownMouse = false;

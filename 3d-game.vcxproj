@@ -134,6 +134,7 @@
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Orbit.cpp" />
     <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +142,7 @@
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="Object3D.h" />
+    <ClInclude Include="Orbit.h" />
     <ClInclude Include="Wheel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
