@@ -16,6 +16,11 @@ int current_time;
 int previos_time = time(NULL);
 int noOfFrames = 0;
 
+float windowHeight = 750;
+float windowWidth = 1500;
+
+int angle = 55;
+
 class Camera
 {
 public:
@@ -97,7 +102,7 @@ int main(int argc, char**agrv)
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
 
 	glutInitWindowPosition(10, 10);
-	glutInitWindowSize(1500, 750);
+	glutInitWindowSize(windowWidth, windowHeight);
 
 	glutCreateWindow("3d game");	
 
@@ -251,7 +256,14 @@ void display()
 	glEnd();
 
 	obj.printModel();
-
+	
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex3f(orbit.getFlatCursorX() - 5, orbit.getFlatCursorY(), 0);
+	glVertex3f(orbit.getFlatCursorX() + 5, orbit.getFlatCursorY(), 0);
+	glVertex3f(orbit.getFlatCursorX(), orbit.getFlatCursorY() - 5, 0);
+	glVertex3f(orbit.getFlatCursorX(), orbit.getFlatCursorY() + 5, 0);
+	glEnd();
 
 	glutSwapBuffers();
 
@@ -263,7 +275,7 @@ void reshape(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	gluPerspective(45, width / height, 0.5, 300);
+	gluPerspective(angle, static_cast<float>(width) / height, 0.5, 300);
 	glMatrixMode(GL_MODELVIEW);
 
 	display();
@@ -450,6 +462,8 @@ void Update()
 	{
 		orbit.changeAlpha();
 	}
+
+	orbit.calculateFlatCursorPosition(windowWidth, windowHeight, mouseXPos, mouseYPos, angle);
 
 
 	scrollUpMouse = false;
