@@ -25,6 +25,7 @@ private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
 	void createNodesArray();
 	void createBuildingsArray();
+	void createStreetsArray();
 
 public:
 
@@ -37,5 +38,6 @@ private:
 public:
 	std::vector<node> nodes;
 	std::vector<std::vector<long long>> buildings;
+	std::vector<std::vector<long long>> streets;
 
 };

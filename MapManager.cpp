@@ -49,6 +49,7 @@ void MapManager::readMap(const char * fileName)
 
 	createNodesArray();
 	createBuildingsArray();
+	createStreetsArray();
 	/*rapidxml::xml_node <>* nodeCeo = document.first_node();
 	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
 	{
@@ -151,6 +152,65 @@ void MapManager::createBuildingsArray()
 		}
 	}
 
+}
+void MapManager::createStreetsArray()
+{
+	rapidxml::xml_node <>* nodeCeo = document.first_node();
+	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+	{
+		if (!strcmp(manager->name(), "way"))
+		{
+			std::vector<long long> refs;
+			bool isStreet = false;
+
+			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+			{
+				if (!strcmp(a->name(), "nd"))
+				{
+					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					{
+						if (!strcmp(b->name(), "ref"))
+						{
+							refs.push_back(std::stoll(b->value()));
+							break;
+						}
+					}
+				}
+				else if (!strcmp(a->name(), "tag"))
+				{
+					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					{
+						if (!strcmp(b->name(), "k"))
+						{
+							std::cout << b->value() << std::endl;
+							if (!(!strcmp(b->value(), "service") ||
+								!strcmp(b->value(), "residential") ||
+								!strcmp(b->value(), "tertiary") ||
+								!strcmp(b->value(), "footway") ||
+								!strcmp(b->value(), "path") ||
+								!strcmp(b->value(), "cycleway")) &&
+								!strcmp(b->value(), "name")/* ||
+								!strcmp(b->value(), "residential") ||
+								!strcmp(b->value(), "residential") ||
+								!strcmp(b->value(), "residential")*/
+								)
+							{
+								isStreet = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+
+			if (isStreet)
+			{
+				streets.push_back(refs);
+			}
+
+		}
+	}
+	//std::getchar();
 }
 
 void MapManager::calculateNodesPositions()

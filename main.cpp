@@ -132,11 +132,6 @@ void display()
 	
 	glLoadIdentity();
 
-	
-
-	//glTranslatef(camera.x, camera.y, camera.z);
-	//glRotated(camera.rx, camera.x, 1.0, camera.z);
-
 	//camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
 	camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
 
@@ -144,38 +139,13 @@ void display()
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
 
-	for (int X = -30; X < 30; X++)
-	{
-		for (int Y = -30; Y < 30; Y++)
-		{
-			if ((X + Y) % 2 == 0)
-			{
 
-				glBegin(GL_POLYGON);
-				glColor3f(1, 1, 1);
-				glVertex3f(X + 0.0, Y + 0.0, 0.0);
-				glVertex3f(X + 1.0, Y + 0.0, 0.0);
-				glVertex3f(X + 1.0, Y + 1.0, 0.0);
-				glVertex3f(X + 0.0, Y + 1.0, 0.0);
-
-				glEnd();
-			}
-
-
-		}
-	}
-
-	/*Cube(5, 5, 6, 6, 3);
-	Cube(15, 8, 18, 12, 4);
-	Cube(-25, -15, -16, -6, 4);
-	Cube(0, 0, 1, 1, 6);
-	Cube(20, -5, 25, 5, 4);*/
-
-	Cube(0, 0, 1, 1, 3);
-	Cube(10, 10, 11, 11, 3);
+	float colX = 0.5;
+	float colY = 0.5;
 	glLineWidth(2.5);
 	for (auto& building : mapManager.buildings)
 	{
+		glColor3f((colX - floor(colX)), (colY - floor(colY)), (colY - floor(colY)));
 		for (size_t q = 0; q < building.size(); q++)
 		{
 			long long firstNodeRef = building[q];
@@ -220,7 +190,6 @@ void display()
 			}
 
 			glBegin(GL_POLYGON);
-			glColor3f(0.5, 0.5, 0.5);
 			glVertex3f(posXfirst, posYfirst, 0);
 			glVertex3f(posXsecond, posYsecond, 0);
 			glVertex3f(posXsecond, posYsecond, 15);
@@ -228,13 +197,67 @@ void display()
 			glEnd();
 
 			glBegin(GL_LINES);
-			glColor3f(0, 0, 0);
+			//glColor3f(0, 0, 0);
 			glVertex3f(posXfirst, posYfirst, 0);
 			glVertex3f(posXfirst, posYfirst, 15);
 			glEnd();
-		}
 
-		
+			colX = posXfirst;
+			colY = posYfirst;
+		}
+	}
+
+	for (auto& street : mapManager.streets)
+	{
+		glColor3f((colX - static_cast<int>(colX)), (colY - static_cast<int>(colY)), (colY - static_cast<int>(colY)));
+		for (size_t q = 0; q < street.size() - 1; q++)
+		{
+			long long firstNodeRef = street[q];
+			long long secondNodeRef;
+
+			if (q < street.size())
+			{
+				secondNodeRef = street[q + 1];
+			}
+
+			float posXfirst;
+			float posYfirst;
+			float posXsecond;
+			float posYsecond;
+
+			bool foundFirst = false;
+			bool foundSecond = false;
+
+			for (auto& checkRow : mapManager.nodes)
+			{
+				if (checkRow.id == firstNodeRef)
+				{
+					posXfirst = checkRow.posX;
+					posYfirst = checkRow.posY;
+					foundFirst = true;
+				}
+				if (checkRow.id == secondNodeRef)
+				{
+					posXsecond = checkRow.posX;
+					posYsecond = checkRow.posY;
+					foundSecond = true;
+				}
+
+				if (foundFirst && foundSecond)
+				{
+					break;
+				}
+			}
+
+			glBegin(GL_LINES);
+			
+			glVertex3f(posXfirst, posYfirst, 0);
+			glVertex3f(posXsecond, posYsecond, 0);
+			glEnd();
+
+			colX = posXfirst;
+			colY = posYfirst;
+		}
 	}
 
 	obj.printModel();
