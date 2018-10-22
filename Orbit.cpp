@@ -50,6 +50,13 @@ void Orbit::calculateFlatCursorPosition(int windowWidth, int windowHeight, int m
 		float t = -eyePoint.z / c;
 		flatCursor.x = eyePoint.x + a * t;
 		flatCursor.y = eyePoint.y + b * t;
+
+		if (moveOrbitXY && !previouslyRendered)
+		{
+			lookAtX += (-flatCursor.x + previousFlatCursor.x)*2;
+			lookAtY += (-flatCursor.y + previousFlatCursor.y)*2;
+			previouslyRendered = true;
+		}
 	}
 }
 

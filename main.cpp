@@ -265,6 +265,14 @@ void display()
 	glVertex3f(orbit.getFlatCursorX(), orbit.getFlatCursorY() + 5, 0);
 	glEnd();
 
+	glBegin(GL_LINES);
+	glColor3f(0, 0, 1);
+	glVertex3f(orbit.getLookAtX() - 1, orbit.getLookAtY(), 0);
+	glVertex3f(orbit.getLookAtX() + 1, orbit.getLookAtY(), 0);
+	glVertex3f(orbit.getLookAtX(), orbit.getLookAtY() - 1, 0);
+	glVertex3f(orbit.getLookAtX(), orbit.getLookAtY() + 1, 0);
+	glEnd();
+
 	glutSwapBuffers();
 
 }
@@ -454,13 +462,18 @@ void Update()
 	{
 		orbit.zoomOut();
 	}
-	else if (leftMouseButtonDown)
-	{
-		orbit.rotate();
-	}
 	else if (rightMouseButtonDown)
 	{
 		orbit.changeAlpha();
+	}
+	else if (scrollMouseButtonDown)
+	{
+		orbit.rotate();
+	}
+
+	if (leftMouseButtonDown)
+	{
+		orbit.activateMovingXY();
 	}
 
 	orbit.calculateFlatCursorPosition(windowWidth, windowHeight, mouseXPos, mouseYPos, angle);
@@ -468,7 +481,7 @@ void Update()
 
 	scrollUpMouse = false;
 	scrollDownMouse = false;
-
+	orbit.deactivateMovingXY();
 	//glutPostRedisplay();
 }
 
