@@ -2,6 +2,13 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_set>
+#include <map>
+
+#include "MapObject.h"
+#include "Street.h"
+#include "Building.h"
+#include "GreenArea.h"
 
 #include "rapidxml.hpp"
 
@@ -23,9 +30,8 @@ public:
 
 private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
-	void createNodesArray();
-	void createBuildingsArray();
-	void createStreetsArray();
+	void createNodesMap();
+	void createMapObjectsArray();
 
 public:
 
@@ -35,9 +41,40 @@ private:
 
 	rapidxml::xml_document <> document;
 
+	std::vector<MapObject> mapObjects;
+
+	std::unordered_set<std::string> skippedTags{
+		"cycleway:right",
+		"description",
+		"maxspeed",
+		"name:etymology:wikidata",
+		"source:maxspeed",
+	};
+
+	std::unordered_set<std::string> temporarySkippedTags{
+	};
+
+	std::unordered_set<std::string> acceptedTags{
+		"area:highway",
+		"building",
+		"landuse",
+	};
+
+	std::map<std::string, long MapObject::*> tagLongPtrs{
+
+	};
+
+	std::map<std::string, std::string MapObject::*> tagStringPtrs{
+		{ "area:highway", &MapObject::area_highway },
+		{ "building", &MapObject::building },
+		{ "landuse", &MapObject::landuse },
+	};
+
 public:
-	std::vector<node> nodes;
-	std::vector<std::vector<long long>> buildings;
-	std::vector<std::vector<long long>> streets;
+	std::map<long long, node> nodes;
+
+	std::vector<Street> streets;
+	std::vector<Building> buildings;
+	std::vector<GreenArea> greenAreas;
 
 };

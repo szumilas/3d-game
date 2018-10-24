@@ -47,29 +47,12 @@ void MapManager::readMap(const char * fileName)
 
 	//rapidxml::print(std::cout, document, 0);
 
-	createNodesArray();
-	createBuildingsArray();
-	createStreetsArray();
-	/*rapidxml::xml_node <>* nodeCeo = document.first_node();
-	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
-	{
-		/*std::cout << "Manager: '" << manager->name() << "', known as:\t";
-		printAttributes(manager);
-		std::cout << "\tfor:\n";
-
-		for (rapidxml::xml_node <>* realWorker = manager->first_node(); realWorker; realWorker = realWorker->next_sibling())
-		{
-			std::cout << "\t'" << realWorker->name() << "' id=" << realWorker->first_attribute()->value() << " working on: '" << realWorker->value() << "'\n";
-		}*/
-
-		/*if (!strcmp(manager->name(), "node"))
-		{
-			printAttributes(manager);
-		}
-	}*/
+	createNodesMap();
+	createMapObjectsArray();
+	
 }
 
-void MapManager::createNodesArray()
+void MapManager::createNodesMap()
 {
 	rapidxml::xml_node <>* nodeCeo = document.first_node();
 	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
@@ -96,34 +79,36 @@ void MapManager::createNodesArray()
 
 			if (newNode.id && newNode.lat && newNode.lon)
 			{
-				nodes.push_back(newNode);
+				nodes[newNode.id] = newNode;
 			}
-			std::cout << std::endl;
+			//std::cout << std::endl;
 		}
 	}
 
 }
 
-
-void MapManager::createBuildingsArray()
+void MapManager::createMapObjectsArray()
 {
 	rapidxml::xml_node <>* nodeCeo = document.first_node();
 	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
 	{
 		if (!strcmp(manager->name(), "way"))
 		{
-			std::vector<long long> refs;
-			bool isBuilding = false;
+			MapObject mapObject;
 
 			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
 			{
+				std::string currentTag;
+				std::string currentTagValue;
+				bool skipTag = false;
+
 				if (!strcmp(a->name(), "nd"))
 				{
 					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
 					{
 						if (!strcmp(b->name(), "ref"))
 						{
-							refs.push_back(std::stoll(b->value()));
+							mapObject.refs.push_back(std::stoll(b->value()));
 							break;
 						}
 					}
@@ -132,108 +117,77 @@ void MapManager::createBuildingsArray()
 				{
 					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
 					{
-						if (!strcmp(b->name(), "k"))
+						if (!strcmp(b->name(), "k")) //attribute name
 						{
-							if (!strcmp(b->value(), "building"))
+							if (skippedTags.count(b->value()) || temporarySkippedTags.count(b->value()))
 							{
-								isBuilding = true;
+								skipTag = true;
 								break;
 							}
+							else if (acceptedTags.count(b->value()))
+							{
+								currentTag = b->value();
+							}
+							else
+							{
+								//assert(!"unknown tag");
+							}
+							
 						}
-					}
-				}
-			}
-
-			if (isBuilding)
-			{
-				buildings.push_back(refs);
-			}
-
-		}
-	}
-
-}
-void MapManager::createStreetsArray()
-{
-	rapidxml::xml_node <>* nodeCeo = document.first_node();
-	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
-	{
-		if (!strcmp(manager->name(), "way"))
-		{
-			std::vector<long long> refs;
-			bool isStreet = false;
-
-			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
-			{
-				if (!strcmp(a->name(), "nd"))
-				{
-					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
-					{
-						if (!strcmp(b->name(), "ref"))
+						else if (!strcmp(b->name(), "v")) //attribute value
 						{
-							refs.push_back(std::stoll(b->value()));
+							currentTagValue = b->value();
+						}
+						else
+						{
 							break;
 						}
 					}
-				}
-				else if (!strcmp(a->name(), "tag"))
-				{
-					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+
+					if (!skipTag)
 					{
-						if (!strcmp(b->name(), "k"))
+						auto mapElement = tagLongPtrs.find(currentTag);
+						if (mapElement != tagLongPtrs.end())
 						{
-							std::cout << b->value() << std::endl;
-							if (!(!strcmp(b->value(), "service") ||
-								!strcmp(b->value(), "residential") ||
-								!strcmp(b->value(), "tertiary") ||
-								!strcmp(b->value(), "footway") ||
-								!strcmp(b->value(), "path") ||
-								!strcmp(b->value(), "cycleway")) &&
-								!strcmp(b->value(), "name")/* ||
-								!strcmp(b->value(), "residential") ||
-								!strcmp(b->value(), "residential") ||
-								!strcmp(b->value(), "residential")*/
-								)
+							mapObject.*mapElement->second = 5;
+						}
+						else 
+						{
+							auto mapElement = tagStringPtrs.find(currentTag);
+							if (mapElement != tagStringPtrs.end())
 							{
-								isStreet = true;
-								break;
+								mapObject.*mapElement->second = currentTagValue;
 							}
 						}
 					}
 				}
 			}
 
-			if (isStreet)
+			if (!mapObject.area_highway.empty())
 			{
-				streets.push_back(refs);
+				streets.push_back(Street(mapObject));
+			}
+			else if (!mapObject.building.empty())
+			{
+				buildings.push_back(Street(mapObject));
+			}
+			else if (mapObject.landuse == "grass")
+			{
+				greenAreas.push_back(Street(mapObject));
 			}
 
 		}
 	}
-	//std::getchar();
 }
 
 void MapManager::calculateNodesPositions()
 {
-	double minLat = 1000;
-	double minLon = 1000;
+	double minLat = 51.112663;
+	double minLon = 17.056106;
 
-	for (auto& node : nodes)
+	for (auto it = nodes.begin(); it != nodes.end(); ++it)
 	{
-		if (node.lat < minLat)
-		{
-			minLat = node.lat;
-		}
-		if (node.lon < minLon)
-		{
-			minLon = node.lon;
-		}
+		it->second.posX = static_cast<float>((it->second.lon - minLon) * longituteRatio);
+		it->second.posY = static_cast<float>((it->second.lat - minLat) * latitudeRatio);
 	}
-
-	for (auto& node : nodes)
-	{
-		node.posX = static_cast<float>((node.lon - minLon) * longituteRatio);
-		node.posY = static_cast<float>((node.lat - minLat) * latitudeRatio);
-	}
-
 }

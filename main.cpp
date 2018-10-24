@@ -84,7 +84,9 @@ MapManager mapManager;
 
 int main(int argc, char**agrv)
 {
-	mapManager.readMap("szczytnicka.osm");
+	//mapManager.readMap("szczytnicka.osm");
+	//mapManager.readMap("map.osm");
+	mapManager.readMap("grunwald.osm");
 	mapManager.calculateNodesPositions();
 	
 
@@ -140,143 +142,59 @@ void display()
 		0, 0, 1); //up
 
 
-	float colX = 0.5;
-	float colY = 0.5;
-	glLineWidth(2.5);
+	glColor3f(0.2, 0.2, 0.2);
+	for (auto& street : mapManager.streets)
+	{
+		glBegin(GL_POLYGON);
+		for (auto& ref : street.refs)
+		{
+			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 0);
+		}
+		glEnd();
+	}
+
+	glColor3f(0.7, 0.7, 0.7);
 	for (auto& building : mapManager.buildings)
 	{
-		glColor3f((colX - floor(colX)), (colY - floor(colY)), (colY - floor(colY)));
-		for (size_t q = 0; q < building.size(); q++)
+		glBegin(GL_POLYGON);
+		for (auto& ref : building.refs)
 		{
-			long long firstNodeRef = building[q];
-			long long secondNodeRef;
+			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 15);
+		}
+		glEnd();
+	}
 
-			if (q < building.size() - 1)
-			{
-				secondNodeRef = building[q + 1];
-			}
-			else
-			{
-				secondNodeRef = building[0];
-			}
-
-			float posXfirst;
-			float posYfirst;
-			float posXsecond;
-			float posYsecond;
-
-			bool foundFirst = false;
-			bool foundSecond = false;
-
-			for (auto& checkRow : mapManager.nodes)
-			{
-				if (checkRow.id == firstNodeRef)
-				{
-					posXfirst = checkRow.posX;
-					posYfirst = checkRow.posY;
-					foundFirst = true;
-				}
-				if (checkRow.id == secondNodeRef)
-				{
-					posXsecond = checkRow.posX;
-					posYsecond = checkRow.posY;
-					foundSecond = true;
-				}
-
-				if (foundFirst && foundSecond)
-				{
-					break;
-				}
-			}
+	glColor3f(0.5, 0.5, 0.5);
+	for (auto& building : mapManager.buildings)
+	{
+		for (size_t q = 0; q < building.refs.size() - 1; q++)
+		{
+			auto ref = building.refs[q];
+			auto nextRef = building.refs[q + 1];
 
 			glBegin(GL_POLYGON);
-			glVertex3f(posXfirst, posYfirst, 0);
-			glVertex3f(posXsecond, posYsecond, 0);
-			glVertex3f(posXsecond, posYsecond, 15);
-			glVertex3f(posXfirst, posYfirst, 15);
+			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 0);
+			glVertex3f(mapManager.nodes.at(nextRef).posX, mapManager.nodes.at(nextRef).posY, 0);
+			glVertex3f(mapManager.nodes.at(nextRef).posX, mapManager.nodes.at(nextRef).posY, 15);
+			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 15);
 			glEnd();
-
-			glBegin(GL_LINES);
-			//glColor3f(0, 0, 0);
-			glVertex3f(posXfirst, posYfirst, 0);
-			glVertex3f(posXfirst, posYfirst, 15);
-			glEnd();
-
-			colX = posXfirst;
-			colY = posYfirst;
 		}
 	}
 
-	for (auto& street : mapManager.streets)
+	glColor3f(0, 0.4, 0.1);
+	for (auto& greenArea : mapManager.greenAreas)
 	{
-		glColor3f((colX - static_cast<int>(colX)), (colY - static_cast<int>(colY)), (colY - static_cast<int>(colY)));
-		for (size_t q = 0; q < street.size() - 1; q++)
+		glBegin(GL_POLYGON);
+		for (auto& ref : greenArea.refs)
 		{
-			long long firstNodeRef = street[q];
-			long long secondNodeRef;
-
-			if (q < street.size())
-			{
-				secondNodeRef = street[q + 1];
-			}
-
-			float posXfirst;
-			float posYfirst;
-			float posXsecond;
-			float posYsecond;
-
-			bool foundFirst = false;
-			bool foundSecond = false;
-
-			for (auto& checkRow : mapManager.nodes)
-			{
-				if (checkRow.id == firstNodeRef)
-				{
-					posXfirst = checkRow.posX;
-					posYfirst = checkRow.posY;
-					foundFirst = true;
-				}
-				if (checkRow.id == secondNodeRef)
-				{
-					posXsecond = checkRow.posX;
-					posYsecond = checkRow.posY;
-					foundSecond = true;
-				}
-
-				if (foundFirst && foundSecond)
-				{
-					break;
-				}
-			}
-
-			glBegin(GL_LINES);
-			
-			glVertex3f(posXfirst, posYfirst, 0);
-			glVertex3f(posXsecond, posYsecond, 0);
-			glEnd();
-
-			colX = posXfirst;
-			colY = posYfirst;
+			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 0);
 		}
+		glEnd();
 	}
 
 	obj.printModel();
 	obj.printWheels();
-	wheel.printModel();
 
-	glBegin(GL_LINES);
-
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, 50.0, 0.0);
-
-	glEnd();
-
-	glBegin(GL_LINES);
-
-	glVertex3f(15.0, 0.0, 0.0);
-	glVertex3f(15.0, 50.0, 0.0);
-
-	glEnd();
 
 	obj.printModel();
 	

@@ -2,9 +2,9 @@
 
 Orbit::Orbit()
 {
-	lookAtX = 400;
-	lookAtY = 400;
-	distance = 50;
+	lookAtX = 0;
+	lookAtY = 0;
+	distance = 100;
 	rz = 3.14;
 	alpha = 3.14 / 4;
 
