@@ -1,14 +1,49 @@
 #include "Orbit.h"
+#include <string>
+
+#include <fstream>
 
 Orbit::Orbit()
 {
-	lookAtX = 0;
-	lookAtY = 0;
-	distance = 100;
-	rz = 3.14;
-	alpha = 3.14 / 4;
-
+	std::fstream file;
+	file.open("Data/OrbitData.txt");
+	if (file)
+	{
+		std::string line;
+		std::getline(file, line);
+		lookAtX = stof(line);
+		std::getline(file, line);
+		lookAtY = stof(line);
+		std::getline(file, line);
+		distance = stof(line);
+		std::getline(file, line);
+		rz = stof(line);
+		std::getline(file, line);
+		alpha = stof(line);
+	}
+	else
+	{
+		lookAtX = 0;
+		lookAtY = 0;
+		distance = 100;
+		rz = 3.14;
+		alpha = 3.14 / 4;
+	}
+	file.close();
+	
 	flatCursor = Point{ 400, 400, 0 };
+}
+
+void Orbit::savePosition()
+{
+	std::fstream file;
+	file.open("Data/OrbitData.txt", std::ios::out);
+	file << lookAtX << std::endl;
+	file << lookAtY << std::endl;
+	file << distance << std::endl;
+	file << rz << std::endl;
+	file << alpha << std::endl;
+	file.close();
 }
 
 Point Orbit::getCameraCenter()

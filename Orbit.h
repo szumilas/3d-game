@@ -23,6 +23,8 @@ public:
 	void calculateFlatCursorPosition(int windowWidth, int windowHeight, int mouseXpos, int mouseYpos, int angle);
 	void calculateFlatCursorRealWorldPosition(int windowWidth, int windowHeight, int mouseXpos, int mouseYpos, int angle);
 
+	void savePosition();
+
 private:
 	Point flatCursor;
 	Point flatCursorRealWorld;
