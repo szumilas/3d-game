@@ -65,7 +65,7 @@ void MapManager::createNodesMap()
 			{
 				if (!strcmp(a->name(), "id"))
 				{
-					newNode.id = std::stoll(a->value());
+newNode.id = std::stoll(a->value());
 				}
 				else if (!strcmp(a->name(), "lat"))
 				{
@@ -95,6 +95,7 @@ void MapManager::createMapObjectsArray()
 		if (!strcmp(manager->name(), "way"))
 		{
 			MapObject mapObject;
+			long long id = std::stoll(manager->first_attribute()->value());
 
 			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
 			{
@@ -132,7 +133,7 @@ void MapManager::createMapObjectsArray()
 							{
 								//assert(!"unknown tag");
 							}
-							
+
 						}
 						else if (!strcmp(b->name(), "v")) //attribute value
 						{
@@ -151,7 +152,7 @@ void MapManager::createMapObjectsArray()
 						{
 							mapObject.*mapElement->second = 5;
 						}
-						else 
+						else
 						{
 							auto mapElement = tagStringPtrs.find(currentTag);
 							if (mapElement != tagStringPtrs.end())
@@ -163,11 +164,32 @@ void MapManager::createMapObjectsArray()
 				}
 			}
 
-			if (!mapObject.area_highway.empty())
+			if (!mapObject.height.empty())
+			{
+				mapObject._height = std::stof(mapObject.height);
+			}
+			else
+			{
+				mapObject._height = 15.0;
+			}
+			if (!mapObject.min_height.empty())
+			{
+				mapObject._min_height = std::stof(mapObject.min_height);
+			}
+			else
+			{
+				mapObject._min_height = 0.0;
+			}
+
+			if (id == 33286825)
+			{
+				//mapObjects.push_back(std::make_unique<HighlightedObject>(mapObject));
+			}
+			else if (!mapObject.area_highway.empty())
 			{
 				mapObjects.push_back(std::make_unique<Street>(mapObject));
 			}
-			else if (!mapObject.building.empty())
+			else if (!mapObject.building.empty() || !mapObject.building_part.empty())
 			{
 				mapObjects.push_back(std::make_unique<Building>(mapObject));
 			}
@@ -175,10 +197,60 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObjects.push_back(std::make_unique<GreenArea>(mapObject));
 			}
+			else if (mapObject.waterway == "river" || mapObject.waterway == "canal")
+			{
+				mapObjects.push_back(std::make_unique<River>(mapObject));
+			}
 
 		}
 	}
 }
+
+/*void MapManager::createMapObjectsArrayFromRelations()
+{
+	rapidxml::xml_node <>* nodeCeo = document.first_node();
+	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+	{
+		if (!strcmp(manager->name(), "relation"))
+		{
+
+			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+			{
+				long long ref = false;
+				std::string type;
+				std::string role;
+
+				std::string currentTag;
+				std::string currentTagValue;
+				bool skipTag = false;
+
+				if (!strcmp(a->name(), "member"))
+				{
+					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					{
+						if (!strcmp(b->name(), "ref"))
+						{
+							ref = std::stoll(b->value());
+						}
+						else if (!strcmp(b->name(), "type"))
+						{
+							type = b->value();
+						}
+						else if (!strcmp(b->name(), "role"))
+						{
+							role = b->value();
+						}
+					}
+
+					if (type == "way" && role == "outer")
+					{
+
+					}
+				}
+			}
+		}
+	}
+}*/
 
 void MapManager::calculateNodesPositions()
 {

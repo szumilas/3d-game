@@ -19,9 +19,18 @@ public:
 
 private:
 
+
 public:
 	/*TAGS*/
 	std::string area_highway;
 	std::string building;
 	std::string landuse;
+	std::string waterway;
+	std::string height;
+	std::string building_part;
+	std::string min_height;
+
+
+	float _height;
+	float _min_height;
 };

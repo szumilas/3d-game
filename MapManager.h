@@ -9,6 +9,8 @@
 #include "Street.h"
 #include "Building.h"
 #include "GreenArea.h"
+#include "River.h"
+#include "HighlightedObject.h"
 
 #include "rapidxml.hpp"
 
@@ -32,6 +34,7 @@ private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
 	void createNodesMap();
 	void createMapObjectsArray();
+	//void createMapObjectsArrayFromRelations();
 
 public:
 
@@ -57,6 +60,10 @@ private:
 		"area:highway",
 		"building",
 		"landuse",
+		"waterway",
+		"height",
+		"building:part",
+		"min_height",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -67,6 +74,10 @@ private:
 		{ "area:highway", &MapObject::area_highway },
 		{ "building", &MapObject::building },
 		{ "landuse", &MapObject::landuse },
+		{ "waterway", &MapObject::waterway },
+		{ "height", &MapObject::height },
+		{ "building:part", &MapObject::building_part },
+		{ "min_height", &MapObject::min_height },
 	};
 
 public:

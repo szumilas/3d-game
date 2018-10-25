@@ -133,11 +133,13 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="GreenArea.cpp" />
+    <ClCompile Include="HighlightedObject.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Orbit.cpp" />
+    <ClCompile Include="River.cpp" />
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
@@ -146,10 +148,12 @@
     <ClInclude Include="Car.h" />
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="GreenArea.h" />
+    <ClInclude Include="HighlightedObject.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Orbit.h" />
+    <ClInclude Include="River.h" />
     <ClInclude Include="Street.h" />
     <ClInclude Include="Wheel.h" />
   </ItemGroup>

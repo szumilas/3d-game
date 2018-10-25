@@ -6,7 +6,7 @@ void Building::display()
 	glBegin(GL_POLYGON);
 	for (auto& point : points)
 	{
-		glVertex3f(point.x, point.y, 15);
+		glVertex3f(point.x, point.y, _height);
 	}
 	glEnd();
 
@@ -17,10 +17,10 @@ void Building::display()
 		auto nextPoint = points[q + 1];
 
 		glBegin(GL_POLYGON);
-		glVertex3f(point.x, point.y, 0);
-		glVertex3f(nextPoint.x, nextPoint.y, 0);
-		glVertex3f(nextPoint.x, nextPoint.y, 15);
-		glVertex3f(point.x, point.y, 15);
+		glVertex3f(point.x, point.y, _min_height);
+		glVertex3f(nextPoint.x, nextPoint.y, _min_height);
+		glVertex3f(nextPoint.x, nextPoint.y, _height);
+		glVertex3f(point.x, point.y, _height);
 		glEnd();
 	}
 }

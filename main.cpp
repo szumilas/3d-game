@@ -86,7 +86,9 @@ int main(int argc, char**agrv)
 {
 	//mapManager.readMap("szczytnicka.osm");
 	//mapManager.readMap("map.osm");
-	mapManager.readMap("grunwald.osm");
+	//mapManager.readMap("grunwald.osm");
+	mapManager.readMap("grunwaldWithRiver.osm");
+	//mapManager.readMap("streetDetail.osm");
 	mapManager.calculateNodesPositions();
 	
 
@@ -219,7 +221,7 @@ void keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case 27: // Escape key
-		
+		orbit.savePosition();
 		exit(0);
 		break;
 	}
