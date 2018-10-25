@@ -9,8 +9,8 @@ public:
 	Orbit();
 	Point getCameraCenter();
 	Point getCameraLookAt();
-	void zoomIn() { distance--; };
-	void zoomOut() { distance++; };
+	void zoomIn() { distance /= 1.05; };
+	void zoomOut() { distance *= 1.05; };
 	void activateMovingXY() { if (previouslyRendered) previouslyRendered = false; else { moveOrbitXY = true; previousFlatCursor = flatCursor; } };
 	void deactivateMovingXY() { moveOrbitXY = false; };
 	void rotate() { rz += 3.14159265 / 360; };
