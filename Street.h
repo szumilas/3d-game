@@ -8,4 +8,6 @@ public:
 
 	Street(MapObject& mapObject) : MapObject(mapObject) {};
 
+	void display();
+
 };

@@ -165,15 +165,15 @@ void MapManager::createMapObjectsArray()
 
 			if (!mapObject.area_highway.empty())
 			{
-				streets.push_back(Street(mapObject));
+				mapObjects.push_back(std::make_unique<Street>(mapObject));
 			}
 			else if (!mapObject.building.empty())
 			{
-				buildings.push_back(Street(mapObject));
+				mapObjects.push_back(std::make_unique<Building>(mapObject));
 			}
 			else if (mapObject.landuse == "grass")
 			{
-				greenAreas.push_back(Street(mapObject));
+				mapObjects.push_back(std::make_unique<GreenArea>(mapObject));
 			}
 
 		}
@@ -189,5 +189,16 @@ void MapManager::calculateNodesPositions()
 	{
 		it->second.posX = static_cast<float>((it->second.lon - minLon) * longituteRatio);
 		it->second.posY = static_cast<float>((it->second.lat - minLat) * latitudeRatio);
+	}
+
+	for (auto& mapObject : mapObjects)
+	{
+		for (auto& ref : mapObject->refs)
+		{
+			Point newPoint;
+			newPoint.x = nodes.at(ref).posX;
+			newPoint.y = nodes.at(ref).posY;
+			mapObject->points.push_back(newPoint);
+		}
 	}
 }

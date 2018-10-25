@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Object3D.h"
+#include "GlobalStructures.h"
 
 class MapObject : public Object3D
 {
 public:
 
+	virtual void display();
 
 private:
 
@@ -13,6 +15,7 @@ private:
 public:
 
 	std::vector<long long> refs;
+	std::vector<Point> points;
 
 private:
 

@@ -41,7 +41,6 @@ private:
 
 	rapidxml::xml_document <> document;
 
-	std::vector<MapObject> mapObjects;
 
 	std::unordered_set<std::string> skippedTags{
 		"cycleway:right",
@@ -73,8 +72,6 @@ private:
 public:
 	std::map<long long, node> nodes;
 
-	std::vector<Street> streets;
-	std::vector<Building> buildings;
-	std::vector<GreenArea> greenAreas;
+	std::vector<std::unique_ptr<MapObject>> mapObjects;
 
 };

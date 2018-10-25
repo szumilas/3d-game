@@ -8,4 +8,6 @@ public:
 
 	GreenArea(MapObject& mapObject) : MapObject(mapObject) {};
 
+	void display();
+
 };

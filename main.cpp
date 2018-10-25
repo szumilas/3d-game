@@ -140,56 +140,10 @@ void display()
 	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
-
-
-	glColor3f(0.2, 0.2, 0.2);
-	for (auto& street : mapManager.streets)
+	
+	for (auto& mapObject : mapManager.mapObjects)
 	{
-		glBegin(GL_POLYGON);
-		for (auto& ref : street.refs)
-		{
-			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 0);
-		}
-		glEnd();
-	}
-
-	glColor3f(0.7, 0.7, 0.7);
-	for (auto& building : mapManager.buildings)
-	{
-		glBegin(GL_POLYGON);
-		for (auto& ref : building.refs)
-		{
-			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 15);
-		}
-		glEnd();
-	}
-
-	glColor3f(0.5, 0.5, 0.5);
-	for (auto& building : mapManager.buildings)
-	{
-		for (size_t q = 0; q < building.refs.size() - 1; q++)
-		{
-			auto ref = building.refs[q];
-			auto nextRef = building.refs[q + 1];
-
-			glBegin(GL_POLYGON);
-			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 0);
-			glVertex3f(mapManager.nodes.at(nextRef).posX, mapManager.nodes.at(nextRef).posY, 0);
-			glVertex3f(mapManager.nodes.at(nextRef).posX, mapManager.nodes.at(nextRef).posY, 15);
-			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 15);
-			glEnd();
-		}
-	}
-
-	glColor3f(0, 0.4, 0.1);
-	for (auto& greenArea : mapManager.greenAreas)
-	{
-		glBegin(GL_POLYGON);
-		for (auto& ref : greenArea.refs)
-		{
-			glVertex3f(mapManager.nodes.at(ref).posX, mapManager.nodes.at(ref).posY, 0);
-		}
-		glEnd();
+		mapObject->display();
 	}
 
 	obj.printModel();
@@ -224,7 +178,7 @@ void reshape(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	gluPerspective(angle, static_cast<float>(width) / height, 0.5, 300);
+	gluPerspective(angle, static_cast<float>(width) / height, 0.5, 3000);
 	glMatrixMode(GL_MODELVIEW);
 
 	display();
