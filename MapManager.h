@@ -68,6 +68,7 @@ private:
 		"min_height",
 		"barrier",
 		"leisure",
+		"amenity",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -84,6 +85,7 @@ private:
 		{ "min_height", &MapObject::min_height },
 		{ "barrier", &MapObject::barrier },
 		{ "leisure", &MapObject::leisure },
+		{ "amenity", &MapObject::amenity },
 	};
 
 public:

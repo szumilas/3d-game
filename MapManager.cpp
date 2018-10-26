@@ -205,7 +205,7 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObjects.push_back(std::make_unique<Barrier>(mapObject));
 			}
-			else if (mapObject.leisure == "common")
+			else if (mapObject.leisure == "common" || mapObject.amenity == "university")
 			{
 				mapObjects.push_back(std::make_unique<Common>(mapObject));
 			}

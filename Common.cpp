@@ -6,7 +6,7 @@ void Common::display()
 	glBegin(GL_POLYGON);
 	for (auto& point : points)
 	{
-		glVertex3f(point.x, point.y, 0);
+		glVertex3f(point.x, point.y, -0.05);
 	}
 	glEnd();
 }

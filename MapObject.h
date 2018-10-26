@@ -31,6 +31,7 @@ public:
 	std::string min_height;
 	std::string barrier;
 	std::string leisure;
+	std::string amenity;
 
 
 	float _height;
