@@ -9,3 +9,12 @@ struct Point
 	float z;
 };
 
+struct node
+{
+	long long id;
+	double lon;
+	double lat;
+
+	float posX;
+	float posY;
+};

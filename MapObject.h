@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "Object3D.h"
 #include "GlobalStructures.h"
 
@@ -8,6 +10,7 @@ class MapObject : public Object3D
 public:
 
 	virtual void display();
+	virtual void calculateXYfromRef(const std::map<long long, node> &nodes);
 
 private:
 

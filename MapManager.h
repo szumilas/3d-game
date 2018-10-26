@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <map>
 
+#include "GlobalStructures.h"
+
 #include "MapObject.h"
 #include "Street.h"
 #include "Building.h"
@@ -13,20 +15,13 @@
 #include "HighlightedObject.h"
 #include "Barrier.h"
 #include "Common.h"
+#include "Parking.h"
+#include "StreetLamp.h"
 
 #include "rapidxml.hpp"
 
 class MapManager
 {
-	struct node
-	{
-		long long id;
-		double lon;
-		double lat;
-
-		float posX;
-		float posY;
-	};
 
 public:
 	void readMap(const char * fileName);
@@ -69,6 +64,7 @@ private:
 		"barrier",
 		"leisure",
 		"amenity",
+		"highway",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{

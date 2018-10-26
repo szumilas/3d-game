@@ -65,7 +65,7 @@ void MapManager::createNodesMap()
 			{
 				if (!strcmp(a->name(), "id"))
 				{
-newNode.id = std::stoll(a->value());
+					newNode.id = std::stoll(a->value());
 				}
 				else if (!strcmp(a->name(), "lat"))
 				{
@@ -74,6 +74,39 @@ newNode.id = std::stoll(a->value());
 				else if (!strcmp(a->name(), "lon"))
 				{
 					newNode.lon = std::stod(a->value());
+				}
+			}
+
+			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+			{
+				std::string currentTag;
+				std::string currentTagValue;
+
+				if (!strcmp(a->name(), "tag"))
+				{
+					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					{
+						if (!strcmp(b->name(), "k")) //attribute name
+						{
+							if (acceptedTags.count(b->value()))
+							{
+								currentTag = b->value();
+							}
+						}
+						else if (!strcmp(b->name(), "v")) //attribute value
+						{
+							currentTagValue = b->value();
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+
+				if (currentTag == "highway" && currentTagValue == "street_lamp")
+				{
+					mapObjects.push_back(std::make_unique<StreetLamp>(newNode.id));
 				}
 			}
 
@@ -209,6 +242,10 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObjects.push_back(std::make_unique<Common>(mapObject));
 			}
+			else if (mapObject.amenity == "parking")
+			{
+				mapObjects.push_back(std::make_unique<Parking>(mapObject));
+			}
 
 		}
 	}
@@ -273,12 +310,6 @@ void MapManager::calculateNodesPositions()
 
 	for (auto& mapObject : mapObjects)
 	{
-		for (auto& ref : mapObject->refs)
-		{
-			Point newPoint;
-			newPoint.x = nodes.at(ref).posX;
-			newPoint.y = nodes.at(ref).posY;
-			mapObject->points.push_back(newPoint);
-		}
+		mapObject->calculateXYfromRef(nodes);
 	}
 }
