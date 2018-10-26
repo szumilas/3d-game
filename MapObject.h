@@ -30,6 +30,7 @@ public:
 	std::string building_part;
 	std::string min_height;
 	std::string barrier;
+	std::string leisure;
 
 
 	float _height;

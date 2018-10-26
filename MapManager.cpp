@@ -193,7 +193,7 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObjects.push_back(std::make_unique<Building>(mapObject));
 			}
-			else if (mapObject.landuse == "grass" || mapObject.landuse == "village_green")
+			else if (mapObject.landuse == "grass" || mapObject.landuse == "village_green" || mapObject.leisure == "park")
 			{
 				mapObjects.push_back(std::make_unique<GreenArea>(mapObject));
 			}
@@ -204,6 +204,10 @@ void MapManager::createMapObjectsArray()
 			else if (!mapObject.barrier.empty())
 			{
 				mapObjects.push_back(std::make_unique<Barrier>(mapObject));
+			}
+			else if (mapObject.leisure == "common")
+			{
+				mapObjects.push_back(std::make_unique<Common>(mapObject));
 			}
 
 		}

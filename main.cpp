@@ -87,7 +87,10 @@ int main(int argc, char**agrv)
 	//mapManager.readMap("szczytnicka.osm");
 	//mapManager.readMap("map.osm");
 	//mapManager.readMap("grunwald.osm");
+	//mapManager.readMap("parkCheck.osm");
+
 	mapManager.readMap("grunwaldWithRiver.osm");
+
 	//mapManager.readMap("streetDetail.osm");
 	mapManager.calculateNodesPositions();
 	
