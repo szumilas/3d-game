@@ -29,6 +29,7 @@ public:
 	std::string height;
 	std::string building_part;
 	std::string min_height;
+	std::string barrier;
 
 
 	float _height;

@@ -130,6 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Barrier.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="GreenArea.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Barrier.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="GlobalStructures.h" />

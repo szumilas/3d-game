@@ -11,6 +11,7 @@
 #include "GreenArea.h"
 #include "River.h"
 #include "HighlightedObject.h"
+#include "Barrier.h"
 
 #include "rapidxml.hpp"
 
@@ -64,6 +65,7 @@ private:
 		"height",
 		"building:part",
 		"min_height",
+		"barrier",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -78,6 +80,7 @@ private:
 		{ "height", &MapObject::height },
 		{ "building:part", &MapObject::building_part },
 		{ "min_height", &MapObject::min_height },
+		{ "barrier", &MapObject::barrier },
 	};
 
 public:

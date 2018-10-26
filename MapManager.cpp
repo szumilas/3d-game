@@ -193,13 +193,17 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObjects.push_back(std::make_unique<Building>(mapObject));
 			}
-			else if (mapObject.landuse == "grass")
+			else if (mapObject.landuse == "grass" || mapObject.landuse == "village_green")
 			{
 				mapObjects.push_back(std::make_unique<GreenArea>(mapObject));
 			}
 			else if (mapObject.waterway == "river" || mapObject.waterway == "canal")
 			{
 				mapObjects.push_back(std::make_unique<River>(mapObject));
+			}
+			else if (!mapObject.barrier.empty())
+			{
+				mapObjects.push_back(std::make_unique<Barrier>(mapObject));
 			}
 
 		}

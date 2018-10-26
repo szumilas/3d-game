@@ -13,8 +13,8 @@ public:
 	void zoomOut() { distance *= 1.05; };
 	void activateMovingXY() { if (previouslyRendered) previouslyRendered = false; else { moveOrbitXY = true; previousFlatCursor = flatCursor; } };
 	void deactivateMovingXY() { moveOrbitXY = false; };
-	void rotate() { rz += 3.14159265 / 360; };
-	void changeAlpha() { if (alpha < 3.14 / 2) alpha += 3.14159265 / 360; else alpha = 3.14 / 36; };
+	void rotate() { rz += 3.14159265 / 180; };
+	void changeAlpha() { if (alpha < 3.14 / 2) alpha += 3.14159265 / 180; else alpha = 3.14 / 36; };
 	float getFlatCursorX() { return flatCursor.x; }
 	float getFlatCursorY() { return flatCursor.y; }
 	float getLookAtX() { return lookAtX; }
