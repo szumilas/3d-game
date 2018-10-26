@@ -17,6 +17,7 @@
 #include "Common.h"
 #include "Parking.h"
 #include "StreetLamp.h"
+#include "Bridge.h"
 
 #include "rapidxml.hpp"
 
@@ -65,6 +66,7 @@ private:
 		"leisure",
 		"amenity",
 		"highway",
+		"man_made",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -82,6 +84,7 @@ private:
 		{ "barrier", &MapObject::barrier },
 		{ "leisure", &MapObject::leisure },
 		{ "amenity", &MapObject::amenity },
+		{ "man_made", &MapObject::man_made },
 	};
 
 public:

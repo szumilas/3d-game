@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\MapObject">
+      <UniqueIdentifier>{91fcc917-6621-40dc-92a7-2693b2b49a81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MapObject">
+      <UniqueIdentifier>{08efab77-b556-48f4-9b02-580a3c50fe69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -36,32 +42,35 @@
     <ClCompile Include="MapObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Street.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Barrier.cpp">
+      <Filter>Source Files\MapObject</Filter>
     </ClCompile>
     <ClCompile Include="Building.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GreenArea.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="River.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HighlightedObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Barrier.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MapObject</Filter>
     </ClCompile>
     <ClCompile Include="Common.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GreenArea.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="HighlightedObject.cpp">
+      <Filter>Source Files\MapObject</Filter>
     </ClCompile>
     <ClCompile Include="Parking.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="River.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Street.cpp">
+      <Filter>Source Files\MapObject</Filter>
     </ClCompile>
     <ClCompile Include="StreetLamp.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Bridge.cpp">
+      <Filter>Source Files\MapObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,32 +95,35 @@
     <ClInclude Include="MapObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Street.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Barrier.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="Building.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GreenArea.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="River.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HighlightedObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Barrier.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="Common.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenArea.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="HighlightedObject.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="Parking.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="River.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Street.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="StreetLamp.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Bridge.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

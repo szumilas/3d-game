@@ -226,6 +226,10 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObjects.push_back(std::make_unique<Building>(mapObject));
 			}
+			else if (mapObject.man_made == "bridge")
+			{
+				mapObjects.push_back(std::make_unique<Bridge>(mapObject));
+			}
 			else if (mapObject.landuse == "grass" || mapObject.landuse == "village_green" || mapObject.leisure == "park")
 			{
 				mapObjects.push_back(std::make_unique<GreenArea>(mapObject));
