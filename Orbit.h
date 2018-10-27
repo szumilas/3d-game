@@ -9,12 +9,12 @@ public:
 	Orbit();
 	Point getCameraCenter();
 	Point getCameraLookAt();
-	void zoomIn() { distance /= 1.05; };
-	void zoomOut() { distance *= 1.05; };
+	void zoomIn() { distance /= 1.05f; };
+	void zoomOut() { distance *= 1.05f; };
 	void activateMovingXY() { if (previouslyRendered) previouslyRendered = false; else { moveOrbitXY = true; previousFlatCursor = flatCursor; } };
 	void deactivateMovingXY() { moveOrbitXY = false; };
-	void rotate() { rz += 3.14159265 / 180; };
-	void changeAlpha() { if (alpha < 3.14 / 2) alpha += 3.14159265 / 180; else alpha = 3.14 / 36; };
+	void rotate() { rz += 3.14159265f / 180.0f; };
+	void changeAlpha() { if (alpha < 3.14 / 2) alpha += 3.14159265f / 180.0f; else alpha = 3.14f / 36.0f; };
 	float getFlatCursorX() { return flatCursor.x; }
 	float getFlatCursorY() { return flatCursor.y; }
 	float getLookAtX() { return lookAtX; }

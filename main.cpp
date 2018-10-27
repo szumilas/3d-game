@@ -19,7 +19,7 @@ int noOfFrames = 0;
 float windowHeight = 750;
 float windowWidth = 1500;
 
-int angle = 55;
+float angle = 55.0f;
 
 class Camera
 {

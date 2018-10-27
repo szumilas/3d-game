@@ -213,45 +213,12 @@ void MapManager::createMapObjectsArray()
 				mapObject._min_height = 0.0;
 			}
 
-			if (id == 33286825)
+			for (auto& check : objectDetector)
 			{
-				//mapObjects.push_back(std::make_unique<HighlightedObject>(mapObject));
-			}
-			else if (!mapObject.area_highway.empty())
-			{
-				mapObjects.push_back(std::make_unique<Street>(mapObject));
-			}
-			else if (!mapObject.building.empty() || !mapObject.building_part.empty())
-			{
-				mapObjects.push_back(std::make_unique<Building>(mapObject));
-			}
-			else if (mapObject.man_made == "bridge")
-			{
-				mapObjects.push_back(std::make_unique<Bridge>(mapObject));
-			}
-			else if (mapObject.landuse == "grass" || mapObject.landuse == "village_green" || mapObject.leisure == "park")
-			{
-				mapObjects.push_back(std::make_unique<GreenArea>(mapObject));
-			}
-			else if (mapObject.waterway == "river" || mapObject.waterway == "canal")
-			{
-				mapObjects.push_back(std::make_unique<River>(mapObject));
-			}
-			else if (!mapObject.barrier.empty())
-			{
-				mapObjects.push_back(std::make_unique<Barrier>(mapObject));
-			}
-			else if (mapObject.leisure == "common" || mapObject.amenity == "university")
-			{
-				mapObjects.push_back(std::make_unique<Common>(mapObject));
-			}
-			else if (mapObject.amenity == "parking")
-			{
-				mapObjects.push_back(std::make_unique<Parking>(mapObject));
-			}
-			else if (mapObject.railway == "tram")
-			{
-				mapObjects.push_back(std::make_unique<Railway>(mapObject));
+				if ((this->*check.first)(mapObject))
+				{
+					(this->*check.second)(mapObject);
+				}
 			}
 		}
 	}
