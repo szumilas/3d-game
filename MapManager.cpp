@@ -200,10 +200,6 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObject._height = std::stof(mapObject.height);
 			}
-			else
-			{
-				mapObject._height = 15.0;
-			}
 			if (!mapObject.min_height.empty())
 			{
 				mapObject._min_height = std::stof(mapObject.min_height);
