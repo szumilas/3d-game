@@ -127,8 +127,7 @@ void MapManager::createMapObjectsArray()
 	{
 		if (!strcmp(manager->name(), "way"))
 		{
-			MapObject mapObject;
-			long long id = std::stoll(manager->first_attribute()->value());
+			MapObject mapObject(std::stoll(manager->first_attribute()->value()));
 
 			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
 			{
@@ -287,10 +286,10 @@ void MapManager::calculateNodesPositions()
 
 bool MapManager::isHighlightedObjectCheck(MapObject& mapObject)
 {
-	//(mapObject.id == 33286825)
-	//	return true;
-	//else
-	return false;
+	if(mapObject.getId() == 101212380ll)
+		return true;
+	else
+		return false;
 }
 
 bool MapManager::isStreetCheck(MapObject& mapObject)

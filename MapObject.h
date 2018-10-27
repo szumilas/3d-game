@@ -9,13 +9,18 @@ class MapObject : public Object3D
 {
 public:
 
+	MapObject() {};
+	MapObject(long long id) { MapObject::id = id; };
 	virtual void display();
 	virtual void calculateXYfromRef(const std::map<long long, node> &nodes);
 
 	void applyKnownValues();
 
+	long long getId() { return id; }
+
 private:
 
+	long long id;
 
 public:
 
