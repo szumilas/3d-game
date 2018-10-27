@@ -2,7 +2,7 @@
 
 void Bridge::display()
 {
-	glColor3f(0.7, 0.7, 0.7);
+	glColor3f(0.7f, 0.7f, 0.7f);
 	glBegin(GL_POLYGON);
 	for (auto& point : points)
 	{

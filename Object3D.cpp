@@ -22,7 +22,7 @@ void Object3D::printModel()
 	int q = 0;
 
 	glBegin(GL_TRIANGLES);
-	glColor3f(1, 0, 0);
+	glColor3f(1.0f, 0.0f, 0.0f);
 
 	for (auto& triangle : triangles)
 	{

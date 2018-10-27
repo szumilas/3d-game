@@ -2,11 +2,11 @@
 
 void Common::display()
 {
-	glColor3f(0.8, 0.5, 0.0);
+	glColor3f(0.8f, 0.5f, 0.0f);
 	glBegin(GL_POLYGON);
 	for (auto& point : points)
 	{
-		glVertex3f(point.x, point.y, -0.05);
+		glVertex3f(point.x, point.y, -0.05f);
 	}
 	glEnd();
 }
