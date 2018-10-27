@@ -34,9 +34,27 @@ private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
 	void createNodesMap();
 	void createMapObjectsArray();
-	//void createMapObjectsArrayFromRelations();
+
+	bool isHighlightedObjectCheck(MapObject& mapObject);
+	bool isStreetCheck(MapObject& mapObject);
+	bool isBuildingCheck(MapObject& mapObject);
+	bool isBridgeCheck(MapObject& mapObject);
+	bool isGreenAreaCheck(MapObject& mapObject);
+	bool isBarrierCheck(MapObject& mapObject);
+	bool isCommonCheck(MapObject& mapObject);
+	bool isParkingCheck(MapObject& mapObject);
+	bool isRailwayCheck(MapObject& mapObject);
+	bool isRiverCheck(MapObject& mapObject);
+	bool isFootwayCheck(MapObject& mapObject);
+
+	template <typename T>
+	void addObject(MapObject& newMapObject)
+	{
+		mapObjects.push_back(std::make_unique<T>(newMapObject));
+	}
 
 public:
+
 
 private:
 	double longituteRatio = 69797.5460045862;
@@ -70,13 +88,15 @@ private:
 		"highway",
 		"man_made",
 		"railway",
+		"colour",
+		"building:colour",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
 
 	};
 
-	std::map<std::string, std::string MapObject::*> tagStringPtrs{
+	std::map<std::string, std::string MapObject::*> tagPtrs{
 		{ "area:highway", &MapObject::area_highway },
 		{ "building", &MapObject::building },
 		{ "landuse", &MapObject::landuse },
@@ -90,101 +110,9 @@ private:
 		{ "highway", &MapObject::highway },
 		{ "man_made", &MapObject::man_made },
 		{ "railway", &MapObject::railway },
+		{ "colour", &MapObject::colour },
+		{ "building:colour", &MapObject::colour },
 	};
-
-	template <typename T>
-	void addObject(MapObject& newMapObject)
-	{
-		mapObjects.push_back(std::make_unique<T>(newMapObject));
-	}
-
-	bool isHighlightedObjectCheck(MapObject& mapObject)
-	{
-		//(mapObject.id == 33286825)
-		//	return true;
-		//else
-			return false;
-	}
-
-	bool isStreetCheck(MapObject& mapObject)
-	{
-		if (!mapObject.area_highway.empty())
-			return true;
-		else
-			return false;
-	}
-
-	bool isBuildingCheck(MapObject& mapObject)
-	{
-		if (!mapObject.building.empty() || !mapObject.building_part.empty())
-			return true;
-		else
-			return false;
-	}
-
-	bool isBridgeCheck(MapObject& mapObject)
-	{
-		if (mapObject.man_made == "bridge")
-			return true;
-		else
-			return false;
-	}
-
-	bool isGreenAreaCheck(MapObject& mapObject)
-	{
-		if (mapObject.landuse == "grass" || mapObject.landuse == "village_green" || mapObject.leisure == "park")
-			return true;
-		else
-			return false;
-	}
-
-	bool isBarrierCheck(MapObject& mapObject)
-	{
-		if (!mapObject.barrier.empty())
-			return true;
-		else
-			return false;
-	}
-
-	bool isCommonCheck(MapObject& mapObject)
-	{
-		if (mapObject.leisure == "common" || mapObject.amenity == "university")
-			return true;
-		else
-			return false;
-	}
-
-	bool isParkingCheck(MapObject& mapObject)
-	{
-		if (mapObject.amenity == "parking")
-			return true;
-		else
-			return false;
-	}
-
-	bool isRailwayCheck(MapObject& mapObject)
-	{
-		if (mapObject.railway == "tram")
-			return true;
-		else
-			return false;
-	}
-
-	bool isRiverCheck(MapObject& mapObject)
-	{
-		if (mapObject.waterway == "river" || mapObject.waterway == "canal")
-			return true;
-		else
-			return false;
-	}
-
-	bool isFootwayCheck(MapObject& mapObject)
-	{
-		if (mapObject.highway == "footway" || mapObject.highway == "path")
-			return true;
-		else
-			return false;
-	}
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
 	{
@@ -202,8 +130,8 @@ private:
 	};
 
 public:
-	std::map<long long, node> nodes;
 
+	std::map<long long, node> nodes;
 	std::vector<std::unique_ptr<MapObject>> mapObjects;
 
 };

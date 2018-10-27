@@ -186,8 +186,8 @@ void MapManager::createMapObjectsArray()
 						}
 						else
 						{
-							auto mapElement = tagStringPtrs.find(currentTag);
-							if (mapElement != tagStringPtrs.end())
+							auto mapElement = tagPtrs.find(currentTag);
+							if (mapElement != tagPtrs.end())
 							{
 								mapObject.*mapElement->second = currentTagValue;
 							}
@@ -196,7 +196,7 @@ void MapManager::createMapObjectsArray()
 				}
 			}
 
-			if (!mapObject.height.empty())
+			/*if (!mapObject.height.empty())
 			{
 				mapObject._height = std::stof(mapObject.height);
 			}
@@ -207,7 +207,9 @@ void MapManager::createMapObjectsArray()
 			else
 			{
 				mapObject._min_height = 0.0;
-			}
+			}*/
+
+			mapObject.applyKnownValues();
 
 			for (auto& check : objectDetector)
 			{
@@ -281,4 +283,92 @@ void MapManager::calculateNodesPositions()
 	{
 		mapObject->calculateXYfromRef(nodes);
 	}
+}
+
+bool MapManager::isHighlightedObjectCheck(MapObject& mapObject)
+{
+	//(mapObject.id == 33286825)
+	//	return true;
+	//else
+	return false;
+}
+
+bool MapManager::isStreetCheck(MapObject& mapObject)
+{
+	if (!mapObject.area_highway.empty())
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isBuildingCheck(MapObject& mapObject)
+{
+	if (!mapObject.building.empty() || !mapObject.building_part.empty())
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isBridgeCheck(MapObject& mapObject)
+{
+	if (mapObject.man_made == "bridge")
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isGreenAreaCheck(MapObject& mapObject)
+{
+	if (mapObject.landuse == "grass" || mapObject.landuse == "village_green" || mapObject.leisure == "park")
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isBarrierCheck(MapObject& mapObject)
+{
+	if (!mapObject.barrier.empty())
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isCommonCheck(MapObject& mapObject)
+{
+	if (mapObject.leisure == "common" || mapObject.amenity == "university")
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isParkingCheck(MapObject& mapObject)
+{
+	if (mapObject.amenity == "parking")
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isRailwayCheck(MapObject& mapObject)
+{
+	if (mapObject.railway == "tram")
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isRiverCheck(MapObject& mapObject)
+{
+	if (mapObject.waterway == "river" || mapObject.waterway == "canal")
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isFootwayCheck(MapObject& mapObject)
+{
+	if (mapObject.highway == "footway" || mapObject.highway == "path")
+		return true;
+	else
+		return false;
 }

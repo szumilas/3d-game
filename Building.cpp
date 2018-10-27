@@ -10,7 +10,7 @@ void Building::display()
 	}
 	glEnd();
 
-	glColor3f(0.5, 0.5, 0.5);
+	glColor3f(_red, _green, _blue);
 	for (size_t q = 0; q < points.size() - 1; q++)
 	{
 		auto point = points[q];

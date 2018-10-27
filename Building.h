@@ -20,6 +20,12 @@ public:
 		{
 			_height = 15.0f;
 		}
+		if (colour.empty())
+		{
+			_red = 0.5f;
+			_green = 0.5f;
+			_blue = 0.5f;
+		}
 	};
 
 	void display();

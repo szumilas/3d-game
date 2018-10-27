@@ -12,6 +12,8 @@ public:
 	virtual void display();
 	virtual void calculateXYfromRef(const std::map<long long, node> &nodes);
 
+	void applyKnownValues();
+
 private:
 
 
@@ -22,6 +24,15 @@ public:
 
 private:
 
+	std::map<std::string, std::tuple<float, float, float>> colorMap
+	{
+		{"white", {1.0f, 1.0f, 1.0f}},
+		{"black", {0.0f, 0.0f, 0.0f}},
+		{"red", {1.0f, 0.0f, 0.0f}},
+		{"green", {0.0f, 1.0f, 0.0f}},
+		{"blue", {0.0f, 0.0f, 1.0f}},
+		{"grey", {0.5f, 0.5f, 0.5f}},
+	};
 
 public:
 	/*TAGS*/
@@ -38,8 +49,12 @@ public:
 	std::string highway;
 	std::string man_made;
 	std::string railway;
+	std::string colour;
 
 
 	float _height;
 	float _min_height;
+	float _red;
+	float _green;
+	float _blue;
 };
