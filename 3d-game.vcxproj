@@ -143,6 +143,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Orbit.cpp" />
     <ClCompile Include="Parking.cpp" />
+    <ClCompile Include="Railway.cpp" />
     <ClCompile Include="River.cpp" />
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="StreetLamp.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Orbit.h" />
     <ClInclude Include="Parking.h" />
+    <ClInclude Include="Railway.h" />
     <ClInclude Include="River.h" />
     <ClInclude Include="Street.h" />
     <ClInclude Include="StreetLamp.h" />

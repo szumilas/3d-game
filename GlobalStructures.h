@@ -7,6 +7,11 @@ struct Point
 	float x;
 	float y;
 	float z;
+
+	float distance(Point& second)
+	{
+		return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2));
+	}
 };
 
 struct node

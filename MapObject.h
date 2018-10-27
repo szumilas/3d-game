@@ -36,6 +36,7 @@ public:
 	std::string leisure;
 	std::string amenity;
 	std::string man_made;
+	std::string railway;
 
 
 	float _height;

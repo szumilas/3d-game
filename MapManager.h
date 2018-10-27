@@ -18,6 +18,7 @@
 #include "Parking.h"
 #include "StreetLamp.h"
 #include "Bridge.h"
+#include "Railway.h"
 
 #include "rapidxml.hpp"
 
@@ -44,11 +45,11 @@ private:
 
 
 	std::unordered_set<std::string> skippedTags{
-		"cycleway:right",
+		/*"cycleway:right",
 		"description",
 		"maxspeed",
 		"name:etymology:wikidata",
-		"source:maxspeed",
+		"source:maxspeed",*/
 	};
 
 	std::unordered_set<std::string> temporarySkippedTags{
@@ -67,6 +68,7 @@ private:
 		"amenity",
 		"highway",
 		"man_made",
+		"railway",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -85,6 +87,7 @@ private:
 		{ "leisure", &MapObject::leisure },
 		{ "amenity", &MapObject::amenity },
 		{ "man_made", &MapObject::man_made },
+		{ "railway", &MapObject::railway },
 	};
 
 public:

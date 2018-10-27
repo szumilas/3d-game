@@ -177,7 +177,6 @@ void MapManager::createMapObjectsArray()
 							break;
 						}
 					}
-
 					if (!skipTag)
 					{
 						auto mapElement = tagLongPtrs.find(currentTag);
@@ -250,7 +249,10 @@ void MapManager::createMapObjectsArray()
 			{
 				mapObjects.push_back(std::make_unique<Parking>(mapObject));
 			}
-
+			else if (mapObject.railway == "tram")
+			{
+				mapObjects.push_back(std::make_unique<Railway>(mapObject));
+			}
 		}
 	}
 }

@@ -72,6 +72,9 @@
     <ClCompile Include="Bridge.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="Railway.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="Bridge.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Railway.h">
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>
