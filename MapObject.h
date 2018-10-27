@@ -35,6 +35,7 @@ public:
 	std::string barrier;
 	std::string leisure;
 	std::string amenity;
+	std::string highway;
 	std::string man_made;
 	std::string railway;
 

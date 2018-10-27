@@ -19,6 +19,7 @@
 #include "StreetLamp.h"
 #include "Bridge.h"
 #include "Railway.h"
+#include "Footway.h"
 
 #include "rapidxml.hpp"
 
@@ -86,6 +87,7 @@ private:
 		{ "barrier", &MapObject::barrier },
 		{ "leisure", &MapObject::leisure },
 		{ "amenity", &MapObject::amenity },
+		{ "highway", &MapObject::highway },
 		{ "man_made", &MapObject::man_made },
 		{ "railway", &MapObject::railway },
 	};
@@ -176,6 +178,14 @@ private:
 			return false;
 	}
 
+	bool isFootwayCheck(MapObject& mapObject)
+	{
+		if (mapObject.highway == "footway" || mapObject.highway == "path")
+			return true;
+		else
+			return false;
+	}
+
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
 	{
 		{ &MapManager::isHighlightedObjectCheck, &MapManager::addObject<HighlightedObject>},
@@ -188,6 +198,7 @@ private:
 		{ &MapManager::isCommonCheck, &MapManager::addObject<Common>},
 		{ &MapManager::isParkingCheck, &MapManager::addObject<Parking>},
 		{ &MapManager::isRailwayCheck, &MapManager::addObject<Railway>},
+		{ &MapManager::isFootwayCheck, &MapManager::addObject<Footway>},
 	};
 
 public:

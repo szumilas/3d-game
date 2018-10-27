@@ -135,6 +135,7 @@
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="Common.cpp" />
+    <ClCompile Include="Footway.cpp" />
     <ClCompile Include="GreenArea.cpp" />
     <ClCompile Include="HighlightedObject.cpp" />
     <ClCompile Include="MapManager.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Building.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Footway.h" />
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="GreenArea.h" />
     <ClInclude Include="HighlightedObject.h" />
