@@ -78,6 +78,9 @@
     <ClCompile Include="Footway.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="Roof.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -136,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="Footway.h">
       <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Roof.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PointInsidePolygonDetector.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

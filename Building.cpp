@@ -2,13 +2,13 @@
 
 void Building::display()
 {
-	glColor3f(0.7f, 0.7f, 0.7f);
+	/*glColor3f(0.7f, 0.7f, 0.7f);
 	glBegin(GL_POLYGON);
 	for (auto& point : points)
 	{
 		glVertex3f(point.x, point.y, _height);
 	}
-	glEnd();
+	glEnd();*/
 
 	glColor3f(_red, _green, _blue);
 	for (size_t q = 0; q < points.size() - 1; q++)

@@ -20,6 +20,7 @@
 #include "Bridge.h"
 #include "Railway.h"
 #include "Footway.h"
+#include "Roof.h"
 
 #include "rapidxml.hpp"
 
@@ -51,6 +52,10 @@ private:
 	void addObject(MapObject& newMapObject)
 	{
 		mapObjects.push_back(std::make_unique<T>(newMapObject));
+		if (std::is_same<T, Building>::value)
+		{
+			mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
+		}
 	}
 
 public:

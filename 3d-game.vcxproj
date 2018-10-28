@@ -146,6 +146,7 @@
     <ClCompile Include="Parking.cpp" />
     <ClCompile Include="Railway.cpp" />
     <ClCompile Include="River.cpp" />
+    <ClCompile Include="Roof.cpp" />
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="StreetLamp.cpp" />
     <ClCompile Include="Wheel.cpp" />
@@ -165,8 +166,10 @@
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Orbit.h" />
     <ClInclude Include="Parking.h" />
+    <ClInclude Include="PointInsidePolygonDetector.h" />
     <ClInclude Include="Railway.h" />
     <ClInclude Include="River.h" />
+    <ClInclude Include="Roof.h" />
     <ClInclude Include="Street.h" />
     <ClInclude Include="StreetLamp.h" />
     <ClInclude Include="Wheel.h" />
