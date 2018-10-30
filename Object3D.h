@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <list>
 
 #include "GlobalStructures.h"
 

@@ -52,7 +52,7 @@ void Railway::calculateXYfromRef(const std::map<long long, node> &nodes)
 		Point& firstPoint = points[q];
 		Point& secondPoint = points[q + 1];
 
-		float distance = firstPoint.distance(secondPoint);
+		float distance = firstPoint.distance2D(secondPoint);
 		
 		//first point
 		{

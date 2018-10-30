@@ -8,10 +8,16 @@ struct Point
 	float y;
 	float z;
 
-	float distance(Point& second)
+	Point() { x = 0; y = 0; z = 0; }
+	Point(float x, float y, float z) { Point::x = x; Point::y = y; Point::z = z; }
+	Point(float x, float y) { Point::x = x; Point::y = y; z = 0; }
+	
+	float distance2D(Point& second)
 	{
 		return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2));
 	}
+
+	bool operator==(const Point& second) { return x == second.x && y == second.y && z == second.z; }
 };
 
 struct Line2D
@@ -61,6 +67,49 @@ struct Line2D
 			B = b + e * g;
 			C = c + f * g;
 		}
+	}
+
+	Point calcuateIntersectionPoint(Line2D& secondLine)
+	{
+		Point intersection;
+		float W = A * secondLine.B - B * secondLine.A;
+		float Wx = -C * secondLine.B + B * secondLine.C;
+		float Wy = -A * secondLine.C + C * secondLine.A;
+
+		if (W == 0)
+		{
+			if (B == 0)
+			{
+				intersection.x = -C / A;
+				intersection.y = 0;
+			}
+			else
+			{
+				intersection.x = 1000000;
+				intersection.y = (-1000000 * A - C) / B;
+			}
+		}
+		else
+		{
+			intersection.x = Wx / W;
+			intersection.y = Wy / W;
+		}
+
+		return intersection;
+	}
+
+	bool isSame(Line2D& secondLine)
+	{
+		float delta = 0.1;
+		if (abs(A - secondLine.A) < delta && abs(B - secondLine.B) < delta && abs(C - secondLine.C) < delta)
+			return true;
+		else
+			return false;
+	}
+
+	float pointDistance(const Point& point)
+	{
+		return abs(A * point.x + B * point.y + C) / (sqrt(A * A + B *B));
 	}
 };
 
