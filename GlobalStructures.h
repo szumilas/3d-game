@@ -4,15 +4,15 @@
 
 struct Point
 {
-	float x;
-	float y;
-	float z;
+	double x;
+	double y;
+	double z;
 
 	Point() { x = 0; y = 0; z = 0; }
-	Point(float x, float y, float z) { Point::x = x; Point::y = y; Point::z = z; }
-	Point(float x, float y) { Point::x = x; Point::y = y; z = 0; }
+	Point(double x, double y, double z) { Point::x = x; Point::y = y; Point::z = z; }
+	Point(double x, double y) { Point::x = x; Point::y = y; z = 0; }
 	
-	float distance2D(Point& second)
+	double distance2D(Point& second)
 	{
 		return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2));
 	}
@@ -111,6 +111,67 @@ struct Line2D
 	{
 		return abs(A * point.x + B * point.y + C) / (sqrt(A * A + B *B));
 	}
+};
+
+struct Plane
+{
+	Plane() {};
+	Plane(Point& p1, Point& p2, Point& p3)
+	{
+		auto detA = [](float a11, float a12, float a13, float a21, float a22, float a23, float a31, float a32, float a33 ) {
+			return a11*a22*a33 + a12*a23*a31 + a13*a21*a32 - (a13*a22*a31 + a11*a23*a32 + a12*a21*a33);
+		};
+
+		
+		float WD = detA(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z);
+		float WA = detA(1.0f, p1.y, p1.z, 1.0f, p2.y, p2.z, 1.0f, p3.y, p3.z);
+		float WB = detA(p1.x, 1.0f, p1.z, p2.x, 1.0f, p2.z, p3.x, 1.0f, p3.z);
+		float WC = detA(p1.x, p1.y, 1.0f, p2.x, p2.y, 1.0f, p3.x, p3.y, 1.0f);
+
+		D = 1;
+		A = -D * WA / WD;
+		B = -D * WB / WD;
+		C = -D * WC / WD;
+	}
+
+	float A, B, C, D;
+};
+
+struct vector2D
+{
+	vector2D(Point& p1, Point& p2)
+	{
+		x = p2.x - p1.x;
+		y = p2.y - p1.y;
+	}
+
+	vector2D(vector2D& v1, vector2D& v2)
+	{
+		x = v1.x + v2.x;
+		y = v1.y + v2.y;
+	}
+
+	void negate()
+	{
+		x *= -1.0f;
+		y *= -1.0f;
+	}
+
+	static double crossProduct(vector2D& v1, vector2D& v2)
+	{
+		return v1.x * v2.y - v1.y * v2.x;
+	}
+
+	void convertIntoUnitVector()
+	{
+		double dist = sqrt(x * x + y * y);
+		x /= dist;
+		y /= dist;
+	}
+
+	double x;
+	double y;
+
 };
 
 struct node
