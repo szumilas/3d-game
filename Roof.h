@@ -44,9 +44,17 @@ public:
 		long long idp1;
 		long long idp2;
 		long long idp3;
-		std::list<RoofPoint>::iterator p1;
-		std::list<RoofPoint>::iterator p2;
-		std::list<RoofPoint>::iterator p3;
+	};
+
+	struct Quadrangle
+	{
+		bool closed;
+		long long idp1;
+		long long idp2;
+		Point p1;
+		Point p2;
+		Point p3;
+		Point p4;
 	};
 
 	Roof(MapObject& mapObject);
@@ -56,19 +64,60 @@ public:
 private:
 
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
-	void calculateSpeedOfPoint(std::list<RoofPoint>::iterator& currentPoint, const std::list<RoofPoint>::iterator& nextPoint, const std::list<RoofPoint>::iterator& prevPoint);
+	void calculateSpeedOfPoint(long long IdcurrentPoint, long long IdnextPoint, long long IdprevPoint);
 	void calculateSpeedOfPoint(long long id);
-	double lineCollapseTime(std::list<RoofPoint>::iterator& p1, std::list<RoofPoint>::iterator& p2);
-	double triangleCollapseTime(std::list<RoofPoint>::iterator& p1, std::list<RoofPoint>::iterator& p2, std::list<RoofPoint>::iterator& p3);
-	void setCollisionPoint(std::list<RoofPoint>::iterator& p1, std::list<RoofPoint>::iterator& p2, std::list<RoofPoint>::iterator& p3);
-	std::list<RoofPoint>::iterator oppositeTriangleWithEdge(std::list<RoofPoint>::iterator& p1, std::list<RoofPoint>::iterator& p2, std::list<RoofPoint>::iterator& p3);
-	void removeTriangle(std::list<RoofPoint>::iterator& p1, std::list<RoofPoint>::iterator& p2, std::list<RoofPoint>::iterator& p3);
-	void removeTriangle(std::list<RoofPoint>::iterator& p1, std::list<RoofPoint>::iterator& p2);
-	void renamePointInTriangles(std::list<RoofPoint>::iterator& oldP, std::list<RoofPoint>::iterator& newP);
+	double lineCollapseTime(RoofPoint& p1, RoofPoint& p2);
+	double triangleCollapseTime(RoofPoint& p1, RoofPoint& p2, RoofPoint& p3);
+	void setCollisionPoint(long long& p1, long long& p2, long long& p3);
+	long long oppositeTriangleWithEdge(long long idp1, long long idp2, long long idp3);
+	void removeTriangle(long long idp1, long long idp2, long long idp3);
+	void sortPoints(long long& idp1, long long& idp2, long long& idp3);
+	void removeTriangle(long long idp1, long long idp2);
+	void renamePointInTriangles(long long oldIdP, long long newIdP);
+	void renamePointInSurfaces(long long oldIdP, long long newIdP);
 	void removePointFromWavefront(long long id);
-	double futureDistance(std::list<RoofPoint>::iterator& p1, std::list<RoofPoint>::iterator& p2, double h);
+	double futureDistance(long long idp1, long long idp2, double h);
 	void removeRoofPoint(long long id);
-	void registerTriangles();
+	int countTrianglesWithPoint(long long id);
+	void removeBrokenTriangles();
+	void removeEmptyWavefronts();
+	//void registerTriangles();
+
+
+	Point getRoofPoint(long long id)
+	{
+		for (int i = 0; i < roofPoints.size(); i++)
+		{
+			if (roofPoints[i].id == id)
+				return roofPoints[i].point;
+		}
+
+		return Point();
+	}
+
+	RoofPoint getFullRoofPoint(long long id)
+	{
+		for (int i = 0; i < roofPoints.size(); i++)
+		{
+			if (roofPoints[i].id == id)
+				return roofPoints[i];
+		}
+
+		return RoofPoint();
+	}
+
+	void updateRoofPoint(long long id, RoofPoint newPoint)
+	{
+		for (int i = 0; i < roofPoints.size(); i++)
+		{
+			if (roofPoints[i].id == id)
+			{
+				roofPoints[i] = newPoint;
+				break;
+			}
+		}
+
+	}
 
 
 	double distanceIdId(long long id1, long long id2)
@@ -111,8 +160,81 @@ private:
 		return it;
 	}
 
-	bool anyPointInTriangle(std::list<RoofPoint>::iterator& A, std::list<RoofPoint>::iterator& B, std::list<RoofPoint>::iterator& C);
+	bool anyPointInTriangle(long long idA, long long idB, long long idC);
 	long long nextRoofPointid();
+
+	template <typename T>
+	int nextIterator(long long id, std::vector<T>& container)
+	{
+		auto i = 0;
+		for (; i < container.size(); i++)
+		{
+			if (container[i].id == id)
+			{
+				break;
+			}
+		}
+
+		i += 1;
+		i = i % container.size();
+		return i;
+	}
+
+	template <>
+	int nextIterator(long long id, std::vector<long long>& container)
+	{
+		auto i = 0;
+		for (; i < container.size(); i++)
+		{
+			if (container[i] == id)
+			{
+				break;
+			}
+		}
+
+		i += 1;
+		i = i % container.size();
+		return i;
+	}
+
+	template <typename T>
+	int prevIterator(long long id, std::vector<T>& container)
+	{
+		auto i = 0;
+		for (; i < container.size(); i++)
+		{
+			if (container[i].id == id)
+			{
+				break;
+			}
+		}
+
+		i -= 1;
+		i = i % container.size();
+		return i;
+	}
+
+	template <>
+	int prevIterator(long long id, std::vector<long long>& container)
+	{
+		auto i = 0;
+		for (; i < container.size(); i++)
+		{
+			if (container[i] == id)
+			{
+				break;
+			}
+		}
+
+		i -= 1;
+		i = (i + container.size()) % container.size();
+		return i;
+	}
+
+	void openWavefrontSurfaces();
+	void closeWavefrontSurfaces();
+
+
 
 public:
 
@@ -137,9 +259,15 @@ private:
 	std::list<std::tuple<Point, Point>> izolines;
 	std::list<std::tuple<Point, Point>> ridges;
 
-	std::list<RoofPoint> roofPoints;
+	std::vector<RoofPoint> roofPoints;
 	std::list<std::tuple<Point, Point>> roofTriangleEdges;
-	std::list<Triangle> triangles;
-	std::list<std::list<std::list<RoofPoint>::iterator>> wavefront;
-	std::list<std::pair<Point, Point>> roofLines;
+	std::vector<Triangle> triangles;
+	std::vector<std::vector<long long>> wavefront;
+	std::vector<std::pair<Point, Point>> roofLines;
+
+	std::vector<Quadrangle> surfaces;
+
+	std::vector<std::tuple<Point, Point, long>> wavefrontLines;
+
+	
 };
