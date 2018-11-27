@@ -4,32 +4,8 @@
 
 class Roof : public MapObject
 {
-
-
-	struct vertex
-	{
-		Point startPoint;
-		Point edgePointStart;
-		float dv;
-		float dx;
-		float dy;
-		float beta;
-	};
-
-
+	
 public:
-
-	struct RoofData
-	{
-		Point startPoint;
-		Point firstPoint;
-		bool firstPointIsNull;
-		Point secondPoint;
-		Point directionPoint;
-		float beta;
-
-		bool operator==(const RoofData& second) { return startPoint == second.startPoint; }
-	};
 
 	struct RoofPoint
 	{
@@ -79,9 +55,9 @@ private:
 	double futureDistance(long long idp1, long long idp2, double h);
 	void removeRoofPoint(long long id);
 	int countTrianglesWithPoint(long long id);
+	double findHeightOfNextCollision();
 	void removeBrokenTriangles();
 	void removeEmptyWavefronts();
-	//void registerTriangles();
 
 
 	Point getRoofPoint(long long id)
@@ -118,48 +94,7 @@ private:
 		}
 
 	}
-
-
-	double distanceIdId(long long id1, long long id2)
-	{
-		auto p1 = roofPoints.begin();
-		auto p2 = roofPoints.begin();
-
-		for (auto itRoofPoint = roofPoints.begin(); itRoofPoint != roofPoints.end(); itRoofPoint++)
-		{
-			if (itRoofPoint->id == id1)
-				p1 = itRoofPoint;
-			if (itRoofPoint->id == id2)
-				p2 = itRoofPoint;
-		}
-
-		return p1->point.distance2D(p2->point);
-	}
-
-	template <typename T, typename Titerator>
-	Titerator nextLoop(Titerator i, std::list<T> &container, int n = 1)
-	{
-		auto it = i;
-		for (int q = 0; q < n; q++)
-		{
-			it = (std::next(it) != container.end()) ? std::next(it) : container.begin();
-		}
-
-		return it;
-	}
-
-	template <typename T, typename Titerator>
-	Titerator prevLoop(Titerator i, std::list<T> &container, int n = 1)
-	{
-		auto it = i;
-		for (int q = 0; q < n; q++)
-		{
-			it = (it != container.begin()) ? std::prev(it) : std::prev(container.end());
-		}
-
-		return it;
-	}
-
+	
 	bool anyPointInTriangle(long long idA, long long idB, long long idC);
 	long long nextRoofPointid();
 
@@ -197,39 +132,6 @@ private:
 		return i;
 	}
 
-	template <typename T>
-	int prevIterator(long long id, std::vector<T>& container)
-	{
-		auto i = 0;
-		for (; i < container.size(); i++)
-		{
-			if (container[i].id == id)
-			{
-				break;
-			}
-		}
-
-		i -= 1;
-		i = i % container.size();
-		return i;
-	}
-
-	template <>
-	int prevIterator(long long id, std::vector<long long>& container)
-	{
-		auto i = 0;
-		for (; i < container.size(); i++)
-		{
-			if (container[i] == id)
-			{
-				break;
-			}
-		}
-
-		i -= 1;
-		i = (i + container.size()) % container.size();
-		return i;
-	}
 
 	void openWavefrontSurfaces();
 	void closeWavefrontSurfaces();
@@ -241,23 +143,9 @@ public:
 
 private:
 
-	std::vector<Point> specialPoints;
-	std::vector<std::pair<Point, Point>> roofEdges;
 	float _roof_level;
-
-	std::list<RoofData> roofData;
-
-	std::vector < std::tuple<Point, float, float, float>> specPoints;
-
-	bool skip = false;
 	float gamma;
 
-
-
-	std::list<vertex> vertices;
-	std::list<std::list<vertex>> verticiesList;
-	std::list<std::tuple<Point, Point>> izolines;
-	std::list<std::tuple<Point, Point>> ridges;
 
 	std::vector<RoofPoint> roofPoints;
 	std::list<std::tuple<Point, Point>> roofTriangleEdges;
@@ -268,6 +156,7 @@ private:
 	std::vector<Quadrangle> surfaces;
 
 	std::vector<std::tuple<Point, Point, long>> wavefrontLines;
+
 
 	
 };
