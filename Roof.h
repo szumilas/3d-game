@@ -137,6 +137,9 @@ private:
 	void closeWavefrontSurfaces();
 
 
+	void openLongRoofLines();
+	void closeLongRoofLine(const long long& id);
+	void restartLongRoofPoint(const long long& id);
 
 public:
 
@@ -156,6 +159,7 @@ private:
 	std::vector<Quadrangle> surfaces;
 
 	std::vector<std::tuple<Point, Point, long>> wavefrontLines;
+	std::vector<std::tuple<long long, Point, Point>> longRoofLines;
 
 
 	

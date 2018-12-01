@@ -30,6 +30,9 @@ Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 
 void Roof::display()
 {
+	bool printWavefrontLines = true;
+	bool printLongRoofLines = true;
+
 	/*glLineWidth(2.0f);
 	glBegin(GL_LINE_LOOP);
 	glColor3f(_red, _green, _blue);
@@ -148,7 +151,7 @@ void Roof::display()
 		glEnd();
 	}
 
-	glLineWidth(3.0f);
+	/*glLineWidth(3.0f);
 	for (auto i = roofLines.begin(); i != roofLines.end(); i++)
 	{
 		glBegin(GL_LINES);
@@ -157,9 +160,34 @@ void Roof::display()
 		glVertex3f(i->second.x, i->second.y, i->second.z);
 		glEnd();
 	}
-	glLineWidth(1.0f);
+	glLineWidth(1.0f);*/
 
-	for (auto i = 0; i < surfaces.size(); i++)
+	if (printLongRoofLines)
+	{
+		glLineWidth(3.0f);
+		for (auto i = longRoofLines.begin(); i != longRoofLines.end(); i++)
+		{
+			glBegin(GL_LINES);
+			glColor3f(0.2f, 0.2f, 0.4f);
+			glVertex3f(std::get<1>(*i).x, std::get<1>(*i).y, std::get<1>(*i).z);
+			glVertex3f(std::get<2>(*i).x, std::get<2>(*i).y, std::get<2>(*i).z);
+			glEnd();
+		}
+		glLineWidth(1.0f);
+
+		glPointSize(5.0f);
+		glBegin(GL_POINTS);
+		glColor3f(0.8f, 0.8f, 0.4f);
+		for (auto i = longRoofLines.begin(); i != longRoofLines.end(); i++)
+		{
+			glVertex3f(std::get<1>(*i).x, std::get<1>(*i).y, std::get<1>(*i).z);
+			glVertex3f(std::get<2>(*i).x, std::get<2>(*i).y, std::get<2>(*i).z);
+		}
+		glEnd();
+		glPointSize(1.0f);
+	}
+
+	/*for (auto i = 0; i < surfaces.size(); i++)
 	{
 		glBegin(GL_POLYGON);
 		glColor3f(0.9f, 0.1f, 0.1f);
@@ -177,45 +205,28 @@ void Roof::display()
 		{
 			surfaces[i].p4 = surfaces[i].p1;
 		}
-	}
+	}*/
 
-	glPointSize(5.0f);
-	glColor3f(0.5f, 1.0f, 0.5f);
-	for (size_t q = 0, limit = wavefrontLines.size(); q < limit; q++)
+
+	if (printWavefrontLines)
 	{
-		auto c = std::get<2>(wavefrontLines[q]);
-		if (c == 0)
+		glPointSize(5.0f);
+		glColor3f(0.5f, 1.0f, 0.5f);
+		for (size_t q = 0, limit = wavefrontLines.size(); q < limit; q++)
 		{
-			glColor3f(1.0f, 1.0f, 0.5f);
+			glLineWidth(2.0f);
+			glBegin(GL_LINES);
+			glColor3f(1.0f, 0.5f, 0.7f);
+			auto& p = std::get<0>(wavefrontLines[q]);
+			glVertex3f(static_cast<float>(p.x), static_cast<float>(p.y), static_cast<float>(p.z));
+			//glVertex3f(-2, 33, 15);
+			auto& p2 = std::get<1>(wavefrontLines[q]);
+			glVertex3f(static_cast<float>(p2.x), static_cast<float>(p2.y), static_cast<float>(p2.z));
+			//glVertex3f(-5, 38, 15);
+			glEnd();
 		}
-		else if (c == 1)
-		{
-			glColor3f(1.0f, 0.0f, 0.5f);
-		}
-		else if (c == 2)
-		{
-			glColor3f(0.0f, 0.0f, 0.5f);
-		}
-		else if (c == 3)
-		{
-			glColor3f(0.2f, 1.0f, 0.5f);
-		}
-		else if (c == 4)
-		{
-			glColor3f(0.2f, 0.0f, 1.0f);
-		}
-		else
-		{
-			glColor3f(1.0f, 1.0f, 1.0f);
-		}
-		glBegin(GL_POINTS);
-		auto& p = std::get<0>(wavefrontLines[q]);
-		glVertex3f(p.x, p.y, p.z);
-		p = std::get<1>(wavefrontLines[q]);
-		glVertex3f(p.x, p.y, p.z);
-		glEnd();
+		glPointSize(1.0f);
 	}
-	glPointSize(1.0f);
 
 	/*glPointSize(2.0f);
 	glBegin(GL_POINTS);
@@ -545,6 +556,7 @@ void Roof::removeRoofPoint(long long id)
 	{
 		if (it->id == id)
 		{
+			closeLongRoofLine(id);
 			roofPoints.erase(it);
 			break;
 		}
@@ -571,6 +583,10 @@ void Roof::removeBrokenTriangles()
 			triangles[itTriangle].idp1 == triangles[itTriangle].idp3 ||
 			triangles[itTriangle].idp2 == triangles[itTriangle].idp3)
 		{
+			closeLongRoofLine(triangles[itTriangle].idp1);
+			closeLongRoofLine(triangles[itTriangle].idp2);
+			closeLongRoofLine(triangles[itTriangle].idp3);
+
 			triangles.erase(triangles.begin() + itTriangle);
 		}
 		else
@@ -586,6 +602,25 @@ void Roof::removeBrokenTriangles()
 
 		if ((p1count <= 1 && p2count <= 1) || (p1count <= 1 && p3count <= 1) || (p2count <= 1 && p3count <= 1))
 		{
+			auto heightOfCollision = lineCollapseTime(getFullRoofPoint(triangles[itTriangle].idp1), getFullRoofPoint(triangles[itTriangle].idp2));
+
+			if (heightOfCollision > 0)
+			{
+				auto startPoint = getFullRoofPoint(triangles[itTriangle].idp1);
+
+				Point vertex(startPoint.point.x + startPoint.dx * heightOfCollision, startPoint.point.y + startPoint.dy * heightOfCollision, startPoint.point.z + heightOfCollision);
+
+				longRoofLines.push_back({ -1, getRoofPoint(triangles[itTriangle].idp1), vertex });
+				longRoofLines.push_back({ -1, getRoofPoint(triangles[itTriangle].idp2), vertex });
+				longRoofLines.push_back({ -1, getRoofPoint(triangles[itTriangle].idp3), vertex });
+			}
+			else
+			{
+				longRoofLines.push_back({ -1, getRoofPoint(triangles[itTriangle].idp1), getRoofPoint(triangles[itTriangle].idp2) });
+				longRoofLines.push_back({ -1, getRoofPoint(triangles[itTriangle].idp2), getRoofPoint(triangles[itTriangle].idp3) });
+				longRoofLines.push_back({ -1, getRoofPoint(triangles[itTriangle].idp3), getRoofPoint(triangles[itTriangle].idp1) });
+			}
+
 			if (p1count <= 1)
 			{
 				removePointFromWavefront(triangles[itTriangle].idp1);
@@ -637,6 +672,48 @@ void Roof::openWavefrontSurfaces()
 			newQuadrangle.idp2 = thisWaveFront[(q + 1) % thisWaveFront.size()];
 
 			surfaces.push_back(newQuadrangle);
+
+
+			wavefrontLines.push_back(std::make_tuple(getRoofPoint(thisWaveFront[q]), getRoofPoint(thisWaveFront[(q + 1) % thisWaveFront.size()]), 1));
+
+		}
+	}
+}
+
+void Roof::openLongRoofLines()
+{
+	for (auto& thisWaveFront : wavefront)
+	{
+		for (int q = 0; q < thisWaveFront.size(); q++)
+		{
+			longRoofLines.push_back(std::make_tuple(thisWaveFront[q], getRoofPoint(thisWaveFront[q]), Point()));
+		}
+	}
+}
+
+void Roof::closeLongRoofLine(const long long& id)
+{
+	for (auto& longRoofLine : longRoofLines)
+	{
+		if (std::get<0>(longRoofLine) == id)
+		{
+			std::get<0>(longRoofLine) = -1;
+			std::get<2>(longRoofLine) = getRoofPoint(id);
+			break;
+		}
+	}
+}
+
+void Roof::restartLongRoofPoint(const long long& id)
+{
+	for (auto& longRoofLine : longRoofLines)
+	{
+		if (std::get<0>(longRoofLine) == id)
+		{
+			std::get<0>(longRoofLine) = -1;
+			std::get<2>(longRoofLine) = getRoofPoint(id);
+			longRoofLines.push_back(std::make_tuple(id, getRoofPoint(id), Point()));
+			break;
 		}
 	}
 }
@@ -756,6 +833,7 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 	}
 
 	openWavefrontSurfaces();
+	openLongRoofLines();
 
 	while (!wavefront.empty())
 	{
@@ -880,6 +958,7 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 			renamePointInTriangles(edgeEventP2, edgeEventP1);
 			renamePointInSurfaces(edgeEventP2, edgeEventP1);
 			removeRoofPoint(edgeEventP2);
+			restartLongRoofPoint(edgeEventP1);
 
 			calculateSpeedOfPoint(edgeEventP1);
 
@@ -923,6 +1002,10 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 				long long oldId = flipSplitEventP1;
 				newPoint.id = newId;
 				roofPoints.push_back(newPoint);
+
+				closeLongRoofLine(oldId);
+				longRoofLines.push_back(std::make_tuple(newId, getRoofPoint(newId), Point()));
+				longRoofLines.push_back(std::make_tuple(oldId, getRoofPoint(newId), Point()));
 
 				int currentWavefront = 0;
 				int pointOnWavefront = 0;
