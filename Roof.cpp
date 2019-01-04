@@ -36,45 +36,25 @@ void Roof::display()
 	bool printSpecialPoints = false;
 	bool printRoofSurfaces = true;
 
-
-	for (auto& roofSurface : roofSurfaces)
+	if (printRoofSurfaces)
 	{
-		glBegin(GL_POLYGON);
-		glColor3f(1.0f, 0.2f, 0);
-		for (auto& point : roofSurface)
+		for (auto& roofSurface : roofSurfaces)
 		{
-			glVertex3f(point.x, point.y, point.z);
+			glBegin(GL_POLYGON);
+			glColor3f(1.0f, 0.2f, 0);
+			for (auto& point : roofSurface)
+			{
+				glVertex3f(point.x, point.y, point.z);
+			}
+			glEnd();
 		}
-		glEnd();
 	}
 
-
-
-	/*glLineWidth(2.0f);
-	glBegin(GL_LINE_LOOP);
-	glColor3f(_red, _green, _blue);
-	for (size_t q = 0; q < points.size() - 1; q++)
-	{
-		//auto point = points[q];
-		//auto nextPoint = points[q + 1];
-
-		glVertex3f(points[q].x, points[q].y, _roof_level);
-
-	}
-	glEnd();*/
-	glLineWidth(1.0f);
-
-	glLineWidth(2.0f);
-	glColor3f(0, 1.0f, 0);
-
-	/*glBegin(GL_LINES);
-	glVertex3f(points[0].x, points[0].y, _roof_level);
-	glVertex3f(points[0].x, points[0].y, _roof_level + 5);
-	glEnd();*/
-
-	
 	if (printSpecialPoints)
 	{
+		glLineWidth(2.0f);
+		glColor3f(0, 1.0f, 0);
+
 		for (auto& specialPoint : specialPoints)
 		{
 			glBegin(GL_LINES);
@@ -83,56 +63,10 @@ void Roof::display()
 			glVertex3f(specialPoint.x, specialPoint.y, specialPoint.z + 2.0f);
 			glEnd();
 		}
+
+		glLineWidth(1.0f);
 	}
 
-	/*glLineWidth(2.0f);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	for (size_t q = 0, limit = roofEdges.size(); q < limit; q++)
-	{
-		glBegin(GL_LINES);
-		glVertex3f(roofEdges[q].first.x, roofEdges[q].first.y, roofEdges[q].first.z);
-		glVertex3f(roofEdges[q].second.x, roofEdges[q].second.y, roofEdges[q].second.z);
-		glEnd();
-	}
-	glLineWidth(1.0f);*/
-
-	/*glLineWidth(2.0f);
-	glColor3f(0.5f, 0.0f, 0.0f);
-	for (auto i = izolines.begin(); i != izolines.end(); i++)
-	{
-		glBegin(GL_LINES);
-
-		glVertex3f(std::get<0>(*i).x, std::get<0>(*i).y, std::get<0>(*i).z);
-		glVertex3f(std::get<1>(*i).x, std::get<1>(*i).y, std::get<1>(*i).z);
-		glEnd();
-	}
-	glLineWidth(1.0f);*/
-
-	/*glLineWidth(2.0f);
-	glColor3f(0.5f, 1.0f, 0.0f);
-	for (auto i = ridges.begin(); i != ridges.end(); i++)
-	{
-		glBegin(GL_LINES);
-
-		glVertex3f(std::get<0>(*i).x, std::get<0>(*i).y, std::get<0>(*i).z);
-		glVertex3f(std::get<1>(*i).x, std::get<1>(*i).y, std::get<1>(*i).z);
-		glEnd();
-	}
-	glLineWidth(1.0f);*/
-
-
-
-
-	/*glColor3f(0.5f, 1.0f, 0.0f);
-	for (auto i = roofTriangleEdges.begin(); i != roofTriangleEdges.end(); i++)
-	{
-		glBegin(GL_LINES);
-		glVertex3f(std::get<0>(*i).x, std::get<0>(*i).y, _roof_level);
-		glVertex3f(std::get<1>(*i).x, std::get<1>(*i).y, _roof_level);
-		glEnd();
-	}*/
-
-	glLineWidth(1.0f);
 
 	if (printTriangles)
 	{
@@ -149,38 +83,6 @@ void Roof::display()
 			glEnd();
 		}
 	}
-
-	/*glBegin(GL_LINE_LOOP);
-	glColor3f(0.5f, 0.5f, 0.5f);
-	for (auto il = wavefront.begin(); il != wavefront.end(); il++)
-	{
-		for (auto i = (*il).begin(); i != (*il).end(); i++)
-		{
-			glVertex3f((*i)->point.x, (*i)->point.y, (*i)->point.z);
-		}
-	}
-	glEnd();*/
-
-	for (auto i = roofPoints.begin(); i != roofPoints.end(); i++)
-	{
-		Point p(i->point.x + i->dx, i->point.y + i->dy, i->point.z);
-		glBegin(GL_LINES);
-		glColor3f(0.2f, 0.2f, 1.0f);
-		glVertex3f(i->point.x, i->point.y, i->point.z);
-		glVertex3f(p.x, p.y, p.z);
-		glEnd();
-	}
-
-	/*glLineWidth(3.0f);
-	for (auto i = roofLines.begin(); i != roofLines.end(); i++)
-	{
-		glBegin(GL_LINES);
-		glColor3f(0.2f, 0.2f, 0.4f);
-		glVertex3f(i->first.x, i->first.y, i->first.z);
-		glVertex3f(i->second.x, i->second.y, i->second.z);
-		glEnd();
-	}
-	glLineWidth(1.0f);*/
 
 	if (printLongRoofLines)
 	{
@@ -207,27 +109,6 @@ void Roof::display()
 		glPointSize(1.0f);*/
 	}
 
-	/*for (auto i = 0; i < surfaces.size(); i++)
-	{
-		glBegin(GL_POLYGON);
-		glColor3f(0.9f, 0.1f, 0.1f);
-		glVertex3f(surfaces[i].p1.x, surfaces[i].p1.y, surfaces[i].p1.z);
-		glVertex3f(surfaces[i].p2.x, surfaces[i].p2.y, surfaces[i].p2.z);
-		glVertex3f(surfaces[i].p3.x, surfaces[i].p3.y, surfaces[i].p3.z);
-		glVertex3f(surfaces[i].p4.x, surfaces[i].p4.y, surfaces[i].p4.z);
-		glEnd();
-
-		if (surfaces[i].p3.z < 15.0f)
-		{
-			surfaces[i].p3 = surfaces[i].p2;
-		}
-		if (surfaces[i].p4.z < 15.0f)
-		{
-			surfaces[i].p4 = surfaces[i].p1;
-		}
-	}*/
-
-
 	if (printWavefrontLines)
 	{
 		glPointSize(5.0f);
@@ -239,24 +120,12 @@ void Roof::display()
 			glColor3f(1.0f, 0.5f, 0.7f);
 			auto& p = std::get<0>(wavefrontLines[q]);
 			glVertex3f(static_cast<float>(p.x), static_cast<float>(p.y), static_cast<float>(p.z));
-			//glVertex3f(-2, 33, 15);
 			auto& p2 = std::get<1>(wavefrontLines[q]);
 			glVertex3f(static_cast<float>(p2.x), static_cast<float>(p2.y), static_cast<float>(p2.z));
-			//glVertex3f(-5, 38, 15);
 			glEnd();
 		}
 		glPointSize(1.0f);
 	}
-
-	/*glPointSize(2.0f);
-	glBegin(GL_POINTS);
-	glColor3f(0.5f, 1.0f, 0.5f);
-	for (size_t q = 0, limit = points.size(); q < limit; q++)
-	{
-		glVertex3f(points[q].x, points[q].y, _roof_level);
-	}
-	glEnd();
-	glPointSize(1.0f);*/
 
 }
 
