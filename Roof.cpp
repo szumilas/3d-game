@@ -30,8 +30,25 @@ Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 
 void Roof::display()
 {
-	bool printWavefrontLines = true;
+	bool printWavefrontLines = false;
 	bool printLongRoofLines = true;
+	bool printTriangles = false;
+	bool printSpecialPoints = false;
+	bool printRoofSurfaces = true;
+
+
+	for (auto& roofSurface : roofSurfaces)
+	{
+		glBegin(GL_POLYGON);
+		glColor3f(1.0f, 0.2f, 0);
+		for (auto& point : roofSurface)
+		{
+			glVertex3f(point.x, point.y, point.z);
+		}
+		glEnd();
+	}
+
+
 
 	/*glLineWidth(2.0f);
 	glBegin(GL_LINE_LOOP);
@@ -55,14 +72,18 @@ void Roof::display()
 	glVertex3f(points[0].x, points[0].y, _roof_level + 5);
 	glEnd();*/
 
-	/*
-	for (size_t q = 0, limit = specialPoints.size() - 1; q < limit; q+=2)
+	
+	if (printSpecialPoints)
 	{
-	glBegin(GL_LINES);
-	glVertex3f(specialPoints[q].x, specialPoints[q].y, specialPoints[q].z);
-	glVertex3f(specialPoints[q + 1].x, specialPoints[q + 1].y, specialPoints[q + 1].z);
-	glEnd();
-	}*/
+		for (auto& specialPoint : specialPoints)
+		{
+			glBegin(GL_LINES);
+			glColor3f(1.0f, 0.5f, 0);
+			glVertex3f(specialPoint.x, specialPoint.y, specialPoint.z);
+			glVertex3f(specialPoint.x, specialPoint.y, specialPoint.z + 2.0f);
+			glEnd();
+		}
+	}
 
 	/*glLineWidth(2.0f);
 	glColor3f(1.0f, 0.0f, 0.0f);
@@ -112,9 +133,8 @@ void Roof::display()
 	}*/
 
 	glLineWidth(1.0f);
-	bool drawTriangle = true;
 
-	if (drawTriangle)
+	if (printTriangles)
 	{
 		for (int i = 0; i < triangles.size(); i++)
 		{
@@ -175,7 +195,7 @@ void Roof::display()
 		}
 		glLineWidth(1.0f);
 
-		glPointSize(5.0f);
+		/*glPointSize(5.0f);
 		glBegin(GL_POINTS);
 		glColor3f(0.8f, 0.8f, 0.4f);
 		for (auto i = longRoofLines.begin(); i != longRoofLines.end(); i++)
@@ -184,7 +204,7 @@ void Roof::display()
 			glVertex3f(std::get<2>(*i).x, std::get<2>(*i).y, std::get<2>(*i).z);
 		}
 		glEnd();
-		glPointSize(1.0f);
+		glPointSize(1.0f);*/
 	}
 
 	/*for (auto i = 0; i < surfaces.size(); i++)
@@ -583,9 +603,9 @@ void Roof::removeBrokenTriangles()
 			triangles[itTriangle].idp1 == triangles[itTriangle].idp3 ||
 			triangles[itTriangle].idp2 == triangles[itTriangle].idp3)
 		{
-			closeLongRoofLine(triangles[itTriangle].idp1);
+			/*closeLongRoofLine(triangles[itTriangle].idp1);
 			closeLongRoofLine(triangles[itTriangle].idp2);
-			closeLongRoofLine(triangles[itTriangle].idp3);
+			closeLongRoofLine(triangles[itTriangle].idp3);*/
 
 			triangles.erase(triangles.begin() + itTriangle);
 		}
@@ -687,6 +707,17 @@ void Roof::openLongRoofLines()
 		for (int q = 0; q < thisWaveFront.size(); q++)
 		{
 			longRoofLines.push_back(std::make_tuple(thisWaveFront[q], getRoofPoint(thisWaveFront[q]), Point()));
+		}
+	}
+}
+
+void Roof::createRoofLevelLongRoofLines()
+{
+	for (auto& thisWaveFront : wavefront)
+	{
+		for (int q = 0; q < thisWaveFront.size(); q++)
+		{
+			longRoofLines.push_back(std::make_tuple(-1, getRoofPoint(thisWaveFront[q]), getRoofPoint(thisWaveFront[(q + 1) % thisWaveFront.size()])));
 		}
 	}
 }
@@ -834,6 +865,12 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 
 	openWavefrontSurfaces();
 	openLongRoofLines();
+	createRoofLevelLongRoofLines();
+
+	specialPoints.push_back(getRoofPoint(0));
+	//specialPoints.push_back(getRoofPoint(1));
+
+	int breakbreak = 0;
 
 	while (!wavefront.empty())
 	{
@@ -953,6 +990,7 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 		if (egdeEvent)
 		{
 			removeTriangle(edgeEventP1, edgeEventP2);
+			updatePoint(edgeEventP2, getRoofPoint(edgeEventP1));
 
 			removePointFromWavefront(edgeEventP2);
 			renamePointInTriangles(edgeEventP2, edgeEventP1);
@@ -1082,10 +1120,134 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 			}
 		}
 		
-
+		//if(breakbreak > 18)
+		//	break;
+		breakbreak++;
 		removeBrokenTriangles();
 		removeEmptyWavefronts();
 	}
 
 	closeWavefrontSurfaces();
+
+	for (auto& longRoofLine : longRoofLines)
+	{
+		graphIdsSet.insert(std::get<1>(longRoofLine));
+		graphIdsSet.insert(std::get<2>(longRoofLine));
+
+	}
+
+	for (auto it = graphIdsSet.begin(); it != graphIdsSet.end();)
+	{
+		bool removed = false;
+		for (auto& startPoint : roofPointsCopy)
+		{
+			if (startPoint.point == *it)
+			{
+				it = graphIdsSet.erase(it);
+				removed = true;
+				break;
+			}
+		}
+		if (!removed)
+			it++;
+	}
+
+	for (auto& startPoint : roofPointsCopy)
+	{
+		graphIds.push_back({ startPoint.id, startPoint.point});
+	}
+
+	auto lastRoofLevelId = graphIds.back().first;
+	auto nextId = lastRoofLevelId + 1;
+
+	for (auto& point : graphIdsSet)
+	{
+		graphIds.push_back({ nextId, point });
+		nextId++;
+	}
+
+	for (auto& longRoofLine : longRoofLines)
+	{
+		Point p1 = std::get<1>(longRoofLine);
+		Point p2 = std::get<2>(longRoofLine);
+
+		std::vector<std::pair<long long, Point>>::iterator it1 = std::find_if(graphIds.begin(), graphIds.end(), [p1](std::pair<long long, Point>& pair) { return pair.second == p1; });
+		std::vector<std::pair<long long, Point>>::iterator it2 = std::find_if(graphIds.begin(), graphIds.end(), [p2](std::pair<long long, Point>& pair) { return pair.second == p2; });
+
+		if(!(it1->first <= lastRoofLevelId && it2->first <= lastRoofLevelId) && !(it1->first == it2->first))
+			connections.push_back({it1->first, it2->first});
+
+	}
+
+	std::vector<std::vector<long long>> neighbours;
+
+	std::vector<std::pair<int, long long>> dataCopy; //pair<state, parent>
+
+	for (auto& graphId : graphIds)
+	{
+		std::vector<long long> thisIdNeighbours;
+		for (auto& connection : connections)
+		{
+			if (connection.first == graphId.first)
+				thisIdNeighbours.push_back(connection.second);
+			if (connection.second == graphId.first)
+				thisIdNeighbours.push_back(connection.first);
+		}
+		neighbours.push_back(thisIdNeighbours);
+		dataCopy.push_back({ 0, -1 });
+	}
+
+
+	for (long long idFrom = 0; idFrom < roofPointsCopy.size(); idFrom++)
+	{
+		std::vector<std::pair<int, long long>> data = dataCopy;
+
+		long long idTo = (idFrom + 1) % roofPointsCopy.size();
+
+
+		data[idFrom].first = 1;
+		std::queue<long long> idsQueue;
+
+		idsQueue.push(idFrom);
+
+		while (!idsQueue.empty())
+		{
+			auto currentId = idsQueue.front();
+
+			if (currentId == idTo)
+				break;
+
+			idsQueue.pop();
+			for (auto& neighbour : neighbours[currentId])
+			{
+				if (data[neighbour].first == 0)
+				{
+					data[neighbour].first = 1;
+					data[neighbour].second = currentId;
+					idsQueue.push(neighbour);
+				}
+			}
+			data[currentId].first = 2;
+		}
+
+		std::vector<long long> path;
+		path.push_back(idTo);
+
+		auto checkHistory = data[idTo].second;
+
+		while (checkHistory != -1)
+		{
+			path.push_back(checkHistory);
+			checkHistory = data[checkHistory].second;
+		}
+
+		std::vector<Point> currentSurface;
+
+		for (auto& currentPoint : path)
+		{
+			currentSurface.push_back(graphIds[currentPoint].second);
+		}
+
+		roofSurfaces.push_back(currentSurface);
+	}
 }

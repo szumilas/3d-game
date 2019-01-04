@@ -17,7 +17,8 @@ struct Point
 		return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2));
 	}
 
-	bool operator==(const Point& second) { return x == second.x && y == second.y && z == second.z; }
+	bool operator==(const Point& second) const { return x == second.x && y == second.y && z == second.z; }
+	bool operator<(const Point& second) const { return x < second.x || x == second.x && y < second.y || x == second.x && y == second.y && z < second.z; }
 };
 
 struct Line2D

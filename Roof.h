@@ -1,6 +1,8 @@
 #pragma once
 
 #include "MapObject.h"
+#include <set>
+#include <queue>
 
 class Roof : public MapObject
 {
@@ -92,7 +94,18 @@ private:
 				break;
 			}
 		}
+	}
 
+	void updatePoint(long long id, Point newPoint)
+	{
+		for (int i = 0; i < roofPoints.size(); i++)
+		{
+			if (roofPoints[i].id == id)
+			{
+				roofPoints[i].point = newPoint;
+				break;
+			}
+		}
 	}
 	
 	bool anyPointInTriangle(long long idA, long long idB, long long idC);
@@ -138,6 +151,7 @@ private:
 
 
 	void openLongRoofLines();
+	void createRoofLevelLongRoofLines();
 	void closeLongRoofLine(const long long& id);
 	void restartLongRoofPoint(const long long& id);
 
@@ -160,7 +174,13 @@ private:
 
 	std::vector<std::tuple<Point, Point, long>> wavefrontLines;
 	std::vector<std::tuple<long long, Point, Point>> longRoofLines;
+	std::vector<Point> specialPoints;
+	std::vector<std::vector<Point>> roofSurfaces;
 
+	//BFS lgorithm:
+	std::set<Point> graphIdsSet;
+	std::vector<std::pair<long long, Point>> graphIds;
+	std::vector<std::pair<long long, long long>> connections;
 
 	
 };
