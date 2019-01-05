@@ -86,3 +86,27 @@ void MapObject::optimizePoints()
 		}
 	}
 }
+
+void MapObject::shadeTheWall(Color& color, const vector2D& wallLine, float shadePower)
+{
+	vector2D equator(Point(0.0, 0.0), Point(1.0, 0.0));
+
+	auto angle = vector2D::angle(equator, wallLine);
+
+	if (angle <= PI / 2) // NORTH
+	{
+		auto ratio = angle / (PI / 2) * shadePower + (1 - shadePower);
+
+		color.red *= ratio;
+		color.green *= ratio;
+		color.blue *= ratio;
+	}
+	else // SOUTH
+	{
+		auto ratio = (angle - PI / 2) / (PI / 2);
+
+		color.red = ratio * (1 - color.red) * shadePower + color.red;
+		color.green = ratio * (1 - color.green) * shadePower + color.green;
+		color.blue = ratio * (1 - color.blue) * shadePower + color.blue;
+	}
+}

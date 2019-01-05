@@ -24,6 +24,11 @@ private:
 
 	void optimizePoints();
 
+protected:
+
+	void shadeTheWall(Color& color, const vector2D& wallLine, float shadePower);
+	Color selectedColor{ 1.0f, 0.0f, 1.0f };
+
 public:
 	//stats
 	long long polygonsCount = 0;

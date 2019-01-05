@@ -6,28 +6,27 @@ class Building : public MapObject
 {
 public:
 
-	Building(MapObject& mapObject) : MapObject(mapObject) {
-
-		if (building == "roof" || building_part == "roof")
-		{
-			if (!_height)
-			{
-				_height = 6.5f;
-			}
-			_min_height = std::min(6.0f, _height - 0.5f);
-		}
-		if (!_height)
-		{
-			_height = 15.0f;
-		}
-		if (colour.empty())
-		{
-			_red = 0.5f;
-			_green = 0.5f;
-			_blue = 0.5f;
-		}
-	};
+	Building(MapObject& mapObject);
 
 	void display();
+
+private:
+
+	void calculateXYfromRef(const std::map<long long, node> &nodes);
+	void generateWalls();
+
+public:
+
+
+private:
+
+	struct Wall
+	{
+		Point p1;
+		Point p2;
+		Color color;
+	};
+
+	std::vector<Wall> walls;
 
 };

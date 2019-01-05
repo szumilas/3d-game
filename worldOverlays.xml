@@ -611,5 +611,30 @@
 	<way id="101209696">
 		<tag k="roof:shape" v="flat"/>
 	</way>
+	<way id="101217170">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101194421">
+		<tag k="height" v="10.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101192342">
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101201769">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101192308">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="3.00"/>
+	</way>
+	<way id="553105179">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="485518145">
+		<tag k="_skip" v="yes"/>
+	</way>
 </osm>
 

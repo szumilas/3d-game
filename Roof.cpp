@@ -30,7 +30,7 @@ Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 void Roof::display()
 {
 	bool printWavefrontLines = false;
-	bool printLongRoofLines = true;
+	bool printLongRoofLines = false;
 	bool printTriangles = false;
 	bool printSpecialPoints = false;
 	bool printRoofSurfaces = true;
@@ -40,8 +40,14 @@ void Roof::display()
 		for (auto& roofSurface : roofSurfaces)
 		{
 			glBegin(GL_POLYGON);
-			glColor3f(_red, _green, _blue);
-			for (auto& point : roofSurface)
+			if (isSelected)
+			{
+				auto newColor = roofSurface.color.mixColor(selectedColor);
+				glColor3f(newColor.red, newColor.green, newColor.blue);
+			}
+			else
+				glColor3f(roofSurface.color.red, roofSurface.color.green, roofSurface.color.blue);
+			for (auto& point : roofSurface.points)
 			{
 				glVertex3f(point.x, point.y, point.z);
 			}
@@ -1135,7 +1141,11 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 				currentSurface.push_back(graphIds[currentPoint].second);
 			}
 
-			roofSurfaces.push_back(currentSurface);
+			Color colorOfSurface{ _red, _green, _blue };
+			vector2D wallLine(currentSurface[0], currentSurface.back());
+			shadeTheWall(colorOfSurface, wallLine, 0.25f);
+
+			roofSurfaces.push_back( { currentSurface, colorOfSurface });
 		}
 	}
 
@@ -1157,6 +1167,6 @@ void Roof::generateFlatRoof()
 		roofSurface.push_back(getRoofPoint(triangle.idp1));
 		roofSurface.push_back(getRoofPoint(triangle.idp2));
 		roofSurface.push_back(getRoofPoint(triangle.idp3));
-		roofSurfaces.push_back(roofSurface);
+		roofSurfaces.push_back({ roofSurface, Color{_red, _green, _blue} });
 	}
 }

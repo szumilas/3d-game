@@ -1,6 +1,16 @@
 #pragma once
 
 #define FPS 60
+#define PI 3.1415926535
+
+struct Color
+{
+	float red;
+	float green;
+	float blue;
+
+	Color mixColor(Color& second) { return Color{(red + second.red) / 2, (green + second.green) / 2 , (blue + second.blue) / 2 }; }
+};
 
 struct Point
 {
@@ -158,9 +168,24 @@ struct vector2D
 		y *= -1.0f;
 	}
 
-	static double crossProduct(vector2D& v1, vector2D& v2)
+	double length() const
+	{
+		return sqrt(x * x + y * y);
+	}
+
+	static double crossProduct(const vector2D& v1, const vector2D& v2)
 	{
 		return v1.x * v2.y - v1.y * v2.x;
+	}
+
+	static double dotProduct(const vector2D& v1, const vector2D& v2)
+	{
+		return v1.x * v2.x + v1.y * v2.y;
+	}
+
+	static double angle(const vector2D& v1, const vector2D& v2)
+	{
+		return acos(dotProduct(v1, v2) / (v1.length() * v2.length()));
 	}
 
 	void convertIntoUnitVector()

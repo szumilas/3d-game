@@ -6,7 +6,7 @@
 
 class Roof : public MapObject
 {
-	
+
 public:
 
 	struct RoofPoint
@@ -33,6 +33,12 @@ public:
 		Point p2;
 		Point p3;
 		Point p4;
+	};
+
+	struct RoofSurface
+	{
+		std::vector<Point> points;
+		Color color;
 	};
 
 	Roof(MapObject& mapObject);
@@ -175,7 +181,7 @@ private:
 	std::vector<std::tuple<Point, Point, long>> wavefrontLines;
 	std::vector<std::tuple<long long, Point, Point>> longRoofLines;
 	std::vector<Point> specialPoints;
-	std::vector<std::vector<Point>> roofSurfaces;
+	std::vector<RoofSurface> roofSurfaces;
 
 	//BFS lgorithm:
 	std::set<Point> graphIdsSet;
