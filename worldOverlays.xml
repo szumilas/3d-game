@@ -1,0 +1,615 @@
+<osm version="0.6" generator="CGImap 0.6.1 (1997 thorn-03.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+	<way id="101202402">
+		<tag k="height" v="35.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101212705">
+		<tag k="height" v="10.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101213579">
+		<tag k="height" v="10.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101189809">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101204939">
+		<tag k="height" v="25.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101210143">
+		<tag k="height" v="25.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101214530">
+		<tag k="height" v="25.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101197955">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101198917">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101204228">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101204347">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101207146">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101208213">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101210230">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101210295">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101212875">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101214934">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101214959">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101226168">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101214038">
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="310691966">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="310691967">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="310691968">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="440603987">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101213837">
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101226171">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101212793">
+		<tag k="height" v="20.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101214199">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101191026">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101193449">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101210673">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="449286080">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="437961024">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="20.00"/>
+	</way>
+	<way id="449286076">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="433123258">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="20.00"/>
+	</way>
+	<way id="449286077">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="449286078">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="449286081">
+		<tag k="height" v="20.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="511542787">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101217936">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="7.00"/>
+	</way>
+	<way id="310691969">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="2.00"/>
+	</way>
+	<way id="310691970">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="2.00"/>
+	</way>
+	<way id="101198400">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="440208116">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="505932755">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="304382155">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="511542804">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101202125">
+		<tag k="height" v="2.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="344994140">
+		<tag k="height" v="2.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101192453">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101201320">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101214385">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101217893">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101216997">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101205551">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101214491">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101209761">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101189836">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101192477">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101206326">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101210301">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101217979">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101192458">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101211317">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101207958">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101217837">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101189614">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101193805">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101210871">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101188192">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101192580">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101193555">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101193786">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101195127">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101195174">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101195603">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101197821">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101197917">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101198530">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101200259">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101202024">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101202108">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101202788">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101207054">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101208016">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101208979">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101209207">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101209515">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101211011">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101211846">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101212936">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101216895">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="484057068">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="484057070">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="484057071">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101189570">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101190543">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101190784">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101192397">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101192499">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101198101">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101201472">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101203589">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101206006">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101206642">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101207006">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101208604">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101210283">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101210694">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101211069">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101211231">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101213870">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101213891">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101215094">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101217395">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101217582">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101217686">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101217827">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101226273">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="484057073">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101191414">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101191703">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101194160">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101197412">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101198111">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101201158">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101202026">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101202857">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101204285">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101204375">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101205556">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101206023">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101206299">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101206358">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101208528">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101210141">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101211854">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101212370">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101213174">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101215867">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101216438">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101187983">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101192345">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="627344291">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101212487">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101213508">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="5.00"/>
+	</way>
+	<way id="101209478">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101211591">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101213430">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101206064">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101189951">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101202399">
+		<tag k="height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101215270">
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101189179">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101206989">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="10.00"/>
+	</way>
+	<way id="101209294">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101210740">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101191800">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101200602">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101213344">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="311265621">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101198826">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101209696">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+</osm>
+
