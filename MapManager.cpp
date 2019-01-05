@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "PointInsidePolygonDetector.h"
 
 #include "MapManager.h"
 
@@ -33,7 +34,6 @@ std::unique_ptr<char[]> MapManager::fileToCharReader(const char * fileName)
 
 void MapManager::readMap(const char * fileName)
 {
-	//auto fileContent = fileToCharReader("xml.txt");
 	auto fileContent = fileToCharReader(fileName);
 
 	try
@@ -44,12 +44,29 @@ void MapManager::readMap(const char * fileName)
 	{
 		//TODO: errors
 	}
+	
+	overlayContent = fileToCharReader("worldOverlays.xml");
 
-	//rapidxml::print(std::cout, document, 0);
+	try
+	{
+		overlays.parse < 0 >(overlayContent.get()); // (2)
+	}
+	catch (const rapidxml::parse_error & e)
+	{
+		//TODO: errors
+	}
 
 	createNodesMap();
 	createMapObjectsArray();
-	
+}
+
+void MapManager::saveOverlays()
+{
+	std::filebuf fb;
+	fb.open("worldOverlays.xml", std::ios::out);
+	std::ostream os(&fb);
+	rapidxml::print(os, overlays);
+	fb.close();
 }
 
 void MapManager::createNodesMap()
@@ -208,6 +225,8 @@ void MapManager::createMapObjectsArray()
 				mapObject._min_height = 0.0;
 			}*/
 
+			applyOverlays(mapObject);
+
 			mapObject.applyKnownValues();
 
 			for (auto& check : objectDetector)
@@ -278,9 +297,16 @@ void MapManager::calculateNodesPositions()
 		it->second.posY = static_cast<float>((it->second.lat - minLat) * latitudeRatio);
 	}
 
+	long long polygonsCount = 0;
+	long long edgesCount = 0;
+	int q = 0;
 	for (auto& mapObject : mapObjects)
 	{
 		mapObject->calculateXYfromRef(nodes);
+		polygonsCount += mapObject->polygonsCount;
+		edgesCount += mapObject->edgesCount;
+
+		q++;
 	}
 }
 
@@ -370,4 +396,126 @@ bool MapManager::isFootwayCheck(MapObject& mapObject)
 		return true;
 	else
 		return false;
+}
+
+void MapManager::selectObject(float X, float Y)
+{
+	PointInsidePolygonDetector detector;
+	Point selectedPoint(X, Y);
+
+	for (auto& mapObject : mapObjects)
+	{
+		if (isBuildingCheck(*mapObject))
+		{
+			if (detector.isInside(mapObject->points, selectedPoint))
+			{
+				mapObject->select();
+				break;
+			}
+		}
+	}
+}
+
+void MapManager::deselectObjects()
+{
+	for (auto& mapObject : mapObjects)
+	{
+		mapObject->deselect();
+	}
+}
+
+void MapManager::applyOverlays(MapObject& mapObject)
+{
+	rapidxml::xml_node <>* nodeCeo = overlays.first_node();
+	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+	{
+		if (!strcmp(manager->name(), "way"))
+		{
+			if (std::stoll(manager->first_attribute()->value()) == mapObject.getId())
+			{
+
+				for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+				{
+					std::string currentTag;
+					std::string currentTagValue;
+					bool skipTag = false;
+
+					if (!strcmp(a->name(), "tag"))
+					{
+						for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+						{
+							if (!strcmp(b->name(), "k")) //attribute name
+							{
+								if (skippedTags.count(b->value()) || temporarySkippedTags.count(b->value()))
+								{
+									skipTag = true;
+									break;
+								}
+								else if (acceptedTags.count(b->value()))
+								{
+									currentTag = b->value();
+								}
+								else
+								{
+									//assert(!"unknown tag");
+								}
+
+							}
+							else if (!strcmp(b->name(), "v")) //attribute value
+							{
+								currentTagValue = b->value();
+							}
+							else
+							{
+								break;
+							}
+						}
+						if (!skipTag)
+						{
+							auto mapElement = tagLongPtrs.find(currentTag);
+							if (mapElement != tagLongPtrs.end())
+							{
+								mapObject.*mapElement->second = 5;
+							}
+							else
+							{
+								auto mapElement = tagPtrs.find(currentTag);
+								if (mapElement != tagPtrs.end())
+								{
+									mapObject.*mapElement->second = currentTagValue;
+								}
+							}
+						}
+					}
+				}
+
+
+
+				break;
+			}
+		}
+	}
+
+}
+
+void MapManager::addOverlayAttribute()
+{
+	for (auto& mapObject : mapObjects)
+	{
+		if (mapObject->isSelected)
+		{
+			rapidxml::xml_node<>* node = overlays.allocate_node(rapidxml::node_type::node_element, "way");
+			char* id = overlays.allocate_string(std::to_string(mapObject->getId()).c_str());
+			node->append_attribute(overlays.allocate_attribute("id", id));
+
+			overlays.first_node()->append_node(node);
+
+			rapidxml::xml_node<>* subnode = overlays.allocate_node(rapidxml::node_type::node_element, "tag");
+			subnode->append_attribute(overlays.allocate_attribute("k", "height"));
+			subnode->append_attribute(overlays.allocate_attribute("v", "100.00"));
+
+			overlays.first_node()->last_node()->append_node(subnode);
+
+		}
+	}
 }

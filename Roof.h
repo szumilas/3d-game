@@ -57,7 +57,6 @@ private:
 	double futureDistance(long long idp1, long long idp2, double h);
 	void removeRoofPoint(long long id);
 	int countTrianglesWithPoint(long long id);
-	double findHeightOfNextCollision();
 	void removeBrokenTriangles();
 	void removeEmptyWavefronts();
 
@@ -154,6 +153,7 @@ private:
 	void createRoofLevelLongRoofLines();
 	void closeLongRoofLine(const long long& id);
 	void restartLongRoofPoint(const long long& id);
+	void generateFlatRoof();
 
 public:
 

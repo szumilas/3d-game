@@ -18,13 +18,11 @@ double measureAngle(Point& currentPoint, Point& nextPoint, Point& previousPoint)
 
 Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 {
-	if (!_height)
-	{
-		_roof_level = 15.0f;
-	}
-	_red = 0.7f;
-	_green = 0.7f;
-	_blue = 0.7f;
+	_roof_level = _height;
+
+	_red = 1.0f;
+	_green = 0.4f;
+	_blue = 0.4f;
 
 };
 
@@ -41,7 +39,7 @@ void Roof::display()
 		for (auto& roofSurface : roofSurfaces)
 		{
 			glBegin(GL_POLYGON);
-			glColor3f(1.0f, 0.2f, 0);
+			glColor3f(_red, _green, _blue);
 			for (auto& point : roofSurface)
 			{
 				glVertex3f(point.x, point.y, point.z);
@@ -644,6 +642,8 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 	gamma = 30 / 180.0 * 3.14;
 
 
+
+
 	for (size_t q = 0; q < points.size() - 1; q++)
 	{
 		RoofPoint roofPoint;
@@ -741,382 +741,421 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 
 	int breakbreak = 0;
 
-	while (!wavefront.empty())
+	if (
+		roof_shape == "flat" ||
+
+		getId() == 101191558 || getId() == 101202875
+		|| getId() == 101206570 || getId() == 101207075
+		|| getId() == 101215614 || getId() == 101215635
+		|| getId() == 408013522 || getId() == 481858743
+		|| getId() == 481858744 || getId() == 481858745
+		|| getId() == 101208296 || getId() == 101215404
+
+		|| getId() == 101215512 || getId() == 375365818
+		)
 	{
-		for (int itWavefrontList = 0; itWavefrontList < wavefront.size(); )
+		generateFlatRoof();
+	}
+	else
+	{
+		while (!wavefront.empty())
 		{
-			if (wavefront[itWavefrontList].size() == 3)
+			for (int itWavefrontList = 0; itWavefrontList < wavefront.size(); )
 			{
-				auto p1 = wavefront[itWavefrontList][0];
-				auto p2 = wavefront[itWavefrontList][1];
-				auto p3 = wavefront[itWavefrontList][2];
-				removeTriangle(p1, p2, p3);
-				removeRoofPoint(p1);
-				removeRoofPoint(p2);
-				removeRoofPoint(p3);
-				wavefront.erase(wavefront.begin() + itWavefrontList);
-				//registerTriangles();
+				if (wavefront[itWavefrontList].size() == 3)
+				{
+					auto p1 = wavefront[itWavefrontList][0];
+					auto p2 = wavefront[itWavefrontList][1];
+					auto p3 = wavefront[itWavefrontList][2];
+					removeTriangle(p1, p2, p3);
+					removeRoofPoint(p1);
+					removeRoofPoint(p2);
+					removeRoofPoint(p3);
+					wavefront.erase(wavefront.begin() + itWavefrontList);
+					//registerTriangles();
+				}
+				else if (wavefront[itWavefrontList].size() == 2)
+				{
+					auto p1 = wavefront[itWavefrontList][0];
+					auto p2 = wavefront[itWavefrontList][1];
+					removeTriangle(p1, p2);
+					removeRoofPoint(p1);
+					removeRoofPoint(p2);
+					wavefront.erase(wavefront.begin() + itWavefrontList);
+				}
+				else if (wavefront[itWavefrontList].size() == 1)
+				{
+					auto p1 = wavefront[itWavefrontList][0];
+					removeRoofPoint(p1);
+					wavefront.erase(wavefront.begin() + itWavefrontList);
+				}
+				else
+					itWavefrontList++;
 			}
-			else if (wavefront[itWavefrontList].size() == 2)
+
+			if (wavefront.empty())
+				break;
+
+			bool egdeEvent = true;
+
+			double heightOfNextCollision = 100000.0f;
+			long long edgeEventP1 = 0;
+			long long edgeEventP2 = 0;
+
+			long long flipSplitEventP1 = 0;
+			long long flipSplitEventP2 = 0;
+			long long flipSplitEventP3 = 0;
+
+			for (int itTriangle = 0; itTriangle < triangles.size(); itTriangle++)
 			{
-				auto p1 = wavefront[itWavefrontList][0];
-				auto p2 = wavefront[itWavefrontList][1];
-				removeTriangle(p1, p2);
-				removeRoofPoint(p1);
-				removeRoofPoint(p2);
-				wavefront.erase(wavefront.begin() + itWavefrontList);
+				auto p1 = getFullRoofPoint(triangles[itTriangle].idp1);
+				auto p2 = getFullRoofPoint(triangles[itTriangle].idp2);
+				auto p3 = getFullRoofPoint(triangles[itTriangle].idp3);
+
+				double joinTimeP1P2 = lineCollapseTime(p1, p2);
+				if (joinTimeP1P2 < heightOfNextCollision && joinTimeP1P2 >= 0.0f)
+				{
+					egdeEvent = true;
+					heightOfNextCollision = joinTimeP1P2;
+					edgeEventP1 = p1.id;
+					edgeEventP2 = p2.id;
+				}
+
+				double joinTimeP1P3 = lineCollapseTime(p1, p3);
+				if (joinTimeP1P3 < heightOfNextCollision && joinTimeP1P3 >= 0.0f)
+				{
+					egdeEvent = true;
+					heightOfNextCollision = joinTimeP1P3;
+					edgeEventP1 = p1.id;
+					edgeEventP2 = p3.id;
+				}
+
+				double joinTimeP2P3 = lineCollapseTime(p2, p3);
+				if (joinTimeP2P3 < heightOfNextCollision && joinTimeP2P3 >= 0.0f)
+				{
+					egdeEvent = true;
+					heightOfNextCollision = joinTimeP2P3;
+					edgeEventP1 = p2.id;
+					edgeEventP2 = p3.id;
+				}
+
+				double triangle123CollapseTime = triangleCollapseTime(p1, p2, p3);
+				if (triangle123CollapseTime < heightOfNextCollision && triangle123CollapseTime >= 0.0f &&
+					futureDistance(p1.id, p2.id, triangle123CollapseTime) > 0.0001f &&
+					futureDistance(p2.id, p3.id, triangle123CollapseTime) > 0.0001f &&
+					futureDistance(p1.id, p3.id, triangle123CollapseTime) > 0.0001f)
+				{
+					egdeEvent = false;
+					heightOfNextCollision = triangle123CollapseTime;
+					flipSplitEventP1 = p1.id;
+					flipSplitEventP2 = p2.id;
+					flipSplitEventP3 = p3.id;
+				}
 			}
-			else if (wavefront[itWavefrontList].size() == 1)
+
+			for (int itRoofPoint = 0; itRoofPoint < roofPoints.size(); itRoofPoint++)
 			{
-				auto p1 = wavefront[itWavefrontList][0];
-				removeRoofPoint(p1);
-				wavefront.erase(wavefront.begin() + itWavefrontList);
+				auto nextPoint = getFullRoofPoint(roofPoints[itRoofPoint].id);
+
+				Point next(roofPoints[itRoofPoint].point.x + heightOfNextCollision * roofPoints[itRoofPoint].dx, roofPoints[itRoofPoint].point.y + heightOfNextCollision * roofPoints[itRoofPoint].dy, roofPoints[itRoofPoint].point.z + heightOfNextCollision);
+				roofLines.push_back({ roofPoints[itRoofPoint].point, next });
+
+
+				nextPoint.point = next;
+				updateRoofPoint(roofPoints[itRoofPoint].id, nextPoint);
+
+				if (roofPoints[itRoofPoint].point.z < 15.0f)
+				{
+					int h = 5;
+				}
+			}
+
+			closeWavefrontSurfaces();
+			openWavefrontSurfaces();
+
+			if (egdeEvent)
+			{
+				removeTriangle(edgeEventP1, edgeEventP2);
+				updatePoint(edgeEventP2, getRoofPoint(edgeEventP1));
+
+				removePointFromWavefront(edgeEventP2);
+				renamePointInTriangles(edgeEventP2, edgeEventP1);
+				renamePointInSurfaces(edgeEventP2, edgeEventP1);
+				removeRoofPoint(edgeEventP2);
+				restartLongRoofPoint(edgeEventP1);
+
+				calculateSpeedOfPoint(edgeEventP1);
+
 			}
 			else
-				itWavefrontList++;
-		}
-
-		if (wavefront.empty())
-			break;
-
-		bool egdeEvent = true;
-
-		double heightOfNextCollision = 100000.0f;
-		long long edgeEventP1 = 0;
-		long long edgeEventP2 = 0;
-
-		long long flipSplitEventP1 = 0;
-		long long flipSplitEventP2 = 0;
-		long long flipSplitEventP3 = 0;
-
-		for (int itTriangle = 0; itTriangle < triangles.size(); itTriangle++)
-		{
-			auto p1 = getFullRoofPoint(triangles[itTriangle].idp1);
-			auto p2 = getFullRoofPoint(triangles[itTriangle].idp2);
-			auto p3 = getFullRoofPoint(triangles[itTriangle].idp3);
-
-			double joinTimeP1P2 = lineCollapseTime(p1, p2);
-			if (joinTimeP1P2 < heightOfNextCollision && joinTimeP1P2 >= 0.0f)
 			{
-				egdeEvent = true;
-				heightOfNextCollision = joinTimeP1P2;
-				edgeEventP1 = p1.id;
-				edgeEventP2 = p2.id;
+				sortPoints(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
+
+				setCollisionPoint(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
+
+				auto oppositePoint = oppositeTriangleWithEdge(flipSplitEventP2, flipSplitEventP3, flipSplitEventP1);
+
+				if (oppositePoint != -1) //flip event
+				{
+					removeTriangle(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
+					removeTriangle(oppositePoint, flipSplitEventP2, flipSplitEventP3);
+
+					Triangle t1;
+					t1.idp1 = flipSplitEventP1;
+					t1.idp2 = flipSplitEventP2;
+					t1.idp3 = oppositePoint;
+
+					Triangle t2;
+					t2.idp1 = flipSplitEventP1;
+					t2.idp2 = flipSplitEventP3;
+					t2.idp3 = oppositePoint;
+
+					triangles.push_back(t1);
+					triangles.push_back(t2);
+
+
+				}
+				else //split event
+				{
+					setCollisionPoint(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
+
+					removeTriangle(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
+
+					RoofPoint newPoint = getFullRoofPoint(flipSplitEventP1);
+					long long newId = nextRoofPointid();
+					long long oldId = flipSplitEventP1;
+					newPoint.id = newId;
+					roofPoints.push_back(newPoint);
+
+					closeLongRoofLine(oldId);
+					longRoofLines.push_back(std::make_tuple(newId, getRoofPoint(newId), Point()));
+					longRoofLines.push_back(std::make_tuple(oldId, getRoofPoint(newId), Point()));
+
+					int currentWavefront = 0;
+					int pointOnWavefront = 0;
+					bool found = false;
+					for (int itWavefrontList = 0; itWavefrontList < wavefront.size(); itWavefrontList++)
+					{
+						for (auto itWavefront = 0; itWavefront < wavefront[itWavefrontList].size(); itWavefront++)
+						{
+							if (wavefront[itWavefrontList][itWavefront] == flipSplitEventP1)
+							{
+								currentWavefront = itWavefrontList;
+								pointOnWavefront = itWavefront;
+								found = true;
+								break;
+							}
+						}
+						if (found)
+							break;
+					}
+
+					std::vector<long long> l1;
+					std::vector<long long> l2;
+
+					auto nextInWavefront = pointOnWavefront;
+
+					for (auto it = pointOnWavefront; wavefront[currentWavefront][it] != flipSplitEventP3; )
+					{
+						l1.push_back(wavefront[currentWavefront][it]);
+						nextInWavefront = it;
+
+						it++;
+						it = it % wavefront[currentWavefront].size();
+					}
+					nextInWavefront++;
+					nextInWavefront = nextInWavefront % wavefront[currentWavefront].size();
+
+					l2.push_back(roofPoints[roofPoints.size() - 1].id);
+					for (auto it = nextInWavefront; wavefront[currentWavefront][it] != wavefront[currentWavefront][pointOnWavefront]; )
+					{
+						l2.push_back(wavefront[currentWavefront][it]);
+						it++;
+						it = it % wavefront[currentWavefront].size();
+					}
+
+					wavefront.erase(wavefront.begin() + currentWavefront);
+					wavefront.push_back(l1);
+					wavefront.push_back(l2);
+
+					calculateSpeedOfPoint(newPoint.id);
+					calculateSpeedOfPoint(flipSplitEventP1);
+
+					for (int it = 0; it < l2.size(); it++)
+					{
+						for (int itTrian = 0; itTrian < triangles.size(); itTrian++)
+						{
+							if (triangles[itTrian].idp1 == l2[it] || triangles[itTrian].idp2 == l2[it] || triangles[itTrian].idp3 == l2[it])
+							{
+								if (triangles[itTrian].idp1 == oldId)
+								{
+									triangles[itTrian].idp1 = newId;
+								}
+								if (triangles[itTrian].idp2 == oldId)
+								{
+									triangles[itTrian].idp2 = newId;
+								}
+								if (triangles[itTrian].idp3 == oldId)
+								{
+									triangles[itTrian].idp3 = newId;
+								}
+							}
+
+						}
+					}
+				}
 			}
 
-			double joinTimeP1P3 = lineCollapseTime(p1, p3);
-			if (joinTimeP1P3 < heightOfNextCollision && joinTimeP1P3 >= 0.0f)
-			{
-				egdeEvent = true;
-				heightOfNextCollision = joinTimeP1P3;
-				edgeEventP1 = p1.id;
-				edgeEventP2 = p3.id;
-			}
-
-			double joinTimeP2P3 = lineCollapseTime(p2, p3);
-			if (joinTimeP2P3 < heightOfNextCollision && joinTimeP2P3 >= 0.0f)
-			{
-				egdeEvent = true;
-				heightOfNextCollision = joinTimeP2P3;
-				edgeEventP1 = p2.id;
-				edgeEventP2 = p3.id;
-			}
-
-			double triangle123CollapseTime = triangleCollapseTime(p1, p2, p3);
-			if (triangle123CollapseTime < heightOfNextCollision && triangle123CollapseTime >= 0.0f &&
-				futureDistance(p1.id, p2.id, triangle123CollapseTime) > 0.0001f &&
-				futureDistance(p2.id, p3.id, triangle123CollapseTime) > 0.0001f &&
-				futureDistance(p1.id, p3.id, triangle123CollapseTime) > 0.0001f)
-			{
-				egdeEvent = false;
-				heightOfNextCollision = triangle123CollapseTime;
-				flipSplitEventP1 = p1.id;
-				flipSplitEventP2 = p2.id;
-				flipSplitEventP3 = p3.id;
-			}
-		}
-
-		for (int itRoofPoint = 0; itRoofPoint < roofPoints.size(); itRoofPoint++)
-		{
-			auto nextPoint = getFullRoofPoint(roofPoints[itRoofPoint].id);
-
-			Point next(roofPoints[itRoofPoint].point.x + heightOfNextCollision * roofPoints[itRoofPoint].dx, roofPoints[itRoofPoint].point.y + heightOfNextCollision * roofPoints[itRoofPoint].dy, roofPoints[itRoofPoint].point.z + heightOfNextCollision);
-			roofLines.push_back({ roofPoints[itRoofPoint].point, next });
-
-
-			nextPoint.point = next;
-			updateRoofPoint(roofPoints[itRoofPoint].id, nextPoint);
-
-			if (roofPoints[itRoofPoint].point.z < 15.0f)
-			{
-				int h = 5;
-			}
+			//if(breakbreak > 18)
+			//	break;
+			breakbreak++;
+			removeBrokenTriangles();
+			removeEmptyWavefronts();
 		}
 
 		closeWavefrontSurfaces();
-		openWavefrontSurfaces();
 
-		if (egdeEvent)
+		for (auto& longRoofLine : longRoofLines)
 		{
-			removeTriangle(edgeEventP1, edgeEventP2);
-			updatePoint(edgeEventP2, getRoofPoint(edgeEventP1));
-
-			removePointFromWavefront(edgeEventP2);
-			renamePointInTriangles(edgeEventP2, edgeEventP1);
-			renamePointInSurfaces(edgeEventP2, edgeEventP1);
-			removeRoofPoint(edgeEventP2);
-			restartLongRoofPoint(edgeEventP1);
-
-			calculateSpeedOfPoint(edgeEventP1);
+			graphIdsSet.insert(std::get<1>(longRoofLine));
+			graphIdsSet.insert(std::get<2>(longRoofLine));
 
 		}
-		else
+
+		for (auto it = graphIdsSet.begin(); it != graphIdsSet.end();)
 		{
-			sortPoints(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
-
-			setCollisionPoint(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
-
-			auto oppositePoint = oppositeTriangleWithEdge(flipSplitEventP2, flipSplitEventP3, flipSplitEventP1);
-
-			if (oppositePoint != -1) //flip event
+			bool removed = false;
+			for (auto& startPoint : roofPointsCopy)
 			{
-				removeTriangle(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
-				removeTriangle(oppositePoint, flipSplitEventP2, flipSplitEventP3);
-
-				Triangle t1;
-				t1.idp1 = flipSplitEventP1;
-				t1.idp2 = flipSplitEventP2;
-				t1.idp3 = oppositePoint;
-
-				Triangle t2;
-				t2.idp1 = flipSplitEventP1;
-				t2.idp2 = flipSplitEventP3;
-				t2.idp3 = oppositePoint;
-
-				triangles.push_back(t1);
-				triangles.push_back(t2);
-
-
-			}
-			else //split event
-			{
-				setCollisionPoint(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
-
-				removeTriangle(flipSplitEventP1, flipSplitEventP2, flipSplitEventP3);
-
-				RoofPoint newPoint = getFullRoofPoint(flipSplitEventP1);
-				long long newId = nextRoofPointid();
-				long long oldId = flipSplitEventP1;
-				newPoint.id = newId;
-				roofPoints.push_back(newPoint);
-
-				closeLongRoofLine(oldId);
-				longRoofLines.push_back(std::make_tuple(newId, getRoofPoint(newId), Point()));
-				longRoofLines.push_back(std::make_tuple(oldId, getRoofPoint(newId), Point()));
-
-				int currentWavefront = 0;
-				int pointOnWavefront = 0;
-				bool found = false;
-				for (int itWavefrontList = 0; itWavefrontList < wavefront.size(); itWavefrontList++)
+				if (startPoint.point == *it)
 				{
-					for (auto itWavefront = 0 ; itWavefront < wavefront[itWavefrontList].size(); itWavefront++)
-					{
-						if (wavefront[itWavefrontList][itWavefront] == flipSplitEventP1)
-						{
-							currentWavefront = itWavefrontList;
-							pointOnWavefront = itWavefront;
-							found = true;
-							break;
-						}
-					}
-					if (found)
-						break;
-				}
-
-				std::vector<long long> l1;
-				std::vector<long long> l2;
-
-				auto nextInWavefront = pointOnWavefront;
-
-				for (auto it = pointOnWavefront; wavefront[currentWavefront][it] != flipSplitEventP3; )
-				{
-					l1.push_back(wavefront[currentWavefront][it]);
-					nextInWavefront = it;
-
-					it++;
-					it = it % wavefront[currentWavefront].size();
-				}
-				nextInWavefront++;
-				nextInWavefront = nextInWavefront % wavefront[currentWavefront].size();
-
-				l2.push_back(roofPoints[roofPoints.size() - 1].id);
-				for (auto it = nextInWavefront; wavefront[currentWavefront][it] != wavefront[currentWavefront][pointOnWavefront]; )
-				{
-					l2.push_back(wavefront[currentWavefront][it]);
-					it++;
-					it = it % wavefront[currentWavefront].size();
-				}
-
-				wavefront.erase(wavefront.begin() + currentWavefront);
-				wavefront.push_back(l1);
-				wavefront.push_back(l2);
-
-				calculateSpeedOfPoint(newPoint.id);
-				calculateSpeedOfPoint(flipSplitEventP1);
-
-				for(int it = 0; it < l2.size(); it++)
-				{
-					for(int itTrian = 0; itTrian < triangles.size(); itTrian++)
-					{
-						if (triangles[itTrian].idp1 == l2[it] || triangles[itTrian].idp2 == l2[it] || triangles[itTrian].idp3 == l2[it])
-						{
-							if (triangles[itTrian].idp1 == oldId)
-							{
-								triangles[itTrian].idp1 = newId;
-							}
-							if (triangles[itTrian].idp2 == oldId)
-							{
-								triangles[itTrian].idp2 = newId;
-							}
-							if (triangles[itTrian].idp3 == oldId)
-							{
-								triangles[itTrian].idp3 = newId;
-							}
-						}
-
-					}
+					it = graphIdsSet.erase(it);
+					removed = true;
+					break;
 				}
 			}
+			if (!removed)
+				it++;
 		}
-		
-		//if(breakbreak > 18)
-		//	break;
-		breakbreak++;
-		removeBrokenTriangles();
-		removeEmptyWavefronts();
-	}
 
-	closeWavefrontSurfaces();
-
-	for (auto& longRoofLine : longRoofLines)
-	{
-		graphIdsSet.insert(std::get<1>(longRoofLine));
-		graphIdsSet.insert(std::get<2>(longRoofLine));
-
-	}
-
-	for (auto it = graphIdsSet.begin(); it != graphIdsSet.end();)
-	{
-		bool removed = false;
 		for (auto& startPoint : roofPointsCopy)
 		{
-			if (startPoint.point == *it)
+			graphIds.push_back({ startPoint.id, startPoint.point });
+		}
+
+		auto lastRoofLevelId = graphIds.back().first;
+		auto nextId = lastRoofLevelId + 1;
+
+		for (auto& point : graphIdsSet)
+		{
+			graphIds.push_back({ nextId, point });
+			nextId++;
+		}
+
+		for (auto& longRoofLine : longRoofLines)
+		{
+			Point p1 = std::get<1>(longRoofLine);
+			Point p2 = std::get<2>(longRoofLine);
+
+			std::vector<std::pair<long long, Point>>::iterator it1 = std::find_if(graphIds.begin(), graphIds.end(), [p1](std::pair<long long, Point>& pair) { return pair.second == p1; });
+			std::vector<std::pair<long long, Point>>::iterator it2 = std::find_if(graphIds.begin(), graphIds.end(), [p2](std::pair<long long, Point>& pair) { return pair.second == p2; });
+
+			if (!(it1->first <= lastRoofLevelId && it2->first <= lastRoofLevelId) && !(it1->first == it2->first))
+				connections.push_back({ it1->first, it2->first });
+
+		}
+
+		std::vector<std::vector<long long>> neighbours;
+
+		std::vector<std::pair<int, long long>> dataCopy; //pair<state, parent>
+
+		for (auto& graphId : graphIds)
+		{
+			std::vector<long long> thisIdNeighbours;
+			for (auto& connection : connections)
 			{
-				it = graphIdsSet.erase(it);
-				removed = true;
-				break;
+				if (connection.first == graphId.first)
+					thisIdNeighbours.push_back(connection.second);
+				if (connection.second == graphId.first)
+					thisIdNeighbours.push_back(connection.first);
 			}
+			neighbours.push_back(thisIdNeighbours);
+			dataCopy.push_back({ 0, -1 });
 		}
-		if (!removed)
-			it++;
-	}
 
-	for (auto& startPoint : roofPointsCopy)
-	{
-		graphIds.push_back({ startPoint.id, startPoint.point});
-	}
 
-	auto lastRoofLevelId = graphIds.back().first;
-	auto nextId = lastRoofLevelId + 1;
-
-	for (auto& point : graphIdsSet)
-	{
-		graphIds.push_back({ nextId, point });
-		nextId++;
-	}
-
-	for (auto& longRoofLine : longRoofLines)
-	{
-		Point p1 = std::get<1>(longRoofLine);
-		Point p2 = std::get<2>(longRoofLine);
-
-		std::vector<std::pair<long long, Point>>::iterator it1 = std::find_if(graphIds.begin(), graphIds.end(), [p1](std::pair<long long, Point>& pair) { return pair.second == p1; });
-		std::vector<std::pair<long long, Point>>::iterator it2 = std::find_if(graphIds.begin(), graphIds.end(), [p2](std::pair<long long, Point>& pair) { return pair.second == p2; });
-
-		if(!(it1->first <= lastRoofLevelId && it2->first <= lastRoofLevelId) && !(it1->first == it2->first))
-			connections.push_back({it1->first, it2->first});
-
-	}
-
-	std::vector<std::vector<long long>> neighbours;
-
-	std::vector<std::pair<int, long long>> dataCopy; //pair<state, parent>
-
-	for (auto& graphId : graphIds)
-	{
-		std::vector<long long> thisIdNeighbours;
-		for (auto& connection : connections)
+		for (long long idFrom = 0; idFrom < roofPointsCopy.size(); idFrom++)
 		{
-			if (connection.first == graphId.first)
-				thisIdNeighbours.push_back(connection.second);
-			if (connection.second == graphId.first)
-				thisIdNeighbours.push_back(connection.first);
-		}
-		neighbours.push_back(thisIdNeighbours);
-		dataCopy.push_back({ 0, -1 });
-	}
+			std::vector<std::pair<int, long long>> data = dataCopy;
+
+			long long idTo = (idFrom + 1) % roofPointsCopy.size();
 
 
-	for (long long idFrom = 0; idFrom < roofPointsCopy.size(); idFrom++)
-	{
-		std::vector<std::pair<int, long long>> data = dataCopy;
+			data[idFrom].first = 1;
+			std::queue<long long> idsQueue;
 
-		long long idTo = (idFrom + 1) % roofPointsCopy.size();
+			idsQueue.push(idFrom);
 
-
-		data[idFrom].first = 1;
-		std::queue<long long> idsQueue;
-
-		idsQueue.push(idFrom);
-
-		while (!idsQueue.empty())
-		{
-			auto currentId = idsQueue.front();
-
-			if (currentId == idTo)
-				break;
-
-			idsQueue.pop();
-			for (auto& neighbour : neighbours[currentId])
+			while (!idsQueue.empty())
 			{
-				if (data[neighbour].first == 0)
+				auto currentId = idsQueue.front();
+
+				if (currentId == idTo)
+					break;
+
+				idsQueue.pop();
+				for (auto& neighbour : neighbours[currentId])
 				{
-					data[neighbour].first = 1;
-					data[neighbour].second = currentId;
-					idsQueue.push(neighbour);
+					if (data[neighbour].first == 0)
+					{
+						data[neighbour].first = 1;
+						data[neighbour].second = currentId;
+						idsQueue.push(neighbour);
+					}
 				}
+				data[currentId].first = 2;
 			}
-			data[currentId].first = 2;
+
+			std::vector<long long> path;
+			path.push_back(idTo);
+
+			auto checkHistory = data[idTo].second;
+
+			while (checkHistory != -1)
+			{
+				path.push_back(checkHistory);
+				checkHistory = data[checkHistory].second;
+			}
+
+			std::vector<Point> currentSurface;
+
+			for (auto& currentPoint : path)
+			{
+				currentSurface.push_back(graphIds[currentPoint].second);
+			}
+
+			roofSurfaces.push_back(currentSurface);
 		}
+	}
 
-		std::vector<long long> path;
-		path.push_back(idTo);
+	polygonsCount = roofSurfaces.size();
+	edgesCount = longRoofLines.size();
+}
 
-		auto checkHistory = data[idTo].second;
+void Roof::generateFlatRoof()
+{
+	_red = 0.4f;
+	_green = 0.4f;
+	_blue = 0.4f;
 
-		while (checkHistory != -1)
-		{
-			path.push_back(checkHistory);
-			checkHistory = data[checkHistory].second;
-		}
+	longRoofLines.clear();
 
-		std::vector<Point> currentSurface;
-
-		for (auto& currentPoint : path)
-		{
-			currentSurface.push_back(graphIds[currentPoint].second);
-		}
-
-		roofSurfaces.push_back(currentSurface);
+	for (auto triangle : triangles)
+	{
+		std::vector<Point> roofSurface;
+		roofSurface.push_back(getRoofPoint(triangle.idp1));
+		roofSurface.push_back(getRoofPoint(triangle.idp2));
+		roofSurface.push_back(getRoofPoint(triangle.idp3));
+		roofSurfaces.push_back(roofSurface);
 	}
 }

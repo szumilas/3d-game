@@ -17,17 +17,25 @@ public:
 	void applyKnownValues();
 
 	long long getId() { return id; }
+	void select();
+	void deselect();
+
+private:
+
+	void optimizePoints();
+
+public:
+	//stats
+	long long polygonsCount = 0;
+	long long edgesCount = 0;
+
+	std::vector<long long> refs;
+	std::vector<Point> points;
+	bool isSelected = false;
 
 private:
 
 	long long id;
-
-public:
-
-	std::vector<long long> refs;
-	std::vector<Point> points;
-
-private:
 
 	std::map<std::string, std::tuple<float, float, float>> colorMap
 	{
@@ -55,6 +63,7 @@ public:
 	std::string man_made;
 	std::string railway;
 	std::string colour;
+	std::string roof_shape;
 
 
 	float _height;
@@ -62,4 +71,8 @@ public:
 	float _red;
 	float _green;
 	float _blue;
+
+	float _redCopy;
+	float _greenCopy;
+	float _blueCopy;
 };

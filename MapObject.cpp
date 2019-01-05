@@ -14,6 +14,8 @@ void MapObject::calculateXYfromRef(const std::map<long long, node> &nodes)
 		newPoint.y = nodes.at(ref).posY;
 		points.push_back(newPoint);
 	}
+	
+	optimizePoints();
 }
 
 void MapObject::applyKnownValues()
@@ -43,4 +45,44 @@ void MapObject::applyKnownValues()
 			}
 		}
 	};
+}
+
+void MapObject::select()
+{
+	isSelected = true;
+	_redCopy = _red;
+	_greenCopy = _green;
+	_blueCopy = _blue;
+
+	_red = 0.8f;
+	_green = 0.2f;
+	_blue = 0.5f;
+}
+
+void MapObject::deselect()
+{
+	if (isSelected)
+	{
+		isSelected = false;
+		_red = _redCopy;
+		_green = _greenCopy;
+		_blue = _blueCopy;
+	}
+
+}
+
+void MapObject::optimizePoints()
+{
+	if (points.size() > 2)
+	{
+		for (auto it = points.begin() + 1; it + 2 != points.end();)
+		{
+			Line2D l1(*(it - 1), *(it + 1));
+
+			if (l1.pointDistance(*(it)) < 0.1)
+				it = points.erase(it);
+			else
+				it++;
+		}
+	}
 }

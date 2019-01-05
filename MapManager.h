@@ -30,11 +30,16 @@ class MapManager
 public:
 	void readMap(const char * fileName);
 	void calculateNodesPositions();
+	void selectObject(float X, float Y);
+	void deselectObjects();
+	void saveOverlays();
+	void addOverlayAttribute();
 
 private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
 	void createNodesMap();
 	void createMapObjectsArray();
+	void applyOverlays(MapObject& mapObject);
 
 	bool isHighlightedObjectCheck(MapObject& mapObject);
 	bool isStreetCheck(MapObject& mapObject);
@@ -52,6 +57,7 @@ private:
 	void addObject(MapObject& newMapObject)
 	{
 		mapObjects.push_back(std::make_unique<T>(newMapObject));
+		newMapObject._height = mapObjects.back()->_height;
 		if (std::is_same<T, Building>::value)
 		{
 			mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
@@ -66,7 +72,9 @@ private:
 	double latitudeRatio = 111220.165038003;
 
 	rapidxml::xml_document <> document;
+	rapidxml::xml_document <> overlays;
 
+	std::unique_ptr<char[]> overlayContent;
 
 	std::unordered_set<std::string> skippedTags{
 		/*"cycleway:right",
@@ -95,6 +103,7 @@ private:
 		"railway",
 		"colour",
 		"building:colour",
+		"roof:shape",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -117,6 +126,7 @@ private:
 		{ "railway", &MapObject::railway },
 		{ "colour", &MapObject::colour },
 		{ "building:colour", &MapObject::colour },
+		{ "roof:shape", &MapObject::roof_shape },
 	};
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector

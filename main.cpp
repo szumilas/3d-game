@@ -85,11 +85,13 @@ MapManager mapManager;
 int main(int argc, char**agrv)
 {
 	//mapManager.readMap("szczytnicka.osm");
+	//mapManager.readMap("szczytnickaB4.osm");
+	//mapManager.readMap("szczytnickaB.osm");
 	//mapManager.readMap("map.osm");
-	//mapManager.readMap("grunwald.osm");
+	mapManager.readMap("grunwald.osm");
 	//mapManager.readMap("parkCheck.osm");
 
-	mapManager.readMap("grunwaldWithRiver.osm");
+	//mapManager.readMap("grunwaldWithRiver.osm");
 
 	//mapManager.readMap("streetDetail.osm");
 	mapManager.calculateNodesPositions();
@@ -148,7 +150,7 @@ void display()
 	
 	for (auto& mapObject : mapManager.mapObjects)
 	{
-		mapObject->display();
+			mapObject->display();
 	}
 
 	obj.printModel();
@@ -225,6 +227,7 @@ void keyboard(unsigned char key, int x, int y)
 	{
 	case 27: // Escape key
 		orbit.savePosition();
+		mapManager.saveOverlays();
 		exit(0);
 		break;
 	}
@@ -234,6 +237,18 @@ void keyboard(unsigned char key, int x, int y)
 	for (int q = 0; q < keys.size(); q++)
 		keys[q] = GetAsyncKeyState(q);
 
+	if (keys[static_cast<int>('Z')])
+	{
+		mapManager.selectObject(orbit.getFlatCursorX(), orbit.getFlatCursorY());
+	}
+	if (keys[static_cast<int>('D')])
+	{
+		mapManager.deselectObjects();
+	}
+	if (keys[static_cast<int>('5')])
+	{
+		mapManager.addOverlayAttribute();
+	}
 
 	/*
 	if (keys[65])
