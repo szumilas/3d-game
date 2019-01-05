@@ -150,6 +150,7 @@ void display()
 	
 	for (auto& mapObject : mapManager.mapObjects)
 	{
+		if(!mapObject->isHidden)
 			mapObject->display();
 	}
 
@@ -232,23 +233,7 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	}
 
-
-	std::vector<bool> keys(100);
-	for (int q = 0; q < keys.size(); q++)
-		keys[q] = GetAsyncKeyState(q);
-
-	if (keys[static_cast<int>('Z')])
-	{
-		mapManager.selectObject(orbit.getFlatCursorX(), orbit.getFlatCursorY());
-	}
-	if (keys[static_cast<int>('D')])
-	{
-		mapManager.deselectObjects();
-	}
-	if (keys[static_cast<int>('5')])
-	{
-		mapManager.addOverlayAttribute();
-	}
+	mapManager.applyMapEditorKeys(orbit);
 
 	/*
 	if (keys[65])
@@ -369,7 +354,11 @@ void Update()
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	if (scrollUpMouse)
+	if (leftMouseButtonDown && rightMouseButtonDown)
+	{
+		orbit.rotate(-1);
+	}
+	else if (scrollUpMouse)
 	{
 		orbit.zoomIn();
 	}
@@ -386,7 +375,7 @@ void Update()
 		orbit.rotate();
 	}
 
-	if (leftMouseButtonDown)
+	else if (leftMouseButtonDown)
 	{
 		orbit.activateMovingXY();
 	}

@@ -13,7 +13,7 @@ public:
 	void zoomOut() { distance *= 1.05f; };
 	void activateMovingXY() { if (previouslyRendered) previouslyRendered = false; else { moveOrbitXY = true; previousFlatCursor = flatCursor; } };
 	void deactivateMovingXY() { moveOrbitXY = false; };
-	void rotate() { rz += 3.14159265f / 180.0f; };
+	void rotate(int direction = 1) { rz += direction * 3.14159265f / 180.0f; };
 	void changeAlpha() { if (alpha < 3.14 / 2) alpha += 3.14159265f / 180.0f; else alpha = 3.14f / 36.0f; };
 	float getFlatCursorX() { return flatCursor.x; }
 	float getFlatCursorY() { return flatCursor.y; }

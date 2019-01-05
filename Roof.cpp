@@ -24,6 +24,7 @@ Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 	_green = 0.4f;
 	_blue = 0.4f;
 
+	building = "roof_generated";
 };
 
 void Roof::display()

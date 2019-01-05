@@ -32,6 +32,7 @@ public:
 	std::vector<long long> refs;
 	std::vector<Point> points;
 	bool isSelected = false;
+	bool isHidden = false;
 
 private:
 
@@ -64,6 +65,7 @@ public:
 	std::string railway;
 	std::string colour;
 	std::string roof_shape;
+	std::string _skip;
 
 
 	float _height;

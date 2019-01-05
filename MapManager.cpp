@@ -229,11 +229,14 @@ void MapManager::createMapObjectsArray()
 
 			mapObject.applyKnownValues();
 
-			for (auto& check : objectDetector)
+			if (mapObject._skip != "yes")
 			{
-				if ((this->*check.first)(mapObject))
+				for (auto& check : objectDetector)
 				{
-					(this->*check.second)(mapObject);
+					if ((this->*check.first)(mapObject))
+					{
+						(this->*check.second)(mapObject);
+					}
 				}
 			}
 		}
@@ -328,7 +331,7 @@ bool MapManager::isStreetCheck(MapObject& mapObject)
 
 bool MapManager::isBuildingCheck(MapObject& mapObject)
 {
-	if (!mapObject.building.empty() || !mapObject.building_part.empty())
+	if (mapObject.building != "roof_generated" && (!mapObject.building.empty() || !mapObject.building_part.empty()))
 		return true;
 	else
 		return false;
@@ -398,21 +401,45 @@ bool MapManager::isFootwayCheck(MapObject& mapObject)
 		return false;
 }
 
-void MapManager::selectObject(float X, float Y)
+void MapManager::selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&))
 {
 	PointInsidePolygonDetector detector;
 	Point selectedPoint(X, Y);
 
 	for (auto& mapObject : mapObjects)
 	{
-		if (isBuildingCheck(*mapObject))
+		if(objectChecker == nullptr || objectChecker != nullptr && (this->*objectChecker)(*mapObject))
 		{
 			if (detector.isInside(mapObject->points, selectedPoint))
 			{
-				mapObject->select();
-				break;
+				if (mapObject->isSelected)
+				{
+					mapObject->deselect();
+				}
+				else
+				{
+					mapObject->select();
+					break;
+				}
 			}
 		}
+	}
+}
+
+void MapManager::hideObjects()
+{
+	for (auto& mapObject : mapObjects)
+	{
+		if (mapObject->isSelected)
+			mapObject->isHidden = true;
+	}
+}
+
+void MapManager::unhideObjects()
+{
+	for (auto& mapObject : mapObjects)
+	{
+		mapObject->isHidden = false;
 	}
 }
 
@@ -422,6 +449,73 @@ void MapManager::deselectObjects()
 	{
 		mapObject->deselect();
 	}
+}
+
+void MapManager::applyMapEditorKeys(Orbit& orbit)
+{
+	std::vector<bool> keys(200);
+	for (int q = 0; q < keys.size(); q++)
+		keys[q] = GetAsyncKeyState(q);
+
+	if (keys[static_cast<int>('Z')])
+	{
+		selectObject(orbit.getFlatCursorX(), orbit.getFlatCursorY());
+	}
+	if (keys[static_cast<int>('B')])
+	{
+		selectObject(orbit.getFlatCursorX(), orbit.getFlatCursorY(), &MapManager::isBuildingCheck);
+	}
+	if (keys[static_cast<int>('D')])
+	{
+		deselectObjects();
+	}
+	if (keys[static_cast<int>('H')])
+	{
+		hideObjects();
+	}
+	if (keys[static_cast<int>('U')])
+	{
+		unhideObjects();
+	}
+
+	if (keys[static_cast<int>('0')])
+	{
+		addOverlayAttribute("_skip", "yes");
+	}
+	if (keys[static_cast<int>('1')])
+	{
+		addOverlayAttribute("height", "5.00");
+	}
+	if (keys[static_cast<int>('2')])
+	{
+		addOverlayAttribute("height", "10.00");
+	}
+	if (keys[static_cast<int>('3')])
+	{
+		addOverlayAttribute("height", "15.00");
+	}
+	if (keys[static_cast<int>('4')])
+	{
+		addOverlayAttribute("height", "20.00");
+	}
+	if (keys[static_cast<int>('5')])
+	{
+		addOverlayAttribute("height", "25.00");
+	}
+	if (keys[static_cast<int>('6')])
+	{
+		addOverlayAttribute("height", "30.00");
+	}
+	if (keys[static_cast<int>('7')])
+	{
+		addOverlayAttribute("height", "35.00");
+	}
+
+	if (keys[static_cast<int>('F')])
+	{
+		addOverlayAttribute("roof:shape", "flat");
+	}
+
 }
 
 void MapManager::applyOverlays(MapObject& mapObject)
@@ -498,23 +592,83 @@ void MapManager::applyOverlays(MapObject& mapObject)
 
 }
 
-void MapManager::addOverlayAttribute()
+void MapManager::addOverlayAttribute(const char* attribute, const char* value)
 {
 	for (auto& mapObject : mapObjects)
 	{
 		if (mapObject->isSelected)
 		{
-			rapidxml::xml_node<>* node = overlays.allocate_node(rapidxml::node_type::node_element, "way");
-			char* id = overlays.allocate_string(std::to_string(mapObject->getId()).c_str());
-			node->append_attribute(overlays.allocate_attribute("id", id));
+			rapidxml::xml_node<>* node = nullptr;
 
-			overlays.first_node()->append_node(node);
+			bool nodeFound = false;
+			bool attributeFound = false;
+			//find node
+			rapidxml::xml_node <>* nodeCeo = overlays.first_node();
+			for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+			{
+				if (!strcmp(manager->name(), "way"))
+				{
+					if (std::stoll(manager->first_attribute()->value()) == mapObject->getId())
+					{
+						nodeFound = true;
+						node = manager;
 
-			rapidxml::xml_node<>* subnode = overlays.allocate_node(rapidxml::node_type::node_element, "tag");
-			subnode->append_attribute(overlays.allocate_attribute("k", "height"));
-			subnode->append_attribute(overlays.allocate_attribute("v", "100.00"));
 
-			overlays.first_node()->last_node()->append_node(subnode);
+						for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+						{
+							std::string currentTag;
+							std::string currentTagValue;
+							bool skipTag = false;
+
+							if (!strcmp(a->name(), "tag"))
+							{
+								for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+								{
+									if (!strcmp(b->name(), "k")) //attribute name
+									{
+										if (!strcmp(b->value(), attribute))
+										{
+											attributeFound = true;
+										}
+
+									}
+									else if (!strcmp(b->name(), "v")) //attribute value
+									{
+										if(attributeFound)
+											b->value(value);
+									}
+								}
+							}
+
+							if (attributeFound)
+								break;
+						}
+
+						break;
+					}
+
+				}
+			}
+
+
+			if (!nodeFound)
+			{
+
+				node = overlays.allocate_node(rapidxml::node_type::node_element, "way");
+				char* id = overlays.allocate_string(std::to_string(mapObject->getId()).c_str());
+				node->append_attribute(overlays.allocate_attribute("id", id));
+
+				overlays.first_node()->append_node(node);
+			}
+
+			if (!attributeFound)
+			{
+				rapidxml::xml_node<>* subnode = overlays.allocate_node(rapidxml::node_type::node_element, "tag");
+				subnode->append_attribute(overlays.allocate_attribute("k", attribute));
+				subnode->append_attribute(overlays.allocate_attribute("v", value));
+
+				node->append_node(subnode);
+			}
 
 		}
 	}

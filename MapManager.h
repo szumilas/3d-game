@@ -7,6 +7,7 @@
 
 #include "GlobalStructures.h"
 
+#include "Orbit.h"
 #include "MapObject.h"
 #include "Street.h"
 #include "Building.h"
@@ -30,10 +31,13 @@ class MapManager
 public:
 	void readMap(const char * fileName);
 	void calculateNodesPositions();
-	void selectObject(float X, float Y);
+	void selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&) = nullptr);
+	void hideObjects();
+	void unhideObjects();
 	void deselectObjects();
+	void applyMapEditorKeys(Orbit& orbit);
 	void saveOverlays();
-	void addOverlayAttribute();
+	void addOverlayAttribute(const char* attribute, const char* value);
 
 private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
@@ -104,6 +108,7 @@ private:
 		"colour",
 		"building:colour",
 		"roof:shape",
+		"_skip",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -127,6 +132,7 @@ private:
 		{ "colour", &MapObject::colour },
 		{ "building:colour", &MapObject::colour },
 		{ "roof:shape", &MapObject::roof_shape },
+		{ "_skip", &MapObject::_skip },
 	};
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
