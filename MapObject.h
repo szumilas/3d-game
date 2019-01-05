@@ -23,6 +23,7 @@ public:
 private:
 
 	void optimizePoints();
+	std::vector<Point> DouglasPeuckerAlgorithm(std::vector<Point>& l, float epsilon);
 
 protected:
 
