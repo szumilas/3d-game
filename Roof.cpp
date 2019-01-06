@@ -759,12 +759,25 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 		|| getId() == 101208296 || getId() == 101215404
 
 		|| getId() == 101215512 || getId() == 375365818
+
+		|| getId() == 101140904 || getId() == 101194851
+		|| getId() == 101206671 || getId() == 255868240
+		|| getId() == 289721093 || getId() == 327031467
+		|| getId() == 101124965 || getId() == 101125718
+		|| getId() == 101188144 || getId() == 101193648
+		|| getId() == 101201334 || getId() == 101134694
+		|| getId() == 101139409 || getId() == 101140255
+		|| getId() == 101143975 || getId() == 101205926
+		|| getId() == 101207269 || getId() == 284166260
+		|| getId() == 343661977 || getId() == 421145612
+		|| getId() == 432328667 || getId() == 432937763
 		)
 	{
 		generateFlatRoof();
 	}
 	else
 	{
+		int check = 1000;
 		while (!wavefront.empty())
 		{
 			for (int itWavefrontList = 0; itWavefrontList < wavefront.size(); )
@@ -1018,6 +1031,12 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 			breakbreak++;
 			removeBrokenTriangles();
 			removeEmptyWavefronts();
+			check--;
+			if (check < 0)
+			{
+				generateFlatRoof();
+				return;
+			}
 		}
 
 		closeWavefrontSurfaces();
@@ -1043,6 +1062,16 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 			}
 			if (!removed)
 				it++;
+		}
+
+		PointInsidePolygonDetector checker;
+		for (auto& point : graphIdsSet)
+		{
+			if (!checker.isInside(points, Point(point)))
+			{
+				generateFlatRoof();
+				return;
+			}
 		}
 
 		for (auto& startPoint : roofPointsCopy)
