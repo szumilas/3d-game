@@ -53,8 +53,14 @@ void Building::generateWalls()
 
 void Building::display()
 {
+
 	for (auto& wall : walls)
 	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		glEnable(GL_TEXTURE_2D);
+
 		glBegin(GL_POLYGON);
 		if (isSelected)
 		{
@@ -64,11 +70,21 @@ void Building::display()
 		else
 			glColor3f(wall.color.red, wall.color.green, wall.color.blue);
 
+		glTexCoord2f(1.0, 1.0);
 		glVertex3f(wall.p1.x, wall.p1.y, _min_height);
+
+		glTexCoord2f(0.0, 1.0);
 		glVertex3f(wall.p2.x, wall.p2.y, _min_height);
+
+		glTexCoord2f(0.0, 0.0);
 		glVertex3f(wall.p2.x, wall.p2.y, _height);
+
+		glTexCoord2f(1.0, 0.0);
 		glVertex3f(wall.p1.x, wall.p1.y, _height);
 		glEnd();
+
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
 	}
 
 	/*glColor3f(0.7f, 0.7f, 0.7f);

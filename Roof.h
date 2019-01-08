@@ -38,6 +38,7 @@ public:
 	struct RoofSurface
 	{
 		std::vector<Point> points;
+		std::vector<Point> texturePoints;
 		Color color;
 	};
 

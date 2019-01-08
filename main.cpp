@@ -1,3 +1,4 @@
+#include <IL/il.h>
 #include <GL/glut.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -9,6 +10,10 @@
 #include "Car.h"
 #include "Orbit.h"
 #include "MapManager.h"
+#include "TextureManager.h"
+
+
+
 
 
 
@@ -81,28 +86,10 @@ void init()
 
 
 MapManager mapManager;
+TextureManager textureManager;
 
 int main(int argc, char**agrv)
 {
-	//mapManager.readMap("szczytnicka.osm");
-	//mapManager.readMap("szczytnickaB4.osm");
-	//mapManager.readMap("szczytnickaB.osm");
-	//mapManager.readMap("map.osm");
-	mapManager.readMap("grunwald.osm");
-	//mapManager.readMap("parkCheck.osm");
-
-	//mapManager.readMap("grunwaldWithRiver.osm");
-
-	//mapManager.readMap("streetDetail.osm");
-	mapManager.calculateNodesPositions();
-	
-
-	//return 0;
-	
-
-
-
-
 	obj.loadModel();
 	wheel.loadModel();
 
@@ -128,6 +115,26 @@ int main(int argc, char**agrv)
 	glutTimerFunc(0, timer, 0);
 
 	init();
+	ilInit();
+
+
+
+
+	textureManager.readTextures();
+
+	mapManager.setTextures(&textureManager);
+
+	//mapManager.readMap("szczytnicka.osm");
+	//mapManager.readMap("szczytnickaB4.osm");
+	//mapManager.readMap("szczytnickaB.osm");
+	//mapManager.readMap("map.osm");
+	mapManager.readMap("grunwald.osm");
+	//mapManager.readMap("parkCheck.osm");
+
+	//mapManager.readMap("grunwaldWithRiver.osm");
+
+	//mapManager.readMap("streetDetail.osm");
+	mapManager.calculateNodesPositions();
 
 
 	glutMainLoop();
@@ -158,7 +165,7 @@ void display()
 	obj.printWheels();
 
 
-	obj.printModel();
+	//obj.printModel();
 	
 	glBegin(GL_LINES);
 	glColor3f(1, 0, 0);
@@ -194,13 +201,13 @@ void reshape(int width, int height)
 
 void timer(int)
 {
-	std::cout << mouseXPos << " " << mouseYPos << " "
+	/*std::cout << mouseXPos << " " << mouseYPos << " "
 		<< (leftMouseButtonDown == true ? "x " : "  ")
 		<< (rightMouseButtonDown == true ? "x " : "  ")
 		<< (scrollMouseButtonDown == true ? "x " : "  ")
 		<< (scrollUpMouse == true ? "x " : "  ")
 		<< (scrollDownMouse == true ? "x " : "  ")
-		<< std::endl;
+		<< std::endl;*/
 
 	glutPostRedisplay();
 
@@ -234,38 +241,6 @@ void keyboard(unsigned char key, int x, int y)
 	}
 
 	mapManager.applyMapEditorKeys(orbit);
-
-	/*
-	if (keys[65])
-		camera.rotateY(-0.02);
-
-	if (keys[87])
-		camera.rotateX(-0.02);
-
-	if (keys[68])
-		camera.rotateY(0.02);
-
-	if (keys[83])
-		camera.rotateX(0.02);*/
-
-	//translate
-	/*if (keys[70]) //F
-		camera.moveX(0.1);
-
-	if (keys[72]) //H
-		camera.moveX(-0.1);
-
-	if (keys[84]) //T
-		camera.moveZ(0.1);
-
-	if (keys[71]) //G
-		camera.moveZ(-0.1);
-
-	if (keys[82]) //R
-		camera.moveY(0.1);
-
-	if (keys[89]) //Y
-		camera.moveY(-0.1);*/
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
@@ -330,17 +305,6 @@ void SpecialKeysUp(int key, int x, int y)
 
 void Update()
 {
-	
-	/*
-	if (upPressed)
-		camera.moveZ(0.01);
-	if (downPressed)
-		camera.moveZ(-0.01);
-	if (leftPressed)
-		camera.moveX(0.01);
-	if (rightPressed)
-		camera.moveX(-0.01);
-	*/
 	if (upPressed)
 		obj.accelerate();
 	if (downPressed)

@@ -39,6 +39,11 @@ void Roof::display()
 	{
 		for (auto& roofSurface : roofSurfaces)
 		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			glEnable(GL_TEXTURE_2D);
+
 			glBegin(GL_POLYGON);
 			if (isSelected)
 			{
@@ -47,11 +52,18 @@ void Roof::display()
 			}
 			else
 				glColor3f(roofSurface.color.red, roofSurface.color.green, roofSurface.color.blue);
-			for (auto& point : roofSurface.points)
+
+			for (int q = 0; q < roofSurface.points.size(); q++)
 			{
-				glVertex3f(point.x, point.y, point.z);
+				glTexCoord2f(roofSurface.texturePoints[q].x, roofSurface.texturePoints[q].y);
+
+				glVertex3f(roofSurface.points[q].x, roofSurface.points[q].y, roofSurface.points[q].z);
 			}
+
 			glEnd();
+
+			glDisable(GL_BLEND);
+			glDisable(GL_TEXTURE_2D);
 		}
 	}
 
@@ -1174,12 +1186,42 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 			vector2D wallLine(currentSurface[0], currentSurface.back());
 			shadeTheWall(colorOfSurface, wallLine, 0.25f);
 
-			roofSurfaces.push_back( { currentSurface, colorOfSurface });
+			roofSurfaces.push_back({ currentSurface, {}, colorOfSurface });
 		}
 	}
 
 	polygonsCount = roofSurfaces.size();
 	edgesCount = longRoofLines.size();
+
+
+	for (auto& roofSurface : roofSurfaces)
+	{
+		float maxZ = -10000000.0f;
+		float maxX = -10000000.0f;
+		float minX = 10000000.0f;
+
+
+		for (auto& point : roofSurface.points)
+		{
+			if (maxZ < point.z)
+				maxZ = point.z;
+			if (maxX < point.x)
+				maxX = point.x;
+			if (minX > point.x)
+				minX = point.x;
+		}
+
+		std::vector<Point> roofSurfaceTexturePoins;
+		auto deltaX = maxX - minX;
+		auto detlaZ = maxZ - _roof_level;
+
+		for (auto& point : roofSurface.points)
+		{
+			roofSurfaceTexturePoins.push_back({ (point.x - minX) / deltaX, (point.z - _roof_level) / detlaZ, 0 });
+		}
+
+		roofSurface.texturePoints = roofSurfaceTexturePoins;
+	}
 }
 
 void Roof::generateFlatRoof()
@@ -1196,6 +1238,6 @@ void Roof::generateFlatRoof()
 		roofSurface.push_back(getRoofPoint(triangle.idp1));
 		roofSurface.push_back(getRoofPoint(triangle.idp2));
 		roofSurface.push_back(getRoofPoint(triangle.idp3));
-		roofSurfaces.push_back({ roofSurface, Color{_red, _green, _blue} });
+		roofSurfaces.push_back({ roofSurface, roofSurface, Color{_red, _green, _blue} });
 	}
 }

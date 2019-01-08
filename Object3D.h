@@ -17,6 +17,7 @@ public:
 	Object3D();
 	void loadModel();
 	void printModel();
+	void setTextureId(unsigned int textureId) { Object3D::textureId = textureId; };
 
 private:
 
@@ -25,6 +26,8 @@ public:
 
 
 protected:
+
+	unsigned int textureId;
 
 	struct MeshTriangle
 	{

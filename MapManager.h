@@ -22,6 +22,7 @@
 #include "Railway.h"
 #include "Footway.h"
 #include "Roof.h"
+#include "TextureManager.h"
 
 #include "rapidxml.hpp"
 
@@ -29,6 +30,7 @@ class MapManager
 {
 
 public:
+	void setTextures(TextureManager* textureManager) { MapManager::textureManager = textureManager; };
 	void readMap(const char * fileName);
 	void calculateNodesPositions();
 	void selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&) = nullptr);
@@ -64,7 +66,9 @@ private:
 		newMapObject._height = mapObjects.back()->_height;
 		if (std::is_same<T, Building>::value)
 		{
+			mapObjects.back()->setTextureId(textureManager->textureIds[0]);
 			mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
+			mapObjects.back()->setTextureId(textureManager->textureIds[1]);
 		}
 	}
 
@@ -72,6 +76,9 @@ public:
 
 
 private:
+
+	TextureManager* textureManager;
+
 	double longituteRatio = 69797.5460045862;
 	double latitudeRatio = 111220.165038003;
 
