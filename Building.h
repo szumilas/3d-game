@@ -8,7 +8,8 @@ public:
 
 	Building(MapObject& mapObject);
 
-	void display();
+	//void display();
+	void calculateFinalGeometry(TextureManager* textureManager);
 
 private:
 
@@ -25,6 +26,10 @@ private:
 		Point p1;
 		Point p2;
 		Color color;
+		unsigned int idTexture;
+		float wallLenght;
+		float xRatio;
+		float yRatio;
 	};
 
 	std::vector<Wall> walls;

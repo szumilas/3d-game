@@ -1,10 +1,5 @@
 #include "MapObject.h"
 
-void MapObject::display()
-{
-
-}
-
 void MapObject::calculateXYfromRef(const std::map<long long, node> &nodes)
 {
 	for (auto& ref : refs)
@@ -16,6 +11,11 @@ void MapObject::calculateXYfromRef(const std::map<long long, node> &nodes)
 	}
 	
 	optimizePoints();
+}
+
+void MapObject::calculateFinalGeometry(TextureManager* textureManager)
+{
+
 }
 
 void MapObject::applyKnownValues()
@@ -50,25 +50,21 @@ void MapObject::applyKnownValues()
 void MapObject::select()
 {
 	isSelected = true;
-	_redCopy = _red;
-	_greenCopy = _green;
-	_blueCopy = _blue;
+	for (auto& polygon : polygons)
+	{
+		std::swap(polygon.color, polygon.additionalColor);
+	}
 
-	_red = 0.8f;
-	_green = 0.2f;
-	_blue = 0.5f;
+	std::cout << id << " ";
 }
 
 void MapObject::deselect()
 {
-	if (isSelected)
+	isSelected = false;
+	for (auto& polygon : polygons)
 	{
-		isSelected = false;
-		_red = _redCopy;
-		_green = _greenCopy;
-		_blue = _blueCopy;
+		std::swap(polygon.color, polygon.additionalColor);
 	}
-
 }
 
 void MapObject::optimizePoints()

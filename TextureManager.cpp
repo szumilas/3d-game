@@ -1,27 +1,31 @@
 #include "TextureManager.h"
+#include <algorithm>
 
 TextureManager::~TextureManager()
 {
-	for (auto& textureId : textureIds)
-		glDeleteTextures(1, &textureId);
+	for (auto& texture : textures)
+		glDeleteTextures(1, &texture.idTexture);
 }
 
 int TextureManager::readTextures()
 {
-	for (auto& texturePath : texturePaths)
+	ilEnable(IL_ORIGIN_SET);
+	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+
+	for (auto& texture : textures)
 	{
 
-		int image = LoadImageA(const_cast<char*>(("Data/Textures/" + texturePath).c_str()));
+		int image = LoadImageA(const_cast<char*>(("Data/Textures/" + texture.filePath).c_str()));
 		if (image == -1)
 		{
 			return 0;
 		}
 
-		auto textureName = static_cast<unsigned int>(image);
+		auto textureIdCreated = static_cast<unsigned int>(image);
 
 		/* OpenGL texture binding of the image loaded by DevIL  */
-		glGenTextures(1, &textureName); /* Texture name generation */
-		glBindTexture(GL_TEXTURE_2D, textureName); /* Binding of texture name */
+		glGenTextures(1, &textureIdCreated); /* Texture name generation */
+		glBindTexture(GL_TEXTURE_2D, textureIdCreated); /* Binding of texture name */
 
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); /* We will use linear interpolation for magnification filter */
@@ -31,10 +35,13 @@ int TextureManager::readTextures()
 		glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
 			0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
 
-		textureIds.push_back(textureName);
-		ilDeleteImages(1, &textureName); /* Because we have already copied image data into texture data we can release memory used by image. */
+		texture.idTexture = textureIdCreated;
+		//textureIds.({ texturePath.first.textureName, { texturePath.first.textureName, texturePath.first.realWidth, texturePath.first.realHeight, textureName} });
+		ilDeleteImages(1, &textureIdCreated); /* Because we have already copied image data into texture data we can release memory used by image. */
 								   //	
 	}
+
+	std::sort(textures.begin(), textures.end(), [](TextureData& a, TextureData& b) { return a.textureName < b.textureName; });
 
 	return 1;
 }

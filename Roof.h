@@ -40,11 +40,13 @@ public:
 		std::vector<Point> points;
 		std::vector<Point> texturePoints;
 		Color color;
+		unsigned int idTexture;
 	};
 
 	Roof(MapObject& mapObject);
 
-	void display();
+	//void display();
+	void calculateFinalGeometry(TextureManager* textureManager);
 
 private:
 

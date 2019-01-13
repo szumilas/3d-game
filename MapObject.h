@@ -1,9 +1,12 @@
 #pragma once
 
+#include <iostream>
 #include <map>
 
 #include "Object3D.h"
 #include "GlobalStructures.h"
+
+#include "TextureManager.h"
 
 class MapObject : public Object3D
 {
@@ -11,8 +14,8 @@ public:
 
 	MapObject() {};
 	MapObject(long long id) { MapObject::id = id; };
-	virtual void display();
 	virtual void calculateXYfromRef(const std::map<long long, node> &nodes);
+	virtual void calculateFinalGeometry(TextureManager* textureManager);
 
 	void applyKnownValues();
 

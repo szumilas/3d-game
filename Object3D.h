@@ -17,7 +17,7 @@ public:
 	Object3D();
 	void loadModel();
 	void printModel();
-	void setTextureId(unsigned int textureId) { Object3D::textureId = textureId; };
+	virtual void display();
 
 private:
 
@@ -26,8 +26,6 @@ public:
 
 
 protected:
-
-	unsigned int textureId;
 
 	struct MeshTriangle
 	{
@@ -40,9 +38,20 @@ protected:
 		float blue;
 	};
 
+	struct Polygon
+	{
+		std::vector<Point> points;
+		std::vector<Point> texturePoints;
+		unsigned int noOfPoints;
+		unsigned int idTexture;
+		Color color;
+		Color additionalColor;
+	};
+
 	Point position;
 	std::vector<Point> mesh;
 	std::vector<MeshTriangle> triangles;
+	std::vector<Polygon> polygons;
 
 	float X;
 	float Y;

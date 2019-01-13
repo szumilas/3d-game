@@ -9,5 +9,16 @@ public:
 	Street(MapObject& mapObject) : MapObject(mapObject) {};
 
 	void display();
+	void calculateFinalGeometry(TextureManager* textureManager);
+
+private:
+
+
+public:
+
+
+private:
+
+	unsigned int idTexture;
 
 };

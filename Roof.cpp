@@ -2,9 +2,6 @@
 
 #include "PointInsidePolygonDetector.h"
 
-
-
-
 double measureAngle(Point& currentPoint, Point& nextPoint, Point& previousPoint)
 {
 	double lenA = currentPoint.distance2D(nextPoint);
@@ -14,20 +11,89 @@ double measureAngle(Point& currentPoint, Point& nextPoint, Point& previousPoint)
 	return acos((lenA * lenA + lenB * lenB - lenC * lenC) / (2 * lenA * lenB));
 }
 
-
-
 Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 {
 	_roof_level = _height;
 
-	_red = 1.0f;
-	_green = 0.4f;
-	_blue = 0.4f;
+	_red = 0.7f;
+	_green = 0.7f;
+	_blue = 0.7f;
 
 	building = "roof_generated";
 };
 
-void Roof::display()
+
+void Roof::calculateFinalGeometry(TextureManager* textureManager)
+{
+	if (roof_shape == "flat")
+	{
+		for (auto& roofSurface : roofSurfaces)
+		{
+			Polygon newPolygon;
+
+			for (auto& point : roofSurface.points)
+			{
+				newPolygon.points.push_back({ point.x, point.y, point.z });
+				newPolygon.texturePoints.push_back({ point.x / textureManager->textures[static_cast<long>(Textures::roof)].realWidth, point.y / textureManager->textures[static_cast<long>(Textures::roof)].realHeight });
+			}
+
+			newPolygon.noOfPoints = newPolygon.texturePoints.size();
+			newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::roof_asphalt)].idTexture;
+			newPolygon.color = Color{ 0.7f, 0.7f, 0.7f };
+
+			newPolygon.additionalColor = Color{ 1.0f, 0.0f, 0.0f };
+
+			polygons.push_back(newPolygon);
+		}
+	}
+	else
+	{
+		for (auto& roofSurface : roofSurfaces)
+		{
+			Polygon newPolygon;
+
+			auto& firstPoint = roofSurface.points[0];
+			auto& lastPoint = roofSurface.points.back();
+
+			vector2D v1(firstPoint, lastPoint);
+			vector2D v2(Point(0.0f, 0.0f), Point(1.0f, 0.0f));
+			auto angle = vector2D::angle(v1, v2);
+
+			if (lastPoint.x < firstPoint.x && lastPoint.y < firstPoint.y)
+				angle = 2 * PI - angle;
+			else if (lastPoint.x > firstPoint.x && lastPoint.y < firstPoint.y)
+				angle = 2 * PI - angle;
+
+			angle *= -1;
+
+			for (auto& point : roofSurface.points)
+			{
+				newPolygon.points.push_back({ point.x, point.y, point.z });
+
+				Point pointToBeRotated;
+				Point rotatedPoint;
+				pointToBeRotated.x = point.x - firstPoint.x;
+				pointToBeRotated.y = point.y - firstPoint.y;
+
+				rotatedPoint.x = pointToBeRotated.x * cos(angle) - pointToBeRotated.y * sin(angle);
+				rotatedPoint.y = pointToBeRotated.x * sin(angle) + pointToBeRotated.y * cos(angle);
+
+				newPolygon.texturePoints.push_back({ rotatedPoint.x / textureManager->textures[static_cast<long>(Textures::roof)].realWidth, rotatedPoint.y / textureManager->textures[static_cast<long>(Textures::roof)].realHeight });
+			}
+
+			newPolygon.noOfPoints = newPolygon.texturePoints.size();
+			newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::roof)].idTexture;
+			newPolygon.color = roofSurface.color;
+
+			auto newColor = roofSurface.color.mixColor(Color{ 1.0f, 0.0f, 0.0f });
+			newPolygon.additionalColor = roofSurface.color.mixColor(newColor);
+
+			polygons.push_back(newPolygon);
+		}
+	}
+}
+
+/*void Roof::display()
 {
 	bool printWavefrontLines = false;
 	bool printLongRoofLines = false;
@@ -41,7 +107,7 @@ void Roof::display()
 		{
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glBindTexture(GL_TEXTURE_2D, textureId);
+			glBindTexture(GL_TEXTURE_2D, idTexture);
 			glEnable(GL_TEXTURE_2D);
 
 			glBegin(GL_POLYGON);
@@ -113,17 +179,6 @@ void Roof::display()
 			glEnd();
 		}
 		glLineWidth(1.0f);
-
-		/*glPointSize(5.0f);
-		glBegin(GL_POINTS);
-		glColor3f(0.8f, 0.8f, 0.4f);
-		for (auto i = longRoofLines.begin(); i != longRoofLines.end(); i++)
-		{
-			glVertex3f(std::get<1>(*i).x, std::get<1>(*i).y, std::get<1>(*i).z);
-			glVertex3f(std::get<2>(*i).x, std::get<2>(*i).y, std::get<2>(*i).z);
-		}
-		glEnd();
-		glPointSize(1.0f);*/
 	}
 
 	if (printWavefrontLines)
@@ -144,7 +199,7 @@ void Roof::display()
 		glPointSize(1.0f);
 	}
 
-}
+}*/
 
 bool positiveAngle(vector2D& v1, vector2D& v2)
 {
@@ -1240,4 +1295,6 @@ void Roof::generateFlatRoof()
 		roofSurface.push_back(getRoofPoint(triangle.idp3));
 		roofSurfaces.push_back({ roofSurface, roofSurface, Color{_red, _green, _blue} });
 	}
+
+	roof_shape = "flat";
 }

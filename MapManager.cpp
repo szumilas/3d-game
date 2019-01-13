@@ -58,6 +58,8 @@ void MapManager::readMap(const char * fileName)
 
 	createNodesMap();
 	createMapObjectsArray();
+	calculateNodesPositions();
+	calculateObjectsFinalGeometry();
 }
 
 void MapManager::saveOverlays()
@@ -447,7 +449,8 @@ void MapManager::deselectObjects()
 {
 	for (auto& mapObject : mapObjects)
 	{
-		mapObject->deselect();
+		if(mapObject->isSelected)
+			mapObject->deselect();
 	}
 }
 
@@ -672,4 +675,14 @@ void MapManager::addOverlayAttribute(const char* attribute, const char* value)
 
 		}
 	}
+}
+
+void MapManager::calculateObjectsFinalGeometry()
+{
+	for (auto& mapObject : mapObjects)
+	{
+		mapObject->calculateFinalGeometry(textureManager);
+	}
+
+
 }

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <time.h>
 
+#include "enum.h"
+
 #include "Object3D.h"
 #include "Car.h"
 #include "Orbit.h"
@@ -124,17 +126,16 @@ int main(int argc, char**agrv)
 
 	mapManager.setTextures(&textureManager);
 
-	//mapManager.readMap("szczytnicka.osm");
+	mapManager.readMap("szczytnicka.osm");
 	//mapManager.readMap("szczytnickaB4.osm");
 	//mapManager.readMap("szczytnickaB.osm");
 	//mapManager.readMap("map.osm");
-	mapManager.readMap("grunwald.osm");
+	//mapManager.readMap("grunwald.osm");
 	//mapManager.readMap("parkCheck.osm");
 
 	//mapManager.readMap("grunwaldWithRiver.osm");
 
 	//mapManager.readMap("streetDetail.osm");
-	mapManager.calculateNodesPositions();
 
 
 	glutMainLoop();

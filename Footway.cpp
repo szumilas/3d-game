@@ -1,17 +1,41 @@
 #include "Footway.h"
 
+void Footway::calculateFinalGeometry(TextureManager* textureManager)
+{
+	idTexture = textureManager->textures[static_cast<long>(Textures::paving)].idTexture;
+}
+
 void Footway::display()
 {
-	glColor3f(0.4f, 0.4f, 0.4f);
-	glBegin(GL_QUADS);
+	/*glColor3f(0.4f, 0.4f, 0.4f);
+	glBegin(GL_QUADS);*/
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, idTexture);
+	glEnable(GL_TEXTURE_2D);
+
+	glColor3f(0.9f, 0.9f, 0.9f);
+	glBegin(GL_POLYGON);
+
 	for (size_t limit = points.size() * 2 / 3, q = points.size() / 3; q < limit - 1; q++)
 	{
+		glTexCoord2f(points[q].x / 2, points[q].y / 2);
 		glVertex3f(points[q].x, points[q].y, _min_height);
+
+		glTexCoord2f(points[q + 1].x / 2, points[q + 1].y / 2);
 		glVertex3f(points[q + 1].x, points[q + 1].y, _min_height);
+
+		glTexCoord2f(points[q + 1 + points.size() / 3].x / 2, points[q + 1 + points.size() / 3].y / 2);
 		glVertex3f(points[q + 1 + points.size() / 3].x, points[q + 1 + points.size() / 3].y, _min_height);
+
+		glTexCoord2f(points[q + points.size() / 3].x / 2, points[q + points.size() / 3].y / 2);
 		glVertex3f(points[q + points.size() / 3].x, points[q + points.size() / 3].y, _min_height);
 	}
 	glEnd();
+
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
 }
 
 void Footway::calculateXYfromRef(const std::map<long long, node> &nodes)

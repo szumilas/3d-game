@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <map>
 
+#include "enum.h"
 #include "GlobalStructures.h"
 
 #include "Orbit.h"
@@ -45,6 +46,7 @@ private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
 	void createNodesMap();
 	void createMapObjectsArray();
+	void calculateObjectsFinalGeometry();
 	void applyOverlays(MapObject& mapObject);
 
 	bool isHighlightedObjectCheck(MapObject& mapObject);
@@ -66,9 +68,9 @@ private:
 		newMapObject._height = mapObjects.back()->_height;
 		if (std::is_same<T, Building>::value)
 		{
-			mapObjects.back()->setTextureId(textureManager->textureIds[0]);
+			//mapObjects.back()->setTextureId(textureManager->textureIds.at(Texture::Te));
 			mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
-			mapObjects.back()->setTextureId(textureManager->textureIds[1]);
+			//mapObjects.back()->setTextureId(textureManager->textureIds[1]);
 		}
 	}
 

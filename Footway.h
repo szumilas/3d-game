@@ -11,10 +11,12 @@ public:
 	};
 
 	void display();
+	void calculateFinalGeometry(TextureManager* textureManager);
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
 
 private:
 
 	float gauge = 2.0f;
+	unsigned int idTexture;
 
 };

@@ -160,6 +160,7 @@
     <ClInclude Include="Building.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="enum.h" />
     <ClInclude Include="Footway.h" />
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="GreenArea.h" />
