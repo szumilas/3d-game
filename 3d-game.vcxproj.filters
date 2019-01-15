@@ -84,6 +84,9 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="enum.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

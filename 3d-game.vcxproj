@@ -149,6 +149,7 @@
     <ClCompile Include="Railway.cpp" />
     <ClCompile Include="River.cpp" />
     <ClCompile Include="Roof.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="StreetLamp.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Railway.h" />
     <ClInclude Include="River.h" />
     <ClInclude Include="Roof.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="Street.h" />
     <ClInclude Include="StreetLamp.h" />
     <ClInclude Include="TextureManager.h" />

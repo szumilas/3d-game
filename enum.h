@@ -14,6 +14,7 @@ enum class Textures : long
 	asphalt,
 	grass,
 	paving,
+	skybox,
 };
 
 enum class Exceptions : long

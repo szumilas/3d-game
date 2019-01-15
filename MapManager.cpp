@@ -4,6 +4,7 @@
 #include "PointInsidePolygonDetector.h"
 
 #include "MapManager.h"
+#include "Skybox.h"
 
 #include "rapidxml_print.hpp"
 
@@ -55,6 +56,9 @@ void MapManager::readMap(const char * fileName)
 	{
 		//TODO: errors
 	}
+
+
+	mapObjects.push_back(std::make_unique<Skybox>(Skybox(textureManager)));
 
 	createNodesMap();
 	createMapObjectsArray();
