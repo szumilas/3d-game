@@ -9,8 +9,6 @@ void MapObject::calculateXYfromRef(const std::map<long long, node> &nodes)
 		newPoint.y = nodes.at(ref).posY;
 		points.push_back(newPoint);
 	}
-	
-	optimizePoints();
 }
 
 void MapObject::calculateFinalGeometry(TextureManager* textureManager)

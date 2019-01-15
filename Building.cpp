@@ -27,6 +27,8 @@ void Building::calculateXYfromRef(const std::map<long long, node> &nodes)
 {
 	MapObject::calculateXYfromRef(nodes);
 
+	MapObject::optimizePoints();
+
 	generateWalls();
 }
 

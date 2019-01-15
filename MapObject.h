@@ -25,11 +25,11 @@ public:
 
 private:
 
-	void optimizePoints();
 	std::vector<Point> DouglasPeuckerAlgorithm(std::vector<Point>& l, float epsilon);
 
 protected:
 
+	void optimizePoints();
 	void shadeTheWall(Color& color, const vector2D& wallLine, float shadePower);
 	Color selectedColor{ 1.0f, 0.0f, 1.0f };
 
