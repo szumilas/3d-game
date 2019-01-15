@@ -2,40 +2,28 @@
 
 void Footway::calculateFinalGeometry(TextureManager* textureManager)
 {
-	idTexture = textureManager->textures[static_cast<long>(Textures::paving)].idTexture;
-}
-
-void Footway::display()
-{
-	/*glColor3f(0.4f, 0.4f, 0.4f);
-	glBegin(GL_QUADS);*/
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture(GL_TEXTURE_2D, idTexture);
-	glEnable(GL_TEXTURE_2D);
-
-	glColor3f(0.9f, 0.9f, 0.9f);
-	glBegin(GL_POLYGON);
-
-	for (size_t limit = points.size() * 2 / 3, q = points.size() / 3; q < limit - 1; q++)
+	for (size_t q = 0, limit = finalLeftRail.size() - 1; q < limit; q++)
 	{
-		glTexCoord2f(points[q].x / 2, points[q].y / 2);
-		glVertex3f(points[q].x, points[q].y, _min_height);
+		Polygon newPolygon;
 
-		glTexCoord2f(points[q + 1].x / 2, points[q + 1].y / 2);
-		glVertex3f(points[q + 1].x, points[q + 1].y, _min_height);
+		newPolygon.points.push_back({ finalLeftRail[q].x, finalLeftRail[q].y, _min_height });
+		newPolygon.points.push_back({ finalLeftRail[q + 1].x, finalLeftRail[q + 1].y, _min_height });
+		newPolygon.points.push_back({ finalRightRail[q + 1].x, finalRightRail[q + 1].y, _min_height });
+		newPolygon.points.push_back({ finalRightRail[q].x, finalRightRail[q].y, _min_height });
 
-		glTexCoord2f(points[q + 1 + points.size() / 3].x / 2, points[q + 1 + points.size() / 3].y / 2);
-		glVertex3f(points[q + 1 + points.size() / 3].x, points[q + 1 + points.size() / 3].y, _min_height);
+		newPolygon.texturePoints.push_back({ finalLeftRail[q].x, finalLeftRail[q].y, _min_height });
+		newPolygon.texturePoints.push_back({ finalLeftRail[q + 1].x, finalLeftRail[q + 1].y, _min_height });
+		newPolygon.texturePoints.push_back({ finalRightRail[q + 1].x, finalRightRail[q + 1].y, _min_height });
+		newPolygon.texturePoints.push_back({ finalRightRail[q].x, finalRightRail[q].y, _min_height });
 
-		glTexCoord2f(points[q + points.size() / 3].x / 2, points[q + points.size() / 3].y / 2);
-		glVertex3f(points[q + points.size() / 3].x, points[q + points.size() / 3].y, _min_height);
+		newPolygon.noOfPoints = newPolygon.texturePoints.size();
+		newPolygon.idTexture = textureManager->textures[static_cast<unsigned int>(Textures::paving)].idTexture;
+		newPolygon.color = Color{ 1.0f, 1.0f, 1.0f };
+
+		newPolygon.additionalColor = newPolygon.color.mixColor(selectedColor);
+
+		polygons.push_back(newPolygon);
 	}
-	glEnd();
-
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
 }
 
 void Footway::calculateXYfromRef(const std::map<long long, node> &nodes)
@@ -100,26 +88,25 @@ void Footway::calculateXYfromRef(const std::map<long long, node> &nodes)
 		}
 	}
 
-	std::vector<Point> finalLeftRail;
-	std::vector<Point> finalRightRail;
-
 	finalLeftRail.push_back(leftRail[0]);
 	finalRightRail.push_back(rightRail[0]);
 
-	for (size_t q = 1, limit = leftRail.size() - 1; q < limit; q += 2)
+	for (size_t q = 1, limit = leftRail.size() - 2; q < limit; q += 2)
 	{
-		finalLeftRail.push_back(Point{ (leftRail[q].x + leftRail[q + 1].x) / 2, (leftRail[q].y + leftRail[q + 1].y) / 2 });
-		finalRightRail.push_back(Point{ (rightRail[q].x + rightRail[q + 1].x) / 2, (rightRail[q].y + rightRail[q + 1].y) / 2 });
+		Line2D leftFirst(leftRail[q - 1], leftRail[q]);
+		Line2D leftSecond(leftRail[q + 1], leftRail[q + 2]);
+		auto intersectionPointLeft = leftFirst.calcuateIntersectionPoint(leftSecond);
+
+		finalLeftRail.push_back(intersectionPointLeft);
+
+		Line2D rightFirst(rightRail[q - 1], rightRail[q]);
+		Line2D rightSecond(rightRail[q + 1], rightRail[q + 2]);
+		auto intersectionPointRight = rightFirst.calcuateIntersectionPoint(rightSecond);
+
+		finalRightRail.push_back(intersectionPointRight);
 	}
 
 	finalLeftRail.push_back(leftRail[leftRail.size() - 1]);
 	finalRightRail.push_back(rightRail[rightRail.size() - 1]);
 
-
-	points.reserve(points.size() + finalLeftRail.size());
-	points.insert(points.end(), finalLeftRail.begin(), finalLeftRail.end());
-
-
-	points.reserve(points.size() + finalRightRail.size());
-	points.insert(points.end(), finalRightRail.begin(), finalRightRail.end());
 }
