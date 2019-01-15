@@ -92,8 +92,6 @@ TextureManager textureManager;
 
 int main(int argc, char**agrv)
 {
-	obj.loadModel();
-	wheel.loadModel();
 
 
 	glutInit(&argc, agrv);
@@ -120,25 +118,38 @@ int main(int argc, char**agrv)
 	ilInit();
 
 
+	try
+	{
+		obj.loadModel();
+		wheel.loadModel();
+
+		textureManager.readTextures();
+
+		mapManager.setTextures(&textureManager);
+
+		mapManager.readMap("szczytnicka.osm");
+		//mapManager.readMap("szczytnickaB4.osm");
+		//mapManager.readMap("szczytnickaB.osm");
+		//mapManager.readMap("map.osm");
+		//mapManager.readMap("grunwald.osm");
+		//mapManager.readMap("parkCheck.osm");
+
+		//mapManager.readMap("grunwaldWithRiver.osm");
+
+		//mapManager.readMap("streetDetail.osm");
+
+		glutMainLoop();
+	}
+	catch (Exceptions exc)
+	{
+		std::string error = std::to_string(static_cast<long>(exc));
+	}
+	catch (...)
+	{
+
+	}
 
 
-	textureManager.readTextures();
-
-	mapManager.setTextures(&textureManager);
-
-	mapManager.readMap("szczytnicka.osm");
-	//mapManager.readMap("szczytnickaB4.osm");
-	//mapManager.readMap("szczytnickaB.osm");
-	//mapManager.readMap("map.osm");
-	//mapManager.readMap("grunwald.osm");
-	//mapManager.readMap("parkCheck.osm");
-
-	//mapManager.readMap("grunwaldWithRiver.osm");
-
-	//mapManager.readMap("streetDetail.osm");
-
-
-	glutMainLoop();
 
 	return 0;
 }

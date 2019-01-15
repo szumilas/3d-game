@@ -15,3 +15,10 @@ enum class Textures : long
 	grass,
 	paving,
 };
+
+enum class Exceptions : long
+{
+	ERR_WHILE_CONVERTING_IMAGE,
+	ERR_WHILE_LOADING_IMAGE,
+
+};

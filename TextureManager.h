@@ -25,7 +25,7 @@ public:
 
 	~TextureManager();
 
-	int readTextures();
+	void readTextures();
 
 private:
 

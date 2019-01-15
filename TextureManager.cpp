@@ -7,18 +7,17 @@ TextureManager::~TextureManager()
 		glDeleteTextures(1, &texture.idTexture);
 }
 
-int TextureManager::readTextures()
+void TextureManager::readTextures()
 {
 	ilEnable(IL_ORIGIN_SET);
 	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 
 	for (auto& texture : textures)
 	{
-
 		int image = LoadImageA(const_cast<char*>(("Data/Textures/" + texture.filePath).c_str()));
 		if (image == -1)
 		{
-			return 0;
+			throw Exceptions::ERR_WHILE_LOADING_IMAGE;
 		}
 		
 		auto textureIdCreated = static_cast<unsigned int>(image);
@@ -39,12 +38,11 @@ int TextureManager::readTextures()
 		texture.idTexture = textureIdCreated;
 		//textureIds.({ texturePath.first.textureName, { texturePath.first.textureName, texturePath.first.realWidth, texturePath.first.realHeight, textureName} });
 		ilDeleteImages(1, &textureIdCreated); /* Because we have already copied image data into texture data we can release memory used by image. */
-								   //	
+
 	}
 
 	std::sort(textures.begin(), textures.end(), [](TextureData& a, TextureData& b) { return a.textureName < b.textureName; });
 
-	return 1;
 }
 
 int TextureManager::LoadImageA(char *filename)
@@ -63,11 +61,13 @@ int TextureManager::LoadImageA(char *filename)
 
 		if (!success)
 		{
-			return -1;
+			throw Exceptions::ERR_WHILE_CONVERTING_IMAGE;
 		}
 	}
 	else
-		return -1;
+	{
+		throw Exceptions::ERR_WHILE_LOADING_IMAGE;
+	}
 
 	return image;
 }
