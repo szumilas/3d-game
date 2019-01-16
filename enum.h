@@ -16,6 +16,7 @@ enum class Textures : long
 	paving,
 	skybox,
 	sett,
+	rail,
 };
 
 enum class Exceptions : long

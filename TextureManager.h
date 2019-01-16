@@ -48,6 +48,7 @@ public:
 		{ Textures::paving, 0.0f, 0.0f, "paving.jpg"},
 		{ Textures::skybox, 4000.0f, 4000.0f, "skybox.png"},
 		{ Textures::sett, -1.0f, -1.0f, "sett.jpg"},
+		{ Textures::rail, -1.0f, -1.0f, "tram_rail.png"},
 	};
 
 
