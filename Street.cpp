@@ -1,30 +1,6 @@
 #include "Street.h"
 #include "PointInsidePolygonDetector.h"
 
-bool positiveAngle2(vector2D& v1, vector2D& v2)
-{
-	return v1.x * v2.y - v1.y * v2.x >= 0;
-}
-
-bool anyPointInTriangle2(std::vector<Point>& points, long long idA, long long idB, long long idC)
-{
-	PointInsidePolygonDetector pointInsidePolygonDetector;
-
-	std::vector<Point> triangle;
-	triangle.push_back(points[idA]);
-	triangle.push_back(points[idB]);
-	triangle.push_back(points[idC]);
-
-	for (int i = (idC + 1) % points.size(); i != idA; i = (i + 1) % points.size())
-	{
-		bool result = pointInsidePolygonDetector.isInside(triangle, points[i]);
-		if (result)
-			return true;
-	}
-
-	return false;
-}
-
 void Street::calculateFinalGeometry(TextureManager* textureManager)
 {
 	if (points.size() > 2)
@@ -60,7 +36,7 @@ void Street::calculateFinalGeometry(TextureManager* textureManager)
 			vector2D v1(points[firstPoint], points[secondPoint]);
 			vector2D v2(points[firstPoint], points[thirdPoint]);
 
-			if (!positiveAngle2(v1, v2) && !anyPointInTriangle2(points, firstPoint, secondPoint, thirdPoint))
+			if (vector2D::crossProduct(v1, v2) <= 0 && PointInsidePolygonDetector::countPointsInsidePolygon({ points[firstPoint], points[secondPoint], points[thirdPoint] }, points) <= 3)
 			{
 				Polygon polygon;
 				polygon.points.push_back(points[firstPoint]);

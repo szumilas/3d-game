@@ -18,7 +18,7 @@ private:
 	
 	// Given three colinear points p, q, r, the function checks if 
 	// point q lies on line segment 'pr' 
-	bool onSegment(Point p, Point q, Point r)
+	static bool onSegment(Point p, Point q, Point r)
 	{
 		if (q.x <= std::max(p.x, r.x) && q.x >= std::min(p.x, r.x) &&
 			q.y <= std::max(p.y, r.y) && q.y >= std::min(p.y, r.y))
@@ -31,7 +31,7 @@ private:
 	// 0 --> p, q and r are colinear 
 	// 1 --> Clockwise 
 	// 2 --> Counterclockwise 
-	int orientation(Point p, Point q, Point r)
+	static int orientation(Point p, Point q, Point r)
 	{
 		double val = (q.y - p.y) * (r.x - q.x) -
 			(q.x - p.x) * (r.y - q.y);
@@ -42,7 +42,7 @@ private:
 
 	// The function that returns true if line segment 'p1q1' 
 	// and 'p2q2' intersect. 
-	bool doIntersect(Point p1, Point q1, Point p2, Point q2)
+	static bool doIntersect(Point p1, Point q1, Point p2, Point q2)
 	{
 		// Find the four orientations needed for general and 
 		// special cases 
@@ -74,7 +74,7 @@ private:
 public:
 
 	// Returns true if the point p lies inside the polygon[] with n vertices 
-	bool isInside(std::vector<Point>& polygon, Point& p)
+	static bool isInside(const std::vector<Point>& polygon, Point& p)
 	{
 		int n = polygon.size();
 		// There must be at least 3 vertices in polygon[] 
@@ -106,6 +106,18 @@ public:
 
 		// Return true if count is odd, false otherwise 
 		return count & 1; // Same as (count%2 == 1) 
+	}
+
+	static int countPointsInsidePolygon(const std::vector<Point>& polygon, std::vector<Point>& points)
+	{
+		int result = 0;
+
+		for (auto& point : points)
+		{
+			result += isInside(polygon, point);
+		}
+
+		return result;
 	}
 
 };
