@@ -273,3 +273,80 @@ void MapObject::dividePointsPolygonIntoTriangles()
 		polygons.push_back(polygon);
 	}
 }
+
+void MapObject::createBothRailsForSymmetryAxis(const std::vector<Point>& axisPoints, std::vector<Point>& finalLeftRail, std::vector<Point>& finalRightRail, float gauge)
+{
+	std::vector<Point> leftRail;
+	std::vector<Point> rightRail;
+
+	for (size_t q = 0, limit = axisPoints.size() - 1; q < limit; q++)
+	{
+		const Point& firstPoint = axisPoints[q];
+		const Point& secondPoint = axisPoints[q + 1];
+
+		float distance = firstPoint.distance2D(secondPoint);
+
+		//first point
+		{
+			Point pointToRotate{ firstPoint.x + gauge / 2 / distance * (secondPoint.x - firstPoint.x), firstPoint.y + gauge / 2 / distance * (secondPoint.y - firstPoint.y) };
+			Point rotatedPoint;
+
+			float alpha = 3.14 / 2;
+			rotatedPoint.x = firstPoint.x + (pointToRotate.x - firstPoint.x) * cos(alpha) - (pointToRotate.y - firstPoint.y) * sin(alpha);
+			rotatedPoint.y = firstPoint.y + (pointToRotate.x - firstPoint.x) * sin(alpha) + (pointToRotate.y - firstPoint.y) * cos(alpha);
+			leftRail.push_back(rotatedPoint);
+		}
+		{
+			Point pointToRotate{ firstPoint.x + gauge / 2 / distance * (secondPoint.x - firstPoint.x), firstPoint.y + gauge / 2 / distance * (secondPoint.y - firstPoint.y) };
+			Point rotatedPoint;
+
+			float alpha = -3.14 / 2;
+			rotatedPoint.x = firstPoint.x + (pointToRotate.x - firstPoint.x) * cos(alpha) - (pointToRotate.y - firstPoint.y) * sin(alpha);
+			rotatedPoint.y = firstPoint.y + (pointToRotate.x - firstPoint.x) * sin(alpha) + (pointToRotate.y - firstPoint.y) * cos(alpha);
+			rightRail.push_back(rotatedPoint);
+		}
+
+
+		//second point
+		{
+			Point pointToRotate{ secondPoint.x + gauge / 2 / distance * (firstPoint.x - secondPoint.x), secondPoint.y + gauge / 2 / distance * (firstPoint.y - secondPoint.y) };
+			Point rotatedPoint;
+
+			float alpha = 3.14 / 2;
+			rotatedPoint.x = secondPoint.x + (pointToRotate.x - secondPoint.x) * cos(alpha) - (pointToRotate.y - secondPoint.y) * sin(alpha);
+			rotatedPoint.y = secondPoint.y + (pointToRotate.x - secondPoint.x) * sin(alpha) + (pointToRotate.y - secondPoint.y) * cos(alpha);
+			rightRail.push_back(rotatedPoint);
+		}
+		{
+			Point pointToRotate{ secondPoint.x + gauge / 2 / distance * (firstPoint.x - secondPoint.x), secondPoint.y + gauge / 2 / distance * (firstPoint.y - secondPoint.y) };
+			Point rotatedPoint;
+
+			float alpha = -3.14 / 2;
+			rotatedPoint.x = secondPoint.x + (pointToRotate.x - secondPoint.x) * cos(alpha) - (pointToRotate.y - secondPoint.y) * sin(alpha);
+			rotatedPoint.y = secondPoint.y + (pointToRotate.x - secondPoint.x) * sin(alpha) + (pointToRotate.y - secondPoint.y) * cos(alpha);
+			leftRail.push_back(rotatedPoint);
+		}
+	}
+
+	finalLeftRail.push_back(leftRail[0]);
+	finalRightRail.push_back(rightRail[0]);
+
+	for (size_t q = 1, limit = leftRail.size() - 2; q < limit; q += 2)
+	{
+		Line2D leftFirst(leftRail[q - 1], leftRail[q]);
+		Line2D leftSecond(leftRail[q + 1], leftRail[q + 2]);
+		auto intersectionPointLeft = leftFirst.calcuateIntersectionPoint(leftSecond);
+
+		finalLeftRail.push_back(intersectionPointLeft);
+
+		Line2D rightFirst(rightRail[q - 1], rightRail[q]);
+		Line2D rightSecond(rightRail[q + 1], rightRail[q + 2]);
+		auto intersectionPointRight = rightFirst.calcuateIntersectionPoint(rightSecond);
+
+		finalRightRail.push_back(intersectionPointRight);
+	}
+
+	finalLeftRail.push_back(leftRail[leftRail.size() - 1]);
+	finalRightRail.push_back(rightRail[rightRail.size() - 1]);
+
+}

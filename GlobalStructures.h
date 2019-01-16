@@ -22,7 +22,7 @@ struct Point
 	Point(double x, double y, double z) { Point::x = x; Point::y = y; Point::z = z; }
 	Point(double x, double y) { Point::x = x; Point::y = y; z = 0; }
 	
-	double distance2D(Point& second)
+	double distance2D(const Point& second) const
 	{
 		return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2));
 	}

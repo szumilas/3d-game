@@ -33,6 +33,7 @@ protected:
 	void shadeTheWall(Color& color, const vector2D& wallLine, float shadePower);
 	Color selectedColor{ 1.0f, 0.0f, 1.0f };
 	void dividePointsPolygonIntoTriangles();
+	void createBothRailsForSymmetryAxis(const std::vector<Point>& axisPoints, std::vector<Point>& finalLeftRail, std::vector<Point>& finalRightRail, float gauge);
 
 public:
 	//stats
