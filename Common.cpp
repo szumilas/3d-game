@@ -1,12 +1,16 @@
 #include "Common.h"
 
-void Common::display()
+void Common::calculateFinalGeometry(TextureManager* textureManager)
 {
-	glColor3f(0.8f, 0.5f, 0.0f);
-	glBegin(GL_POLYGON);
 	for (auto& point : points)
 	{
-		glVertex3f(point.x, point.y, _min_height);
+		point.z = -0.08;
 	}
-	glEnd();
+
+	dividePointsPolygonIntoTriangles();
+
+	for (auto& polygon : polygons)
+	{
+		polygon.idTexture = textureManager->textures[static_cast<long>(Textures::sett)].idTexture;
+	}
 }

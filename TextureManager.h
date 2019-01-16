@@ -47,6 +47,7 @@ public:
 		{ Textures::grass, 1.25f, 0.972f, "grass.jpg"},
 		{ Textures::paving, 0.0f, 0.0f, "paving.jpg"},
 		{ Textures::skybox, 4000.0f, 4000.0f, "skybox.png"},
+		{ Textures::sett, -1.0f, -1.0f, "sett.jpg"},
 	};
 
 
