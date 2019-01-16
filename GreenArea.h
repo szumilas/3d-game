@@ -8,7 +8,6 @@ public:
 
 	GreenArea(MapObject& mapObject) : MapObject(mapObject) {};
 
-	void display();
 	void calculateFinalGeometry(TextureManager* textureManager);
 
 private:
