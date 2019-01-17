@@ -17,6 +17,12 @@ enum class Textures : long
 	skybox,
 	sett,
 	rail,
+	bollard,
+	concrete_wall,
+	fence,
+	guard_rail,
+	hedge,
+	retaining_wall,
 };
 
 enum class Exceptions : long
