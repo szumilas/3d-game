@@ -77,6 +77,7 @@ public:
 	std::string colour;
 	std::string roof_shape;
 	std::string _skip;
+	std::string natural;
 
 
 	float _height;

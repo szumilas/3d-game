@@ -131,6 +131,10 @@ void MapManager::createNodesMap()
 				{
 					mapObjects.push_back(std::make_unique<StreetLamp>(newNode.id));
 				}
+				else if (currentTag == "natural" && currentTagValue == "tree")
+				{
+					mapObjects.push_back(std::make_unique<Tree>(newNode.id));
+				}
 			}
 
 			if (newNode.id && newNode.lat && newNode.lon)

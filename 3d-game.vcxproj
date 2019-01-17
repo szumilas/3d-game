@@ -153,6 +153,7 @@
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="StreetLamp.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="Wheel.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +180,7 @@
     <ClInclude Include="Street.h" />
     <ClInclude Include="StreetLamp.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Tree.h" />
     <ClInclude Include="Wheel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

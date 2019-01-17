@@ -22,6 +22,7 @@
 #include "Bridge.h"
 #include "Railway.h"
 #include "Footway.h"
+#include "Tree.h"
 #include "Roof.h"
 #include "TextureManager.h"
 
@@ -118,6 +119,7 @@ private:
 		"building:colour",
 		"roof:shape",
 		"_skip",
+		"natural",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -142,6 +144,7 @@ private:
 		{ "building:colour", &MapObject::colour },
 		{ "roof:shape", &MapObject::roof_shape },
 		{ "_skip", &MapObject::_skip },
+		{ "natural", &MapObject::natural },
 	};
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
