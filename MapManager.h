@@ -120,6 +120,7 @@ private:
 		"roof:shape",
 		"_skip",
 		"natural",
+		"width",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -145,6 +146,7 @@ private:
 		{ "roof:shape", &MapObject::roof_shape },
 		{ "_skip", &MapObject::_skip },
 		{ "natural", &MapObject::natural },
+		{ "width", &MapObject::width },
 	};
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector

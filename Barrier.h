@@ -13,7 +13,7 @@ public:
 		{
 			if (barrier == "wall") { _red = 170.0f / 256; _green = 113.0f / 256; _blue = 82.0f / 256; textureName = Textures::concrete_wall; }
 			else if (barrier == "kerb") { _red = 241.0f / 256; _green = 235.0f / 256; _blue = 240.0f / 256; textureName = Textures::concrete_wall; }
-			else if (barrier == "hedge") { _red = 140.0f / 256; _green = 195.0f / 256; _blue = 2.0f / 256; textureName = Textures::hedge; }
+			else if (barrier == "hedge") { _red = 140.0f / 256; _green = 195.0f / 256; _blue = 2.0f / 256; textureName = Textures::hedge; _width = 0.5f;}
 			else if (barrier == "bollard") { _red = 234.0f / 256; _green = 207.0f / 256; _blue = 32.0f / 256; textureName = Textures::bollard; }
 			else if (barrier == "retaining_wall") { _red = 213.0f / 256; _green = 205.0f / 256; _blue = 195.0f / 256; textureName = Textures::retaining_wall; }
 			else if (barrier == "guard_rail") { _red = 179.0f / 256; _green = 225.0f / 256; _blue = 251.0f / 256; textureName = Textures::guard_rail; }

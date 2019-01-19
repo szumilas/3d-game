@@ -78,10 +78,12 @@ public:
 	std::string roof_shape;
 	std::string _skip;
 	std::string natural;
+	std::string width;
 
 
 	float _height;
 	float _min_height;
+	float _width;
 	float _red;
 	float _green;
 	float _blue;
