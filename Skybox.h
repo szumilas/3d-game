@@ -6,8 +6,8 @@ class Skybox : public MapObject
 {
 public:
 	
-	Skybox(TextureManager* textureManager);
-	void calculateXYfromRef(const std::map<long long, node> &nodes);
+	Skybox(TextureManager* textureManager, float minX, float maxX, float minY, float maxY);
+	void calculateXYfromRef();
 	void calculateFinalGeometry(TextureManager* textureManager);
 
 private:

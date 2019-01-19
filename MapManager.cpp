@@ -57,13 +57,15 @@ void MapManager::readMap(const char * fileName)
 		//TODO: errors
 	}
 
-
-	mapObjects.push_back(std::make_unique<Skybox>(Skybox(textureManager)));
-
+	
 	createNodesMap();
 	createMapObjectsArray();
 	calculateNodesPositions();
 	calculateObjectsFinalGeometry();
+	calculateObjectsBoundingCoordinates();
+	calculateMapBoundingCoordinates();
+
+	mapObjects.push_back(std::make_unique<Skybox>(Skybox(textureManager, minX, maxX, minY, maxY)));
 }
 
 void MapManager::saveOverlays()
@@ -691,6 +693,27 @@ void MapManager::calculateObjectsFinalGeometry()
 	{
 		mapObject->calculateFinalGeometry(textureManager);
 	}
+}
 
+void MapManager::calculateObjectsBoundingCoordinates()
+{
+	for (auto& mapObject : mapObjects)
+	{
+		mapObject->calculateBoundingCoordinates();
+	}
+}
 
+void MapManager::calculateMapBoundingCoordinates()
+{
+	for (auto& mapObject : mapObjects)
+	{
+		if (mapObject->minX < minX)
+			minX = mapObject->minX;
+		if (mapObject->maxX > maxX)
+			maxX = mapObject->maxX;
+		if (mapObject->minY < minY)
+			minY = mapObject->minY;
+		if (mapObject->maxY > maxY)
+			maxY = mapObject->maxY;
+	}
 }

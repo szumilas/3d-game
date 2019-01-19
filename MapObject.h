@@ -16,6 +16,7 @@ public:
 	MapObject(long long id) { MapObject::id = id; };
 	virtual void calculateXYfromRef(const std::map<long long, node> &nodes);
 	virtual void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateBoundingCoordinates();
 
 	void applyKnownValues();
 
@@ -25,10 +26,10 @@ public:
 
 private:
 
-	std::vector<Point> DouglasPeuckerAlgorithm(std::vector<Point>& l, float epsilon);
 
 protected:
 
+	std::vector<Point> DouglasPeuckerAlgorithm(std::vector<Point>& l, float epsilon);
 	void optimizePoints();
 	void shadeTheWall(Color& color, const vector2D& wallLine, float shadePower);
 	Color selectedColor{ 1.0f, 0.0f, 1.0f };
@@ -44,6 +45,10 @@ public:
 	std::vector<Point> points;
 	bool isSelected = false;
 	bool isHidden = false;
+	float maxX = -10000000.0f;
+	float minX =  10000000.0f;
+	float maxY = -10000000.0f;
+	float minY =  10000000.0f;
 
 private:
 

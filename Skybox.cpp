@@ -1,16 +1,22 @@
 #include "Skybox.h"
 
-Skybox::Skybox(TextureManager* textureManager)
+Skybox::Skybox(TextureManager* textureManager, float minX, float maxX, float minY, float maxY)
 {
+	MapObject::minX = minX;
+	MapObject::maxX = maxX;
+	MapObject::minY = minY;
+	MapObject::maxY = maxY;
 
+	calculateXYfromRef();
+	calculateFinalGeometry(textureManager);
 }
 
-void Skybox::calculateXYfromRef(const std::map<long long, node> &nodes)
+void Skybox::calculateXYfromRef()
 {
-	points.push_back(Point{ -500.0f, -500.0f, 0 });
-	points.push_back(Point{ -500.0f,  500.0f, 0 });
-	points.push_back(Point{  500.0f,  500.0f, 0 });
-	points.push_back(Point{  500.0f, -500.0f, 0 });
+	points.push_back(Point{ minX, minY, 0 });
+	points.push_back(Point{ minX, maxY, 0 });
+	points.push_back(Point{ maxX, maxY, 0 });
+	points.push_back(Point{ maxX, minY, 0 });
 }
 
 void Skybox::calculateFinalGeometry(TextureManager* textureManager)

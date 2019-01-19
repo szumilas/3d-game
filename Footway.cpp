@@ -36,6 +36,8 @@ void Footway::calculateXYfromRef(const std::map<long long, node> &nodes)
 		points.push_back(newPoint);
 	}
 
+	points = DouglasPeuckerAlgorithm(points, 0.1f);
+
 	createBothRailsForSymmetryAxis(points, finalLeftRail, finalRightRail, gauge);
 
 }

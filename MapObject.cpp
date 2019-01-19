@@ -17,6 +17,24 @@ void MapObject::calculateFinalGeometry(TextureManager* textureManager)
 
 }
 
+void MapObject::calculateBoundingCoordinates()
+{
+	for (auto& polygon : polygons)
+	{
+		for (auto& point : polygon.points)
+		{
+			if (point.x < minX)
+				minX = point.x;
+			if (point.x > maxX)
+				maxX = point.x;
+			if (point.y < minY)
+				minY = point.y;
+			if (point.y > maxY)
+				maxY = point.y;
+		}
+	}
+}
+
 void MapObject::applyKnownValues()
 {
 	if (!height.empty()) { _height = std::stof(height); };

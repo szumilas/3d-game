@@ -48,6 +48,8 @@ private:
 	void createNodesMap();
 	void createMapObjectsArray();
 	void calculateObjectsFinalGeometry();
+	void calculateObjectsBoundingCoordinates();
+	void calculateMapBoundingCoordinates();
 	void applyOverlays(MapObject& mapObject);
 
 	bool isHighlightedObjectCheck(MapObject& mapObject);
@@ -79,6 +81,11 @@ public:
 
 
 private:
+
+	float maxX = -10000000.0f;
+	float minX =  10000000.0f;
+	float maxY = -10000000.0f;
+	float minY =  10000000.0f;
 
 	TextureManager* textureManager;
 
