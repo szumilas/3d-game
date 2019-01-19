@@ -52,7 +52,7 @@ public:
 		{ Textures::bollard, 1.0f, 0.5f, "bollard.png" },
 		{ Textures::concrete_wall, 1.0f, 1.0f, "concrete_wall.jpg" },
 		{ Textures::fence, 1.83f, 1.1f, "fence_with_post.png" },
-		{ Textures::guard_rail, 1.5f, 0.3f, "guard_rail.jpg" },
+		{ Textures::guard_rail, 1.5f, 0.3f, "guard_rail.png" },
 		{ Textures::hedge, 2.0f, 1.0f, "hedge.png" },
 		{ Textures::retaining_wall, 2.0f, 1.0f, "retaining_wall.jpg" },
 	};
