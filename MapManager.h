@@ -24,6 +24,8 @@
 #include "Footway.h"
 #include "Tree.h"
 #include "Roof.h"
+#include "Water.h"
+
 #include "TextureManager.h"
 
 #include "rapidxml.hpp"
@@ -65,6 +67,7 @@ private:
 	bool isRailwayCheck(MapObject& mapObject);
 	bool isRiverCheck(MapObject& mapObject);
 	bool isFootwayCheck(MapObject& mapObject);
+	bool isWater(MapObject& mapObject);
 
 	template <typename T>
 	void addObject(MapObject& newMapObject)
@@ -173,6 +176,7 @@ private:
 		{ &MapManager::isParkingCheck, &MapManager::addObject<Parking>},
 		{ &MapManager::isRailwayCheck, &MapManager::addObject<Railway>},
 		{ &MapManager::isFootwayCheck, &MapManager::addObject<Footway>},
+		{ &MapManager::isWater, &MapManager::addObject<Water>},
 	};
 
 public:

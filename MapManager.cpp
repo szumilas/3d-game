@@ -517,6 +517,14 @@ bool MapManager::isFootwayCheck(MapObject& mapObject)
 		return false;
 }
 
+bool MapManager::isWater(MapObject& mapObject)
+{
+	if (mapObject.natural == "water")
+		return true;
+	else
+		return false;
+}
+
 void MapManager::selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&))
 {
 	PointInsidePolygonDetector detector;

@@ -93,6 +93,9 @@
     <ClCompile Include="RelationalMapObject.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="Water.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -171,6 +174,9 @@
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="RelationalMapObject.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Water.h">
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>

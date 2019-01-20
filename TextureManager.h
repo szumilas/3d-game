@@ -55,6 +55,7 @@ public:
 		{ Textures::guard_rail, 1.5f, 0.3f, "guard_rail.png" },
 		{ Textures::hedge, 2.0f, 1.0f, "hedge.png" },
 		{ Textures::retaining_wall, 2.0f, 1.0f, "retaining_wall.jpg" },
+		{ Textures::water, 1.0f, 1.0f, "water.jpg" },
 	};
 
 

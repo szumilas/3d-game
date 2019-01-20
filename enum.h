@@ -23,6 +23,7 @@ enum class Textures : long
 	guard_rail,
 	hedge,
 	retaining_wall,
+	water,
 };
 
 enum class Exceptions : long
