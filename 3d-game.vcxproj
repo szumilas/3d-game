@@ -147,6 +147,7 @@
     <ClCompile Include="Orbit.cpp" />
     <ClCompile Include="Parking.cpp" />
     <ClCompile Include="Railway.cpp" />
+    <ClCompile Include="RelationalMapObject.cpp" />
     <ClCompile Include="River.cpp" />
     <ClCompile Include="Roof.cpp" />
     <ClCompile Include="Skybox.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Parking.h" />
     <ClInclude Include="PointInsidePolygonDetector.h" />
     <ClInclude Include="Railway.h" />
+    <ClInclude Include="RelationalMapObject.h" />
     <ClInclude Include="River.h" />
     <ClInclude Include="Roof.h" />
     <ClInclude Include="Skybox.h" />

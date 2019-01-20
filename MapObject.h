@@ -21,6 +21,7 @@ public:
 	void applyKnownValues();
 
 	long long getId() { return id; }
+	void setId(long long newId) { id = newId; }
 	void select();
 	void deselect();
 
@@ -84,6 +85,7 @@ public:
 	std::string _skip;
 	std::string natural;
 	std::string width;
+	std::string type;
 
 
 	float _height;

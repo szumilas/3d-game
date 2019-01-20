@@ -47,9 +47,11 @@ private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
 	void createNodesMap();
 	void createMapObjectsArray();
+	void addRelationalMapObjectsToArray();
 	void calculateObjectsFinalGeometry();
 	void calculateObjectsBoundingCoordinates();
 	void calculateMapBoundingCoordinates();
+	void applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a);
 	void applyOverlays(MapObject& mapObject);
 
 	bool isHighlightedObjectCheck(MapObject& mapObject);
@@ -128,6 +130,7 @@ private:
 		"_skip",
 		"natural",
 		"width",
+		"type",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -154,6 +157,7 @@ private:
 		{ "_skip", &MapObject::_skip },
 		{ "natural", &MapObject::natural },
 		{ "width", &MapObject::width },
+		{ "type", &MapObject::type },
 	};
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector

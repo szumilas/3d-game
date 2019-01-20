@@ -5,6 +5,7 @@
 
 #include "MapManager.h"
 #include "Skybox.h"
+#include "RelationalMapObject.h"
 
 #include "rapidxml_print.hpp"
 
@@ -61,6 +62,8 @@ void MapManager::readMap(const char * fileName)
 	createNodesMap();
 	createMapObjectsArray();
 	calculateNodesPositions();
+
+	
 	calculateObjectsFinalGeometry();
 	calculateObjectsBoundingCoordinates();
 	calculateMapBoundingCoordinates();
@@ -160,10 +163,6 @@ void MapManager::createMapObjectsArray()
 
 			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
 			{
-				std::string currentTag;
-				std::string currentTagValue;
-				bool skipTag = false;
-
 				if (!strcmp(a->name(), "nd"))
 				{
 					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
@@ -177,65 +176,9 @@ void MapManager::createMapObjectsArray()
 				}
 				else if (!strcmp(a->name(), "tag"))
 				{
-					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
-					{
-						if (!strcmp(b->name(), "k")) //attribute name
-						{
-							if (skippedTags.count(b->value()) || temporarySkippedTags.count(b->value()))
-							{
-								skipTag = true;
-								break;
-							}
-							else if (acceptedTags.count(b->value()))
-							{
-								currentTag = b->value();
-							}
-							else
-							{
-								//assert(!"unknown tag");
-							}
-
-						}
-						else if (!strcmp(b->name(), "v")) //attribute value
-						{
-							currentTagValue = b->value();
-						}
-						else
-						{
-							break;
-						}
-					}
-					if (!skipTag)
-					{
-						auto mapElement = tagLongPtrs.find(currentTag);
-						if (mapElement != tagLongPtrs.end())
-						{
-							mapObject.*mapElement->second = 5;
-						}
-						else
-						{
-							auto mapElement = tagPtrs.find(currentTag);
-							if (mapElement != tagPtrs.end())
-							{
-								mapObject.*mapElement->second = currentTagValue;
-							}
-						}
-					}
+					applyObjectTag(mapObject, a);
 				}
 			}
-
-			/*if (!mapObject.height.empty())
-			{
-				mapObject._height = std::stof(mapObject.height);
-			}
-			if (!mapObject.min_height.empty())
-			{
-				mapObject._min_height = std::stof(mapObject.min_height);
-			}
-			else
-			{
-				mapObject._min_height = 0.0;
-			}*/
 
 			applyOverlays(mapObject);
 
@@ -250,6 +193,165 @@ void MapManager::createMapObjectsArray()
 						(this->*check.second)(mapObject);
 					}
 				}
+			}
+		}
+	}
+}
+
+void MapManager::addRelationalMapObjectsToArray()
+{
+	std::vector<RelationalMapObject> relationalMapObjects;
+	std::unordered_set<long long> usedWays;
+
+	rapidxml::xml_node <>* nodeCeo = document.first_node();
+	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+	{
+		if (!strcmp(manager->name(), "relation"))
+		{
+			RelationalMapObject relationalMapObject(std::stoll(manager->first_attribute()->value()));
+
+			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+			{
+
+				if (!strcmp(a->name(), "member"))
+				{
+					std::string type;
+					std::string ref;
+					std::string role;
+					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					{
+						if (!strcmp(b->name(), "type"))
+						{
+							type = b->value();
+						}
+						else if (!strcmp(b->name(), "ref"))
+						{
+							ref = b->value();
+						}
+						else if (!strcmp(b->name(), "role"))
+						{
+							role = b->value();
+						}
+					}
+
+					if (type == "way" && !ref.empty() && !role.empty())
+					{
+						relationalMapObject.addMember(stoll(ref), role);
+						usedWays.emplace(stoll(ref));
+					}
+				}
+				else if (!strcmp(a->name(), "tag"))
+				{
+					applyObjectTag(relationalMapObject, a);
+				}
+			}
+
+
+			applyOverlays(relationalMapObject);
+
+			relationalMapObject.applyKnownValues();
+
+			relationalMapObjects.push_back(std::move(relationalMapObject));
+		}
+	}
+
+	std::map<long long, std::vector<long long>> ways;
+
+	nodeCeo = document.first_node();
+	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+	{
+		if (!strcmp(manager->name(), "way"))
+		{
+			long long wayId = std::stoll(manager->first_attribute()->value());
+			if (usedWays.find(wayId) == usedWays.end())
+				continue;
+
+			std::vector<long long> nodes;
+
+			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+			{
+				if (!strcmp(a->name(), "nd"))
+				{
+					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					{
+						if (!strcmp(b->name(), "ref"))
+						{
+							nodes.push_back(std::stoll(b->value()));
+							break;
+						}
+					}
+				}
+			}
+
+			ways.insert({ wayId, nodes });
+		}
+	}
+
+	for (auto& relationalMapObject : relationalMapObjects)
+	{
+		relationalMapObject.createNodeGeometry(ways, nodes);
+
+		if (relationalMapObject._skip != "yes" && !relationalMapObject.points.empty())
+		{
+			for (auto& check : objectDetector)
+			{
+				if ((this->*check.first)(relationalMapObject))
+				{
+					(this->*check.second)(relationalMapObject);
+				}
+			}
+		}
+
+	}
+}
+
+void MapManager::applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a)
+{
+	std::string currentTag;
+	std::string currentTagValue;
+	bool skipTag = false;
+
+	for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+	{
+		if (!strcmp(b->name(), "k")) //attribute name
+		{
+			if (skippedTags.count(b->value()) || temporarySkippedTags.count(b->value()))
+			{
+				skipTag = true;
+				break;
+			}
+			else if (acceptedTags.count(b->value()))
+			{
+				currentTag = b->value();
+			}
+			else
+			{
+				//assert(!"unknown tag");
+			}
+
+		}
+		else if (!strcmp(b->name(), "v")) //attribute value
+		{
+			currentTagValue = b->value();
+		}
+		else
+		{
+			break;
+		}
+	}
+	if (!skipTag)
+	{
+		auto mapElement = tagLongPtrs.find(currentTag);
+		if (mapElement != tagLongPtrs.end())
+		{
+			mapObject.*mapElement->second = 5;
+		}
+		else
+		{
+			auto mapElement = tagPtrs.find(currentTag);
+			if (mapElement != tagPtrs.end())
+			{
+				mapObject.*mapElement->second = currentTagValue;
 			}
 		}
 	}
@@ -311,6 +413,8 @@ void MapManager::calculateNodesPositions()
 		it->second.posX = static_cast<float>((it->second.lon - minLon) * longituteRatio);
 		it->second.posY = static_cast<float>((it->second.lat - minLat) * latitudeRatio);
 	}
+
+	addRelationalMapObjectsToArray();
 
 	long long polygonsCount = 0;
 	long long edgesCount = 0;

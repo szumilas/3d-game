@@ -90,6 +90,9 @@
     <ClCompile Include="Tree.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="RelationalMapObject.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -165,6 +168,9 @@
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="Tree.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="RelationalMapObject.h">
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>
