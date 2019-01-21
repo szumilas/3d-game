@@ -525,6 +525,14 @@ bool MapManager::isWater(MapObject& mapObject)
 		return false;
 }
 
+bool MapManager::isRiverbank(MapObject& mapObject)
+{
+	if (mapObject.waterway == "riverbank")
+		return true;
+	else
+		return false;
+}
+
 void MapManager::selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&))
 {
 	PointInsidePolygonDetector detector;

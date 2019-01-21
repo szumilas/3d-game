@@ -134,7 +134,6 @@ void MapObject::optimizePoints()
 	}
 
 
-	double epsilon = 0.1;
 
 	auto optimizedPoints1 = DouglasPeuckerAlgorithm(l1, epsilon);
 	auto optimizedPoints2 = DouglasPeuckerAlgorithm(l2, epsilon);

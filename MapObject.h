@@ -37,6 +37,8 @@ protected:
 	void dividePointsPolygonIntoTriangles();
 	void createBothRailsForSymmetryAxis(const std::vector<Point>& axisPoints, std::vector<Point>& finalLeftRail, std::vector<Point>& finalRightRail, float gauge);
 
+	double epsilon = 0.1;
+
 public:
 	//stats
 	long long polygonsCount = 0;

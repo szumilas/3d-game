@@ -149,6 +149,7 @@
     <ClCompile Include="Railway.cpp" />
     <ClCompile Include="RelationalMapObject.cpp" />
     <ClCompile Include="River.cpp" />
+    <ClCompile Include="Riverbank.cpp" />
     <ClCompile Include="Roof.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Street.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Railway.h" />
     <ClInclude Include="RelationalMapObject.h" />
     <ClInclude Include="River.h" />
+    <ClInclude Include="Riverbank.h" />
     <ClInclude Include="Roof.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Street.h" />
