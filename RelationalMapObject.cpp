@@ -11,7 +11,8 @@ void RelationalMapObject::createNodeGeometry(std::map<long long, std::vector<lon
 {
 	std::sort(members.begin(), members.end(), [](Member& a, Member& b) {return a.isInner < b.isInner; });
 
-	members.resize(2);
+	if(members.size() > 2)
+		members.resize(2);
 
 	if (members.size() == 2 && members[0].isInner + members[1].isInner == true)
 	{
@@ -103,7 +104,18 @@ void RelationalMapObject::createNodeGeometry(std::map<long long, std::vector<lon
 			}
 		}
 	}
+	else if (members.size() == 1 && members[0].isInner == false)
+	{
+		if (ways.count(members[0].ref))
+		{
+			auto refs = &ways.at(members[0].ref);
 
+			for (auto& ref : *refs)
+			{
+				points.push_back({ nodes.at(ref).posX, nodes.at(ref).posY });
+			}
+		}
+	}
 
 
 }
