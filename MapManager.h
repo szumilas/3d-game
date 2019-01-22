@@ -27,6 +27,7 @@
 #include "Water.h"
 #include "Riverbank.h"
 #include "BusShelter.h"
+#include "Crossing.h"
 
 #include "TextureManager.h"
 
@@ -59,6 +60,7 @@ private:
 	void applyOverlays(MapObject& mapObject);
 
 	bool isBusShelterCheck(MapObject& mapObject);
+	bool isCrossingCheck(MapObject& mapObject);
 	bool isHighlightedObjectCheck(MapObject& mapObject);
 	bool isStreetCheck(MapObject& mapObject);
 	bool isBuildingCheck(MapObject& mapObject);
@@ -138,6 +140,7 @@ private:
 		"natural",
 		"width",
 		"type",
+		"footway",
 	};
 
 	std::map<std::string, long MapObject::*> tagLongPtrs{
@@ -165,11 +168,13 @@ private:
 		{ "natural", &MapObject::natural },
 		{ "width", &MapObject::width },
 		{ "type", &MapObject::type },
+		{ "footway", &MapObject::footway },
 	};
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
 	{
 		{ &MapManager::isBusShelterCheck, &MapManager::addObject<BusShelter> },
+		{ &MapManager::isCrossingCheck, &MapManager::addObject<Crossing> },
 		{ &MapManager::isHighlightedObjectCheck, &MapManager::addObject<HighlightedObject>},
 		{ &MapManager::isStreetCheck, &MapManager::addObject<Street>},
 		{ &MapManager::isBuildingCheck, &MapManager::addObject<Building>},

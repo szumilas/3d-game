@@ -6,17 +6,24 @@ class Footway : public MapObject
 {
 public:
 
-	Footway(MapObject& mapObject) : MapObject(mapObject) {
+	Footway(MapObject& mapObject) : MapObject(mapObject)
+	{
 		_min_height = -0.05f;
+		_red = 1.0f;
+		_green = 1.0f;
+		_blue = 1.0f;
+		textureName = Textures::paving;
 	};
 
-	void calculateFinalGeometry(TextureManager* textureManager);
+	virtual void calculateFinalGeometry(TextureManager* textureManager);
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
 
-private:
+protected:
 
 	float gauge = 2.0f;
-	unsigned int idTexture;
+	Textures textureName;
+
+private:
 
 	std::vector<Point> finalLeftRail;
 	std::vector<Point> finalRightRail;

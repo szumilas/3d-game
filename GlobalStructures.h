@@ -189,6 +189,18 @@ struct vector2D
 		return acos(dotProduct(v1, v2) / (v1.length() * v2.length()));
 	}
 
+	static double realAngle(const vector2D& v1, const vector2D& v2)
+	{
+		auto alpha = angle(v1, v2);
+
+		if (v1.x < 0 && v1.y < 0)
+			alpha = 2 * PI - alpha;
+		else if (v1.x > 0 && v1.y < 0)
+			alpha = 2 * PI - alpha;
+
+		return alpha;
+	}
+
 	void convertIntoUnitVector()
 	{
 		double dist = sqrt(x * x + y * y);

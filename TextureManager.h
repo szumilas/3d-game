@@ -58,6 +58,7 @@ public:
 		{ Textures::water, 1.0f, 1.0f, "water.jpg" },
 		{ Textures::bus_shelter, 1.5f, 3.0f, "bus_shelter.png" },
 		{ Textures::bus_shelter_with_sign, 1.5f, 3.0f, "bus_shelter_with_sign.png" },
+		{ Textures::crossing, 5.0f, 1.0f, "crossing.png" },
 	};
 
 

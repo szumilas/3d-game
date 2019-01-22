@@ -26,6 +26,7 @@ enum class Textures : long
 	water,
 	bus_shelter,
 	bus_shelter_with_sign,
+	crossing,
 };
 
 enum class Exceptions : long

@@ -88,6 +88,7 @@ public:
 	std::string natural;
 	std::string width;
 	std::string type;
+	std::string footway;
 
 
 	float _height;

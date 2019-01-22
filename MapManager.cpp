@@ -441,6 +441,16 @@ bool MapManager::isBusShelterCheck(MapObject& mapObject)
 		return false;
 }
 
+bool MapManager::isCrossingCheck(MapObject& mapObject)
+{
+	if (mapObject.footway == "crossing")
+	{
+		return true; 
+	}
+	else
+		return false;
+}
+
 bool MapManager::isHighlightedObjectCheck(MapObject& mapObject)
 {
 	if(mapObject.getId() == 101212380ll)

@@ -57,12 +57,7 @@ void Roof::calculateFinalGeometry(TextureManager* textureManager)
 
 			vector2D v1(firstPoint, lastPoint);
 			vector2D v2(Point(0.0f, 0.0f), Point(1.0f, 0.0f));
-			auto angle = vector2D::angle(v1, v2);
-
-			if (lastPoint.x < firstPoint.x && lastPoint.y < firstPoint.y)
-				angle = 2 * PI - angle;
-			else if (lastPoint.x > firstPoint.x && lastPoint.y < firstPoint.y)
-				angle = 2 * PI - angle;
+			auto angle = vector2D::realAngle(v1, v2);
 
 			angle *= -1;
 
