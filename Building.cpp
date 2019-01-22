@@ -36,7 +36,68 @@ void Building::calculateFinalGeometry(TextureManager* textureManager)
 {
 	for (auto& wall : walls)
 	{
-		Textures wallTexture;
+		wall.idTexture = textureManager->textures[static_cast<long>(wall.textureName)].idTexture;
+		wall.xRatio = static_cast<int>(wall.wallLenght / textureManager->textures[static_cast<long>(wall.textureName)].realWidth);
+		wall.yRatio = static_cast<int>(_height) / textureManager->textures[static_cast<long>(wall.textureName)].realHeight;
+
+		if (!wall.xRatio)
+			wall.xRatio = 1.0f;
+
+		if (!wall.yRatio)
+			wall.yRatio = 1.0f;
+
+	}
+
+	for (auto& wall : walls)
+	{
+		Polygon newPolygon;
+
+		newPolygon.points.push_back({ wall.p1.x, wall.p1.y, _min_height });
+		newPolygon.points.push_back({ wall.p2.x, wall.p2.y, _min_height });
+		newPolygon.points.push_back({ wall.p2.x, wall.p2.y, _height });
+		newPolygon.points.push_back({ wall.p1.x, wall.p1.y, _height });
+
+		newPolygon.texturePoints.push_back({ 0.0f, 0.0f });
+		newPolygon.texturePoints.push_back({ wall.xRatio, 0.0 });
+		newPolygon.texturePoints.push_back({ wall.xRatio, wall.yRatio });
+		newPolygon.texturePoints.push_back({ 0.0f, wall.yRatio });
+
+		newPolygon.noOfPoints = newPolygon.texturePoints.size();
+		newPolygon.idTexture = wall.idTexture;
+		newPolygon.color = wall.color;
+
+		auto newColor = wall.color.mixColor(selectedColor);
+		newPolygon.additionalColor = wall.color.mixColor(newColor);
+
+		polygons.push_back(newPolygon);
+	}
+}
+
+void Building::generateWalls()
+{
+	vector2D equator(Point(0.0, 0.0), Point(1.0, 0.0));
+
+	for (int q = 0; q < static_cast<int>(points.size()) - 1; q++)
+	{
+		Wall newWall;
+		newWall.p1 = points[q];
+		newWall.p2 = points[q + 1];
+
+		newWall.color.red = _red;
+		newWall.color.green = _green;
+		newWall.color.blue = _blue;
+
+		vector2D wallLine(newWall.p1, newWall.p2);
+		shadeTheWall(newWall.color, wallLine, 0.5f);
+
+		newWall.wallLenght = wallLine.length();
+
+		walls.push_back(newWall);
+	}
+
+	for (auto& wall : walls)
+	{
+		Textures wallTexture = Textures::apartment_windows;
 
 		if (getId() == 440403931 || getId() == 440403932 || getId() == 402873616 || getId() == 101212302 || getId() == 403442403 || getId() == 440403933)
 		{
@@ -76,99 +137,6 @@ void Building::calculateFinalGeometry(TextureManager* textureManager)
 			}
 		}
 
-		wall.idTexture = textureManager->textures[static_cast<long>(wallTexture)].idTexture;
-		wall.xRatio = static_cast<int>(wall.wallLenght / textureManager->textures[static_cast<long>(wallTexture)].realWidth);
-		wall.yRatio = static_cast<int>(_height) / textureManager->textures[static_cast<long>(wallTexture)].realHeight;
-
-		if (!wall.xRatio)
-			wall.xRatio = 1.0f;
-
-	}
-
-	for (auto& wall : walls)
-	{
-		Polygon newPolygon;
-
-		newPolygon.points.push_back({ wall.p1.x, wall.p1.y, _min_height });
-		newPolygon.points.push_back({ wall.p2.x, wall.p2.y, _min_height });
-		newPolygon.points.push_back({ wall.p2.x, wall.p2.y, _height });
-		newPolygon.points.push_back({ wall.p1.x, wall.p1.y, _height });
-
-		newPolygon.texturePoints.push_back({ 0.0f, 0.0f });
-		newPolygon.texturePoints.push_back({ wall.xRatio, 0.0 });
-		newPolygon.texturePoints.push_back({ wall.xRatio, wall.yRatio });
-		newPolygon.texturePoints.push_back({ 0.0f, wall.yRatio });
-
-		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = wall.idTexture;
-		newPolygon.color = wall.color;
-
-		auto newColor = wall.color.mixColor(selectedColor);
-		newPolygon.additionalColor = wall.color.mixColor(newColor);
-
-
-		polygons.push_back(newPolygon);
+		wall.textureName = wallTexture;
 	}
 }
-
-void Building::generateWalls()
-{
-	vector2D equator(Point(0.0, 0.0), Point(1.0, 0.0));
-
-	for (int q = 0; q < static_cast<int>(points.size()) - 1; q++)
-	{
-		Wall newWall;
-		newWall.p1 = points[q];
-		newWall.p2 = points[q + 1];
-
-		newWall.color.red = _red;
-		newWall.color.green = _green;
-		newWall.color.blue = _blue;
-
-		vector2D wallLine(newWall.p1, newWall.p2);
-		shadeTheWall(newWall.color, wallLine, 0.5f);
-
-		newWall.wallLenght = wallLine.length();
-
-		walls.push_back(newWall);
-	}
-}
-
-/*void Building::display()
-{
-
-	for (auto& wall : walls)
-	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBindTexture(GL_TEXTURE_2D, wall.idTexture);
-		glEnable(GL_TEXTURE_2D);
-
-		glBegin(GL_POLYGON);
-		if (isSelected)
-		{
-			auto newColor = wall.color.mixColor(selectedColor);
-			glColor3f(newColor.red, newColor.green, newColor.blue);
-		}
-		else
-			glColor3f(wall.color.red, wall.color.green, wall.color.blue);
-
-		glTexCoord2f(0, 0.0);
-		glVertex3f(wall.p1.x, wall.p1.y, _min_height);
-
-		glTexCoord2f(wall.xRatio, 0.0);
-		glVertex3f(wall.p2.x, wall.p2.y, _min_height);
-
-		glTexCoord2f(wall.xRatio, wall.yRatio);
-		glVertex3f(wall.p2.x, wall.p2.y, _height);
-
-		glTexCoord2f(0, wall.yRatio);
-		glVertex3f(wall.p1.x, wall.p1.y, _height);
-
-
-		glEnd();
-
-		glDisable(GL_BLEND);
-		glDisable(GL_TEXTURE_2D);
-	}
-}*/

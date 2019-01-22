@@ -191,6 +191,7 @@ void MapManager::createMapObjectsArray()
 					if ((this->*check.first)(mapObject))
 					{
 						(this->*check.second)(mapObject);
+						break;
 					}
 				}
 			}
@@ -298,6 +299,7 @@ void MapManager::addRelationalMapObjectsToArray()
 				if ((this->*check.first)(relationalMapObject))
 				{
 					(this->*check.second)(relationalMapObject);
+					break;
 				}
 			}
 		}
@@ -427,6 +429,16 @@ void MapManager::calculateNodesPositions()
 
 		q++;
 	}
+}
+
+bool MapManager::isBusShelterCheck(MapObject& mapObject)
+{
+	if (mapObject.building == "yes" && mapObject.amenity == "shelter")
+	{
+		return true; 
+	}
+	else
+		return false;
 }
 
 bool MapManager::isHighlightedObjectCheck(MapObject& mapObject)

@@ -14,12 +14,18 @@ public:
 private:
 
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
-	void generateWalls();
+
+protected:
+
+	virtual void generateWalls();
 
 public:
 
 
 private:
+
+
+protected:
 
 	struct Wall
 	{
@@ -27,6 +33,7 @@ private:
 		Point p2;
 		Color color;
 		unsigned int idTexture;
+		Textures textureName;
 		float wallLenght;
 		float xRatio;
 		float yRatio;

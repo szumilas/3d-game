@@ -24,6 +24,8 @@ enum class Textures : long
 	hedge,
 	retaining_wall,
 	water,
+	bus_shelter,
+	bus_shelter_with_sign,
 };
 
 enum class Exceptions : long

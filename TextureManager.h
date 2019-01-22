@@ -56,6 +56,8 @@ public:
 		{ Textures::hedge, 2.0f, 1.0f, "hedge.png" },
 		{ Textures::retaining_wall, 2.0f, 1.0f, "retaining_wall.jpg" },
 		{ Textures::water, 1.0f, 1.0f, "water.jpg" },
+		{ Textures::bus_shelter, 1.5f, 3.0f, "bus_shelter.png" },
+		{ Textures::bus_shelter_with_sign, 1.5f, 3.0f, "bus_shelter_with_sign.png" },
 	};
 
 

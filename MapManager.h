@@ -26,6 +26,7 @@
 #include "Roof.h"
 #include "Water.h"
 #include "Riverbank.h"
+#include "BusShelter.h"
 
 #include "TextureManager.h"
 
@@ -57,6 +58,7 @@ private:
 	void applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a);
 	void applyOverlays(MapObject& mapObject);
 
+	bool isBusShelterCheck(MapObject& mapObject);
 	bool isHighlightedObjectCheck(MapObject& mapObject);
 	bool isStreetCheck(MapObject& mapObject);
 	bool isBuildingCheck(MapObject& mapObject);
@@ -167,6 +169,7 @@ private:
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
 	{
+		{ &MapManager::isBusShelterCheck, &MapManager::addObject<BusShelter> },
 		{ &MapManager::isHighlightedObjectCheck, &MapManager::addObject<HighlightedObject>},
 		{ &MapManager::isStreetCheck, &MapManager::addObject<Street>},
 		{ &MapManager::isBuildingCheck, &MapManager::addObject<Building>},

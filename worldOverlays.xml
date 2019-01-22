@@ -138,9 +138,6 @@
 		<tag k="height" v="20.00"/>
 		<tag k="roof:shape" v="flat"/>
 	</way>
-	<way id="511542787">
-		<tag k="_skip" v="yes"/>
-	</way>
 	<way id="101217936">
 		<tag k="roof:shape" v="flat"/>
 		<tag k="height" v="7.00"/>
@@ -163,9 +160,6 @@
 		<tag k="roof:shape" v="flat"/>
 	</way>
 	<way id="304382155">
-		<tag k="_skip" v="yes"/>
-	</way>
-	<way id="511542804">
 		<tag k="_skip" v="yes"/>
 	</way>
 	<way id="101202125">
