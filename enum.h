@@ -27,6 +27,13 @@ enum class Textures : long
 	bus_shelter,
 	bus_shelter_with_sign,
 	crossing,
+	pasaz_grunwaldzki,
+	pasaz_grunwaldzki_tunnel,
+	pasaz_grunwaldzki_banner,
+	pasaz_grunwaldzki_single,
+	pasaz_grunwaldzki_front,
+	glass_elevation,
+	no_texture,
 };
 
 enum class Exceptions : long

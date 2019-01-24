@@ -148,6 +148,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Orbit.cpp" />
     <ClCompile Include="Parking.cpp" />
+    <ClCompile Include="PasazGrunwaldzki.cpp" />
     <ClCompile Include="Railway.cpp" />
     <ClCompile Include="RelationalMapObject.cpp" />
     <ClCompile Include="River.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Orbit.h" />
     <ClInclude Include="Parking.h" />
+    <ClInclude Include="PasazGrunwaldzki.h" />
     <ClInclude Include="PointInsidePolygonDetector.h" />
     <ClInclude Include="Railway.h" />
     <ClInclude Include="RelationalMapObject.h" />

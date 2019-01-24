@@ -431,6 +431,16 @@ void MapManager::calculateNodesPositions()
 	}
 }
 
+bool MapManager::isPasazGrunwaldzkiCheck(MapObject& mapObject)
+{
+	if (mapObject.getId() == 101195833 || mapObject.getId() == 101212793 || mapObject.getId() == 101213837 || mapObject.getId() == 101189502)
+	{
+		return true; 
+	}
+	else
+		return false;
+}
+
 bool MapManager::isBusShelterCheck(MapObject& mapObject)
 {
 	if (mapObject.building == "yes" && mapObject.amenity == "shelter")

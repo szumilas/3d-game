@@ -92,6 +92,7 @@
 	</way>
 	<way id="101213837">
 		<tag k="height" v="10.00"/>
+		<tag k="roof:shape" v="flat"/>
 	</way>
 	<way id="101226171">
 		<tag k="_skip" v="yes"/>
@@ -634,6 +635,9 @@
 		<tag k="_skip" v="yes"/>
 	</way>
 	<way id="402873615">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="6553408">
 		<tag k="_skip" v="yes"/>
 	</way>
 </osm>

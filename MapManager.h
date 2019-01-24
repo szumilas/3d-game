@@ -28,6 +28,7 @@
 #include "Riverbank.h"
 #include "BusShelter.h"
 #include "Crossing.h"
+#include "PasazGrunwaldzki.h"
 
 #include "TextureManager.h"
 
@@ -59,6 +60,7 @@ private:
 	void applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a);
 	void applyOverlays(MapObject& mapObject);
 
+	bool isPasazGrunwaldzkiCheck(MapObject& mapObject);
 	bool isBusShelterCheck(MapObject& mapObject);
 	bool isCrossingCheck(MapObject& mapObject);
 	bool isHighlightedObjectCheck(MapObject& mapObject);
@@ -80,7 +82,7 @@ private:
 	{
 		mapObjects.push_back(std::make_unique<T>(newMapObject));
 		newMapObject._height = mapObjects.back()->_height;
-		if (std::is_same<T, Building>::value)
+		if (std::is_same<T, Building>::value || std::is_same<T, PasazGrunwaldzki>::value)
 		{
 			//mapObjects.back()->setTextureId(textureManager->textureIds.at(Texture::Te));
 			mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
@@ -173,6 +175,7 @@ private:
 
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
 	{
+		{ &MapManager::isPasazGrunwaldzkiCheck, &MapManager::addObject<PasazGrunwaldzki> },
 		{ &MapManager::isBusShelterCheck, &MapManager::addObject<BusShelter> },
 		{ &MapManager::isCrossingCheck, &MapManager::addObject<Crossing> },
 		{ &MapManager::isHighlightedObjectCheck, &MapManager::addObject<HighlightedObject>},

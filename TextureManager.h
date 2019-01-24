@@ -59,6 +59,13 @@ public:
 		{ Textures::bus_shelter, 1.5f, 3.0f, "bus_shelter.png" },
 		{ Textures::bus_shelter_with_sign, 1.5f, 3.0f, "bus_shelter_with_sign.png" },
 		{ Textures::crossing, 5.0f, 1.0f, "crossing.png" },
+		{ Textures::pasaz_grunwaldzki, 45.0f, 20.0f, "pasaz_grunwaldzki.png" },
+		{ Textures::pasaz_grunwaldzki_tunnel, 45.0f, 20.0f, "pasaz_grunwaldzki_tunnel.png" },
+		{ Textures::pasaz_grunwaldzki_banner, 20.0f, 20.0f, "pasaz_grunwaldzki_banner.png" },
+		{ Textures::pasaz_grunwaldzki_single, 1.0f, 20.0f, "pasaz_grunwaldzki_single.png" },
+		{ Textures::pasaz_grunwaldzki_front, 5.0f, 10.0f, "pasaz_grunwaldzki_front.png" },
+		{ Textures::glass_elevation, 5.0f, 5.0f, "glass_elevation.jpg" },
+		{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
 	};
 
 
