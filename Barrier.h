@@ -11,14 +11,14 @@ public:
 		if(!_min_height) _min_height = 0.0f;
 		if (colour.empty())
 		{
-			if (barrier == "wall") { _red = 170.0f / 256; _green = 113.0f / 256; _blue = 82.0f / 256; textureName = Textures::concrete_wall; _width = 0.25f;}
-			else if (barrier == "kerb") { _red = 241.0f / 256; _green = 235.0f / 256; _blue = 240.0f / 256; textureName = Textures::concrete_wall; _width = 0.1f;}
-			else if (barrier == "hedge") { _red = 140.0f / 256; _green = 195.0f / 256; _blue = 2.0f / 256; textureName = Textures::hedge; _width = 0.5f;}
-			else if (barrier == "bollard") { _red = 234.0f / 256; _green = 207.0f / 256; _blue = 32.0f / 256; textureName = Textures::bollard; }
-			else if (barrier == "retaining_wall") { _red = 213.0f / 256; _green = 205.0f / 256; _blue = 195.0f / 256; textureName = Textures::retaining_wall; _width = 0.2f;}
-			else if (barrier == "guard_rail") { _red = 179.0f / 256; _green = 225.0f / 256; _blue = 251.0f / 256; textureName = Textures::guard_rail; }
-			else if (barrier == "fence") { _red = 171.0f / 256; _green = 187.0f / 256; _blue = 197.0f / 256; textureName = Textures::fence; }
-			else { _red = 128.0f / 256; _green = 128.0f / 256; _blue = 128.0f / 256; textureName = Textures::concrete_wall; }
+			if (barrier == "wall") { _color.red = 170.0f / 256; _color.green = 113.0f / 256; _color.blue = 82.0f / 256; textureName = Textures::concrete_wall; _width = 0.25f;}
+			else if (barrier == "kerb") { _color.red = 241.0f / 256; _color.green = 235.0f / 256; _color.blue = 240.0f / 256; textureName = Textures::concrete_wall; _width = 0.1f;}
+			else if (barrier == "hedge") { _color.red = 140.0f / 256; _color.green = 195.0f / 256; _color.blue = 2.0f / 256; textureName = Textures::hedge; _width = 0.5f;}
+			else if (barrier == "bollard") { _color.red = 234.0f / 256; _color.green = 207.0f / 256; _color.blue = 32.0f / 256; textureName = Textures::bollard; }
+			else if (barrier == "retaining_wall") { _color.red = 213.0f / 256; _color.green = 205.0f / 256; _color.blue = 195.0f / 256; textureName = Textures::retaining_wall; _width = 0.2f;}
+			else if (barrier == "guard_rail") { _color.red = 179.0f / 256; _color.green = 225.0f / 256; _color.blue = 251.0f / 256; textureName = Textures::guard_rail; }
+			else if (barrier == "fence") { _color.red = 171.0f / 256; _color.green = 187.0f / 256; _color.blue = 197.0f / 256; textureName = Textures::fence; }
+			else { _color.red = 128.0f / 256; _color.green = 128.0f / 256; _color.blue = 128.0f / 256; textureName = Textures::concrete_wall; }
 		}
 		if (height.empty())
 		{

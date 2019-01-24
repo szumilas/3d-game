@@ -4,15 +4,11 @@ PasazGrunwaldzki::PasazGrunwaldzki(MapObject& mapObject) : Building(mapObject)
 {
 	if (getId() == 101189502)
 	{
-		_red = 0.5;
-		_green = 0.5;
-		_blue = 0.5;
+		_color = Color::gray();
 	}
 	else
 	{
-		_red = 0.95f;
-		_green = 0.95f;
-		_blue = 0.95f;
+		_color = Color{ 0.95f, 0.95f, 0.95f };
 	}
 }
 

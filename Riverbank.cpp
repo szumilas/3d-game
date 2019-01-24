@@ -5,9 +5,9 @@ Riverbank::Riverbank(MapObject& mapObject) : MapObject(mapObject)
 	_height = 0.0f;
 	_min_height = -3.0f;
 
-	_red = 0.8f;
-	_green = 0.8f;
-	_blue = 0.8f;
+	_color.red = 0.8f;
+	_color.green = 0.8f;
+	_color.blue = 0.8f;
 };
 
 void Riverbank::calculateXYfromRef(const std::map<long long, node> &nodes)
@@ -72,9 +72,9 @@ void Riverbank::generateWalls()
 		newWall.p1 = points[q];
 		newWall.p2 = points[q + 1];
 
-		newWall.color.red = _red;
-		newWall.color.green = _green;
-		newWall.color.blue = _blue;
+		newWall.color.red = _color.red;
+		newWall.color.green = _color.green;
+		newWall.color.blue = _color.blue;
 
 		vector2D wallLine(newWall.p1, newWall.p2);
 		shadeTheWall(newWall.color, wallLine, 0.5f);

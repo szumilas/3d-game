@@ -17,9 +17,9 @@ Building::Building(MapObject& mapObject) : MapObject(mapObject)
 	}
 	if (colour.empty())
 	{
-		_red = 0.5f;
-		_green = 0.5f;
-		_blue = 0.5f;
+		_color.red = 0.5f;
+		_color.green = 0.5f;
+		_color.blue = 0.5f;
 	}
 };
 
@@ -83,9 +83,9 @@ void Building::generateWalls()
 		newWall.p1 = points[q];
 		newWall.p2 = points[q + 1];
 
-		newWall.color.red = _red;
-		newWall.color.green = _green;
-		newWall.color.blue = _blue;
+		newWall.color.red = _color.red;
+		newWall.color.green = _color.green;
+		newWall.color.blue = _color.blue;
 
 		vector2D wallLine(newWall.p1, newWall.p2);
 		shadeTheWall(newWall.color, wallLine, 0.5f);

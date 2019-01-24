@@ -18,7 +18,7 @@ void Footway::calculateFinalGeometry(TextureManager* textureManager)
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
 		newPolygon.idTexture = textureManager->textures[static_cast<unsigned int>(textureName)].idTexture;
-		newPolygon.color = Color{ _red, _green, _blue };
+		newPolygon.color = Color{ _color.red, _color.green, _color.blue };
 
 		newPolygon.additionalColor = newPolygon.color.mixColor(selectedColor);
 

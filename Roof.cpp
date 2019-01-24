@@ -15,9 +15,9 @@ Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 {
 	_roof_level = _height;
 
-	_red = 0.7f;
-	_green = 0.7f;
-	_blue = 0.7f;
+	_color.red = 0.7f;
+	_color.green = 0.7f;
+	_color.blue = 0.7f;
 
 	building = "roof_generated";
 };
@@ -1232,7 +1232,7 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 				currentSurface.push_back(graphIds[currentPoint].second);
 			}
 
-			Color colorOfSurface{ _red, _green, _blue };
+			Color colorOfSurface{ _color.red, _color.green, _color.blue };
 			vector2D wallLine(currentSurface[0], currentSurface.back());
 			shadeTheWall(colorOfSurface, wallLine, 0.25f);
 
@@ -1276,9 +1276,9 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 
 void Roof::generateFlatRoof()
 {
-	_red = 0.4f;
-	_green = 0.4f;
-	_blue = 0.4f;
+	_color.red = 0.4f;
+	_color.green = 0.4f;
+	_color.blue = 0.4f;
 
 	longRoofLines.clear();
 
@@ -1288,7 +1288,7 @@ void Roof::generateFlatRoof()
 		roofSurface.push_back(getRoofPoint(triangle.idp1));
 		roofSurface.push_back(getRoofPoint(triangle.idp2));
 		roofSurface.push_back(getRoofPoint(triangle.idp3));
-		roofSurfaces.push_back({ roofSurface, roofSurface, Color{_red, _green, _blue} });
+		roofSurfaces.push_back({ roofSurface, roofSurface, Color{ _color.red, _color.green, _color.blue } });
 	}
 
 	roof_shape = "flat";

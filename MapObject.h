@@ -94,11 +94,7 @@ public:
 	float _height;
 	float _min_height;
 	float _width;
-	float _red;
-	float _green;
-	float _blue;
+	Color _color;
 
-	float _redCopy;
-	float _greenCopy;
-	float _blueCopy;
+	Color _colorCopy;
 };

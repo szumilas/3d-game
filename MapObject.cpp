@@ -43,18 +43,18 @@ void MapObject::applyKnownValues()
 	{
 		if (colour[0] == '#')
 		{
-			_red = static_cast<float>(std::stoul(colour.substr(1, 2), nullptr, 16)) / 256;
-			_green = static_cast<float>(std::stoul(colour.substr(3, 2), nullptr, 16)) / 256;
-			_blue = static_cast<float>(std::stoul(colour.substr(5, 2), nullptr, 16)) / 256;
+			_color.red = static_cast<float>(std::stoul(colour.substr(1, 2), nullptr, 16)) / 256;
+			_color.green = static_cast<float>(std::stoul(colour.substr(3, 2), nullptr, 16)) / 256;
+			_color.blue = static_cast<float>(std::stoul(colour.substr(5, 2), nullptr, 16)) / 256;
 		}
 		else
 		{
 			auto mapElement = colorMap.find(colour);
 			if (mapElement != colorMap.end())
 			{
-				_red = std::get<0>(mapElement->second);
-				_green = std::get<1>(mapElement->second);
-				_blue = std::get<2>(mapElement->second);
+				_color.red = std::get<0>(mapElement->second);
+				_color.green = std::get<1>(mapElement->second);
+				_color.blue = std::get<2>(mapElement->second);
 			}
 			else
 			{
