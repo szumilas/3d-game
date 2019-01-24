@@ -154,6 +154,7 @@
     <ClCompile Include="River.cpp" />
     <ClCompile Include="Riverbank.cpp" />
     <ClCompile Include="Roof.cpp" />
+    <ClCompile Include="Sedesowiec.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="StreetLamp.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="River.h" />
     <ClInclude Include="Riverbank.h" />
     <ClInclude Include="Roof.h" />
+    <ClInclude Include="Sedesowiec.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="Street.h" />
     <ClInclude Include="StreetLamp.h" />

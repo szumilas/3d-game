@@ -108,6 +108,9 @@
     <ClCompile Include="PasazGrunwaldzki.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="Sedesowiec.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -201,6 +204,9 @@
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="PasazGrunwaldzki.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Sedesowiec.h">
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>

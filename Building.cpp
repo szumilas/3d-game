@@ -99,14 +99,7 @@ void Building::generateWalls()
 	{
 		Textures wallTexture = Textures::apartment_windows;
 
-		if (getId() == 440403931 || getId() == 440403932 || getId() == 402873616 || getId() == 101212302 || getId() == 403442403 || getId() == 440403933)
-		{
-			if (wall.wallLenght > 20)
-			{
-				wallTexture = Textures::manhattan;
-			}
-		}
-		else if (building == "yes" && _height == 15)
+		if (building == "yes" && _height == 15)
 		{
 			if (wall.wallLenght < 4)
 			{

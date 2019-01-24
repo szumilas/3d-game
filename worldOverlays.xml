@@ -640,5 +640,29 @@
 	<way id="6553408">
 		<tag k="_skip" v="yes"/>
 	</way>
+	<way id="5682537">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="381819563">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="440403926">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="403442402">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="6039644">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="440403925">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="440403927">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="6047518">
+		<tag k="_skip" v="yes"/>
+	</way>
 </osm>
 

@@ -441,6 +441,17 @@ bool MapManager::isPasazGrunwaldzkiCheck(MapObject& mapObject)
 		return false;
 }
 
+bool MapManager::isSedesowiecCheck(MapObject& mapObject)
+{
+	if (mapObject.getId() == 101212302 || mapObject.getId() == 402873616 || mapObject.getId() == 403442403 || mapObject.getId() == 440403931 || mapObject.getId() == 440403932 || mapObject.getId() == 440403933 ||
+		mapObject.getId() == 381819562 || mapObject.getId() == 402873614 || mapObject.getId() == 403442401 || mapObject.getId() == 440403922 || mapObject.getId() == 440403923 || mapObject.getId() == 440403924)
+	{
+		return true; 
+	}
+	else
+		return false;
+}
+
 bool MapManager::isBusShelterCheck(MapObject& mapObject)
 {
 	if (mapObject.building == "yes" && mapObject.amenity == "shelter")
