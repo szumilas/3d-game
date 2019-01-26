@@ -29,6 +29,7 @@
 #include "BusShelter.h"
 #include "Crossing.h"
 #include "PasazGrunwaldzki.h"
+#include "GrunwaldzkiCenter.h"
 #include "Sedesowiec.h"
 
 #include "TextureManager.h"
@@ -42,6 +43,7 @@ public:
 	void setTextures(TextureManager* textureManager) { MapManager::textureManager = textureManager; };
 	void readMap(const char * fileName);
 	void calculateNodesPositions();
+	void removeSkippedObjects();
 	void selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&) = nullptr);
 	void hideObjects();
 	void unhideObjects();
@@ -62,6 +64,7 @@ private:
 	void applyOverlays(MapObject& mapObject);
 
 	bool isPasazGrunwaldzkiCheck(MapObject& mapObject);
+	bool isGrunwaldzkiCenterCheck(MapObject& mapObject);
 	bool isSedesowiecCheck(MapObject& mapObject);
 	bool isBusShelterCheck(MapObject& mapObject);
 	bool isCrossingCheck(MapObject& mapObject);
@@ -82,13 +85,18 @@ private:
 	template <typename T>
 	void addObject(MapObject& newMapObject)
 	{
-		mapObjects.push_back(std::make_unique<T>(newMapObject));
-		newMapObject._height = mapObjects.back()->_height;
-		if (std::is_same<T, Building>::value || std::is_same<T, PasazGrunwaldzki>::value || std::is_same<T, Sedesowiec>::value)
+		if (newMapObject._skip != "yes")
 		{
-			//mapObjects.back()->setTextureId(textureManager->textureIds.at(Texture::Te));
-			mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
-			//mapObjects.back()->setTextureId(textureManager->textureIds[1]);
+			mapObjects.push_back(std::make_unique<T>(newMapObject));
+			newMapObject._height = mapObjects.back()->_height;
+			if (std::is_same<T, Building>::value || std::is_same<T, PasazGrunwaldzki>::value || std::is_same<T, GrunwaldzkiCenter>::value || std::is_same<T, Sedesowiec>::value)
+			{
+				//mapObjects.back()->setTextureId(textureManager->textureIds.at(Texture::Te));
+			
+					mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
+
+				//mapObjects.back()->setTextureId(textureManager->textureIds[1]);
+			}
 		}
 	}
 
@@ -178,6 +186,7 @@ private:
 	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
 	{
 		{ &MapManager::isPasazGrunwaldzkiCheck, &MapManager::addObject<PasazGrunwaldzki> },
+		{ &MapManager::isGrunwaldzkiCenterCheck, &MapManager::addObject<GrunwaldzkiCenter> },
 		{ &MapManager::isSedesowiecCheck, &MapManager::addObject<Sedesowiec> },
 		{ &MapManager::isBusShelterCheck, &MapManager::addObject<BusShelter> },
 		{ &MapManager::isCrossingCheck, &MapManager::addObject<Crossing> },

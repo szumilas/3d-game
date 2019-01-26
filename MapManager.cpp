@@ -62,6 +62,7 @@ void MapManager::readMap(const char * fileName)
 	createNodesMap();
 	createMapObjectsArray();
 	calculateNodesPositions();
+	removeSkippedObjects();
 
 	
 	calculateObjectsFinalGeometry();
@@ -184,15 +185,12 @@ void MapManager::createMapObjectsArray()
 
 			mapObject.applyKnownValues();
 
-			if (mapObject._skip != "yes")
+			for (auto& check : objectDetector)
 			{
-				for (auto& check : objectDetector)
+				if ((this->*check.first)(mapObject))
 				{
-					if ((this->*check.first)(mapObject))
-					{
-						(this->*check.second)(mapObject);
-						break;
-					}
+					(this->*check.second)(mapObject);
+					break;
 				}
 			}
 		}
@@ -292,7 +290,7 @@ void MapManager::addRelationalMapObjectsToArray()
 	{
 		relationalMapObject.createNodeGeometry(ways, nodes);
 
-		if (relationalMapObject._skip != "yes" && !relationalMapObject.points.empty())
+		if (!relationalMapObject.points.empty())
 		{
 			for (auto& check : objectDetector)
 			{
@@ -431,9 +429,27 @@ void MapManager::calculateNodesPositions()
 	}
 }
 
+void MapManager::removeSkippedObjects()
+{
+	mapObjects.erase(
+		std::remove_if(mapObjects.begin(), mapObjects.end(), [&](const std::unique_ptr<MapObject>& a) {return a->_skip == "yes"; }),
+		mapObjects.end());
+}
+
 bool MapManager::isPasazGrunwaldzkiCheck(MapObject& mapObject)
 {
 	if (mapObject.getId() == 101195833 || mapObject.getId() == 101212793 || mapObject.getId() == 101213837 || mapObject.getId() == 101189502)
+	{
+		return true; 
+	}
+	else
+		return false;
+}
+
+bool MapManager::isGrunwaldzkiCenterCheck(MapObject& mapObject)
+{
+	if (mapObject.getId() == 101195194 || mapObject.getId() == 101212152 || mapObject.getId() == 101207075 || mapObject.getId() == 101215218 ||
+		mapObject.getId() == 1442935 || mapObject.getId() == 101188144 || mapObject.getId() == 101191558)
 	{
 		return true; 
 	}

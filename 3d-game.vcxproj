@@ -141,6 +141,7 @@
     <ClCompile Include="Crossing.cpp" />
     <ClCompile Include="Footway.cpp" />
     <ClCompile Include="GreenArea.cpp" />
+    <ClCompile Include="GrunwaldzkiCenter.cpp" />
     <ClCompile Include="HighlightedObject.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="MapObject.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Footway.h" />
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="GreenArea.h" />
+    <ClInclude Include="GrunwaldzkiCenter.h" />
     <ClInclude Include="HighlightedObject.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />

@@ -664,5 +664,41 @@
 	<way id="6047518">
 		<tag k="_skip" v="yes"/>
 	</way>
+	<way id="101188144">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101195194">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101212152">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101203044">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101209250">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101215123">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101192203">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101209601">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101205636">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101189757">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="1442935">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101215218">
+		<tag k="roof:shape" v="flat"/>
+	</way>
 </osm>
 

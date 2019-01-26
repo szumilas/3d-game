@@ -11,7 +11,9 @@ struct Color
 
 	Color mixColor(Color& second) { return Color{(red + second.red) / 2, (green + second.green) / 2 , (blue + second.blue) / 2 }; }
 	static Color white() { return Color{ 1.0f, 1.0f, 1.0f }; }
+	static Color black() { return Color{ 0.0f, 0.0f, 0.0f }; }
 	static Color lightGray() { return Color{ 0.8f, 0.8f, 0.8f }; }
+	static Color darkGray() { return Color{ 0.2f, 0.2f, 0.2f }; }
 	static Color gray() { return Color{ 0.5f, 0.5f, 0.5f }; }
 };
 
