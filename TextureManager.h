@@ -67,6 +67,7 @@ public:
 		{ Textures::pasaz_grunwaldzki_front, 5.0f, 10.0f, "pasaz_grunwaldzki_front.png" },
 		{ Textures::glass_elevation, 5.0f, 5.0f, "glass_elevation.jpg" },
 		{ Textures::grunwaldzki, 6.0f, 3.0f, "grunwaldzki.png" },
+		{ Textures::PwrC13, 10.0f, 6.0f, "PwrC13.png" },
 		{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
 	};
 

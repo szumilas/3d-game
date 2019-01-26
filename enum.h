@@ -35,6 +35,7 @@ enum class Textures : long
 	pasaz_grunwaldzki_front,
 	glass_elevation,
 	grunwaldzki,
+	PwrC13,
 	no_texture,
 };
 

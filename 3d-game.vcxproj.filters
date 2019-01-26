@@ -114,6 +114,9 @@
     <ClCompile Include="GrunwaldzkiCenter.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="PwrC13.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -213,6 +216,9 @@
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="GrunwaldzkiCenter.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="PwrC13.h">
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>

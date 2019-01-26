@@ -457,6 +457,16 @@ bool MapManager::isGrunwaldzkiCenterCheck(MapObject& mapObject)
 		return false;
 }
 
+bool MapManager::isPwrC13Check(MapObject& mapObject)
+{
+	if (mapObject.getId() == 353785323 || mapObject.getId() == 479882765 || mapObject.getId() == 479882766)
+	{
+		return true; 
+	}
+	else
+		return false;
+}
+
 bool MapManager::isSedesowiecCheck(MapObject& mapObject)
 {
 	if (mapObject.getId() == 101212302 || mapObject.getId() == 402873616 || mapObject.getId() == 403442403 || mapObject.getId() == 440403931 || mapObject.getId() == 440403932 || mapObject.getId() == 440403933 ||

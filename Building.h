@@ -35,8 +35,8 @@ protected:
 		unsigned int idTexture;
 		Textures textureName;
 		float wallLenght;
-		float xRatio;
-		float yRatio;
+		float xRatio = 0.0f;
+		float yRatio = 0.0f;
 	};
 
 	std::vector<Wall> walls;

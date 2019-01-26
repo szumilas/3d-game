@@ -31,6 +31,7 @@
 #include "PasazGrunwaldzki.h"
 #include "GrunwaldzkiCenter.h"
 #include "Sedesowiec.h"
+#include "PwrC13.h"
 
 #include "TextureManager.h"
 
@@ -65,6 +66,7 @@ private:
 
 	bool isPasazGrunwaldzkiCheck(MapObject& mapObject);
 	bool isGrunwaldzkiCenterCheck(MapObject& mapObject);
+	bool isPwrC13Check(MapObject& mapObject);
 	bool isSedesowiecCheck(MapObject& mapObject);
 	bool isBusShelterCheck(MapObject& mapObject);
 	bool isCrossingCheck(MapObject& mapObject);
@@ -89,7 +91,7 @@ private:
 		{
 			mapObjects.push_back(std::make_unique<T>(newMapObject));
 			newMapObject._height = mapObjects.back()->_height;
-			if (std::is_same<T, Building>::value || std::is_same<T, PasazGrunwaldzki>::value || std::is_same<T, GrunwaldzkiCenter>::value || std::is_same<T, Sedesowiec>::value)
+			if (std::is_same<T, Building>::value || std::is_base_of<Building, T>::value)
 			{
 				//mapObjects.back()->setTextureId(textureManager->textureIds.at(Texture::Te));
 			
@@ -187,6 +189,7 @@ private:
 	{
 		{ &MapManager::isPasazGrunwaldzkiCheck, &MapManager::addObject<PasazGrunwaldzki> },
 		{ &MapManager::isGrunwaldzkiCenterCheck, &MapManager::addObject<GrunwaldzkiCenter> },
+		{ &MapManager::isPwrC13Check, &MapManager::addObject<PwrC13> },
 		{ &MapManager::isSedesowiecCheck, &MapManager::addObject<Sedesowiec> },
 		{ &MapManager::isBusShelterCheck, &MapManager::addObject<BusShelter> },
 		{ &MapManager::isCrossingCheck, &MapManager::addObject<Crossing> },

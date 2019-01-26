@@ -37,8 +37,10 @@ void Building::calculateFinalGeometry(TextureManager* textureManager)
 	for (auto& wall : walls)
 	{
 		wall.idTexture = textureManager->textures[static_cast<long>(wall.textureName)].idTexture;
-		wall.xRatio = static_cast<int>(wall.wallLenght / textureManager->textures[static_cast<long>(wall.textureName)].realWidth);
-		wall.yRatio = static_cast<int>(_height - _min_height) / textureManager->textures[static_cast<long>(wall.textureName)].realHeight;
+		if(!wall.xRatio)
+			wall.xRatio = static_cast<int>(wall.wallLenght / textureManager->textures[static_cast<long>(wall.textureName)].realWidth);
+		if (!wall.yRatio)
+			wall.yRatio = static_cast<int>(_height - _min_height) / textureManager->textures[static_cast<long>(wall.textureName)].realHeight;
 
 		if (!wall.xRatio)
 			wall.xRatio = 1.0f;

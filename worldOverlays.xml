@@ -700,5 +700,11 @@
 	<way id="101215218">
 		<tag k="roof:shape" v="flat"/>
 	</way>
+	<way id="316817198">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101124650">
+		<tag k="_skip" v="yes"/>
+	</way>
 </osm>
 
