@@ -68,6 +68,7 @@ private:
 	int countTrianglesWithPoint(long long id);
 	void removeBrokenTriangles();
 	void removeEmptyWavefronts();
+	void generateRoof(float roofStartLevel, float roofAngle);
 
 
 	Point getRoofPoint(long long id)
@@ -184,7 +185,7 @@ private:
 	std::vector<std::tuple<Point, Point, long>> wavefrontLines;
 	std::vector<std::tuple<long long, Point, Point>> longRoofLines;
 	std::vector<Point> specialPoints;
-	std::vector<RoofSurface> roofSurfaces;
+	std::vector<std::pair<bool, std::vector<RoofSurface>>> roofsSurfaces;
 
 	//BFS lgorithm:
 	std::set<Point> graphIdsSet;

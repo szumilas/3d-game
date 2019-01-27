@@ -21,6 +21,8 @@ protected:
 
 public:
 
+	bool roofNeeded = true;
+
 
 private:
 

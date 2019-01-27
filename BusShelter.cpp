@@ -6,6 +6,8 @@ BusShelter::BusShelter(MapObject& mapObject) : Building(mapObject)
 	_min_height = 0.0f;
 
 	roof_shape = "flat";
+
+	roofNeeded = false;
 };
 
 void BusShelter::calculateFinalGeometry(TextureManager* textureManager)

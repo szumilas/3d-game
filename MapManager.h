@@ -90,14 +90,10 @@ private:
 		if (newMapObject._skip != "yes")
 		{
 			mapObjects.push_back(std::make_unique<T>(newMapObject));
-			newMapObject._height = mapObjects.back()->_height;
-			if (std::is_same<T, Building>::value || std::is_base_of<Building, T>::value)
-			{
-				//mapObjects.back()->setTextureId(textureManager->textureIds.at(Texture::Te));
 			
-					mapObjects.push_back(std::make_unique<Roof>(Roof(newMapObject)));
-
-				//mapObjects.back()->setTextureId(textureManager->textureIds[1]);
+			if ((std::is_same<T, Building>::value || std::is_base_of<Building, T>::value) && dynamic_cast<Building*>(mapObjects.back().get())->roofNeeded)
+			{
+				mapObjects.push_back(std::make_unique<Roof>(Roof(*mapObjects.back().get())));
 			}
 		}
 	}

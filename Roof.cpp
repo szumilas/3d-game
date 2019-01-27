@@ -25,66 +25,70 @@ Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 
 void Roof::calculateFinalGeometry(TextureManager* textureManager)
 {
-	if (roof_shape == "flat")
+	for (auto& roofSurfaces : roofsSurfaces)
 	{
-		for (auto& roofSurface : roofSurfaces)
+		if (roofSurfaces.first == false)
 		{
-			Polygon newPolygon;
-
-			for (auto& point : roofSurface.points)
+			for (auto& roofSurface : roofSurfaces.second)
 			{
-				newPolygon.points.push_back({ point.x, point.y, point.z });
-				newPolygon.texturePoints.push_back({ point.x / textureManager->textures[static_cast<long>(Textures::roof)].realWidth, point.y / textureManager->textures[static_cast<long>(Textures::roof)].realHeight });
+				Polygon newPolygon;
+
+				for (auto& point : roofSurface.points)
+				{
+					newPolygon.points.push_back({ point.x, point.y, point.z });
+					newPolygon.texturePoints.push_back({ point.x / textureManager->textures[static_cast<long>(Textures::roof)].realWidth, point.y / textureManager->textures[static_cast<long>(Textures::roof)].realHeight });
+				}
+
+				newPolygon.noOfPoints = newPolygon.texturePoints.size();
+				newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::roof_asphalt)].idTexture;
+				newPolygon.color = Color{ 0.7f, 0.7f, 0.7f };
+
+				newPolygon.additionalColor = Color{ 1.0f, 0.0f, 0.0f };
+
+				polygons.push_back(newPolygon);
 			}
-
-			newPolygon.noOfPoints = newPolygon.texturePoints.size();
-			newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::roof_asphalt)].idTexture;
-			newPolygon.color = Color{ 0.7f, 0.7f, 0.7f };
-
-			newPolygon.additionalColor = Color{ 1.0f, 0.0f, 0.0f };
-
-			polygons.push_back(newPolygon);
 		}
-	}
-	else
-	{
-		for (auto& roofSurface : roofSurfaces)
+		else
 		{
-			Polygon newPolygon;
-
-			auto& firstPoint = roofSurface.points[0];
-			auto& lastPoint = roofSurface.points.back();
-
-			vector2D v1(firstPoint, lastPoint);
-			vector2D v2(Point(0.0f, 0.0f), Point(1.0f, 0.0f));
-			auto angle = vector2D::realAngle(v1, v2);
-
-			angle *= -1;
-
-			for (auto& point : roofSurface.points)
+			for (auto& roofSurface : roofSurfaces.second)
 			{
-				newPolygon.points.push_back({ point.x, point.y, point.z });
+				Polygon newPolygon;
 
-				Point pointToBeRotated;
-				Point rotatedPoint;
-				pointToBeRotated.x = point.x - firstPoint.x;
-				pointToBeRotated.y = point.y - firstPoint.y;
+				auto& firstPoint = roofSurface.points[0];
+				auto& lastPoint = roofSurface.points.back();
 
-				rotatedPoint.x = pointToBeRotated.x * cos(angle) - pointToBeRotated.y * sin(angle);
-				rotatedPoint.y = pointToBeRotated.x * sin(angle) + pointToBeRotated.y * cos(angle);
+				vector2D v1(firstPoint, lastPoint);
+				vector2D v2(Point(0.0f, 0.0f), Point(1.0f, 0.0f));
+				auto angle = vector2D::realAngle(v1, v2);
 
-				newPolygon.texturePoints.push_back({ rotatedPoint.x / textureManager->textures[static_cast<long>(Textures::roof)].realWidth, rotatedPoint.y / textureManager->textures[static_cast<long>(Textures::roof)].realHeight });
+				angle *= -1;
+
+				for (auto& point : roofSurface.points)
+				{
+					newPolygon.points.push_back({ point.x, point.y, point.z });
+
+					Point pointToBeRotated;
+					Point rotatedPoint;
+					pointToBeRotated.x = point.x - firstPoint.x;
+					pointToBeRotated.y = point.y - firstPoint.y;
+
+					rotatedPoint.x = pointToBeRotated.x * cos(angle) - pointToBeRotated.y * sin(angle);
+					rotatedPoint.y = pointToBeRotated.x * sin(angle) + pointToBeRotated.y * cos(angle);
+
+					newPolygon.texturePoints.push_back({ rotatedPoint.x / textureManager->textures[static_cast<long>(Textures::roof)].realWidth, rotatedPoint.y / textureManager->textures[static_cast<long>(Textures::roof)].realHeight });
+				}
+
+				newPolygon.noOfPoints = newPolygon.texturePoints.size();
+				newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::roof)].idTexture;
+				newPolygon.color = roofSurface.color;
+
+				auto newColor = roofSurface.color.mixColor(Color{ 1.0f, 0.0f, 0.0f });
+				newPolygon.additionalColor = roofSurface.color.mixColor(newColor);
+
+				polygons.push_back(newPolygon);
 			}
-
-			newPolygon.noOfPoints = newPolygon.texturePoints.size();
-			newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::roof)].idTexture;
-			newPolygon.color = roofSurface.color;
-
-			auto newColor = roofSurface.color.mixColor(Color{ 1.0f, 0.0f, 0.0f });
-			newPolygon.additionalColor = roofSurface.color.mixColor(newColor);
-
-			polygons.push_back(newPolygon);
 		}
+
 	}
 }
 
@@ -708,9 +712,34 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 {
 	MapObject::calculateXYfromRef(nodes);
 
-	gamma = 30 / 180.0 * 3.14;
+	generateRoof(_roof_level, 30);
+	if(_min_height)
+		generateRoof(_min_height, 0);
+
+}
 
 
+
+void Roof::generateRoof(float roofStartLevel, float roofAngle)
+{
+	gamma = roofAngle / 180.0 * 3.14;
+
+	roofPoints.clear();
+	roofTriangleEdges.clear();
+	triangles.clear();
+	wavefront.clear();
+	roofLines.clear();
+
+	surfaces.clear();
+
+	wavefrontLines.clear();
+	longRoofLines.clear();
+	specialPoints.clear();
+	std::vector<RoofSurface> roofSurfaces;
+
+	graphIdsSet.clear();
+	graphIds.clear();
+	connections.clear();
 
 
 	for (size_t q = 0; q < points.size() - 1; q++)
@@ -718,9 +747,14 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 		RoofPoint roofPoint;
 		roofPoint.id = q;
 		roofPoint.point = points[q];
-		roofPoint.point.z = _roof_level;
+		roofPoint.point.z = roofStartLevel;
 
 		roofPoints.push_back(roofPoint);
+	}
+
+	if (roofAngle == 0)
+	{
+		generateFlatRoof();
 	}
 
 	auto roofPointsCopy = roofPoints;
@@ -742,7 +776,7 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 				RoofPoint roofPoint;
 				roofPoint.id = q;
 				roofPoint.point = points[q];
-				roofPoint.point.z = _roof_level;
+				roofPoint.point.z = roofStartLevel;
 
 				roofPoints.push_back(roofPoint);
 			}
@@ -1263,19 +1297,23 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 
 		std::vector<Point> roofSurfaceTexturePoins;
 		auto deltaX = maxX - minX;
-		auto detlaZ = maxZ - _roof_level;
+		auto detlaZ = maxZ - roofStartLevel;
 
 		for (auto& point : roofSurface.points)
 		{
-			roofSurfaceTexturePoins.push_back({ (point.x - minX) / deltaX, (point.z - _roof_level) / detlaZ, 0 });
+			roofSurfaceTexturePoins.push_back({ (point.x - minX) / deltaX, (point.z - roofStartLevel) / detlaZ, 0 });
 		}
 
 		roofSurface.texturePoints = roofSurfaceTexturePoins;
 	}
+
+	roofsSurfaces.push_back({ true, roofSurfaces });
 }
 
 void Roof::generateFlatRoof()
 {
+	std::vector<RoofSurface> roofSurfaces;
+
 	_color.red = 0.4f;
 	_color.green = 0.4f;
 	_color.blue = 0.4f;
@@ -1290,6 +1328,8 @@ void Roof::generateFlatRoof()
 		roofSurface.push_back(getRoofPoint(triangle.idp3));
 		roofSurfaces.push_back({ roofSurface, roofSurface, Color{ _color.red, _color.green, _color.blue } });
 	}
+
+	roofsSurfaces.push_back({ false, roofSurfaces });
 
 	roof_shape = "flat";
 }
