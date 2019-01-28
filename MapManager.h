@@ -52,6 +52,8 @@ public:
 	void applyMapEditorKeys(Orbit& orbit);
 	void saveOverlays();
 	void addOverlayAttribute(const char* attribute, const char* value);
+	void generatePolygonsFile();
+	void loadPolygonsFromFile();
 
 private:
 	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
@@ -100,6 +102,7 @@ private:
 
 public:
 
+	bool loadedFromPolygonsFile = false;
 
 private:
 
@@ -208,5 +211,6 @@ public:
 
 	std::map<long long, node> nodes;
 	std::vector<std::unique_ptr<MapObject>> mapObjects;
+	std::vector<std::unique_ptr<Object3D>> polygonsObjects;
 
 };

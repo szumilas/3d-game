@@ -24,6 +24,19 @@ private:
 
 public:
 
+	struct Polygon
+	{
+		std::vector<Point> points;
+		std::vector<Point> texturePoints;
+		unsigned int noOfPoints;
+		unsigned int idTexture;
+		Color color;
+		Color additionalColor;
+	};
+
+
+	std::vector<Polygon> polygons;
+
 
 protected:
 
@@ -38,20 +51,9 @@ protected:
 		float blue;
 	};
 
-	struct Polygon
-	{
-		std::vector<Point> points;
-		std::vector<Point> texturePoints;
-		unsigned int noOfPoints;
-		unsigned int idTexture;
-		Color color;
-		Color additionalColor;
-	};
-
 	Point position;
 	std::vector<Point> mesh;
 	std::vector<MeshTriangle> triangles;
-	std::vector<Polygon> polygons;
 
 	float X;
 	float Y;

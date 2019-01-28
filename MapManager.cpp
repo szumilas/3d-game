@@ -906,3 +906,84 @@ void MapManager::calculateMapBoundingCoordinates()
 			maxY = mapObject->maxY;
 	}
 }
+
+void MapManager::generatePolygonsFile()
+{
+	std::ofstream file;
+	file.open("Data/World.txt", std::ios::out);
+
+	for (auto& mapObject : mapObjects)
+	{
+		for (auto& polygon : mapObject->polygons)
+		{
+			if (polygon.noOfPoints < 3)
+				continue;
+			
+			file << polygon.idTexture << " ";
+			file << polygon.color.red << " " << polygon.color.green << " " << polygon.color.blue << " ";
+			file << polygon.additionalColor.red << " " << polygon.additionalColor.green << " " << polygon.additionalColor.blue << " ";
+			file << polygon.noOfPoints << " ";
+
+			for (auto& point : polygon.points)
+			{
+				file << point.x << " " << point.y << " " << point.z << " ";
+			}
+			for (auto& texturePoint : polygon.texturePoints)
+			{
+				file << texturePoint.x << " " << texturePoint.y << " " << texturePoint.z << " ";
+			}
+
+			file << std::endl;
+		}
+	}
+
+	file.close();
+
+}
+void MapManager::loadPolygonsFromFile()
+{
+	loadedFromPolygonsFile = true;
+
+	std::ifstream file;
+	file.open("Data/World.txt");
+
+	Object3D::Polygon objectPolygon;
+	file >> objectPolygon.idTexture;
+	
+	do
+	{
+		Object3D newWorldObject;
+
+		file >> objectPolygon.color.red;
+		file >> objectPolygon.color.green;
+		file >> objectPolygon.color.blue;
+
+		file >> objectPolygon.additionalColor.red;
+		file >> objectPolygon.additionalColor.green;
+		file >> objectPolygon.additionalColor.blue;
+
+		file >> objectPolygon.noOfPoints;
+
+		for (int q = 0; q < objectPolygon.noOfPoints; q++)
+		{
+			Point newPoint;
+			file >> newPoint.x >> newPoint.y >> newPoint.z;
+			objectPolygon.points.push_back(std::move(newPoint));
+		}
+
+		for (int q = 0; q < objectPolygon.noOfPoints; q++)
+		{
+			Point newTexturePoint;
+			file >> newTexturePoint.x >> newTexturePoint.y >> newTexturePoint.z;
+			objectPolygon.texturePoints.push_back(std::move(newTexturePoint));
+		}
+
+		newWorldObject.polygons.push_back(objectPolygon);
+		polygonsObjects.push_back(std::make_unique<Object3D>(newWorldObject));
+		objectPolygon.points.clear();
+		objectPolygon.texturePoints.clear();
+
+	} while (file >> objectPolygon.idTexture);
+
+	file.close();
+}
