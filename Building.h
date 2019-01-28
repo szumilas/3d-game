@@ -14,6 +14,7 @@ public:
 private:
 
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
+	void applyGenericTextures(TextureManager* textureManager);
 
 protected:
 
@@ -25,6 +26,11 @@ public:
 
 
 private:
+
+	bool genericWallTexture = false;
+	Textures emptyWallTextureName;
+	Textures smallWallTextureName;
+	Textures bigWallTextureName;
 
 
 protected:

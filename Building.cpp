@@ -1,4 +1,5 @@
 #include "Building.h"
+#include <typeinfo>
 
 Building::Building(MapObject& mapObject) : MapObject(mapObject)
 {
@@ -17,9 +18,58 @@ Building::Building(MapObject& mapObject) : MapObject(mapObject)
 	}
 	if (colour.empty())
 	{
-		_color.red = 0.5f;
-		_color.green = 0.5f;
-		_color.blue = 0.5f;
+		if (building == "roof")
+		{
+			_color = Color::black();
+		}
+		if (typeid(*this) == typeid(Building) && building != "office")
+		{
+			if ((getId() / 10) % 10 == 0)
+			{
+				_color = Color{ 1.0f, 1.0f, 1.0f };
+			}
+			else if ((getId() / 10) % 10 == 1)
+			{
+				_color = Color{ 1.0f, 1.0f, 0.9f };
+
+			}
+			else if ((getId() / 10) % 10 == 2)
+			{
+				_color = Color{ 1.0f, 0.9f, 1.0f };
+			}
+			else if ((getId() / 10) % 10 == 3)
+			{
+				_color = Color{ 1.0f, 0.9f, 0.9f };
+			}
+			else if ((getId() / 10) % 10 == 4)
+			{
+				_color = Color{ 0.9f, 1.0f, 1.0f };
+			}
+			else if ((getId() / 10) % 10 == 5)
+			{
+				_color = Color{ 0.9f, 1.0f, 0.9f };
+			}
+			else if ((getId() / 10) % 10 == 6)
+			{
+				_color = Color{ 0.9f, 0.9f, 1.0f };
+			}
+			else if ((getId() / 10) % 10 == 7)
+			{
+				_color = Color{ 0.9f, 0.9f, 0.9f };
+			}
+			else if ((getId() / 10) % 10 == 8)
+			{
+				_color = Color{ 0.9f, 1.0f, 0.96f };
+			}
+			else if ((getId() / 10) % 10 == 9)
+			{
+				_color = Color{ 0.9f, 0.95f, 1.0f };
+			}
+		}
+		else
+		{
+			_color = Color::gray();
+		}
 	}
 };
 
@@ -30,17 +80,27 @@ void Building::calculateXYfromRef(const std::map<long long, node> &nodes)
 	MapObject::optimizePoints();
 
 	generateWalls();
+
+	if (points.size() <= 3)
+	{
+		_skip = "yes";
+	}
 }
 
 void Building::calculateFinalGeometry(TextureManager* textureManager)
 {
+	if (genericWallTexture)
+	{
+		applyGenericTextures(textureManager);
+	}
+
 	for (auto& wall : walls)
 	{
 		wall.idTexture = textureManager->textures[static_cast<long>(wall.textureName)].idTexture;
 		if(!wall.xRatio)
-			wall.xRatio = static_cast<int>(wall.wallLenght / textureManager->textures[static_cast<long>(wall.textureName)].realWidth);
+			wall.xRatio = round(wall.wallLenght / textureManager->textures[static_cast<long>(wall.textureName)].realWidth);
 		if (!wall.yRatio)
-			wall.yRatio = static_cast<int>(_height - _min_height) / textureManager->textures[static_cast<long>(wall.textureName)].realHeight;
+			wall.yRatio = round(_height - _min_height) / textureManager->textures[static_cast<long>(wall.textureName)].realHeight;
 
 		if (!wall.xRatio)
 			wall.xRatio = 1.0f;
@@ -90,7 +150,7 @@ void Building::generateWalls()
 		newWall.color.blue = _color.blue;
 
 		vector2D wallLine(newWall.p1, newWall.p2);
-		shadeTheWall(newWall.color, wallLine, 0.5f);
+		shadeTheWall(newWall.color, wallLine, shadePower);
 
 		newWall.wallLenght = wallLine.length();
 
@@ -99,39 +159,134 @@ void Building::generateWalls()
 
 	for (auto& wall : walls)
 	{
-		Textures wallTexture = Textures::apartment_windows;
+		Textures wallTexture = Textures::no_texture;
 
-		if (building == "yes" && _height == 15)
-		{
-			if (wall.wallLenght < 4)
-			{
-				wallTexture = Textures::tenement_house_no_windows;
-			}
-			else
-			{
-				wallTexture = Textures::tenement_house_windows;
-			}
-		}
-		else if (building == "office")
+		if (building == "office")
 		{
 			wallTexture = Textures::office_windows;
 		}
-		else
+		else if (building == "roof")
 		{
-			if (wall.wallLenght < 4)
+			wallTexture = Textures::no_texture;
+		}
+		else if (typeid(*this) == typeid(Building))
+		{
+			if (getId() % 10 == 0)
 			{
-				wallTexture = Textures::apartment_no_windows;
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_00_empty;
+				smallWallTextureName = Textures::building_00_small;
+				bigWallTextureName = Textures::building_00_big;
 			}
-			else if (wall.wallLenght >= 4 && wall.wallLenght < 200)
+			else if (getId() % 10 == 1)
 			{
-				wallTexture = Textures::apartment_one_window;
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_01_empty;
+				smallWallTextureName = Textures::building_01_small;
+				bigWallTextureName = Textures::building_01_big;
 			}
-			else
+			else if (getId() % 10 == 2)
 			{
-				wallTexture = Textures::apartment_windows;
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_02_empty;
+				smallWallTextureName = Textures::building_02_small;
+				bigWallTextureName = Textures::building_02_big;
+			}
+			else if (getId() % 10 == 3)
+			{
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_03_empty;
+				smallWallTextureName = Textures::building_03_small;
+				bigWallTextureName = Textures::building_03_big;
+			}
+			else if (getId() % 10 == 4)
+			{
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_04_empty;
+				smallWallTextureName = Textures::building_04_small;
+				bigWallTextureName = Textures::building_04_big;
+			}
+			else if (getId() % 10 == 5)
+			{
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_05_empty;
+				smallWallTextureName = Textures::building_05_small;
+				bigWallTextureName = Textures::building_05_big;
+			}
+			else if (getId() % 10 == 6)
+			{
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_06_empty;
+				smallWallTextureName = Textures::building_06_small;
+				bigWallTextureName = Textures::building_06_big;
+			}
+			else if (getId() % 10 == 7)
+			{
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_07_empty;
+				smallWallTextureName = Textures::building_07_small;
+				bigWallTextureName = Textures::building_07_big;
+			}
+			else if (getId() % 10 == 8)
+			{
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_05_empty;
+				smallWallTextureName = Textures::building_05_small;
+				bigWallTextureName = Textures::building_05_big;
+			}
+			else if (getId() % 10 == 9)
+			{
+				genericWallTexture = true;
+				emptyWallTextureName = Textures::building_04_empty;
+				smallWallTextureName = Textures::building_04_small;
+				bigWallTextureName = Textures::building_04_big;
 			}
 		}
 
 		wall.textureName = wallTexture;
 	}
+}
+
+void Building::applyGenericTextures(TextureManager* textureManager)
+{
+	for (auto& wall : walls)
+	{
+		auto exactBigTextureRatio = wall.wallLenght / textureManager->textures[static_cast<long>(bigWallTextureName)].realWidth;
+		auto roundedBigTextureRation = round(exactBigTextureRatio);
+
+		if (roundedBigTextureRation)
+		{
+			if (exactBigTextureRatio < roundedBigTextureRation)
+			{
+				std::swap(exactBigTextureRatio, roundedBigTextureRation);
+			}
+
+			if (exactBigTextureRatio / roundedBigTextureRation < 1.10)
+			{
+				wall.textureName = bigWallTextureName;
+				continue;
+			}
+		}
+
+		auto exactSmallTextureRatio = wall.wallLenght / textureManager->textures[static_cast<long>(smallWallTextureName)].realWidth;
+		auto roundedSmallTextureRation = round(exactSmallTextureRatio);
+
+		if (roundedSmallTextureRation)
+		{
+			if (exactSmallTextureRatio < roundedSmallTextureRation)
+			{
+				std::swap(exactSmallTextureRatio, roundedSmallTextureRation);
+			}
+
+			if (exactSmallTextureRatio / roundedSmallTextureRation < 1.15)
+			{
+				wall.textureName = smallWallTextureName;
+				continue;
+			}
+		}
+		
+
+		wall.textureName = emptyWallTextureName;
+	}
+
 }

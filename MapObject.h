@@ -38,6 +38,7 @@ protected:
 	void createBothRailsForSymmetryAxis(const std::vector<Point>& axisPoints, std::vector<Point>& finalLeftRail, std::vector<Point>& finalRightRail, float gauge);
 
 	double epsilon = 0.1;
+	float shadePower = 0.5;
 
 public:
 	//stats

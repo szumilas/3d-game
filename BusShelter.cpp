@@ -47,4 +47,7 @@ void BusShelter::generateWalls()
 	walls[0].color = Color{1.0f, 1.0f, 1.0f};
 	walls[1].color = Color{1.0f, 1.0f, 1.0f};
 
+	walls[0].yRatio = 1.0f;
+	walls[1].yRatio = 1.0f;
+
 }
