@@ -143,6 +143,7 @@
     <ClCompile Include="GreenArea.cpp" />
     <ClCompile Include="GrunwaldzkiCenter.cpp" />
     <ClCompile Include="HighlightedObject.cpp" />
+    <ClCompile Include="MapContainer.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Object3D.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="GreenArea.h" />
     <ClInclude Include="GrunwaldzkiCenter.h" />
     <ClInclude Include="HighlightedObject.h" />
+    <ClInclude Include="MapContainer.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="Object3D.h" />

@@ -24,6 +24,8 @@ private:
 
 public:
 
+	bool alreadyPrinted = false;
+
 	struct Polygon
 	{
 		std::vector<Point> points;
@@ -55,6 +57,7 @@ protected:
 	std::vector<Point> mesh;
 	std::vector<MeshTriangle> triangles;
 
+public:
 	float X;
 	float Y;
 	float Z;

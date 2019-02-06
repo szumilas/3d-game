@@ -679,6 +679,11 @@ void MapManager::applyMapEditorKeys(Orbit& orbit)
 	{
 		unhideObjects();
 	}
+	if (keys[static_cast<int>('C')])
+	{
+		currentCameraView++;
+		currentCameraView %= 2;
+	}
 
 	if (keys[static_cast<int>('0')])
 	{

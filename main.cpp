@@ -13,6 +13,7 @@
 #include "Orbit.h"
 #include "MapManager.h"
 #include "TextureManager.h"
+#include "MapContainer.h"
 
 
 
@@ -43,6 +44,8 @@ public:
 	
 	Point center;
 	Point lookAt;
+
+	std::vector<std::pair<Point, Point>> cameraViews;
 
 };
 
@@ -84,11 +87,14 @@ void init()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.1f);
 }
 
 
 MapManager mapManager;
 TextureManager textureManager;
+MapContainer mapContainer;
 
 int main(int argc, char**agrv)
 {
@@ -127,16 +133,37 @@ int main(int argc, char**agrv)
 
 		mapManager.setTextures(&textureManager);
 
-		mapManager.readMap("szczytnicka.osm");
+		//mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");
 		//mapManager.readMap("szczytnickaB.osm");
 		//mapManager.readMap("map.osm");
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		//mapManager.readMap("grunwaldWithRiver.osm");
+		mapManager.readMap("grunwaldWithRiver.osm");
+		//mapManager.readMap("trees.osm");
+		//mapManager.readMap("walls.osm");
 
 		//mapManager.readMap("streetDetail.osm");
+		//mapManager.readMap("lake.osm");
+		//mapManager.readMap("A1.osm");
+		//mapManager.readMap("d1only.osm");
+		//mapManager.readMap("river.osm");
+		//mapManager.readMap("curie3.osm");
+		//mapManager.readMap("shelter.osm");
+		//mapManager.readMap("stairs.osm");
+		//mapManager.readMap("pasaz.osm");
+		//mapManager.readMap("sedesowce.osm");
+		//mapManager.readMap("grunwaldzki.osm");
+		//mapManager.readMap("c13.osm");
+
+		//mapManager.generatePolygonsFile();
+		//mapManager.loadPolygonsFromFile();
+		//mapContainer.loadWorldIntoBuckets(&mapManager.polygonsObjects);
+		mapContainer.loadWorldIntoSections(mapManager.mapObjects);
+
+		camera.cameraViews.push_back({ obj.getCameraCenter(), obj.getCameraLookAt() });
+		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
 
 		glutMainLoop();
 	}
@@ -161,17 +188,19 @@ void display()
 	glLoadIdentity();
 
 	//camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
-	camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
+	//camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
+
+	camera.cameraViews[0] = { obj.getCameraCenter(), obj.getCameraLookAt() };
+	camera.cameraViews[1] = { orbit.getCameraCenter(), orbit.getCameraLookAt() };
+
+
+	camera.adjustCamera(camera.cameraViews[mapManager.currentCameraView].first, camera.cameraViews[mapManager.currentCameraView].second);
 
 	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
-	
-	for (auto& mapObject : mapManager.mapObjects)
-	{
-		if(!mapObject->isHidden)
-			mapObject->display();
-	}
+
+	mapContainer.displayWorld(obj.getCameraCenter(), obj.getCameraLookAt());
 
 	obj.printModel();
 	obj.printWheels();
@@ -205,7 +234,7 @@ void reshape(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	gluPerspective(angle, static_cast<float>(width) / height, 0.5, 3000);
+	gluPerspective(angle, static_cast<float>(width) / height, 0.5, 10000);
 	glMatrixMode(GL_MODELVIEW);
 
 	display();
@@ -232,8 +261,8 @@ void timer(int)
 	current_time = time(NULL);
 	if (current_time - previos_time > 0)
 	{
-
-		std::cout << noOfFrames / (current_time - previos_time) << std::endl;
+		int currentFPS = noOfFrames / (current_time - previos_time);
+		glutSetWindowTitle((std::string("3d game FPS: ") + std::to_string(currentFPS)).c_str());
 		previos_time = time(NULL);
 		noOfFrames = 0;
 	}
@@ -247,7 +276,8 @@ void keyboard(unsigned char key, int x, int y)
 	{
 	case 27: // Escape key
 		orbit.savePosition();
-		mapManager.saveOverlays();
+		if(!mapManager.loadedFromPolygonsFile)
+			mapManager.saveOverlays();
 		exit(0);
 		break;
 	}

@@ -103,6 +103,7 @@ private:
 public:
 
 	bool loadedFromPolygonsFile = false;
+	int currentCameraView = 1;
 
 private:
 

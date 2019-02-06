@@ -117,6 +117,9 @@
     <ClCompile Include="PwrC13.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="MapContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="PwrC13.h">
       <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MapContainer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

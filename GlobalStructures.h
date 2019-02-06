@@ -1,6 +1,6 @@
 #pragma once
 
-#define FPS 60
+#define FPS 30
 #define PI 3.1415926535
 
 struct Color
@@ -211,6 +211,13 @@ struct vector2D
 		double dist = sqrt(x * x + y * y);
 		x /= dist;
 		y /= dist;
+	}
+
+	void rotate(double angle)
+	{
+		double x2 = x * cos(angle) - y * sin(angle);
+		y = x * sin(angle) + y * cos(angle);
+		x = x2;
 	}
 
 	double x;
