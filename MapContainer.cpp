@@ -84,7 +84,7 @@ void MapContainer::displayWorld(Point& center, Point& lookAt)
 		}
 	}
 	
-	if(background->get() != nullptr)
+	if(background != nullptr)
 	{
 		background->get()->display();
 		background->get()->alreadyPrinted = false;
