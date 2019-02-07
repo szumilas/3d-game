@@ -84,8 +84,11 @@ void MapContainer::displayWorld(Point& center, Point& lookAt)
 		}
 	}
 	
-	background->get()->display();
-	background->get()->alreadyPrinted = false;
+	if(background->get() != nullptr)
+	{
+		background->get()->display();
+		background->get()->alreadyPrinted = false;
+	}
 }
 
 void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
@@ -147,7 +150,8 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 		}
 
 	}
-
-	background = &mapObjects.back();
+	
+	if(!mapObjects.empty())
+		background = &mapObjects.back();
 
 }

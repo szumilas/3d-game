@@ -2,6 +2,8 @@
 
 #include "Object3D.h"
 #include "Wheel.h"
+#include "enum.h"
+#include "TextureManager.h"
 
 class Car : public Object3D
 {
@@ -11,6 +13,8 @@ public:
 	Car();
 
 	void loadModel();
+	void importFromObjFile(const char* filePath, TextureManager* textureManager);
+	void display();
 
 	void move();
 	void accelerate();
@@ -36,8 +40,8 @@ private:
 
 	float steeringWheelAngle;
 
-	float v_max = 30; //[m/s]
-	float acceleration = 3; //[m/s^s]
+	float v_max = 60; //[m/s]
+	float acceleration = 6; //[m/s^s]
 
 	bool tryAccelerate;
 	bool trySlow;

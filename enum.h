@@ -60,6 +60,7 @@ enum class Textures : long
 	building_07_big,
 	building_07_small,
 	building_07_empty,
+	octavia,
 	no_texture,
 };
 

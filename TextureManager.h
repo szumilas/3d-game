@@ -92,6 +92,7 @@ public:
 		{ Textures::building_07_big, 12.0f, 15.0f, "building_07_big.jpg" },
 		{ Textures::building_07_small, 3.0f, 15.0f, "building_07_small.jpg" },
 		{ Textures::building_07_empty, 1.0f, 15.0f, "building_07_empty.jpg" },
+		{ Textures::octavia, -1.0f, -1.0f, "octavia.png" },
 		{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
 	};
 

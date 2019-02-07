@@ -126,21 +126,22 @@ int main(int argc, char**agrv)
 
 	try
 	{
-		obj.loadModel();
+		//obj.loadModel();
 		wheel.loadModel();
 
 		textureManager.readTextures();
 
 		mapManager.setTextures(&textureManager);
+		obj.importFromObjFile("Data/Cars/octavia.obj", &textureManager);
 
 		//mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");
-		//mapManager.readMap("szczytnickaB.osm");
+		mapManager.readMap("szczytnickaB.osm");
 		//mapManager.readMap("map.osm");
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		mapManager.readMap("grunwaldWithRiver.osm");
+		//mapManager.readMap("grunwaldWithRiver.osm");
 		//mapManager.readMap("trees.osm");
 		//mapManager.readMap("walls.osm");
 
@@ -202,8 +203,10 @@ void display()
 
 	mapContainer.displayWorld(obj.getCameraCenter(), obj.getCameraLookAt());
 
-	obj.printModel();
-	obj.printWheels();
+	//obj.printModel();
+	//obj.printWheels();
+	obj.display();
+	obj.alreadyPrinted = false;
 
 
 	//obj.printModel();

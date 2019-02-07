@@ -1,4 +1,6 @@
 #include "Car.h"
+#include <fstream>
+#include <sstream>
 
 Car::Car()
 {
@@ -24,6 +26,135 @@ Car::Car()
 	cameraCenter = Point{-8, 0, 5};
 	cameraLookAt = Point{0, 0, 3};
 
+}
+
+void Car::importFromObjFile(const char* filePath, TextureManager* textureManager)
+{
+	std::ifstream file;
+	file.open(filePath);
+
+	if (!file)
+		throw;
+
+	std::vector<Point> vertices(1);
+	std::vector<Point> textureVertices(1);
+	std::vector<std::vector<int>> faces;
+
+
+	std::string line;
+	std::string svalue;
+
+	do
+	{
+		getline(file, line);
+		std::stringstream ssline(line);
+
+		ssline >> svalue;
+
+		if (svalue == "v")
+		{
+			Point newPoint;
+			ssline >> newPoint.x;
+			ssline >> newPoint.z;
+			ssline >> newPoint.y;
+
+			//newPoint.x /= 10;
+			//newPoint.y /= 10;
+			//newPoint.z /= 10;
+
+			vertices.push_back(newPoint);
+		}
+		else if (svalue == "vt")
+		{
+			Point newPoint;
+			ssline >> newPoint.x;
+			ssline >> newPoint.y;
+
+			textureVertices.push_back(newPoint);
+		}
+		else if (svalue == "f")
+		{
+			int v = 0, vt = 0, vn = 0;
+			Polygon newPolygon;
+
+			std::stringstream ssfulldata(line);
+			getline(ssfulldata, svalue, ' ');
+
+			while (getline(ssfulldata, svalue, ' '))
+			{
+				std::stringstream data(svalue);
+				getline(data, svalue, '/');
+				v = stoi(svalue);
+
+				getline(data, svalue, '/');
+				vt = stoi(svalue);
+
+				getline(data, svalue, '/');
+				vn = stoi(svalue);
+
+				newPolygon.points.push_back(vertices[v]);
+				newPolygon.texturePoints.push_back(textureVertices[vt]);
+			}
+
+			newPolygon.noOfPoints = newPolygon.points.size();
+			newPolygon.color = Color::white();
+			newPolygon.idTexture = textureManager->textures[static_cast<int>(Textures::octavia)].idTexture;
+			polygons.push_back(newPolygon);
+
+		}
+		else if (svalue == "usemtl")
+		{
+			//vertices.resize(1);
+			//textureVertices.resize(1);
+		}
+	} while (line != "#EOF");
+
+	float maxX = 0.0f;
+	float maxY = 0.0f;
+	float minX = 100.0f;
+	float minY = 100.0f;
+
+	for (auto& polygon : polygons)
+	{
+		for (auto& point : polygon.points)
+		{
+			if (point.x > maxX)
+			{
+				maxX = point.x;
+			}
+			if (point.y > maxY)
+			{
+				maxY = point.y;
+			}
+			if (point.x < minX)
+			{
+				minX = point.x;
+			}
+			if (point.y < minY)
+			{
+				minY = point.y;
+			}
+		}
+
+	}
+
+	auto deltaX = maxX - minX;
+	auto deltaY = maxY - minY;
+
+	for (auto& polygon : polygons)
+	{
+		for (auto& point : polygon.points)
+		{
+			point.x = point.x - minX - 0.5 * deltaX;
+			point.y = point.y - minY - 0.5 * deltaY;
+			
+			point.x *= -0.165;
+			point.y *= 0.165;
+			point.z *= 0.165;
+		}
+	}
+
+	file.close();
 }
 
 void Car::loadModel()
@@ -208,7 +339,7 @@ void Car::move()
 
 	rz += vy;
 
-	if (v > -0.0005 && v < 0.0005)
+	if (v > -0.01 && v < 0.01 && !tryAccelerate)
 		v = 0;
 
 	if (v != 0)
@@ -219,9 +350,9 @@ void Car::move()
 			steeringWheelAngle += 0.002;
 
 		if (v > 0)
-			v -= 0.0001;
+			v -= 0.05;
 		if (v < 0)
-			v += 0.0001;
+			v += 0.05;
 	}
 
 	wheels[0].adjustPosition(X, Y, rz, wheelBase / 2 + wheelBaseOffset, track / 2, steeringWheelAngle);
@@ -278,4 +409,41 @@ Point Car::getCameraCenter()
 Point Car::getCameraLookAt()
 {
 	return Point{ X + cameraLookAt.x * cos(rz) - cameraLookAt.y * sin(rz), Y + cameraLookAt.x * sin(rz) + cameraLookAt.y * cos(rz), cameraLookAt.z };
+}
+
+void Car::display()
+{
+	if (!alreadyPrinted)
+	{
+		alreadyPrinted = true;
+
+		sin_rz = sin(rz);
+		cos_rz = cos(rz);
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_TEXTURE_2D);
+
+		for (auto& polygon : polygons)
+		{
+			glBindTexture(GL_TEXTURE_2D, polygon.idTexture);
+
+			glBegin(GL_POLYGON);
+			glColor3f(polygon.color.red, polygon.color.green, polygon.color.blue);
+
+			for (unsigned int i = 0; i < polygon.noOfPoints; i++)
+			{
+				glTexCoord2f(polygon.texturePoints[i].x, polygon.texturePoints[i].y);
+				Point toPrint;
+				toPrint.x = X + polygon.points[i].x * cos_rz - polygon.points[i].y * sin_rz;
+				toPrint.y = Y + polygon.points[i].x * sin_rz + polygon.points[i].y * cos_rz;
+				toPrint.z = Z + polygon.points[i].z;
+				glVertex3f(toPrint.x, toPrint.y, toPrint.z);
+			}
+			glEnd();
+		}
+
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+	}
 }
