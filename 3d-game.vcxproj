@@ -146,6 +146,8 @@
     <ClCompile Include="MapContainer.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Mesh.h" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Orbit.cpp" />
