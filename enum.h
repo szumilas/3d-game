@@ -60,7 +60,14 @@ enum class Textures : long
 	building_07_big,
 	building_07_small,
 	building_07_empty,
-	octavia,
+	skoda_octavia,
+	toyota_hilux,
+	lamborghini_huracan,
+	toyota_yaris,
+	suzuki_vitara,
+	rolls_royce_phantom,
+	alfa_romeo_147,
+	audi_r8_v10_coupe,
 	no_texture,
 };
 

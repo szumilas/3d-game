@@ -13,7 +13,7 @@ public:
 	Car();
 
 	void loadModel();
-	void importFromObjFile(const char* filePath, TextureManager* textureManager);
+	void importFromObjFile(const char* filePath, TextureManager* textureManager, Textures textureName, float scaleRatio = 1.0f);
 	void display();
 
 	void move();
@@ -35,8 +35,8 @@ public:
 
 private:
 
-	float a;
-	float v;
+	float a = 0;
+	float v = 0;
 
 	float steeringWheelAngle;
 

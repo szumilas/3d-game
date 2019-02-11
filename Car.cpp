@@ -28,7 +28,7 @@ Car::Car()
 
 }
 
-void Car::importFromObjFile(const char* filePath, TextureManager* textureManager)
+void Car::importFromObjFile(const char* filePath, TextureManager* textureManager, Textures textureName, float scaleRatio)
 {
 	std::ifstream file;
 	file.open(filePath);
@@ -98,7 +98,7 @@ void Car::importFromObjFile(const char* filePath, TextureManager* textureManager
 
 			newPolygon.noOfPoints = newPolygon.points.size();
 			newPolygon.color = Color::white();
-			newPolygon.idTexture = textureManager->textures[static_cast<int>(Textures::octavia)].idTexture;
+			newPolygon.idTexture = textureManager->textures[static_cast<int>(textureName)].idTexture;
 			polygons.push_back(newPolygon);
 
 		}
@@ -107,7 +107,7 @@ void Car::importFromObjFile(const char* filePath, TextureManager* textureManager
 			//vertices.resize(1);
 			//textureVertices.resize(1);
 		}
-	} while (line != "#EOF");
+	} while (line != "#EOF" && line != "# End of File");
 
 	float maxX = 0.0f;
 	float maxY = 0.0f;
@@ -148,9 +148,9 @@ void Car::importFromObjFile(const char* filePath, TextureManager* textureManager
 			point.x = point.x - minX - 0.5 * deltaX;
 			point.y = point.y - minY - 0.5 * deltaY;
 			
-			point.x *= -0.165;
-			point.y *= 0.165;
-			point.z *= 0.165;
+			point.x *= -scaleRatio;
+			point.y *= scaleRatio;
+			point.z *= scaleRatio;
 		}
 	}
 

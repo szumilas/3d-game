@@ -49,7 +49,7 @@ public:
 
 };
 
-Car obj;
+std::vector<Car> cars(8);
 Wheel wheel;
 Orbit orbit;
 
@@ -132,16 +132,33 @@ int main(int argc, char**agrv)
 		textureManager.readTextures();
 
 		mapManager.setTextures(&textureManager);
-		obj.importFromObjFile("Data/Cars/octavia.obj", &textureManager);
+		//cars[0].importFromObjFile("Data/Cars/skoda_octavia.obj", &textureManager, Textures::skoda_octavia, 0.165);
+		cars[0].importFromObjFile("Data/Cars/rolls_royce_phantom.obj", &textureManager, Textures::rolls_royce_phantom, 0.165);
+		cars[1].importFromObjFile("Data/Cars/toyota_hilux.obj", &textureManager, Textures::toyota_hilux, 0.165);
+		cars[1].X += 5;
+		cars[2].importFromObjFile("Data/Cars/lamborghini_huracan.obj", &textureManager, Textures::lamborghini_huracan, 0.165);
+		//cars[2].importFromObjFile("Data/Cars/toyota_hilux3.obj", &textureManager, Textures::toyota_hilux, 0.165);
+		cars[2].X += 10;
+		cars[3].importFromObjFile("Data/Cars/toyota_yaris.obj", &textureManager, Textures::toyota_yaris, 0.165);
+		//cars[3].importFromObjFile("Data/Cars/toyota_hilux4.obj", &textureManager, Textures::toyota_hilux, 0.165);
+		cars[3].X += 15;
+		cars[4].importFromObjFile("Data/Cars/suzuki_vitara.obj", &textureManager, Textures::suzuki_vitara, 0.165);
+		cars[4].X += 20;
+		cars[5].importFromObjFile("Data/Cars/rolls_royce_phantom.obj", &textureManager, Textures::rolls_royce_phantom, 0.165);
+		cars[5].X += 25;
+		cars[6].importFromObjFile("Data/Cars/alfa_romeo_147.obj", &textureManager, Textures::alfa_romeo_147, 0.165);
+		cars[6].X += 30;
+		cars[7].importFromObjFile("Data/Cars/audi_r8_v10_coupe.obj", &textureManager, Textures::audi_r8_v10_coupe, 0.165);
+		cars[7].X += 35;
 
 		//mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");
-		mapManager.readMap("szczytnickaB.osm");
+		//mapManager.readMap("szczytnickaB.osm");
 		//mapManager.readMap("map.osm");
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		//mapManager.readMap("grunwaldWithRiver.osm");
+		mapManager.readMap("grunwaldWithRiver.osm");
 		//mapManager.readMap("trees.osm");
 		//mapManager.readMap("walls.osm");
 
@@ -163,7 +180,7 @@ int main(int argc, char**agrv)
 		//mapContainer.loadWorldIntoBuckets(&mapManager.polygonsObjects);
 		mapContainer.loadWorldIntoSections(mapManager.mapObjects);
 
-		camera.cameraViews.push_back({ obj.getCameraCenter(), obj.getCameraLookAt() });
+		camera.cameraViews.push_back({ cars[0].getCameraCenter(), cars[0].getCameraLookAt() });
 		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
 
 		glutMainLoop();
@@ -191,7 +208,7 @@ void display()
 	//camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
 	//camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
 
-	camera.cameraViews[0] = { obj.getCameraCenter(), obj.getCameraLookAt() };
+	camera.cameraViews[0] = { cars[0].getCameraCenter(), cars[0].getCameraLookAt() };
 	camera.cameraViews[1] = { orbit.getCameraCenter(), orbit.getCameraLookAt() };
 
 
@@ -201,12 +218,15 @@ void display()
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
 
-	mapContainer.displayWorld(obj.getCameraCenter(), obj.getCameraLookAt());
+	mapContainer.displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
 
 	//obj.printModel();
 	//obj.printWheels();
-	obj.display();
-	obj.alreadyPrinted = false;
+	for (auto& car : cars)
+	{
+		car.display();
+		car.alreadyPrinted = false;
+	}
 
 
 	//obj.printModel();
@@ -351,15 +371,15 @@ void SpecialKeysUp(int key, int x, int y)
 void Update()
 {
 	if (upPressed)
-		obj.accelerate();
+		cars[0].accelerate();
 	if (downPressed)
-		obj.slow();
+		cars[0].slow();
 	if (leftPressed)
-		obj.turnLeft();
+		cars[0].turnLeft();
 	if (rightPressed)
-		obj.turnRight();
+		cars[0].turnRight();
 
-	obj.move();
+	cars[0].move();
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 

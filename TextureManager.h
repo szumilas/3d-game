@@ -92,7 +92,14 @@ public:
 		{ Textures::building_07_big, 12.0f, 15.0f, "building_07_big.jpg" },
 		{ Textures::building_07_small, 3.0f, 15.0f, "building_07_small.jpg" },
 		{ Textures::building_07_empty, 1.0f, 15.0f, "building_07_empty.jpg" },
-		{ Textures::octavia, -1.0f, -1.0f, "octavia.png" },
+		{ Textures::skoda_octavia, -1.0f, -1.0f, "skoda_octavia.png" },
+		{ Textures::toyota_hilux, -1.0f, -1.0f, "toyota_hilux.png" },
+		{ Textures::lamborghini_huracan, -1.0f, -1.0f, "lamborghini_huracan.png" },
+		{ Textures::toyota_yaris, -1.0f, -1.0f, "toyota_yaris.png" },
+		{ Textures::suzuki_vitara, -1.0f, -1.0f, "suzuki_vitara.png" },
+		{ Textures::rolls_royce_phantom, -1.0f, -1.0f, "rolls_royce_phantom.png" },
+		{ Textures::alfa_romeo_147, -1.0f, -1.0f, "alfa_romeo_147.png" },
+		{ Textures::audi_r8_v10_coupe, -1.0f, -1.0f, "audi_r8_v10_coupe.png" },
 		{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
 	};
 
