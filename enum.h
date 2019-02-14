@@ -68,6 +68,7 @@ enum class Textures : long
 	rolls_royce_phantom,
 	alfa_romeo_147,
 	audi_r8_v10_coupe,
+	car_gauge,
 	no_texture,
 };
 

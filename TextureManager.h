@@ -100,6 +100,7 @@ public:
 		{ Textures::rolls_royce_phantom, -1.0f, -1.0f, "rolls_royce_phantom.png" },
 		{ Textures::alfa_romeo_147, -1.0f, -1.0f, "alfa_romeo_147.png" },
 		{ Textures::audi_r8_v10_coupe, -1.0f, -1.0f, "audi_r8_v10_coupe.png" },
+		{ Textures::car_gauge, -1.0f, -1.0f, "car_gauge.png" },
 		{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
 	};
 

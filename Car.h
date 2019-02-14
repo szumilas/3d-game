@@ -27,6 +27,8 @@ public:
 	Point getCameraCenter();
 	Point getCameraLookAt();
 
+	float getVelocity() { return v; } //[m/s]
+
 private:
 
 

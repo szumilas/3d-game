@@ -14,6 +14,7 @@
 #include "MapManager.h"
 #include "TextureManager.h"
 #include "MapContainer.h"
+#include "CarGauge.h"
 
 
 
@@ -52,6 +53,7 @@ public:
 std::vector<Car> cars(8);
 Wheel wheel;
 Orbit orbit;
+CarGauge carGauge;
 
 
 void display();
@@ -151,6 +153,8 @@ int main(int argc, char**agrv)
 		cars[7].importFromObjFile("Data/Cars/audi_r8_v10_coupe.obj", &textureManager, Textures::audi_r8_v10_coupe, 0.165);
 		cars[7].X += 35;
 
+		carGauge.load(&textureManager);
+
 		//mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");
 		//mapManager.readMap("szczytnickaB.osm");
@@ -214,23 +218,19 @@ void display()
 
 	camera.adjustCamera(camera.cameraViews[mapManager.currentCameraView].first, camera.cameraViews[mapManager.currentCameraView].second);
 
+	glPushMatrix();
 	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
 
 	mapContainer.displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
 
-	//obj.printModel();
-	//obj.printWheels();
 	for (auto& car : cars)
 	{
 		car.display();
 		car.alreadyPrinted = false;
 	}
-
-
-	//obj.printModel();
-	
+		
 	glBegin(GL_LINES);
 	glColor3f(1, 0, 0);
 	glVertex3f(orbit.getFlatCursorX() - 5, orbit.getFlatCursorY(), 0);
@@ -246,6 +246,13 @@ void display()
 	glVertex3f(orbit.getLookAtX(), orbit.getLookAtY() - 1, 0);
 	glVertex3f(orbit.getLookAtX(), orbit.getLookAtY() + 1, 0);
 	glEnd();
+
+	glPopMatrix();
+
+	carGauge.setVelocity(cars[0].getVelocity());
+	carGauge.setRPM(cars[0].getVelocity());
+	carGauge.display();
+
 
 	glutSwapBuffers();
 
