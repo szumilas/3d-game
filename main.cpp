@@ -17,7 +17,9 @@
 #include "CarGauge.h"
 
 
+#include "freetype.h"
 
+freetype::font_data our_font;
 
 
 
@@ -93,6 +95,7 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.1f);
+	our_font.init("data/stocky.ttf", 16);
 }
 
 
@@ -159,12 +162,12 @@ int main(int argc, char**agrv)
 
 		//mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");
-		//mapManager.readMap("szczytnickaB.osm");
+		mapManager.readMap("szczytnickaB.osm");
 		//mapManager.readMap("map.osm");
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		mapManager.readMap("grunwaldWithRiver.osm");
+		//mapManager.readMap("grunwaldWithRiver.osm");
 		//mapManager.readMap("trees.osm");
 		//mapManager.readMap("walls.osm");
 
@@ -200,7 +203,7 @@ int main(int argc, char**agrv)
 
 	}
 
-
+	our_font.clean();
 
 	return 0;
 }
@@ -255,6 +258,7 @@ void display()
 	carGauge.setRPM(cars[0].getRPM());
 	carGauge.display();
 
+	freetype::print(our_font, 320, 0, "Active Freetype Text With NeHe - %i", cars[0].getCurrentGear());
 
 	glutSwapBuffers();
 

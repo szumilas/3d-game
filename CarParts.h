@@ -45,6 +45,7 @@ public:
 	inline float getMainTransmission() { return mainTransmission; }
 	inline void gearUp() { if (currentGear < gears.size() - 1) currentGear++; }
 	inline void gearDown() { if (currentGear > 0) currentGear--; }
+	inline unsigned int getCurrentGear() { return currentGear; };
 
 private:
 

@@ -76,12 +76,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Programming\openGL\DevIL\DevIL Windows SDK\include;E:\Programming\openGL\Glew and Glut\freeglut\include;E:\Programming\openGL\Glew and Glut\glew-1.11.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Programming\openGL\FreeType\freetype-2.3.5-1-bin\include;E:\Programming\openGL\FreeType\freetype-2.3.5-1-bin\include\freetype2;E:\Programming\openGL\DevIL\DevIL Windows SDK\include;E:\Programming\openGL\Glew and Glut\freeglut\include;E:\Programming\openGL\Glew and Glut\glew-1.11.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>E:\Programming\openGL\DevIL\DevIL Windows SDK\lib\x86\Release;E:\Programming\openGL\Glew and Glut\freeglut\lib;E:\Programming\openGL\Glew and Glut\glew-1.11.0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Programming\openGL\DevIL\DevIL Windows SDK\lib\x86\Release;E:\Programming\openGL\Glew and Glut\freeglut\lib;E:\Programming\openGL\Glew and Glut\glew-1.11.0\lib;E:\Programming\openGL\FreeType\freetype-2.3.5-1-lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -103,16 +103,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Programming\openGL\DevIL\DevIL Windows SDK\include;E:\Programming\openGL\Glew and Glut\freeglut\include;E:\Programming\openGL\Glew and Glut\glew-1.11.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Programming\openGL\FreeType\freetype-2.3.5-1-bin\include;E:\Programming\openGL\FreeType\freetype-2.3.5-1-bin\include\freetype2;E:\Programming\openGL\DevIL\DevIL Windows SDK\include;E:\Programming\openGL\Glew and Glut\freeglut\include;E:\Programming\openGL\Glew and Glut\glew-1.11.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>E:\Programming\openGL\DevIL\DevIL Windows SDK\lib\x86\Release;E:\Programming\openGL\Glew and Glut\freeglut\lib;E:\Programming\openGL\Glew and Glut\glew-1.11.0\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Programming\openGL\DevIL\DevIL Windows SDK\lib\x86\Release;E:\Programming\openGL\Glew and Glut\freeglut\lib;E:\Programming\openGL\Glew and Glut\glew-1.11.0\lib;E:\Programming\openGL\FreeType\freetype-2.3.5-1-lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,6 +142,7 @@
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Crossing.cpp" />
     <ClCompile Include="Footway.cpp" />
+    <ClCompile Include="freetype.cpp" />
     <ClCompile Include="GreenArea.cpp" />
     <ClCompile Include="GrunwaldzkiCenter.cpp" />
     <ClCompile Include="HighlightedObject.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Crossing.h" />
     <ClInclude Include="enum.h" />
     <ClInclude Include="Footway.h" />
+    <ClInclude Include="freetype.h" />
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="GreenArea.h" />
     <ClInclude Include="GrunwaldzkiCenter.h" />

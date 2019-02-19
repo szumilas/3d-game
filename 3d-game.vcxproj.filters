@@ -132,6 +132,9 @@
     <ClCompile Include="CarParts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="freetype.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -243,6 +246,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CarParts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="freetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

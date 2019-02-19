@@ -32,6 +32,7 @@ public:
 
 	float getVelocity() { return v; } //[m/s]
 	float getRPM() { return engine.getRPM(); } //[m/s]
+	unsigned int getCurrentGear() { return gearBox.getCurrentGear(); } //[-]
 
 private:
 
