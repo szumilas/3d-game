@@ -26,6 +26,7 @@ Car::Car()
 	cameraCenter = Point{-8, 0, 5};
 	cameraLookAt = Point{0, 0, 3};
 
+	resistanceRatio = (engine.getMaxTorque() * gearBox.getTopTransmission() * gearBox.getMainTransmission() * nm) / (rd * vMax * vMax);
 }
 
 void Car::importFromObjFile(const char* filePath, TextureManager* textureManager, Textures textureName, float scaleRatio)
@@ -310,7 +311,17 @@ void Car::loadModel()
 
 void Car::move()
 {
-	if (tryAccelerate)
+	engine.accelerator(tryAccelerate);
+
+	float drivingForce = engine.getCurrentTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() / rd * nm;
+	float drivingResistance = resistanceRatio * v * v;
+
+	if (v > 40)
+		int h = 5;
+
+	acceleration = (drivingForce - drivingResistance) / mass;
+
+	/*if (tryAccelerate)
 	{
 		v += acceleration / FPS;
 		if (v > v_max)
@@ -322,7 +333,9 @@ void Car::move()
 		v -= acceleration / FPS;
 		if (v < -v_max)
 			v = -v_max;
-	}
+	}*/
+
+	v += acceleration / FPS;
 
 	sin_rz = sin(rz);
 	cos_rz = cos(rz);

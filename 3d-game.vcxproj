@@ -138,6 +138,7 @@
     <ClCompile Include="BusShelter.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="CarGauge.cpp" />
+    <ClCompile Include="CarParts.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Crossing.cpp" />
     <ClCompile Include="Footway.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="BusShelter.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="CarGauge.h" />
+    <ClInclude Include="CarParts.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Crossing.h" />
     <ClInclude Include="enum.h" />

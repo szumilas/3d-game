@@ -12,7 +12,7 @@ public:
 	void load(TextureManager* textureManager);
 	void display();
 	inline void setVelocity(float v /*[m/s]*/) { velocityClock.currentValue = 3.6 * abs(v); };
-	inline void setRPM(float v /*[m/s]*/) { RPMClock.currentValue = 1000 * v; };
+	inline void setRPM(float RPM /*[m/s]*/) { RPMClock.currentValue = RPM; };
 
 private:
 

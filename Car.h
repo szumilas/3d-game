@@ -4,6 +4,7 @@
 #include "Wheel.h"
 #include "enum.h"
 #include "TextureManager.h"
+#include "CarParts.h"
 
 class Car : public Object3D
 {
@@ -21,6 +22,8 @@ public:
 	void slow();
 	void turnRight();
 	void turnLeft();
+	void gearUp() { gearBox.gearUp(); };
+	void gearDown() { gearBox.gearDown(); };
 
 	void printWheels();
 
@@ -28,6 +31,7 @@ public:
 	Point getCameraLookAt();
 
 	float getVelocity() { return v; } //[m/s]
+	float getRPM() { return engine.getRPM(); } //[m/s]
 
 private:
 
@@ -39,6 +43,11 @@ private:
 
 	float a = 0;
 	float v = 0;
+	float mass = 1000; //[kg]
+	float rd = 0.3; //[m]
+	float vMax = 150.0 / 3.6; //[m / s]
+	float resistanceRatio; //[kN / (m / s)^2]
+	float nm = 0.9; //[-]
 
 	float steeringWheelAngle;
 
@@ -56,4 +65,6 @@ private:
 	Point cameraCenter;
 	Point cameraLookAt;
 
+	Engine engine;
+	GearBox gearBox;
 };

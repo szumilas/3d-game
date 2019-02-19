@@ -75,6 +75,8 @@ GLboolean upPressed = false;
 GLboolean downPressed = false;
 GLboolean leftPressed = false;
 GLboolean rightPressed = false;
+GLboolean F1Pressed = false;
+GLboolean F2Pressed = false;
 
 GLboolean leftMouseButtonDown = false;
 GLboolean rightMouseButtonDown = false;
@@ -250,7 +252,7 @@ void display()
 	glPopMatrix();
 
 	carGauge.setVelocity(cars[0].getVelocity());
-	carGauge.setRPM(cars[0].getVelocity());
+	carGauge.setRPM(cars[0].getRPM());
 	carGauge.display();
 
 
@@ -358,6 +360,10 @@ void SpecialKeys(int key, int x, int y)
 		leftPressed = true;
 	if (GLUT_KEY_RIGHT == key)
 		rightPressed = true;
+	if (GLUT_KEY_F1 == key)
+		F1Pressed = true;
+	if (GLUT_KEY_F2 == key)
+		F2Pressed = true;
 
 
 }
@@ -372,6 +378,10 @@ void SpecialKeysUp(int key, int x, int y)
 		leftPressed = false;
 	if (GLUT_KEY_RIGHT == key)
 		rightPressed = false;
+	if (GLUT_KEY_F1 == key)
+		F1Pressed = false;
+	if (GLUT_KEY_F2 == key)
+		F2Pressed = false;
 
 }
 
@@ -385,6 +395,10 @@ void Update()
 		cars[0].turnLeft();
 	if (rightPressed)
 		cars[0].turnRight();
+	if (F1Pressed)
+		cars[0].gearUp();
+	if (F2Pressed)
+		cars[0].gearDown();
 
 	cars[0].move();
 
