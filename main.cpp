@@ -1,3 +1,5 @@
+#define NOFULLSCREEN
+
 #include <IL/il.h>
 #include <GL/glut.h>
 #include <GL/gl.h>
@@ -27,8 +29,10 @@ int current_time;
 int previos_time = time(NULL);
 int noOfFrames = 0;
 
-float windowHeight = 750;
-float windowWidth = 1500;
+int windowHeight = 750;
+int windowWidth = 1500;
+
+int windowRealWidth;
 
 float angle = 55.0f;
 
@@ -95,7 +99,13 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.1f);
-	our_font.init("data/stocky.ttf", 16);
+	our_font.init("data/digital_counter_7.ttf", 16);
+
+#ifdef FULLSCREEN  
+	windowRealWidth = glutGet(GLUT_SCREEN_WIDTH);
+#else
+	windowRealWidth = windowWidth;
+#endif
 }
 
 
@@ -112,8 +122,8 @@ int main(int argc, char**agrv)
 
 	glutInitWindowPosition(10, 10);
 	glutInitWindowSize(windowWidth, windowHeight);
-
-	glutCreateWindow("3d game");	
+	
+	glutCreateWindow("3d game");
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -192,6 +202,10 @@ int main(int argc, char**agrv)
 		camera.cameraViews.push_back({ cars[0].getCameraCenter(), cars[0].getCameraLookAt() });
 		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
 
+	#ifdef FULLSCREEN  
+		glutFullScreen();
+	#endif
+
 		glutMainLoop();
 	}
 	catch (Exceptions exc)
@@ -258,7 +272,8 @@ void display()
 	carGauge.setRPM(cars[0].getRPM());
 	carGauge.display();
 
-	freetype::print(our_font, 320, 0, "Active Freetype Text With NeHe - %i", cars[0].getCurrentGear());
+	freetype::print(our_font, 1625, 152, "%i", cars[0].getCurrentGear());
+	freetype::print(our_font, 625, 152, "%i", windowRealWidth);
 
 	glutSwapBuffers();
 
