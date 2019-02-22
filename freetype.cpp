@@ -179,7 +179,8 @@ void font_data::clean() {
 /// A fairly straightforward function that pushes
 /// a projection matrix that will make object world 
 /// coordinates identical to window coordinates.
-inline void pushScreenCoordinateMatrix() {
+void pushScreenCoordinateMatrix()
+{
 	glPushAttrib(GL_TRANSFORM_BIT);
 	GLint   viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -192,19 +193,17 @@ inline void pushScreenCoordinateMatrix() {
 
 /// Pops the projection matrix without changing the current
 /// MatrixMode.
-inline void pop_projection_matrix() {
+void pop_projection_matrix()
+{
 	glPushAttrib(GL_TRANSFORM_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glPopAttrib();
 }
 
-///Much like Nehe's glPrint function, but modified to work
-///with freetype fonts.
-void print(const font_data &ft_font, float x, float y, const char *fmt, ...) {
 
-	// We want a coordinate system where distance is measured in window pixels.
-	pushScreenCoordinateMatrix();
+void display(const font_data &ft_font, float x, float y, const char *fmt, ...)
+{
 
 	GLuint font = ft_font.list_base;
 	//We make the height a little bigger there will be some space between lines.
@@ -249,7 +248,7 @@ void print(const font_data &ft_font, float x, float y, const char *fmt, ...) {
 
 	glPushAttrib(GL_LIST_BIT | GL_CURRENT_BIT | GL_ENABLE_BIT | GL_TRANSFORM_BIT);
 	glMatrixMode(GL_MODELVIEW);
-	glDisable(GL_LIGHTING);
+	//glDisable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -260,6 +259,8 @@ void print(const font_data &ft_font, float x, float y, const char *fmt, ...) {
 	float modelview_matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelview_matrix);
 
+
+	glColor3f(1.0f, 0.0f, 0.0f);
 	//This is where the text display actually happens.
 	//For each line of text we reset the modelview matrix
 	//so that the line's text will start in the correct position.
@@ -291,10 +292,6 @@ void print(const font_data &ft_font, float x, float y, const char *fmt, ...) {
 
 	}
 
-
-	glPopAttrib();
-
-	pop_projection_matrix();
 }
 
 } //close the namespace

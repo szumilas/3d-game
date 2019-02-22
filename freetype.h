@@ -34,6 +34,9 @@
 ///overlapping with anyone else's code.
 namespace freetype {
 
+	void pop_projection_matrix();
+	void pushScreenCoordinateMatrix();
+
 	//Inside of this namespace, give ourselves the ability
 	//to write just "vector" instead of "std::vector"
 	using std::vector;
@@ -59,7 +62,20 @@ namespace freetype {
 	///The flagship function of the library - this thing will print
 	///out text at window coordinates x,y, using the font ft_font.
 	///The current modelview matrix will also be applied to the text. 
-	void print(const font_data &ft_font, float x, float y, const char *fmt, ...);
+	template <typename T>
+	void print(const font_data &ft_font, float x, float y, const char *fmt, T args...)
+	{
+		// We want a coordinate system where distance is measured in window pixels.
+		pushScreenCoordinateMatrix();
+
+		display(ft_font, x, y, fmt, args);
+
+		glPopAttrib();
+
+		pop_projection_matrix();
+	}
+
+	void display(const font_data &ft_font, float x, float y, const char *fmt, ...);
 
 }  //close the namespace
 

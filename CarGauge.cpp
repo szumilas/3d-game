@@ -21,29 +21,30 @@ void CarGauge::display()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_TEXTURE_2D);
-	
+
 	glBindTexture(GL_TEXTURE_2D, idTexture);
-
 	glBegin(GL_POLYGON);
-	glColor3f(1, 1, 1);
 
+	glColor3f(1.0f, 1.0f, 1.0f);
 	glTexCoord2f(0, 0);
-	glVertex3f(0.2, -0.2, -0.501);
+	glVertex2f(0, 0);
 	glTexCoord2f(1, 0);
-	glVertex3f(0.4, -0.2, -0.501);
+	glVertex2f(1300, 0);
 	glTexCoord2f(1, 1);
-	glVertex3f(0.4, -0.1, -0.501);
+	glVertex2f(1300, 200);
 	glTexCoord2f(0, 1);
-	glVertex3f(0.2, -0.1, -0.501);
+	glVertex2f(0, 200);
 
 	glEnd();
 
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
-	calculateClockTipPositions();
+
+
+	/*calculateClockTipPositions();
 	velocityClock.display();
-	RPMClock.display();
+	RPMClock.display();*/
 }
 
 void CarGauge::calculateClockTipPositions()

@@ -17,11 +17,10 @@
 #include "TextureManager.h"
 #include "MapContainer.h"
 #include "CarGauge.h"
+#include "Screen2D.h"
 
 
-#include "freetype.h"
 
-freetype::font_data our_font;
 
 
 
@@ -29,10 +28,11 @@ int current_time;
 int previos_time = time(NULL);
 int noOfFrames = 0;
 
-int windowHeight = 750;
-int windowWidth = 1500;
+int windowWidth = 1280;
+int windowHeight = 800;
 
 int windowRealWidth;
+int windowRealHeight;
 
 float angle = 55.0f;
 
@@ -60,6 +60,8 @@ std::vector<Car> cars(8);
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
+
+Screen2D screen2D(&carGauge);
 
 
 void display();
@@ -99,13 +101,6 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.1f);
-	our_font.init("data/digital_counter_7.ttf", 16);
-
-#ifdef FULLSCREEN  
-	windowRealWidth = glutGet(GLUT_SCREEN_WIDTH);
-#else
-	windowRealWidth = windowWidth;
-#endif
 }
 
 
@@ -115,8 +110,6 @@ MapContainer mapContainer;
 
 int main(int argc, char**agrv)
 {
-
-
 	glutInit(&argc, agrv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
 
@@ -124,6 +117,17 @@ int main(int argc, char**agrv)
 	glutInitWindowSize(windowWidth, windowHeight);
 	
 	glutCreateWindow("3d game");
+
+#ifdef FULLSCREEN  
+	windowRealWidth = glutGet(GLUT_SCREEN_WIDTH);
+	windowRealHeight = glutGet(GLUT_SCREEN_HEIGHT);
+#else
+	windowRealWidth = windowWidth;
+	windowRealHeight = windowHeight;
+#endif
+
+	screen2D.setSize(windowRealWidth, windowRealHeight);
+	screen2D.loadFonts();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -217,7 +221,6 @@ int main(int argc, char**agrv)
 
 	}
 
-	our_font.clean();
 
 	return 0;
 }
@@ -268,12 +271,17 @@ void display()
 
 	glPopMatrix();
 
-	carGauge.setVelocity(cars[0].getVelocity());
-	carGauge.setRPM(cars[0].getRPM());
-	carGauge.display();
 
-	freetype::print(our_font, 1625, 152, "%i", cars[0].getCurrentGear());
-	freetype::print(our_font, 625, 152, "%i", windowRealWidth);
+
+	/*carGauge.setVelocity(cars[0].getVelocity());
+	carGauge.setRPM(cars[0].getRPM());
+	carGauge.display();*/
+
+	screen2D.display();
+
+	//freetype::print(our_font, 0.5 * windowRealWidth + 0.522 * windowRealHeight, 0.174 * windowRealHeight, "%i", 8);
+	//freetype::print(our_font, 0.5 * windowRealWidth + 0.522 * windowRealHeight, 0.174 * windowRealHeight, "%i", cars[0].getCurrentGear());
+	//freetype::print(our_font, 625, 152, "%i", windowRealWidth);
 
 	glutSwapBuffers();
 
@@ -281,11 +289,11 @@ void display()
 
 void reshape(int width, int height)
 {
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, windowRealWidth, windowRealHeight);
 	glMatrixMode(GL_PROJECTION);
 
 	glLoadIdentity();
-	gluPerspective(angle, static_cast<float>(width) / height, 0.5, 10000);
+	gluPerspective(angle, static_cast<float>(windowRealWidth) / windowRealHeight, 0.5, 10000);
 	glMatrixMode(GL_MODELVIEW);
 
 	display();
