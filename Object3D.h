@@ -16,7 +16,6 @@ class Object3D
 public:
 	Object3D();
 	void loadModel();
-	void printModel();
 	virtual void display();
 
 private:
@@ -41,21 +40,7 @@ public:
 
 
 protected:
-
-	struct MeshTriangle
-	{
-		int p1;
-		int p2;
-		int p3;
-
-		float red;
-		float green;
-		float blue;
-	};
-
-	Point position;
-	std::vector<Point> mesh;
-	std::vector<MeshTriangle> triangles;
+		Point position;
 
 public:
 	float X;

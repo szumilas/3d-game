@@ -15,7 +15,6 @@ public:
 
 	Car();
 
-	void loadModel();
 	void importFromObjFile(const char* filePath, TextureManager* textureManager, Textures textureName, float scaleRatio = 1.0f);
 	void display();
 
@@ -26,8 +25,6 @@ public:
 	void turnLeft();
 	void gearUp() { gearBox.gearUp(); };
 	void gearDown() { gearBox.gearDown(); };
-
-	void printWheels();
 
 	Point getCameraCenter();
 	Point getCameraLookAt();

@@ -8,7 +8,6 @@ public:
 
 	Wheel();
 
-	void loadModel();
 	void adjustPosition(float Xcar, float Ycar, float rzCar, float xOffset, float yOffset, float steeringWheelAngle = 0);
 
 private:
