@@ -8,6 +8,9 @@
 
 class CarGauge
 {
+
+	friend class Screen2D;
+
 public:
 
 	CarGauge();

@@ -85,6 +85,8 @@ GLboolean leftPressed = false;
 GLboolean rightPressed = false;
 GLboolean F1Pressed = false;
 GLboolean F2Pressed = false;
+GLboolean F1Released = true;
+GLboolean F2Released = true;
 
 GLboolean leftMouseButtonDown = false;
 GLboolean rightMouseButtonDown = false;
@@ -388,11 +390,10 @@ void SpecialKeys(int key, int x, int y)
 		leftPressed = true;
 	if (GLUT_KEY_RIGHT == key)
 		rightPressed = true;
-	if (GLUT_KEY_F1 == key)
+	if (GLUT_KEY_F1 == key && F1Released)
 		F1Pressed = true;
-	if (GLUT_KEY_F2 == key)
+	if (GLUT_KEY_F2 == key && F2Released)
 		F2Pressed = true;
-
 
 }
 
@@ -407,9 +408,15 @@ void SpecialKeysUp(int key, int x, int y)
 	if (GLUT_KEY_RIGHT == key)
 		rightPressed = false;
 	if (GLUT_KEY_F1 == key)
+	{
 		F1Pressed = false;
+		F1Released = true;
+	}
 	if (GLUT_KEY_F2 == key)
+	{
 		F2Pressed = false;
+		F2Released = true;
+	}
 
 }
 
@@ -423,10 +430,16 @@ void Update()
 		cars[0].turnLeft();
 	if (rightPressed)
 		cars[0].turnRight();
-	if (F1Pressed)
+	if (F1Pressed && F1Released)
+	{
 		cars[0].gearUp();
-	if (F2Pressed)
+		F1Released = false;
+	}
+	if (F2Pressed && F2Released)
+	{
 		cars[0].gearDown();
+		F2Released = false;
+	}
 
 	cars[0].move();
 

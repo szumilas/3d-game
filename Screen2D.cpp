@@ -27,9 +27,7 @@ void Screen2D::display()
 
 
 	carGauge->display();
-	//freetype::print(digital_counter, 0.5 * width + 0.522 * height, 0.174 * height, "%i", 5);
-	//freetype::print(digital_counter, 100, 100, "55");
-	freetype::display(digital_counter, 0.5 * width + 0.495 * height, 0.035 * height, "%i", 4);
+	freetype::display(digital_counter, 0.5 * width + 0.495 * height, 0.035 * height, "%i", carGauge->car->getCurrentGear());
 
 	glPopAttrib();
 

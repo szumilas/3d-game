@@ -5,6 +5,8 @@
 class Engine
 {
 
+	friend class CarGauge;
+
 public:
 	
 	Engine();

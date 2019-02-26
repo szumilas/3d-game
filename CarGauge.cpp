@@ -22,7 +22,7 @@ void CarGauge::setScreenResolution(int w, int h)
 	RPMClock.clockTipStartPosition = { 0.5 * w + 0.2996 * h, 0.105 * h };
 	RPMClock.clockTipLenght = 0.08f * h;
 	RPMClock.clockTipWidth = 0.004f * h;
-	RPMClock.currentValue = &car->v;
+	RPMClock.currentValue = &car->engine.RPM;
 }
 
 void CarGauge::load(TextureManager* textureManager, Car* car)
