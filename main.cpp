@@ -28,8 +28,8 @@ int current_time;
 int previos_time = time(NULL);
 int noOfFrames = 0;
 
-int windowWidth = 1280;
-int windowHeight = 800;
+int windowWidth = 1500;
+int windowHeight = 750;
 
 int windowRealWidth;
 int windowRealHeight;
@@ -172,7 +172,8 @@ int main(int argc, char**agrv)
 		cars[7].importFromObjFile("Data/Cars/audi_r8_v10_coupe.obj", &textureManager, Textures::audi_r8_v10_coupe, 0.165);
 		cars[7].X += 35;
 
-		carGauge.load(&textureManager);
+		carGauge.load(&textureManager, &cars[0]);
+		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
 		//mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Car.h"
+
 #include "TextureManager.h"
 #include "GlobalStructures.h"
 #include "enum.h"
@@ -9,10 +11,9 @@ class CarGauge
 public:
 
 	CarGauge();
-	void load(TextureManager* textureManager);
+	void load(TextureManager* textureManager, Car* car);
+	void setScreenResolution(int w, int h);
 	void display();
-	inline void setVelocity(float v /*[m/s]*/) { velocityClock.currentValue = 3.6 * abs(v); };
-	inline void setRPM(float RPM /*[m/s]*/) { RPMClock.currentValue = RPM; };
 
 private:
 
@@ -30,19 +31,20 @@ private:
 		Point clockTipStartLeftPosition;
 		Point clockTipStartRightPosition;
 
-		float clockTipLenght = 0.04f;
-		float clockTipWidth = 0.002f;
+		float clockTipLenght;
+		float clockTipWidth;
 
-		float currentValue;
+		float* currentValue;
 		float maxValue;
-		
+
 		void display()
 		{
 			glBegin(GL_TRIANGLES);
 			glColor3f(1, 0, 0);
-			glVertex3f(clockTipStartLeftPosition.x, clockTipStartLeftPosition.y, -0.5);
-			glVertex3f(clockTipStartRightPosition.x, clockTipStartRightPosition.y, -0.5);
-			glVertex3f(clockTipEndPosition.x, clockTipEndPosition.y, -0.5);
+			glVertex2f(clockTipStartLeftPosition.x, clockTipStartLeftPosition.y);
+			glVertex2f(clockTipStartRightPosition.x, clockTipStartRightPosition.y);
+			glVertex2f(clockTipEndPosition.x, clockTipEndPosition.y);
+
 			glEnd();
 		}
 
@@ -53,7 +55,7 @@ private:
 			clockTipStartRightPosition = clockTipStartPosition;
 
 			float angle = 4.9 / 4.0 * PI;
-			angle -= (currentValue / maxValue) * 2.92 / 2.0 * PI;
+			angle -= (*currentValue / maxValue) * 2.92 / 2.0 * PI;
 
 			clockTipEndPosition.x += clockTipLenght * cos(angle);
 			clockTipEndPosition.y += clockTipLenght * sin(angle);
@@ -70,7 +72,12 @@ private:
 
 	unsigned int idTexture;
 
+	Car* car = nullptr;
+
 	Clock velocityClock;
 	Clock RPMClock;
+
+	int w;
+	int h;
 
 };

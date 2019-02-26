@@ -9,6 +9,8 @@
 class Car : public Object3D
 {
 
+	friend class CarGauge;
+
 public:
 
 	Car();
