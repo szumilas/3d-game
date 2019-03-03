@@ -5,7 +5,7 @@ Tree::Tree(long long ref)
 	refs.push_back(ref);
 	_height = 4.0f;
 }
-
+/*
 void Tree::display()
 {
 	glColor3f(0.2f, 0.2f, 0.2f);
@@ -46,13 +46,47 @@ void Tree::display()
 		glVertex3f(treeCrownPoints[q + 1].x, treeCrownPoints[q + 1].y, treeCrownPoints[q + 1].z);
 		glVertex3f(treeCrownPoints[q + 2].x, treeCrownPoints[q + 2].y, treeCrownPoints[q + 2].z);
 		glEnd();
-	}*/
+	}
 
 	Object3D::display();
 }
-
+*/
 void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 {
+	//importFromObjFile("Data/Trees/elm_tree.obj", Textures::elm_tree, 0.5);
+
+	Point newPoint;
+	float size = 4.0f;
+
+	newPoint.x = nodes.at(refs[0]).posX;
+	newPoint.y = nodes.at(refs[0]).posY;
+
+	std::vector<std::pair<Point, Point>> treePoints{ {{ newPoint.x - size / 2, newPoint.y }, { newPoint.x + size / 2, newPoint.y, 0 }},
+	{ { newPoint.x, newPoint.y - size / 2},{ newPoint.x, newPoint.y + size / 2, 0 } } };
+
+	for (auto& line : treePoints)
+	{
+		Polygon polygon;
+		polygon.points.push_back({ line.first.x, line.first.y, 0 });
+		polygon.points.push_back({ line.second.x, line.second.y, 0 });
+		polygon.points.push_back({ line.second.x, line.second.y, _height });
+		polygon.points.push_back({ line.first.x, line.first.y, _height });
+	
+		polygon.texturePoints.push_back({ 0, 0 });
+		polygon.texturePoints.push_back({ 1, 0 });
+		polygon.texturePoints.push_back({ 1, 1 });
+		polygon.texturePoints.push_back({ 0, 1 });
+
+		polygon.noOfPoints = polygon.points.size();
+		polygon.color = Color{ 1.0f, 1.0f, 1.0f };
+
+		polygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(Textures::elm_tree)].idTexture;
+
+		polygons.push_back(polygon);
+	}
+
+
+	/*
 	Point newPoint;
 	float size = 0.3;
 
@@ -134,4 +168,6 @@ void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 	{
 		polygon.color = Color{0,1,0};
 	}
+
+	*/
 }

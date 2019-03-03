@@ -9,7 +9,7 @@ public:
 
 	Tree(long long ref);
 
-	void display();
+	//void display();
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
 
 private:
