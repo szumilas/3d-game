@@ -23,7 +23,7 @@ public:
 	void slow();
 	void turnRight();
 	void turnLeft();
-	void gearUp() { gearBox.gearUp(); };
+	void gearUp() { gearBox.gearUp(); engine.changeRPM(gearBox.getCurrentTransmission(), gearBox.getNextTransmission()); };
 	void gearDown() { gearBox.gearDown(); };
 
 	Point getCameraCenter();

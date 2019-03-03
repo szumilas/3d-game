@@ -17,6 +17,7 @@ public:
 	void accelerator(bool pedal);
 	float getCurrentTorque();
 	inline float getMaxTorque() { return maxTorque; }
+	inline void changeRPM(float currentTransmission, float nextTransmission) { RPM *= (nextTransmission / currentTransmission); }
 
 private:
 
@@ -43,6 +44,7 @@ public:
 
 	inline float getTransmission(unsigned int gear) { return gears[gear]; }
 	inline float getCurrentTransmission() { return gears[currentGear]; }
+	inline float getNextTransmission() { if (currentGear == gears.size() - 1) return gears[currentGear]; return gears[currentGear + 1]; }
 	inline float getTopTransmission() { return gears.back(); }
 	inline float getMainTransmission() { return mainTransmission; }
 	inline void gearUp() { if (currentGear < gears.size() - 1) currentGear++; }
