@@ -1,6 +1,6 @@
 #include "Skybox.h"
 
-Skybox::Skybox(TextureManager* textureManager, float minX, float maxX, float minY, float maxY)
+Skybox::Skybox(float minX, float maxX, float minY, float maxY)
 {
 	MapObject::minX = minX;
 	MapObject::maxX = maxX;
@@ -8,7 +8,7 @@ Skybox::Skybox(TextureManager* textureManager, float minX, float maxX, float min
 	MapObject::maxY = maxY;
 
 	calculateXYfromRef();
-	calculateFinalGeometry(textureManager);
+	calculateFinalGeometry();
 }
 
 void Skybox::calculateXYfromRef()
@@ -17,7 +17,7 @@ void Skybox::calculateXYfromRef()
 	points.push_back(Point{ minX - 500, maxY + 500, 0 });
 	points.push_back(Point{ maxX + 500, maxY + 500, 0 });
 	points.push_back(Point{ maxX + 500, minY - 500, 0 });
-}
+	}
 
 void Skybox::calculateFinalGeometry(TextureManager* textureManager)
 {
@@ -39,7 +39,7 @@ void Skybox::calculateFinalGeometry(TextureManager* textureManager)
 		newPolygon.texturePoints.push_back({ 0.00f + static_cast<float>(q) / 4, 0.6666f });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::skybox)].idTexture;
+		newPolygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::skybox)].idTexture;
 		newPolygon.color = Color{1,1,1};
 		
 		polygons.push_back(newPolygon);
@@ -59,7 +59,7 @@ void Skybox::calculateFinalGeometry(TextureManager* textureManager)
 		newPolygon.texturePoints.push_back({ 0.26f, 0.32f });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::skybox)].idTexture;
+		newPolygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::skybox)].idTexture;
 		newPolygon.color = Color{ 1,1,1 };
 
 		polygons.push_back(newPolygon);
@@ -78,10 +78,9 @@ void Skybox::calculateFinalGeometry(TextureManager* textureManager)
 		newPolygon.texturePoints.push_back({ 0.49f, 1.00f });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = textureManager->textures[static_cast<long>(Textures::skybox)].idTexture;
+		newPolygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::skybox)].idTexture;
 		newPolygon.color = Color{ 1,1,1 };
 
 		polygons.push_back(newPolygon);
 	}
-
 }

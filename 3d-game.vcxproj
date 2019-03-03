@@ -186,6 +186,7 @@
     <ClInclude Include="Footway.h" />
     <ClInclude Include="freetype.h" />
     <ClInclude Include="GlobalStructures.h" />
+    <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="GreenArea.h" />
     <ClInclude Include="GrunwaldzkiCenter.h" />
     <ClInclude Include="HighlightedObject.h" />

@@ -1,6 +1,6 @@
 #include "River.h"
 
-void River::calculateFinalGeometry(TextureManager* textureManager)
+void River::calculateFinalGeometry()
 {
 	for (size_t q = 0, limit = finalLeftRail.size() - 1; q < limit; q++)
 	{
@@ -17,7 +17,7 @@ void River::calculateFinalGeometry(TextureManager* textureManager)
 		newPolygon.texturePoints.push_back({ finalRightRail[q].x, finalRightRail[q].y, _min_height });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = textureManager->textures[static_cast<unsigned int>(Textures::water)].idTexture;
+		newPolygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(Textures::water)].idTexture;
 		newPolygon.color = Color{ 1.0f, 1.0f, 1.0f };
 
 		newPolygon.additionalColor = newPolygon.color.mixColor(selectedColor);

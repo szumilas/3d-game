@@ -15,7 +15,7 @@ public:
 	MapObject() {};
 	MapObject(long long id) { MapObject::id = id; };
 	virtual void calculateXYfromRef(const std::map<long long, node> &nodes);
-	virtual void calculateFinalGeometry(TextureManager* textureManager);
+	virtual void calculateFinalGeometry();
 	void calculateBoundingCoordinates();
 
 	void applyKnownValues();

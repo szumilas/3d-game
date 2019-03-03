@@ -1,11 +1,11 @@
 #include "Water.h"
 
-void Water::calculateFinalGeometry(TextureManager* textureManager)
+void Water::calculateFinalGeometry()
 {
 	dividePointsPolygonIntoTriangles();
 
 	for (auto& polygon : polygons)
 	{
-		polygon.idTexture = textureManager->textures[static_cast<long>(Textures::water)].idTexture;
+		polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::water)].idTexture;
 	}
 }

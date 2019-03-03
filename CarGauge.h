@@ -14,7 +14,7 @@ class CarGauge
 public:
 
 	CarGauge();
-	void load(TextureManager* textureManager, Car* car);
+	void load(Car* car);
 	void setScreenResolution(int w, int h);
 	void display();
 

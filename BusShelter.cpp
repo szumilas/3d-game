@@ -10,9 +10,9 @@ BusShelter::BusShelter(MapObject& mapObject) : Building(mapObject)
 	roofNeeded = false;
 };
 
-void BusShelter::calculateFinalGeometry(TextureManager* textureManager)
+void BusShelter::calculateFinalGeometry()
 {
-	Building::calculateFinalGeometry(textureManager);
+	Building::calculateFinalGeometry();
 
 	//TODO: add better roof
 	Polygon newPolygon;

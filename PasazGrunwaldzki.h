@@ -8,7 +8,7 @@ class PasazGrunwaldzki : public Building
 public:
 
 	PasazGrunwaldzki(MapObject& mapObject);
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 
 private:
 

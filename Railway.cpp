@@ -1,6 +1,6 @@
 #include "Railway.h"
 
-void Railway::calculateFinalGeometry(TextureManager* textureManager)
+void Railway::calculateFinalGeometry()
 {
 	struct Rail
 	{
@@ -31,7 +31,7 @@ void Railway::calculateFinalGeometry(TextureManager* textureManager)
 			newPolygon.texturePoints.push_back({ 0, 1 });
 
 			newPolygon.noOfPoints = newPolygon.texturePoints.size();
-			newPolygon.idTexture = textureManager->textures[static_cast<unsigned int>(Textures::rail)].idTexture;
+			newPolygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(Textures::rail)].idTexture;
 			newPolygon.color = Color{ 1.0f, 1.0f, 1.0f };
 
 			newPolygon.additionalColor = newPolygon.color.mixColor(selectedColor);

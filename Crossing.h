@@ -8,7 +8,7 @@ public:
 
 	Crossing(MapObject& mapObject);
 
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 
 
 };

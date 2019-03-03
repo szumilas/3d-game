@@ -15,7 +15,7 @@ public:
 		textureName = Textures::paving;
 	};
 
-	virtual void calculateFinalGeometry(TextureManager* textureManager);
+	virtual void calculateFinalGeometry();
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
 
 protected:

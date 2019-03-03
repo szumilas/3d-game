@@ -12,7 +12,7 @@ void MapObject::calculateXYfromRef(const std::map<long long, node> &nodes)
 	}
 }
 
-void MapObject::calculateFinalGeometry(TextureManager* textureManager)
+void MapObject::calculateFinalGeometry()
 {
 
 }

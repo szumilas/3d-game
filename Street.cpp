@@ -1,12 +1,12 @@
 #include "Street.h"
 
-void Street::calculateFinalGeometry(TextureManager* textureManager)
+void Street::calculateFinalGeometry()
 {
 	dividePointsPolygonIntoTriangles();
 
 	for (auto& polygon : polygons)
 	{
-		polygon.idTexture = textureManager->textures[static_cast<long>(Textures::asphalt)].idTexture;
+		polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::asphalt)].idTexture;
 
 		if (area_highway == "cycleway")
 		{
@@ -16,7 +16,7 @@ void Street::calculateFinalGeometry(TextureManager* textureManager)
 		}
 		else if (area_highway == "footway")
 		{
-			polygon.idTexture = textureManager->textures[static_cast<long>(Textures::paving)].idTexture;
+			polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::paving)].idTexture;
 		}
 		else  if (area_highway == "service")
 		{

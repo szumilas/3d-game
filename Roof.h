@@ -46,7 +46,7 @@ public:
 	Roof(MapObject& mapObject);
 
 	//void display();
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 
 private:
 

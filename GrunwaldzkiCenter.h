@@ -8,7 +8,7 @@ class GrunwaldzkiCenter : public Building
 public:
 
 	GrunwaldzkiCenter(MapObject& mapObject);
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 
 private:
 

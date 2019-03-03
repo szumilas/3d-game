@@ -8,9 +8,9 @@ Crossing::Crossing(MapObject& mapObject) : Footway(mapObject)
 	textureName = Textures::crossing;
 };
 
-void Crossing::calculateFinalGeometry(TextureManager* textureManager)
+void Crossing::calculateFinalGeometry()
 {
-	Footway::calculateFinalGeometry(textureManager);
+	Footway::calculateFinalGeometry();
 
 	auto& firstPoint = points[0];
 	auto& lastPoint = points.back();

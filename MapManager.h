@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <map>
 
+#include "GlobalVariables.h"
 #include "enum.h"
 #include "GlobalStructures.h"
 
@@ -41,7 +42,6 @@ class MapManager
 {
 
 public:
-	void setTextures(TextureManager* textureManager) { MapManager::textureManager = textureManager; };
 	void readMap(const char * fileName);
 	void calculateNodesPositions();
 	void removeSkippedObjects();
@@ -111,8 +111,6 @@ private:
 	float minX =  10000000.0f;
 	float maxY = -10000000.0f;
 	float minY =  10000000.0f;
-
-	TextureManager* textureManager;
 
 	double longituteRatio = 69797.5460045862;
 	double latitudeRatio = 111220.165038003;

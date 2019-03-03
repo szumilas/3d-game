@@ -29,7 +29,7 @@ Car::Car()
 	resistanceRatio = (engine.getMaxTorque() * gearBox.getTopTransmission() * gearBox.getMainTransmission() * nm) / (rd * vMax * vMax);
 }
 
-void Car::importFromObjFile(const char* filePath, TextureManager* textureManager, Textures textureName, float scaleRatio)
+void Car::importFromObjFile(const char* filePath, Textures textureName, float scaleRatio)
 {
 	std::ifstream file;
 	file.open(filePath);
@@ -99,7 +99,7 @@ void Car::importFromObjFile(const char* filePath, TextureManager* textureManager
 
 			newPolygon.noOfPoints = newPolygon.points.size();
 			newPolygon.color = Color::white();
-			newPolygon.idTexture = textureManager->textures[static_cast<int>(textureName)].idTexture;
+			newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(textureName)].idTexture;
 			polygons.push_back(newPolygon);
 
 		}

@@ -15,7 +15,7 @@ public:
 
 	Car();
 
-	void importFromObjFile(const char* filePath, TextureManager* textureManager, Textures textureName, float scaleRatio = 1.0f);
+	void importFromObjFile(const char* filePath, Textures textureName, float scaleRatio = 1.0f);
 	void display();
 
 	void move();

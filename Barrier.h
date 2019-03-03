@@ -33,7 +33,7 @@ public:
 		}
 	};
 
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 	
 private:
 	Textures textureName;

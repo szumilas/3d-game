@@ -53,9 +53,9 @@ void PasazGrunwaldzki::generateWalls()
 	}
 }
 
-void PasazGrunwaldzki::calculateFinalGeometry(TextureManager* textureManager)
+void PasazGrunwaldzki::calculateFinalGeometry()
 {
-	Building::calculateFinalGeometry(textureManager);
+	Building::calculateFinalGeometry();
 
 	if (getId() == 101213837)
 	{
@@ -85,7 +85,7 @@ void PasazGrunwaldzki::calculateFinalGeometry(TextureManager* textureManager)
 			newPolygon.texturePoints.push_back({ 0.0f, wall.yRatio });
 
 			newPolygon.noOfPoints = newPolygon.texturePoints.size();
-			newPolygon.idTexture = textureManager->textures[static_cast<int>(Textures::glass_elevation)].idTexture;
+			newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(Textures::glass_elevation)].idTexture;
 			newPolygon.color = wall.color;
 
 			auto newColor = wall.color.mixColor(selectedColor);

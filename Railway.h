@@ -8,7 +8,7 @@ public:
 
 	Railway(MapObject& mapObject) : MapObject(mapObject) { _min_height = 0.05f; };
 
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
 
 private:

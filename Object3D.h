@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 
+#include "GlobalVariables.h"
 #include "GlobalStructures.h"
 
 #include <GL/glut.h>

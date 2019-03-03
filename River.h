@@ -10,7 +10,7 @@ public:
 		_min_height = -3.0f;
 	};
 
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
 
 private:

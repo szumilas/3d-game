@@ -87,20 +87,20 @@ void Building::calculateXYfromRef(const std::map<long long, node> &nodes)
 	}
 }
 
-void Building::calculateFinalGeometry(TextureManager* textureManager)
+void Building::calculateFinalGeometry()
 {
 	if (genericWallTexture)
 	{
-		applyGenericTextures(textureManager);
+		applyGenericTextures(&Game::textureManager);
 	}
 
 	for (auto& wall : walls)
 	{
-		wall.idTexture = textureManager->textures[static_cast<long>(wall.textureName)].idTexture;
+		wall.idTexture = Game::textureManager.textures[static_cast<long>(wall.textureName)].idTexture;
 		if(!wall.xRatio)
-			wall.xRatio = round(wall.wallLenght / textureManager->textures[static_cast<long>(wall.textureName)].realWidth);
+			wall.xRatio = round(wall.wallLenght / Game::textureManager.textures[static_cast<long>(wall.textureName)].realWidth);
 		if (!wall.yRatio)
-			wall.yRatio = round(_height - _min_height) / textureManager->textures[static_cast<long>(wall.textureName)].realHeight;
+			wall.yRatio = round(_height - _min_height) / Game::textureManager.textures[static_cast<long>(wall.textureName)].realHeight;
 
 		if (!wall.xRatio)
 			wall.xRatio = 1.0f;

@@ -20,16 +20,16 @@ void Riverbank::calculateXYfromRef(const std::map<long long, node> &nodes)
 	generateWalls();
 }
 
-void Riverbank::calculateFinalGeometry(TextureManager* textureManager)
+void Riverbank::calculateFinalGeometry()
 {
 	for (auto& wall : walls)
 	{
 		
 		auto wallTexture = Textures::retaining_wall;
 
-		wall.idTexture = textureManager->textures[static_cast<long>(wallTexture)].idTexture;
-		wall.xRatio = static_cast<int>(wall.wallLenght / textureManager->textures[static_cast<long>(wallTexture)].realWidth);
-		wall.yRatio = static_cast<int>(_height - _min_height) / textureManager->textures[static_cast<long>(wallTexture)].realHeight;
+		wall.idTexture = Game::textureManager.textures[static_cast<long>(wallTexture)].idTexture;
+		wall.xRatio = static_cast<int>(wall.wallLenght / Game::textureManager.textures[static_cast<long>(wallTexture)].realWidth);
+		wall.yRatio = static_cast<int>(_height - _min_height) / Game::textureManager.textures[static_cast<long>(wallTexture)].realHeight;
 
 		if (!wall.xRatio)
 			wall.xRatio = 1.0f;

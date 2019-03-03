@@ -25,9 +25,9 @@ void CarGauge::setScreenResolution(int w, int h)
 	RPMClock.currentValue = &car->engine.RPM;
 }
 
-void CarGauge::load(TextureManager* textureManager, Car* car)
+void CarGauge::load(Car* car)
 {
-	idTexture = textureManager->textures[static_cast<int>(Textures::car_gauge)].idTexture;
+	idTexture = Game::textureManager.textures[static_cast<int>(Textures::car_gauge)].idTexture;
 	CarGauge::car = car;
 }
 

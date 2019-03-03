@@ -8,7 +8,7 @@ public:
 
 	Street(MapObject& mapObject) : MapObject(mapObject) {};
 
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 
 private:
 

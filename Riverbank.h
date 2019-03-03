@@ -9,7 +9,7 @@ public:
 	Riverbank(MapObject& mapObject);
 
 	//void display();
-	void calculateFinalGeometry(TextureManager* textureManager);
+	void calculateFinalGeometry();
 
 private:
 

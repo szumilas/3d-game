@@ -1,6 +1,6 @@
 #include "Common.h"
 
-void Common::calculateFinalGeometry(TextureManager* textureManager)
+void Common::calculateFinalGeometry()
 {
 	for (auto& point : points)
 	{
@@ -11,6 +11,6 @@ void Common::calculateFinalGeometry(TextureManager* textureManager)
 
 	for (auto& polygon : polygons)
 	{
-		polygon.idTexture = textureManager->textures[static_cast<long>(Textures::sett)].idTexture;
+		polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::sett)].idTexture;
 	}
 }

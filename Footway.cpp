@@ -1,6 +1,6 @@
 #include "Footway.h"
 
-void Footway::calculateFinalGeometry(TextureManager* textureManager)
+void Footway::calculateFinalGeometry()
 {
 	for (size_t q = 0, limit = finalLeftRail.size() - 1; q < limit; q++)
 	{
@@ -17,7 +17,7 @@ void Footway::calculateFinalGeometry(TextureManager* textureManager)
 		newPolygon.texturePoints.push_back({ finalRightRail[q].x, finalRightRail[q].y });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = textureManager->textures[static_cast<unsigned int>(textureName)].idTexture;
+		newPolygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(textureName)].idTexture;
 		newPolygon.color = Color{ _color.red, _color.green, _color.blue };
 
 		newPolygon.additionalColor = newPolygon.color.mixColor(selectedColor);
