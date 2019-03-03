@@ -155,3 +155,25 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 		background = &mapObjects.back();
 
 }
+
+void MapContainer::displayAllWorld()
+{
+	for (auto& lineToDisplay : mapObjectSections)
+	{
+		for (auto& sectionToDisplay : lineToDisplay)
+		{
+			for (auto& object : sectionToDisplay)
+			{
+				object->get()->display();
+				object->get()->alreadyPrinted = false;
+			}
+		}
+	}
+
+	if (background != nullptr)
+	{
+		background->get()->display();
+		background->get()->alreadyPrinted = false;
+	}
+
+}

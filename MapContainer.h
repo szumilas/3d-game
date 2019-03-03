@@ -14,6 +14,7 @@ public:
 
 	void loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
 	void displayWorld(Point& center, Point& lookAt);
+	void displayAllWorld();
 
 private:
 
