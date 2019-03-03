@@ -18,6 +18,7 @@ public:
 	Object3D();
 	void loadModel();
 	virtual void display();
+	void importFromObjFile(const char* filePath, Textures textureName, float scaleRatio = 1.0f);
 
 private:
 
