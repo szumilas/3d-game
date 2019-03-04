@@ -40,6 +40,8 @@ private:
 		float* currentValue;
 		float maxValue;
 
+		float ratio = 1.0f;
+
 		void display()
 		{
 			glBegin(GL_TRIANGLES);
@@ -58,7 +60,7 @@ private:
 			clockTipStartRightPosition = clockTipStartPosition;
 
 			float angle = 4.9 / 4.0 * PI;
-			angle -= (*currentValue / maxValue) * 2.92 / 2.0 * PI;
+			angle -= (*currentValue * ratio / maxValue) * 2.92 / 2.0 * PI;
 
 			clockTipEndPosition.x += clockTipLenght * cos(angle);
 			clockTipEndPosition.y += clockTipLenght * sin(angle);
