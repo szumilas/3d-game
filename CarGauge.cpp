@@ -2,7 +2,6 @@
 
 CarGauge::CarGauge()
 {
-	velocityClock.maxValue = 220;
 	velocityClock.currentValue = 0;
 	
 	RPMClock.maxValue = 8000;
@@ -28,7 +27,16 @@ void CarGauge::setScreenResolution(int w, int h)
 
 void CarGauge::load(Car* car)
 {
-	idTexture = Game::textureManager.textures[static_cast<int>(Textures::car_gauge)].idTexture;
+	if (car->vMax > 220 / 3.6)
+	{
+		idTexture = Game::textureManager.textures[static_cast<int>(Textures::car_gauge_330)].idTexture;
+		velocityClock.maxValue = 330;
+	}
+	else
+	{
+		idTexture = Game::textureManager.textures[static_cast<int>(Textures::car_gauge)].idTexture;
+		velocityClock.maxValue = 220;
+	}
 	CarGauge::car = car;
 }
 

@@ -21,6 +21,8 @@
 #include "CarGauge.h"
 #include "Screen2D.h"
 
+#include "carDB.h"
+
 namespace Game
 {
 	TextureManager textureManager;
@@ -156,10 +158,10 @@ int main(int argc, char**agrv)
 		Game::textureManager.readTextures();
 
 		//cars[0].importFromObjFile("Data/Cars/skoda_octavia.obj", &textureManager, Textures::skoda_octavia, 0.165);
-		cars[0].importFromObjFile("Data/Cars/rolls_royce_phantom.obj", Textures::rolls_royce_phantom, 0.165);
+		cars[0].importFromObjFile("Data/Cars/lamborghini_huracan.obj", Textures::lamborghini_huracan, 0.165);
 		cars[1].importFromObjFile("Data/Cars/toyota_hilux.obj", Textures::toyota_hilux, 0.165);
 		cars[1].X += 5;
-		cars[2].importFromObjFile("Data/Cars/lamborghini_huracan.obj", Textures::lamborghini_huracan, 0.165);
+		cars[2].importFromObjFile("Data/Cars/rolls_royce_phantom.obj", Textures::rolls_royce_phantom, 0.165);
 		//cars[2].importFromObjFile("Data/Cars/toyota_hilux3.obj", &textureManager, Textures::toyota_hilux, 0.165);
 		cars[2].X += 10;
 		cars[3].importFromObjFile("Data/Cars/toyota_yaris.obj", Textures::toyota_yaris, 0.165);

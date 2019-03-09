@@ -6,6 +6,8 @@
 #include "TextureManager.h"
 #include "CarParts.h"
 
+#include "carDB.h"
+
 class Car : public Object3D
 {
 
@@ -40,18 +42,19 @@ public:
 
 private:
 
+	CarBrand carBrand;
+
 	float a = 0;
 	float v = 0; //[m/s]
-	float mass = 1000; //[kg]
+	float mass; //[kg]
 	float rd = 0.3; //[m]
-	float vMax = 200.0 / 3.6; //[m / s]
+	float vMax; //[m / s]
 	float resistanceRatio; //[kN / (m / s)^2]
 	float nm = 0.9; //[-]
 
 	float steeringWheelAngle;
 
-	float v_max = 60; //[m/s]
-	float acceleration = 6; //[m/s^s]
+	float acceleration; //[m/s^s]
 
 	bool tryAccelerate;
 	bool trySlow;
@@ -66,4 +69,5 @@ private:
 
 	Engine engine;
 	GearBox gearBox;
+
 };

@@ -69,6 +69,7 @@ enum class Textures : long
 	alfa_romeo_147,
 	audi_r8_v10_coupe,
 	car_gauge,
+	car_gauge_330,
 	elm_tree,
 	no_texture,
 };

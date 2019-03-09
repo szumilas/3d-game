@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "GlobalStructures.h"
+#include "carDB.h"
 
 class Engine
 {
@@ -12,6 +13,7 @@ class Engine
 public:
 	
 	Engine();
+	Engine(CarBrand carBrand);
 	Engine(float maxPower, float minPossibleRPM, float maxPossibleRPM, float minOptimalRMP, float maxOptimalRMP, float maxPowerRPM);
 
 
@@ -47,6 +49,8 @@ private:
 class GearBox
 {
 public:
+
+	GearBox(CarBrand carBrand);
 
 	inline float getTransmission(unsigned int gear) { return gears[gear]; }
 	inline float getCurrentTransmission() { return gears[currentGear]; }

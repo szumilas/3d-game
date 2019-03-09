@@ -1,7 +1,12 @@
 #include "Car.h"
 
-Car::Car()
+Car::Car() : carBrand(CarBrand::LamborghiniAventador), engine(carBrand), gearBox(carBrand)
 {
+	mass = carDB.at(carBrand).mass;
+	vMax = carDB.at(carBrand).vMax / 3.6;
+
+
+
 	X = 0;
 	Y = 0;
 	Z = 0.01;
@@ -52,7 +57,7 @@ void Car::move()
 	if(tryAccelerate)
 		drivingForce = engine.getCurrentTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() / rd * nm;
 
-	resistanceRatio = (engine.getMaxTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() * nm) / (rd * vMax * vMax);;
+	resistanceRatio = (engine.getMaxTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() * nm) / (rd * vMax * vMax);
 
 	drivingResistance = resistanceRatio * v * v;
 	if (v > 0 && v < 15)
