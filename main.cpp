@@ -177,14 +177,14 @@ int main(int argc, char**agrv)
 		carGauge.load(&cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
-		//mapManager.readMap("szczytnicka.osm");
+		mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");
 		//mapManager.readMap("szczytnickaB.osm");
 		//mapManager.readMap("map.osm");
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		mapManager.readMap("grunwaldWithRiver.osm");
+		//mapManager.readMap("grunwaldWithRiver.osm");
 		//mapManager.readMap("trees.osm");
 		//mapManager.readMap("walls.osm");
 
@@ -249,6 +249,7 @@ void display()
 		0, 0, 1); //up
 
 	mapContainer.displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
+	//mapContainer.displayAllWorld();
 
 	for (auto& car : cars)
 	{
@@ -341,6 +342,9 @@ void keyboard(unsigned char key, int x, int y)
 		if(!mapManager.loadedFromPolygonsFile)
 			mapManager.saveOverlays();
 		exit(0);
+		break;
+	case 32:
+		cars[0].slow();
 		break;
 	}
 

@@ -23,16 +23,40 @@ Car::Car()
 
 	cameraCenter = Point{-8, 0, 5};
 	cameraLookAt = Point{0, 0, 3};
-
-	resistanceRatio = (engine.getMaxTorque() * gearBox.getTopTransmission() * gearBox.getMainTransmission() * nm) / (rd * vMax * vMax);
 }
 
 void Car::move()
 {
-	engine.accelerator(tryAccelerate);
+	if (trySlow)
+	{
+		v = 0;
+	}
 
-	float drivingForce = engine.getCurrentTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() / rd * nm;
-	float drivingResistance = resistanceRatio * v * v;
+	//Automatic Transmission
+	//------------------------
+
+	if(tryAccelerate && gearBox.getCurrentGear() == 0)
+		gearBox.gearUp();
+	else if (engine.nextGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getNextTransmission(), rd, v))
+		gearBox.gearUp();
+	else if (engine.previousGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getPreviousTransmission(), rd, v))
+		gearBox.gearDown();
+
+	//------------------------
+
+	engine.setRPM(Engine::calculateRMP(gearBox.getCurrentTransmission() * gearBox.getMainTransmission(), rd, v));
+
+	float drivingForce = 0.0f;
+	float drivingResistance = 0.0f;
+
+	if(tryAccelerate)
+		drivingForce = engine.getCurrentTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() / rd * nm;
+
+	resistanceRatio = (engine.getMaxTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() * nm) / (rd * vMax * vMax);;
+
+	drivingResistance = resistanceRatio * v * v;
+	if (v > 0 && v < 15)
+		drivingResistance = resistanceRatio * 15 * 15;
 
 	if (v > 40)
 		int h = 5;
@@ -79,11 +103,6 @@ void Car::move()
 			steeringWheelAngle -= 0.002;
 		if (steeringWheelAngle < 0)
 			steeringWheelAngle += 0.002;
-
-		if (v > 0)
-			v -= 0.05;
-		if (v < 0)
-			v += 0.05;
 	}
 
 	wheels[0].adjustPosition(X, Y, rz, wheelBase / 2 + wheelBaseOffset, track / 2, steeringWheelAngle);

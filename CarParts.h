@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "GlobalStructures.h"
+
 class Engine
 {
 
@@ -14,13 +16,17 @@ public:
 
 
 	float getRPM() { return RPM; }
-	void accelerator(bool pedal);
+	void setRPM(float newRPM);
 	float getCurrentTorque();
 	inline float getMaxTorque() { return maxTorque; }
 	inline void changeRPM(float currentTransmission, float nextTransmission) { RPM *= (nextTransmission / currentTransmission); }
+	bool nextGearDrivingForceBigger(float mainTransmission, float currentTransmission, float nextTransmission, float rd, float v);
+	bool previousGearDrivingForceBigger(float mainTransmission, float currentTransmission, float previousTransmission, float rd, float v);
+	static float calculateRMP(float totalTransmission, float rd, float v) { return totalTransmission * 30 * v / PI / rd; }
 
 private:
 
+	float getTorque(float RPM);
 
 public:
 
@@ -45,6 +51,7 @@ public:
 	inline float getTransmission(unsigned int gear) { return gears[gear]; }
 	inline float getCurrentTransmission() { return gears[currentGear]; }
 	inline float getNextTransmission() { if (currentGear == gears.size() - 1) return gears[currentGear]; return gears[currentGear + 1]; }
+	inline float getPreviousTransmission() { if (currentGear == 0) return gears[currentGear]; return gears[currentGear - 1]; }
 	inline float getTopTransmission() { return gears.back(); }
 	inline float getMainTransmission() { return mainTransmission; }
 	inline void gearUp() { if (currentGear < gears.size() - 1) currentGear++; }

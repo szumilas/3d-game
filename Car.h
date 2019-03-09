@@ -41,10 +41,10 @@ public:
 private:
 
 	float a = 0;
-	float v = 0;
+	float v = 0; //[m/s]
 	float mass = 1000; //[kg]
 	float rd = 0.3; //[m]
-	float vMax = 150.0 / 3.6; //[m / s]
+	float vMax = 200.0 / 3.6; //[m / s]
 	float resistanceRatio; //[kN / (m / s)^2]
 	float nm = 0.9; //[-]
 
