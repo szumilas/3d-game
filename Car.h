@@ -15,7 +15,7 @@ class Car : public Object3D
 
 public:
 
-	Car();
+	Car(CarBrand carBrand, float startX, float startY);
 
 	void display();
 

@@ -1,14 +1,14 @@
 #include "Car.h"
 
-Car::Car() : carBrand(CarBrand::SuzukiVitara), engine(carBrand), gearBox(carBrand)
+Car::Car(CarBrand carBrand, float startX, float startY) : carBrand(carBrand), engine(carBrand), gearBox(carBrand)
 {
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
 
 
 
-	X = 0;
-	Y = 0;
+	X = startX;
+	Y = startY;
 	Z = 0.01;
 
 	rz = 3.14 / 4 * 1;

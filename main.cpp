@@ -60,7 +60,7 @@ public:
 
 };
 
-std::vector<Car> cars(1);
+std::vector<Car> cars{Car(CarBrand::SuzukiVitara, 0, 0), Car(CarBrand::LamborghiniHuracan, 5, 0) };
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
@@ -157,26 +157,10 @@ int main(int argc, char**agrv)
 
 		Game::textureManager.readTextures();
 
-
-		cars[0].importFromObjFile();
-		////cars[0].importFromObjFile("Data/Cars/skoda_octavia.obj", &textureManager, Textures::skoda_octavia, 0.165);
-		//cars[0].importFromObjFile("Data/Cars/rolls_royce_phantom.obj", Textures::rolls_royce_phantom, 0.165);
-		//cars[1].importFromObjFile("Data/Cars/toyota_hilux.obj", Textures::toyota_hilux, 0.165);
-		//cars[1].X += 5;
-		//cars[2].importFromObjFile("Data/Cars/toyota_yaris.obj", Textures::toyota_yaris, 0.165);
-		////cars[2].importFromObjFile("Data/Cars/toyota_hilux3.obj", &textureManager, Textures::toyota_hilux, 0.165);
-		//cars[2].X += 10;
-		//cars[3].importFromObjFile("Data/Cars/lamborghini_huracan.obj", Textures::lamborghini_huracan, 0.165);
-		////cars[3].importFromObjFile("Data/Cars/toyota_hilux4.obj", &textureManager, Textures::toyota_hilux, 0.165);
-		//cars[3].X += 15;
-		//cars[4].importFromObjFile("Data/Cars/suzuki_vitara.obj", Textures::suzuki_vitara, 0.165);
-		//cars[4].X += 20;
-		//cars[5].importFromObjFile("Data/Cars/rolls_royce_phantom.obj", Textures::rolls_royce_phantom, 0.165);
-		//cars[5].X += 25;
-		//cars[6].importFromObjFile("Data/Cars/alfa_romeo_147.obj", Textures::alfa_romeo_147, 0.165);
-		//cars[6].X += 30;
-		//cars[7].importFromObjFile("Data/Cars/audi_r8_v10_coupe.obj", Textures::audi_r8_v10_coupe, 0.165);
-		//cars[7].X += 35;
+		for (auto& car : cars)
+		{
+			car.importFromObjFile();
+		}
 
 		carGauge.load(&cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
