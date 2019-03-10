@@ -44,12 +44,13 @@ private:
 
 		void display()
 		{
+			glBindTexture(GL_TEXTURE_2D, Game::textureManager.textures[static_cast<int>(Textures::no_texture)].idTexture);
+
+			glColor3f(1.0f, 0.0f, 0.0f);
 			glBegin(GL_TRIANGLES);
-			glColor3f(1, 0, 0);
 			glVertex2f(clockTipStartLeftPosition.x, clockTipStartLeftPosition.y);
 			glVertex2f(clockTipStartRightPosition.x, clockTipStartRightPosition.y);
 			glVertex2f(clockTipEndPosition.x, clockTipEndPosition.y);
-
 			glEnd();
 		}
 

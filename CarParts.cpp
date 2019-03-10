@@ -24,7 +24,7 @@ Engine::Engine(float maxPower, float minPossibleRPM, float maxPossibleRPM, float
 	if (maxPower > 300)
 	{
 		Engine::maxPossibleRPM = 8000;
-		Engine::maxOptimalRMP = 6500;
+		Engine::maxOptimalRMP = 6000;
 	}
 }
 

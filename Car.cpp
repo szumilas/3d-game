@@ -1,6 +1,6 @@
 #include "Car.h"
 
-Car::Car() : carBrand(CarBrand::LamborghiniAventador), engine(carBrand), gearBox(carBrand)
+Car::Car() : carBrand(CarBrand::SuzukiVitara), engine(carBrand), gearBox(carBrand)
 {
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
@@ -192,4 +192,10 @@ void Car::display()
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
 	}
+}
+
+void Car::importFromObjFile()
+{
+	Object3D::importFromObjFile(carDB.at(carBrand).objFilePath.c_str(), carDB.at(carBrand).textureName, 0.165);
+
 }

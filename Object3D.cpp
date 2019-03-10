@@ -113,6 +113,7 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 
 			newPolygon.noOfPoints = newPolygon.points.size();
 			newPolygon.color = Color::white();
+			newPolygon.additionalColor = Color::white();
 			newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(textureName)].idTexture;
 			polygons.push_back(newPolygon);
 

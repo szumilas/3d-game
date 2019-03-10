@@ -33,6 +33,7 @@ public:
 	float getVelocity() { return v; } //[m/s]
 	float getRPM() { return engine.getRPM(); } //[m/s]
 	unsigned int getCurrentGear() { return gearBox.getCurrentGear(); } //[-]
+	void importFromObjFile();
 
 private:
 
@@ -50,7 +51,7 @@ private:
 	float rd = 0.3; //[m]
 	float vMax; //[m / s]
 	float resistanceRatio; //[kN / (m / s)^2]
-	float nm = 0.9; //[-]
+	float nm = 0.8; //[-]
 
 	float steeringWheelAngle;
 
