@@ -110,11 +110,6 @@ void Car::move()
 			steeringWheelAngle += 0.002;
 	}
 
-	wheels[0].adjustPosition(X, Y, rz, wheelBase / 2 + wheelBaseOffset, track / 2, steeringWheelAngle);
-	wheels[1].adjustPosition(X, Y, rz, wheelBase / 2 + wheelBaseOffset, -track / 2, steeringWheelAngle);
-	wheels[2].adjustPosition(X, Y, rz, -wheelBase / 2 + wheelBaseOffset, track / 2);
-	wheels[3].adjustPosition(X, Y, rz, -wheelBase / 2 + wheelBaseOffset, -track / 2);
-
 	tryAccelerate = false;
 	trySlow = false;
 }
@@ -189,6 +184,12 @@ void Car::display()
 			glEnd();
 		}
 
+		backWheels.setCarPosition(X, Y, Z);
+		backWheels.setCarAngle(rz);
+
+		backWheels.rotate(v);
+		backWheels.display();
+
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
 	}
@@ -196,6 +197,7 @@ void Car::display()
 
 void Car::importFromObjFile()
 {
-	Object3D::importFromObjFile(carDB.at(carBrand).objFilePath.c_str(), carDB.at(carBrand).textureName, 0.165);
-
+	Object3D::importFromObjFile((carDB.at(carBrand).objFilePath + "body.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
+	backWheels.importFromObjFile((carDB.at(carBrand).objFilePath + "back_wheels.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
+	backWheels.calculateGeometry(-1.45);
 }

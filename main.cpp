@@ -60,7 +60,7 @@ public:
 
 };
 
-std::vector<Car> cars{Car(CarBrand::SuzukiVitara, 0, 0), Car(CarBrand::LamborghiniHuracan, 5, 0) };
+std::vector<Car> cars{Car(CarBrand::SuzukiVitara, 0, 0) };
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
