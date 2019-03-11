@@ -125,10 +125,10 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 		}
 	} while (line != "#EOF" && line != "# End of File");
 
-	float maxX = 0.0f;
-	float maxY = 0.0f;
-	float minX = 100.0f;
-	float minY = 100.0f;
+	float maxX = -100.0f;
+	float maxY = -100.0f;
+	float minX =  100.0f;
+	float minY =  100.0f;
 
 	for (auto& polygon : polygons)
 	{

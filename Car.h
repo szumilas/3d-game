@@ -46,6 +46,8 @@ private:
 	CarBrand carBrand;
 
 	Wheel backWheels;
+	Wheel leftWheel;
+	Wheel rightWheel;
 
 	float a = 0;
 	float v = 0; //[m/s]

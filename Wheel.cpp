@@ -2,7 +2,7 @@
 
 Wheel::Wheel()
 {
-
+	rz = 0.0f;
 }
 
 void Wheel::display()
@@ -22,10 +22,15 @@ void Wheel::display()
 			float firstX = polygon.points[i].x * cos(angle) - (polygon.points[i].z - r) * sin(angle);
 			float firstZ = polygon.points[i].x * sin(angle) + (polygon.points[i].z - r) * cos(angle) + r;
 
+			float secondX = firstX * cos(rz) - polygon.points[i].y * sin(rz);
+			float secondY = firstX * sin(rz) + polygon.points[i].y * cos(rz);
+			float secondZ = firstZ;
 
-			toPrint.x = carX + (firstX + xOffset) * car_cos_rz - polygon.points[i].y * car_sin_rz;
-			toPrint.y = carY + (firstX + xOffset) * car_sin_rz + polygon.points[i].y * car_cos_rz;
-			toPrint.z = carZ + firstZ;
+			toPrint.x = carX + (secondX + xOffset) * car_cos_rz - (secondY + yOffset) * car_sin_rz;
+			toPrint.y = carY + (secondX + xOffset) * car_sin_rz + (secondY + yOffset) * car_cos_rz;
+			toPrint.z = carZ + secondZ;
+
+
 			glVertex3f(toPrint.x, toPrint.y, toPrint.z);
 		}
 		glEnd();
