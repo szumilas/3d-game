@@ -104,13 +104,7 @@ void Car::move()
 	if (v > -0.01 && v < 0.01 && !tryAccelerate)
 		v = 0;
 
-	if (v != 0)
-	{
-		if (steeringWheelAngle > 0)
-			steeringWheelAngle -= 0.002;
-		if (steeringWheelAngle < 0)
-			steeringWheelAngle += 0.002;
-	}
+	straightenSteeringWheelAngle();
 
 	tryAccelerate = false;
 	trySlow = false;
@@ -212,4 +206,17 @@ void Car::importFromObjFile()
 	leftWheel.calculateGeometry(carDB.at(carBrand).frontWheelsXoffset, carDB.at(carBrand).frontWheelsYoffset);
 	rightWheel.importFromObjFile((carDB.at(carBrand).objFilePath + "right_wheel.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
 	rightWheel.calculateGeometry(carDB.at(carBrand).frontWheelsXoffset, -carDB.at(carBrand).frontWheelsYoffset);
+}
+
+void Car::straightenSteeringWheelAngle()
+{
+	if (v != 0)
+	{
+		if (steeringWheelAngle > 0.002f)
+			steeringWheelAngle -= 0.002f;
+		else if (steeringWheelAngle < -0.002f)
+			steeringWheelAngle += 0.002f;
+		else
+			steeringWheelAngle = 0.0f;
+	}
 }
