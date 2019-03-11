@@ -207,9 +207,9 @@ void Car::importFromObjFile()
 {
 	Object3D::importFromObjFile((carDB.at(carBrand).objFilePath + "body.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
 	backWheels.importFromObjFile((carDB.at(carBrand).objFilePath + "back_wheels.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
-	backWheels.calculateGeometry(-1.45f);
+	backWheels.calculateGeometry(carDB.at(carBrand).backWheelsXoffset);
 	leftWheel.importFromObjFile((carDB.at(carBrand).objFilePath + "left_wheel.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
-	leftWheel.calculateGeometry(1.32f, 0.77f);
+	leftWheel.calculateGeometry(carDB.at(carBrand).frontWheelsXoffset, carDB.at(carBrand).frontWheelsYoffset);
 	rightWheel.importFromObjFile((carDB.at(carBrand).objFilePath + "right_wheel.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
-	rightWheel.calculateGeometry(1.32f, -0.77f);
+	rightWheel.calculateGeometry(carDB.at(carBrand).frontWheelsXoffset, -carDB.at(carBrand).frontWheelsYoffset);
 }
