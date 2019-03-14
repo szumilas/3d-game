@@ -28,8 +28,7 @@ void Screen2D::display()
 
 	carGauge->display();
 	freetype::display(digital_counter, 0.5 * width + 0.495 * height, 0.035 * height, "%i", carGauge->car->getCurrentGear());
-
-	glPopAttrib();
+	freetype::display(digital_counter, 0.5 * width - 0.495 * height, 0.035 * height, "%i", static_cast<int>(carGauge->car->resultantTorque));
 
 	pop_projection_matrix();
 }

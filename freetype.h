@@ -70,8 +70,6 @@ namespace freetype {
 
 		display(ft_font, x, y, fmt, args);
 
-		glPopAttrib();
-
 		pop_projection_matrix();
 	}
 

@@ -288,9 +288,9 @@ void display(const font_data &ft_font, float x, float y, const char *fmt, ...)
 
 		glPopMatrix();
 
-
-
 	}
+
+	glPopAttrib();
 
 }
 
