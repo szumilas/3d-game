@@ -31,5 +31,6 @@ private:
 
 
 	freetype::font_data digital_counter;
+	freetype::font_data stocky;
 
 };

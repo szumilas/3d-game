@@ -42,12 +42,9 @@ public:
 
 
 protected:
-		Point position;
 
 public:
-	float X;
-	float Y;
-	float Z;
+	Point position;
 
 	float rz;
 

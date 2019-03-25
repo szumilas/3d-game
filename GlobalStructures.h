@@ -32,6 +32,14 @@ struct Point
 		return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2));
 	}
 
+	static void rotate(Point& p, const Point& refP, float angle)
+	{
+		double newX = refP.x + (p.x - refP.x) * cos(angle) - (p.y - refP.y) * sin(angle);
+		double newY = refP.y + (p.y - refP.y) * cos(angle) + (p.x - refP.x) * sin(angle);
+		p.x = newX;
+		p.y = newY;
+	}
+
 	bool operator==(const Point& second) const { return x == second.x && y == second.y && z == second.z; }
 	bool operator!=(const Point& second) const { return x != second.x || y != second.y || z != second.z; }
 	bool operator<(const Point& second) const { return x < second.x || x == second.x && y < second.y || x == second.x && y == second.y && z < second.z; }
@@ -156,6 +164,17 @@ struct Plane
 
 struct vector2D
 {
+	vector2D()
+	{
+		x = 0.0;
+		y = 0.0;
+	}
+
+	vector2D(double x, double y) : x(x), y(y)
+	{
+
+	}
+
 	vector2D(Point& p1, Point& p2)
 	{
 		x = p2.x - p1.x;
@@ -206,6 +225,16 @@ struct vector2D
 		return alpha;
 	}
 
+	static double directedAngle(const vector2D& v1, const vector2D& v2)
+	{
+		auto alpha = angle(v1, v2);
+
+		if (crossProduct(v1, v2) < 0)
+			alpha = 2 * PI - alpha;
+
+		return alpha;
+	}
+
 	void convertIntoUnitVector()
 	{
 		double dist = sqrt(x * x + y * y);
@@ -220,8 +249,8 @@ struct vector2D
 		x = x2;
 	}
 
-	double x;
-	double y;
+	double x = 0.0;
+	double y = 0.0;
 
 };
 
@@ -233,4 +262,32 @@ struct node
 
 	float posX;
 	float posY;
+};
+
+struct Force
+{
+	Force(Point center, vector2D vec) : center(center)
+	{
+		if (abs(vec.x) < 0.001 && abs(vec.y) < 0.001)
+		{
+			direction = 0.0f;
+			value = 0.0f;
+		}
+		else
+		{
+			direction = vector2D::directedAngle(vector2D(Point(0, 0), Point(1, 0)), vec);
+			value = vec.length();
+		}
+	}
+
+	Force(Point center, float direction, float value) : center(center), direction(direction), value(value)
+	{
+	
+	}
+
+
+	Point center;
+	float direction;
+	float value;
+
 };

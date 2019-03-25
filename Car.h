@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "Object3D.h"
 #include "Wheel.h"
 #include "enum.h"
@@ -12,6 +14,8 @@ class Car : public Object3D
 {
 
 	friend class CarGauge;
+	friend class Screen2D;
+
 
 public:
 
@@ -38,9 +42,23 @@ public:
 private:
 
 	void straightenSteeringWheelAngle();
+	void calculateMovement();
+	void setLastWheelPosition();
+	void calculateCarDrift();
+
+	template <typename T> int sgn(T val)
+	{
+		return (T(0) < val) - (val < T(0));
+	}
+
+	Point getCarPointInGlobalSystem(const Point& p)
+	{
+		return { position.x + cos(rz) * p.x - sin(rz) * p.y, position.y + sin(rz) * p.x + cos(rz) * p.y };
+	}
 
 public:
 
+	float resultantTorque;
 
 private:
 
@@ -50,13 +68,20 @@ private:
 	Wheel leftWheel;
 	Wheel rightWheel;
 
+	Point lastWheelsPosition[4];
+	std::list<Point> wheelsTrace;
+
 	float a = 0;
 	float v = 0; //[m/s]
+	float vx = 0; //[m/s]
+	float vy = 0; //[m/s]
 	float mass; //[kg]
 	float rd = 0.3; //[m]
 	float vMax; //[m / s]
 	float resistanceRatio; //[kN / (m / s)^2]
 	float nm = 0.8; //[-]
+
+	vector2D vLoc{0.0, 0.0};
 
 	float steeringWheelAngle;
 
@@ -66,14 +91,15 @@ private:
 	bool trySlow;
 
 	std::vector<Wheel> wheels;
-	float wheelBaseOffset;
-	float wheelBase;
-	float track;
-
+	float frontWheelsYoffset;
+	float frontWheelsXoffset;
+	float backWheelsXoffset;
+			
 	Point cameraCenter;
 	Point cameraLookAt;
 
 	Engine engine;
 	GearBox gearBox;
 
+	std::vector<Force> forces;
 };
