@@ -7,11 +7,11 @@ Car::Car(CarBrand carBrand, float startX, float startY) : carBrand(carBrand), en
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
 
-	position.x = startX;
-	position.y = startY;
+	position.x = -140;
+	position.y = -347;
 	position.z = 0.01;
 
-	rz = 3.14 / 4 * 1;
+	rz = 3.14 / 4 * 0 + 4.36;
 
 	steeringWheelAngle = 0;
 
@@ -98,8 +98,10 @@ void Car::move()
 	straightenSteeringWheelAngle();
 	calculateCarDrift();
 
+	Game::soundManager.playSound(Sounds::engine, engine.getRPM());
 	tryAccelerate = false;
 	trySlow = false;
+
 }
 
 void Car::accelerate()

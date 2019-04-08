@@ -1,3 +1,54 @@
+//#include <iostream>
+//#include "TextureManager.h"
+//
+//#include <allegro5/allegro_acodec.h>
+//
+//namespace Game
+//{
+//	TextureManager textureManager;
+//}
+//
+//int main(int argc, char **argv) {
+//
+//	ALLEGRO_SAMPLE *sample = NULL;
+//
+//	if (!al_init()) {
+//		fprintf(stderr, "failed to initialize allegro!\n");
+//		return -1;
+//	}
+//
+//	if (!al_install_audio()) {
+//		fprintf(stderr, "failed to initialize audio!\n");
+//		return -1;
+//	}
+//
+//	if (!al_init_acodec_addon()) {
+//		fprintf(stderr, "failed to initialize audio codecs!\n");
+//		return -1;
+//	}
+//
+//	if (!al_reserve_samples(1)) {
+//		fprintf(stderr, "failed to reserve samples!\n");
+//		return -1;
+//	}
+//
+//	sample = al_load_sample("Data/Sounds/engine.wav");
+//
+//	if (!sample) {
+//		printf("Audio clip sample not loaded!\n");
+//		return -1; 
+//	}
+//
+//
+//	/* Loop the sample until the display closes. */
+//	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
+//
+//	al_rest(1.0);
+//
+//	al_destroy_sample(sample);
+//	return 0;
+//}
+
 #define NOFULLSCREEN
 
 #include <IL/il.h>
@@ -17,6 +68,7 @@
 #include "Orbit.h"
 #include "MapManager.h"
 #include "TextureManager.h"
+#include "SoundManager.h"
 #include "MapContainer.h"
 #include "CarGauge.h"
 #include "Screen2D.h"
@@ -26,6 +78,7 @@
 namespace Game
 {
 	TextureManager textureManager;
+	SoundManager soundManager;
 }
 
 int current_time;
@@ -60,7 +113,7 @@ public:
 
 };
 
-std::vector<Car> cars{Car(CarBrand::SuzukiVitara, 0, 0) };
+std::vector<Car> cars{Car(CarBrand::LamborghiniHuracan, 0, 0) };
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
@@ -167,13 +220,13 @@ int main(int argc, char**agrv)
 
 		//mapManager.readMap("szczytnicka.osm");
 		//mapManager.readMap("szczytnickaB4.osm");
-		mapManager.readMap("szczytnickaB.osm");
+		//mapManager.readMap("szczytnickaB.osm");
 		//mapManager.readMap("map.osm");
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
 		//mapManager.readMap("grunwaldWithRiver.osm");
-		//mapManager.readMap("trees.osm");
+		mapManager.readMap("trees2.osm");
 		//mapManager.readMap("walls.osm");
 
 		//mapManager.readMap("streetDetail.osm");

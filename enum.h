@@ -74,6 +74,11 @@ enum class Textures : long
 	no_texture,
 };
 
+enum class Sounds : long
+{
+	engine,
+};
+
 enum class Exceptions : long
 {
 	ERR_WHILE_CONVERTING_IMAGE,
