@@ -209,6 +209,7 @@ int main(int argc, char**agrv)
 		wheel.loadModel();
 
 		Game::textureManager.readTextures();
+		Game::soundManager.readSounds();
 
 		for (auto& car : cars)
 		{
