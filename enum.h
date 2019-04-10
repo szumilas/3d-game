@@ -77,6 +77,7 @@ enum class Textures : long
 enum class Sounds : long
 {
 	engine,
+	engine2,
 };
 
 enum class Exceptions : long

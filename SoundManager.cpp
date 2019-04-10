@@ -32,15 +32,15 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {	
-	for (auto& sample : samples)
+	for (auto& sampleInstance : sampleInstances)
 	{
-		al_set_sample(sample, NULL);
-		al_destroy_sample_instance(sample);
+		al_set_sample(sampleInstance, NULL);
+		al_destroy_sample_instance(sampleInstance);
 	}
 
-	for (auto& sample_data : samples_data)
+	for (auto& sound : sounds)
 	{
-		al_destroy_sample(sample_data);
+		al_destroy_sample(sound.soundData);
 	}
 
 	for (auto& submixer : submixers)
@@ -58,77 +58,57 @@ void SoundManager::readSounds()
 {
 	for (auto& sound : sounds)
 	{
-		submixers.push_back(al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2));
-
-		if (!submixers.back())
-		{
-			throw Exceptions::ERR_WHILE_CREATE_ALLEGRO_MIXER;
-		}
-
 		std::string fullPath = "Data/Sounds/" + sound.filePath;
 
-		samples_data.push_back(al_load_sample(fullPath.c_str()));
+		sound.soundData = al_load_sample(fullPath.c_str());
 
-		if (!samples_data.back())
+		if (!sound.soundData)
 		{
 			throw Exceptions::ERR_WHILE_LOADING_SAMPLE;
-		}
-
-		samples.push_back(al_create_sample_instance(NULL));
-
-		if (!samples.back())
-		{
-			throw Exceptions::ERR_WHILE_CREATE_SAMPLE;
-		}
-		if (!al_set_sample(samples.back(), samples_data.back()))
-		{
-			throw Exceptions::ERR_WHILE_SET_SAMPLE_PTR;
-		}
-		if (!al_attach_sample_instance_to_mixer(samples.back(), submixers.back()))
-		{
-			throw Exceptions::ERR_WHILE_ATTACHING_SAMPLE_INSTANCE_TO_MIXER;
-		}
-		if (!al_attach_mixer_to_mixer(submixers.back(), mixer))
-		{
-			throw Exceptions::ERR_WHILE_ATTACHING_SUBMIXER_TO_MIXER;
 		}
 	}
 
 	std::sort(sounds.begin(), sounds.end(), [](SoundData& a, SoundData& b) { return a.soundName < b.soundName; });
-
-	al_set_sample_instance_playmode(samples[0], ALLEGRO_PLAYMODE_LOOP);
-	al_play_sample_instance(samples[0]);
-	al_set_sample_instance_gain(samples[0], 1);
 }
 
-void SoundManager::playSound(Sounds soundName, float RPM, const Point& soundPosition)
+void SoundManager::playSound(ALLEGRO_SAMPLE_INSTANCE* sample, float volume, float pan, float speed)
 {
-	if (RPM >= 6000)
-		RPM = 5999;
+	al_set_sample_instance_gain(sample, volume);
+	al_set_sample_instance_pan(sample, pan);
+	al_set_sample_instance_speed(sample, speed);
+}
 
-	float speed = (RPM / 3000) + 0.6;
+ALLEGRO_SAMPLE_INSTANCE* SoundManager::registerSoundInstance(Sounds soundName)
+{
+	submixers.push_back(al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2));
 
-	speed = max(speed, 1.0);
+	if (!submixers.back())
+	{
+		throw Exceptions::ERR_WHILE_CREATE_ALLEGRO_MIXER;
+	}
 
-	float volume = sqrt(1 / (max(1, soundPosition.distance2D(cameraCenter))));
+	ALLEGRO_SAMPLE_INSTANCE* newInstance = al_create_sample_instance(NULL);
+	sampleInstances.push_back(newInstance);
 
-	vector2D lookingLine(cameraCenter, cameraLookAt);
-	vector2D objectLine(cameraCenter, soundPosition);
+	if (!sampleInstances.back())
+	{
+		throw Exceptions::ERR_WHILE_CREATE_SAMPLE;
+	}
+	if (!al_set_sample(sampleInstances.back(), sounds[static_cast<int>(soundName)].soundData))
+	{
+		throw Exceptions::ERR_WHILE_SET_SAMPLE_PTR;
+	}
+	if (!al_attach_sample_instance_to_mixer(sampleInstances.back(), submixers.back()))
+	{
+		throw Exceptions::ERR_WHILE_ATTACHING_SAMPLE_INSTANCE_TO_MIXER;
+	}
+	if (!al_attach_mixer_to_mixer(submixers.back(), mixer))
+	{
+		throw Exceptions::ERR_WHILE_ATTACHING_SUBMIXER_TO_MIXER;
+	}
 
-	float angle = vector2D::directedAngle(lookingLine, objectLine);
+	al_set_sample_instance_playmode(newInstance, ALLEGRO_PLAYMODE_LOOP);
+	al_play_sample_instance(newInstance);
 
-	float finalPan = 0.0f;
-
-	if (angle >= 0.0f && angle < PI / 2)
-		finalPan = -angle / (PI / 2);
-	else if (angle >= PI / 2 && angle < PI)
-		finalPan = -(PI - angle) / (PI / 2);
-	else if (angle >= PI && angle < 3 / 2 * PI)
-		finalPan = (angle - PI) / (PI / 2);
-	else if (angle >= 3 / 2 * PI && angle < 2 * PI)
-		finalPan = (2 * PI - angle) / (PI / 2);
-
-	al_set_sample_instance_pan(samples[0], finalPan);
-	al_set_sample_instance_gain(samples[0], volume);
-	al_set_sample_instance_speed(samples[0], speed);
+	return newInstance;
 }

@@ -113,7 +113,7 @@ public:
 
 };
 
-std::vector<Car> cars{Car(CarBrand::LamborghiniHuracan, 0, 0) };
+std::vector<Car> cars;
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
@@ -210,6 +210,8 @@ int main(int argc, char**agrv)
 
 		Game::textureManager.readTextures();
 		Game::soundManager.readSounds();
+
+		cars = { Car(CarBrand::LamborghiniHuracan, 0, 0, &camera.center, &camera.lookAt), Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt) };
 
 		for (auto& car : cars)
 		{
@@ -489,7 +491,8 @@ void Update()
 		F2Released = false;
 	}
 
-	cars[0].move();
+	for(auto& car : cars)
+		car.move();
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 

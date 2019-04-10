@@ -15,6 +15,7 @@ class SoundManager
 	{
 		Sounds soundName;
 		std::string filePath;
+		ALLEGRO_SAMPLE* soundData;
 	};
 
 
@@ -24,7 +25,9 @@ public:
 
 	void readSounds();
 
-	void playSound(Sounds soundName, float RPM, const Point& soundPosition);
+	ALLEGRO_SAMPLE_INSTANCE* registerSoundInstance(Sounds soundName);
+
+	void playSound(ALLEGRO_SAMPLE_INSTANCE* sample, float volume = 1.0f, float pan = 0.0f, float speed = 1.0f);
 
 	void serCameraPosition(const Point& newCenter, const Point& newLookAt) { cameraCenter = newCenter; cameraLookAt = newLookAt; }
 
@@ -39,10 +42,10 @@ public:
 	ALLEGRO_MIXER *mixer;
 
 	std::vector<ALLEGRO_MIXER*> submixers;
-	std::vector<ALLEGRO_SAMPLE_INSTANCE*> samples;
-	std::vector<ALLEGRO_SAMPLE*> samples_data;
+	std::vector<ALLEGRO_SAMPLE_INSTANCE*> sampleInstances;
 
 	std::vector<SoundData> sounds{
-		{ Sounds::engine, "engine.wav" }
+		{ Sounds::engine, "engine.wav" },
+		{ Sounds::engine2, "engine2.wav" },
 	};
 };

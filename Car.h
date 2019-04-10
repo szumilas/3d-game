@@ -1,5 +1,6 @@
 #pragma once
 
+#include <allegro5/allegro_acodec.h>
 #include <list>
 
 #include "Object3D.h"
@@ -19,7 +20,7 @@ class Car : public Object3D
 
 public:
 
-	Car(CarBrand carBrand, float startX, float startY);
+	Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt);
 
 	void display();
 
@@ -45,6 +46,7 @@ private:
 	void calculateMovement();
 	void setLastWheelPosition();
 	void calculateCarDrift();
+	void playEngineSound();
 
 	template <typename T> int sgn(T val)
 	{
@@ -98,8 +100,13 @@ private:
 	Point cameraCenter;
 	Point cameraLookAt;
 
+	Point* globalCameraCenter;
+	Point* globalCameraLookAt;
+
 	Engine engine;
 	GearBox gearBox;
 
 	std::vector<Force> forces;
+
+	ALLEGRO_SAMPLE_INSTANCE* engineSound;
 };

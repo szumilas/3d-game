@@ -1,14 +1,20 @@
+#define NOMINMAX
+
+
 #include "Car.h"
 
 #include <algorithm>
 
-Car::Car(CarBrand carBrand, float startX, float startY) : carBrand(carBrand), engine(carBrand), gearBox(carBrand)
+Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt) : carBrand(carBrand), engine(carBrand), gearBox(carBrand)
 {
+	Car::globalCameraCenter = globalCameraCenter;
+	Car::globalCameraLookAt = globalCameraLookAt;
+
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
 
-	position.x = -140;
-	position.y = -347;
+	position.x = startX -140;
+	position.y = startY -347;
 	position.z = 0.01;
 
 	rz = 3.14 / 4 * 0 + 4.36;
@@ -27,6 +33,10 @@ Car::Car(CarBrand carBrand, float startX, float startY) : carBrand(carBrand), en
 	cameraLookAt = Point{0, 0, 3};
 
 	setLastWheelPosition();
+
+
+	engineSound = Game::soundManager.registerSoundInstance(carDB.at(carBrand).engineSound);
+
 }
 
 void Car::move()
@@ -97,8 +107,9 @@ void Car::move()
 
 	straightenSteeringWheelAngle();
 	calculateCarDrift();
+	
+	playEngineSound();
 
-	Game::soundManager.playSound(Sounds::engine, engine.getRPM(), position);
 	tryAccelerate = false;
 	trySlow = false;
 
@@ -346,4 +357,32 @@ void Car::calculateCarDrift()
 	}
 
 	setLastWheelPosition();
+}
+
+void Car::playEngineSound()
+{
+
+	float speed = (engine.getRPM() / 3000) + 0.6;
+
+	speed = std::max(speed, 1.0f);
+
+	float volume = sqrt(1 / (std::max(1.0, position.distance2D(*globalCameraCenter)) ));
+
+	vector2D lookingLine(*globalCameraCenter, *globalCameraLookAt);
+	vector2D objectLine(*globalCameraCenter, position);
+
+	float angle = vector2D::directedAngle(lookingLine, objectLine);
+
+	float finalPan = 0.0f;
+
+	if (angle >= 0.0f && angle < PI / 2)
+		finalPan = -angle / (PI / 2);
+	else if (angle >= PI / 2 && angle < PI)
+		finalPan = -(PI - angle) / (PI / 2);
+	else if (angle >= PI && angle < 3 / 2 * PI)
+		finalPan = (angle - PI) / (PI / 2);
+	else if (angle >= 3 / 2 * PI && angle < 2 * PI)
+		finalPan = (2 * PI - angle) / (PI / 2);
+
+	Game::soundManager.playSound(engineSound, volume, finalPan, speed);
 }
