@@ -98,7 +98,7 @@ void Car::move()
 	straightenSteeringWheelAngle();
 	calculateCarDrift();
 
-	Game::soundManager.playSound(Sounds::engine, engine.getRPM());
+	Game::soundManager.playSound(Sounds::engine, engine.getRPM(), position);
 	tryAccelerate = false;
 	trySlow = false;
 

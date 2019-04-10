@@ -7,6 +7,7 @@
 #include <allegro5/allegro_acodec.h>
 
 #include "enum.h"
+#include "GlobalStructures.h"
 
 class SoundManager
 {
@@ -23,10 +24,14 @@ public:
 
 	void readSounds();
 
-	void playSound(Sounds soundName, float RPM);
+	void playSound(Sounds soundName, float RPM, const Point& soundPosition);
+
+	void serCameraPosition(const Point& newCenter, const Point& newLookAt) { cameraCenter = newCenter; cameraLookAt = newLookAt; }
 
 private:
-	
+
+	Point cameraCenter;
+	Point cameraLookAt;
 
 public:
 

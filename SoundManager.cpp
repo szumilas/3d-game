@@ -101,7 +101,7 @@ void SoundManager::readSounds()
 	al_set_sample_instance_gain(samples[0], 1);
 }
 
-void SoundManager::playSound(Sounds soundName, float RPM)
+void SoundManager::playSound(Sounds soundName, float RPM, const Point& soundPosition)
 {
 	if (RPM >= 6000)
 		RPM = 5999;
@@ -109,6 +109,26 @@ void SoundManager::playSound(Sounds soundName, float RPM)
 	float speed = (RPM / 3000) + 0.6;
 
 	speed = max(speed, 1.0);
-	
+
+	float volume = sqrt(1 / (max(1, soundPosition.distance2D(cameraCenter))));
+
+	vector2D lookingLine(cameraCenter, cameraLookAt);
+	vector2D objectLine(cameraCenter, soundPosition);
+
+	float angle = vector2D::directedAngle(lookingLine, objectLine);
+
+	float finalPan = 0.0f;
+
+	if (angle >= 0.0f && angle < PI / 2)
+		finalPan = -angle / (PI / 2);
+	else if (angle >= PI / 2 && angle < PI)
+		finalPan = -(PI - angle) / (PI / 2);
+	else if (angle >= PI && angle < 3 / 2 * PI)
+		finalPan = (angle - PI) / (PI / 2);
+	else if (angle >= 3 / 2 * PI && angle < 2 * PI)
+		finalPan = (2 * PI - angle) / (PI / 2);
+
+	al_set_sample_instance_pan(samples[0], finalPan);
+	al_set_sample_instance_gain(samples[0], volume);
 	al_set_sample_instance_speed(samples[0], speed);
 }

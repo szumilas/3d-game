@@ -175,7 +175,7 @@ struct vector2D
 
 	}
 
-	vector2D(Point& p1, Point& p2)
+	vector2D(const Point& p1, const Point& p2)
 	{
 		x = p2.x - p1.x;
 		y = p2.y - p1.y;

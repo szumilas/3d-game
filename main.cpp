@@ -289,6 +289,8 @@ void display()
 	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
+	Game::soundManager.serCameraPosition(camera.center, camera.lookAt);
+
 
 	mapContainer.displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
 	//mapContainer.displayAllWorld();
