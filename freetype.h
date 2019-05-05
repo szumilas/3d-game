@@ -32,6 +32,10 @@
 ///Wrap everything in a namespace, that way can use common
 ///function names like "print" without worrying about
 ///overlapping with anyone else's code.
+
+#include "enum.h"
+#include "GlobalStructures.h"
+
 namespace freetype {
 
 	void pop_projection_matrix();
@@ -73,7 +77,13 @@ namespace freetype {
 		pop_projection_matrix();
 	}
 
-	void display(const font_data &ft_font, float x, float y, const char *fmt, ...);
+	void display(ColorName colorName, const font_data &ft_font, float x, float y, const char *fmt, ...);
+
+	static void setGLcolor(ColorName colorName)
+	{
+		Color color = Color(colorName);
+		glColor3f(color.red, color.green, color.blue);
+	}
 
 }  //close the namespace
 

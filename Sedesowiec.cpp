@@ -2,7 +2,7 @@
 
 Sedesowiec::Sedesowiec(MapObject& mapObject) : Building(mapObject)
 {
-	_color = Color::lightGray();
+	_color = Color(ColorName::LIGHT_GRAY);
 	epsilon = 0.5;
 }
 

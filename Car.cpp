@@ -7,11 +7,14 @@
 
 Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt) : carBrand(carBrand), engine(carBrand), gearBox(carBrand)
 {
+	importFromObjFile();
+
 	Car::globalCameraCenter = globalCameraCenter;
 	Car::globalCameraLookAt = globalCameraLookAt;
 
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
+	momentOfInertia = 1.0f / 12.0f * mass * (length * length + width * width);
 
 	position.x = startX -140;
 	position.y = startY -347;
@@ -30,12 +33,15 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 	cameraCenter = Point{-8, 0, 5};
 	//cameraCenter = Point{ -0.001, 0, 15 };
+	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
 
 	setLastWheelPosition();
 
 
 	engineSound = Game::soundManager.registerSoundInstance(carDB.at(carBrand).engineSound);
+
+	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd);
 
 }
 
@@ -58,16 +64,21 @@ void Car::move()
 
 	if(tryAccelerate && gearBox.getCurrentGear() == 0)
 		gearBox.gearUp();
-	else if (engine.nextGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getNextTransmission(), rd, v))
+	else if (engine.nextGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getNextTransmission(), rd, v.length()))
 		gearBox.gearUp();
-	else if (engine.previousGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getPreviousTransmission(), rd, v))
+	else if (engine.previousGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getPreviousTransmission(), rd, v.length()))
 		gearBox.gearDown();
 
 	//------------------------
 
-	engine.setRPM(Engine::calculateRMP(gearBox.getCurrentTransmission() * gearBox.getMainTransmission(), rd, v));
+	engine.setRPM(Engine::calculateRMP(gearBox.getCurrentTransmission() * gearBox.getMainTransmission(), rd, v.length()));
 
-	float drivingForce = 0.0f;
+
+
+
+
+
+	/*float drivingForce = 0.0f;
 	float drivingResistance = 0.0f;
 
 	if(tryAccelerate)
@@ -102,8 +113,12 @@ void Car::move()
 		globalForces.push_back({{ position.x + force.center.x * cos(rz) - force.center.y * sin(rz), position.y + force.center.x * sin(rz) + force.center.y * cos(rz) }, force.direction + rz, force.value});
 	}
 
-	forces = globalForces;
+	forces = globalForces;*/
+
+	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, getGlobalVector(v), angularVelocity, steeringWheelAngle, rz);
 	
+	calculateNetForces();
+	calculateMovement();
 
 	straightenSteeringWheelAngle();
 	calculateCarDrift();
@@ -137,8 +152,8 @@ void Car::turnRight()
 	else
 		steeringWheelAngle *= 1.1f;*/
 
-	if (steeringWheelAngle < -3.14 / 6)
-		steeringWheelAngle = -3.14 / 6;
+	if (steeringWheelAngle < -PI / 4)
+		steeringWheelAngle = -PI / 4;
 }
 
 void Car::turnLeft()
@@ -153,8 +168,8 @@ void Car::turnLeft()
 	else
 		steeringWheelAngle /= 1.1f;*/
 
-	if (steeringWheelAngle > 3.14 / 6)
-		steeringWheelAngle = 3.14 / 6;
+	if (steeringWheelAngle > PI / 4)
+		steeringWheelAngle = PI / 4;
 }
 
 Point Car::getCameraCenter()
@@ -182,68 +197,95 @@ void Car::display()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
 
-		for (auto& polygon : polygons)
+		bool prin3DtModel = true;
+		if(prin3DtModel)
 		{
-			glBindTexture(GL_TEXTURE_2D, polygon.idTexture);
+			for (auto& polygon : polygons)
+			{
+				glBindTexture(GL_TEXTURE_2D, polygon.idTexture);
+
+				glBegin(GL_POLYGON);
+				glColor3f(polygon.color.red, polygon.color.green, polygon.color.blue);
+
+				for (unsigned int i = 0; i < polygon.noOfPoints; i++)
+				{
+					glTexCoord2f(polygon.texturePoints[i].x, polygon.texturePoints[i].y);
+					Point toPrint;
+					toPrint.x = position.x + polygon.points[i].x * cos_rz - polygon.points[i].y * sin_rz;
+					toPrint.y = position.y + polygon.points[i].x * sin_rz + polygon.points[i].y * cos_rz;
+					toPrint.z = position.z + polygon.points[i].z;
+					glVertex3f(toPrint.x, toPrint.y, toPrint.z);
+				}
+				glEnd();
+			}
+
+			leftWheel.rz = steeringWheelAngle;
+			rightWheel.rz = steeringWheelAngle;
+
+			for (auto currentWheel :
+				std::vector<std::pair<Wheel*, float>>
+			{ {&backWheels, pacejkaModel.allWheels[rearLeftWheel].angularVelocity },
+			  {&leftWheel,  pacejkaModel.allWheels[frontLeftWheel].angularVelocity },
+			  {&rightWheel,  pacejkaModel.allWheels[frontRightWheel].angularVelocity } }
+				)
+			{
+				currentWheel.first->setCarPosition(position.x, position.y, position.z);
+				currentWheel.first->setCarAngle(rz);
+			
+				currentWheel.first->rotate(currentWheel.second);
+				currentWheel.first->display();
+			}
+		}
+		else
+		{
+
 
 			glBegin(GL_POLYGON);
-			glColor3f(polygon.color.red, polygon.color.green, polygon.color.blue);
 
-			for (unsigned int i = 0; i < polygon.noOfPoints; i++)
-			{
-				glTexCoord2f(polygon.texturePoints[i].x, polygon.texturePoints[i].y);
-				Point toPrint;
-				toPrint.x = position.x + polygon.points[i].x * cos_rz - polygon.points[i].y * sin_rz;
-				toPrint.y = position.y + polygon.points[i].x * sin_rz + polygon.points[i].y * cos_rz;
-				toPrint.z = position.z + polygon.points[i].z;
-				glVertex3f(toPrint.x, toPrint.y, toPrint.z);
-			}
+			cretateGlobalVertex({ length / 2,  width / 2, 0.5 });
+			cretateGlobalVertex({ length / 2, -width / 2, 0.5 });
+			cretateGlobalVertex({ -length / 2, -width / 2, 0.5 });
+			cretateGlobalVertex({ -length / 2,  width / 2, 0.5 });
+
 			glEnd();
-		}
 
-		leftWheel.rz = steeringWheelAngle;
-		rightWheel.rz = steeringWheelAngle;
+			glDisable(GL_BLEND);
+			glDisable(GL_TEXTURE_2D);
 
-		for (auto& currentWheel : {&backWheels, &leftWheel, &rightWheel})
-		{
-			currentWheel->setCarPosition(position.x, position.y, position.z);
-			currentWheel->setCarAngle(rz);
-
-			currentWheel->rotate(v);
-			currentWheel->display();
-		}
-
-		glDisable(GL_BLEND);
-		glDisable(GL_TEXTURE_2D);
-
-
-		for (auto& force : forces)
-		{
+			//center point
+			glPointSize(10.0);
 			glColor3f(1.0f, 0.0f, 0.0f);
+			glBegin(GL_POINTS);
+			glVertex3f(position.x, position.y, 0.52);
+			glEnd();
+			glPointSize(1.0);
+
+
+			for (auto& force : forces)
+			{
+				glPointSize(10.0);
+				glColor3f(0.0f, 0.0f, 1.0f);
+				glBegin(GL_POINTS);
+				cretateGlobalVertex(force.center);
+				glEnd();
+				glPointSize(1.0);
+
+				glLineWidth(5);
+				glBegin(GL_LINES);
+				cretateGlobalVertex(force.center);
+				cretateGlobalVertex({ force.center.x + force.vector.x / 1000, force.center.y + force.vector.y / 1000, force.center.z });
+				glEnd();
+				glLineWidth(1);
+			}
+
 			glLineWidth(5);
+			glColor3f(1.0f, 0.5f, 0.0f);
 			glBegin(GL_LINES);
-
-			glVertex3f(force.center.x, force.center.y, 0.0f);
-			glVertex3f(force.center.x + force.value / 1000 * cos(force.direction), force.center.y + force.value / 1000 * sin(force.direction), 0.0f);
-
+			cretateGlobalVertex({ 0, 0, 0.53 });
+			cretateGlobalVertex({ v.x * 10, v.y * 10, 0.53 });
 			glEnd();
 			glLineWidth(1);
 		}
-
-
-		glColor3f(0.0f, 0.0f, 1.0f);
-		glLineWidth(5);
-		glBegin(GL_LINES);
-
-		glVertex3f(position.x, position.y, 0.0f);
-		glVertex3f(position.x + vx / 10, position.y + vy / 10, 0.0f);
-
-		glEnd();
-		glLineWidth(1);
-
-
-		
-
 
 		glColor3f(0.1f, 0.1f, 0.1f);
 		glPointSize(5);
@@ -256,7 +298,6 @@ void Car::display()
 
 		glEnd();
 		glPointSize(1);
-
 	}
 }
 
@@ -274,17 +315,38 @@ void Car::importFromObjFile()
 	frontWheelsXoffset = carDB.at(carBrand).frontWheelsXoffset;
 	backWheelsXoffset = carDB.at(carBrand).backWheelsXoffset;
 
+	float maxX = -1000.0f;
+	float maxY = -1000.0f;
+	float minX =  1000.0f;
+	float minY =  1000.0f;
 
+	for (auto& polygon : polygons)
+	{
+		for (auto& point : polygon.points)
+		{
+			if (point.x > maxX)
+				maxX = point.x;
+			if (point.y > maxY)
+				maxY = point.y;
+			if (point.x < minX)
+				minX = point.x;
+			if (point.y < minY)
+				minY = point.y;
+		}
+	}
+
+	length = maxX - minX;
+	width = maxY - minY;
 }
 
 void Car::straightenSteeringWheelAngle()
 {
-	if (v != 0)
+	if (v.length() != 0)
 	{
 		if (steeringWheelAngle > 0.05f)
-			steeringWheelAngle -= 0.05f * v / 100;
+			steeringWheelAngle -= 0.05f * v.length() / 100;
 		else if (steeringWheelAngle < -0.05f)
-			steeringWheelAngle += 0.05f * v / 100;
+			steeringWheelAngle += 0.05f * v.length() / 100;
 		else
 			steeringWheelAngle = 0.0f;
 	}
@@ -292,45 +354,42 @@ void Car::straightenSteeringWheelAngle()
 
 void Car::calculateMovement()
 {
-	float resultantForceX = 0.0f;
-	float resultantForceY = 0.0f;
-
-	for (auto& force : forces)
-	{
-		resultantForceX += force.value * cos(force.direction);
-		resultantForceY += force.value * sin(force.direction);
-	}
-
-	float resultantAccelerationX = resultantForceX / mass;
-	float resultantAccelerationY = resultantForceY / mass;
-
-	vLoc.x += resultantAccelerationX / FPS;
-	vLoc.y += resultantAccelerationY / FPS;
-
-	vx = vLoc.x * cos(rz) - 0.0*vLoc.y * sin(rz);
-	vy = vLoc.x * sin(rz) + 0.0*vLoc.y * cos(rz);
 	
-	position.x += vx / FPS;
-	position.y += vy / FPS;
+	if (v.x * (v.x + netForce.vector.x / mass / FPS) < 0)
+		v.x = 0.0f;
+	else
+		v.x += netForce.vector.x / mass / FPS;
 	
-	v = sqrt(vx * vx + vy * vy);
+	if (v.y * (v.y + netForce.vector.y / mass / FPS) < 0)
+		v.y = 0.0f;
+	else
+		v.y += netForce.vector.y / mass / FPS;
 
+	if (abs(v.x) < 0.01f)
+		v.x = 0;
+	if (abs(v.y) < 0.1f)
+		v.y = 0;
 
-	resultantTorque = 0.0f;
+	velocity = v.length();
+
+	sin_rz = sin(rz);
+	cos_rz = cos(rz);
+
 	
-	auto& force = forces[1];
+	position.x += (v.x * cos_rz - v.y * sin_rz) / FPS;
+	position.y += (v.x * sin_rz + v.y * cos_rz) / FPS;
 
-	resultantTorque += force.center.x * (sin(force.direction) * force.value) - force.center.y * (cos(force.direction) * force.value);
+
+	if (angularVelocity * (angularVelocity + netTorque / momentOfInertia / FPS) < 0)
+		angularVelocity = 0.0f;
+	else
+		angularVelocity += netTorque / momentOfInertia / FPS;
+	
+	if (abs(angularVelocity) < 0.1f)
+		angularVelocity = 0;
 
 
-	auto angleToRotate = resultantTorque / FPS / (4500 + mass * backWheelsXoffset * backWheelsXoffset);
-	rz += angleToRotate;
-
-	Point newCenter(position.x, position.y);
-	Point::rotate(newCenter, getCarPointInGlobalSystem({ backWheelsXoffset, 0 }), angleToRotate);
-
-	position.x = newCenter.x;
-	position.y = newCenter.y;
+	rz += angularVelocity / FPS;
 }
 
 void Car::setLastWheelPosition()
@@ -385,4 +444,22 @@ void Car::playEngineSound()
 		finalPan = (2 * PI - angle) / (PI / 2);
 
 	Game::soundManager.playSound(engineSound, volume, finalPan, speed);
+}
+
+void Car::calculateNetForces()
+{
+	Force newNetForce;
+	float newNetTorque = 0.0f;
+
+	for (auto& force : forces)
+	{
+		newNetForce.vector += force.vector;
+		newNetForce.center.z = 0.52f;
+
+		vector2D r({0, 0}, force.center);
+		newNetTorque += vector2D::crossProduct(r, force.vector);
+	}
+
+	netForce = newNetForce;
+	netTorque = newNetTorque;
 }

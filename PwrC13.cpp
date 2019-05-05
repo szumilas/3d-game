@@ -2,7 +2,7 @@
 
 PwrC13::PwrC13(MapObject& mapObject) : Building(mapObject)
 {
-	_color = Color::gray();
+	_color = Color(ColorName::GRAY);
 }
 
 void PwrC13::generateWalls()

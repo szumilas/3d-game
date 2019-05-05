@@ -154,6 +154,7 @@
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Orbit.cpp" />
+    <ClCompile Include="PacejkaModel.cpp" />
     <ClCompile Include="Parking.cpp" />
     <ClCompile Include="PasazGrunwaldzki.cpp" />
     <ClCompile Include="PwrC13.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Orbit.h" />
+    <ClInclude Include="PacejkaModel.h" />
     <ClInclude Include="Parking.h" />
     <ClInclude Include="PasazGrunwaldzki.h" />
     <ClInclude Include="PointInsidePolygonDetector.h" />

@@ -96,3 +96,27 @@ enum class Exceptions : long
 	ERR_WHILE_ATTACHING_SUBMIXER_TO_MIXER,
 
 };
+
+enum class ColorName : long
+{
+	WHITE,
+	BLACK,
+	LIGHT_GRAY,
+	DARK_GRAY,
+	GRAY,
+	RED,
+	GREEN,
+	BLUE,
+	ORANGE,
+	BROWN,
+	YELLOW,
+	PINK,
+};
+
+enum
+{
+	frontLeftWheel,
+	frontRightWheel,
+	rearLeftWheel,
+	rearRightWheel,
+};

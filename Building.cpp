@@ -20,7 +20,7 @@ Building::Building(MapObject& mapObject) : MapObject(mapObject)
 	{
 		if (building == "roof")
 		{
-			_color = Color::black();
+			_color = Color(ColorName::BLACK);
 		}
 		if (typeid(*this) == typeid(Building) && building != "office")
 		{
@@ -68,7 +68,7 @@ Building::Building(MapObject& mapObject) : MapObject(mapObject)
 		}
 		else
 		{
-			_color = Color::gray();
+			_color = Color(ColorName::GRAY);
 		}
 	}
 };

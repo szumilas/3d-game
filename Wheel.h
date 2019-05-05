@@ -18,6 +18,7 @@ private:
 
 
 public:
+	float angle = 0.0f;
 
 
 private:
@@ -30,5 +31,4 @@ private:
 	float carZ;
 	float car_sin_rz;
 	float car_cos_rz;
-	float angle = 0.0f;
 };

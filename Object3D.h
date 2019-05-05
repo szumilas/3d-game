@@ -19,6 +19,8 @@ public:
 	void loadModel();
 	virtual void display();
 	void importFromObjFile(const char* filePath, Textures textureName, float scaleRatio = 1.0f);
+	void cretateGlobalVertex(const Point& localPoint);
+	vector2D getGlobalVector(const vector2D& vLocal);
 
 private:
 

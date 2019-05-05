@@ -2,7 +2,7 @@
 
 GrunwaldzkiCenter::GrunwaldzkiCenter(MapObject& mapObject) : Building(mapObject)
 {
-	_color = Color::lightGray();
+	_color = Color(ColorName::LIGHT_GRAY);
 
 	if (getId() == 101195194 || getId() == 1442935)
 	{
@@ -75,7 +75,7 @@ void GrunwaldzkiCenter::calculateFinalGeometry()
 
 			newPolygon.noOfPoints = newPolygon.texturePoints.size();
 			newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(Textures::glass_elevation)].idTexture;
-			newPolygon.color = Color::white();
+			newPolygon.color = Color(ColorName::WHITE);
 
 			auto newColor = wall.color.mixColor(selectedColor);
 			newPolygon.additionalColor = wall.color.mixColor(newColor);
@@ -89,7 +89,7 @@ void GrunwaldzkiCenter::calculateFinalGeometry()
 		{
 			{401.83145141601563, -117.92674255371094 },
 			{393.61627197265625, -138.16880798339844 },
-			Color::white(),
+			Color(ColorName::WHITE),
 			0,
 			Textures::grunwaldzki,
 			0,
@@ -117,7 +117,7 @@ void GrunwaldzkiCenter::calculateFinalGeometry()
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
 		newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(additionalWall.textureName)].idTexture;
-		newPolygon.color = Color::white();
+		newPolygon.color = Color(ColorName::WHITE);
 
 		auto newColor = additionalWall.color.mixColor(selectedColor);
 		newPolygon.additionalColor = additionalWall.color.mixColor(newColor);

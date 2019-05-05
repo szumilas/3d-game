@@ -1,20 +1,55 @@
 #pragma once
 
+#include <cmath>
+#include <vector>
+#include "enum.h"
+
 #define FPS 30
 #define PI 3.1415926535
+#define GRAVITY 9.81
 
-struct Color
+class Color
 {
+	struct ColorData
+	{
+		ColorName colorName;
+		float red;
+		float green;
+		float blue;
+	};
+
+public:
+
+	Color() { red = 0.0f; green = 0.0f, blue = 0.0f; }
+	Color(ColorName colorName)
+	{
+		red = colors[static_cast<long>(colorName)].red;
+		green = colors[static_cast<long>(colorName)].green;
+		blue = colors[static_cast<long>(colorName)].blue;
+	};
+	Color(float red, float green, float blue) : red(red), green(green), blue(blue) {}
+
+	Color mixColor(Color& second) { return Color((red + second.red) / 2, (green + second.green) / 2 , (blue + second.blue) / 2 ); }
+	
 	float red;
 	float green;
 	float blue;
 
-	Color mixColor(Color& second) { return Color{(red + second.red) / 2, (green + second.green) / 2 , (blue + second.blue) / 2 }; }
-	static Color white() { return Color{ 1.0f, 1.0f, 1.0f }; }
-	static Color black() { return Color{ 0.0f, 0.0f, 0.0f }; }
-	static Color lightGray() { return Color{ 0.8f, 0.8f, 0.8f }; }
-	static Color darkGray() { return Color{ 0.2f, 0.2f, 0.2f }; }
-	static Color gray() { return Color{ 0.5f, 0.5f, 0.5f }; }
+private:
+	std::vector<ColorData> colors{
+		{ ColorName::WHITE, 1.0f, 1.0f, 1.0f },
+		{ ColorName::BLACK, 0.0f, 0.0f, 0.0f },
+		{ ColorName::LIGHT_GRAY, 0.8f, 0.8f, 0.8f },
+		{ ColorName::DARK_GRAY, 0.2f, 0.2f, 0.2f },
+		{ ColorName::GRAY, 0.5f, 0.5f, 0.5f },
+		{ ColorName::RED, 1.0f, 0.0f, 0.0f },
+		{ ColorName::GREEN, 0.0f, 1.0f, 0.0f },
+		{ ColorName::BLUE, 0.0f, 0.0f, 1.0f },
+		{ ColorName::ORANGE, 1.0f, 0.5f, 0.0f },
+		{ ColorName::BROWN, 0.5f, 0.25f, 0.0f },
+		{ ColorName::YELLOW, 1.0f, 1.0f, 0.0f },
+		{ ColorName::PINK, 1.0f, 0.0f, 0.5f },
+	};
 };
 
 struct Point
@@ -187,6 +222,23 @@ struct vector2D
 		y = v1.y + v2.y;
 	}
 
+	vector2D operator+(const vector2D& v2) const
+	{
+		return { x + v2.x, y + v2.y };
+	}
+
+	void operator+=(const vector2D& v2)
+	{
+		x += v2.x;
+		y += v2.y;
+	}
+
+	void operator*=(double scale)
+	{
+		x *= scale;
+		y *= scale;
+	}
+
 	void negate()
 	{
 		x *= -1.0f;
@@ -266,28 +318,16 @@ struct node
 
 struct Force
 {
-	Force(Point center, vector2D vec) : center(center)
+	Force()
 	{
-		if (abs(vec.x) < 0.001 && abs(vec.y) < 0.001)
-		{
-			direction = 0.0f;
-			value = 0.0f;
-		}
-		else
-		{
-			direction = vector2D::directedAngle(vector2D(Point(0, 0), Point(1, 0)), vec);
-			value = vec.length();
-		}
+
 	}
 
-	Force(Point center, float direction, float value) : center(center), direction(direction), value(value)
+	Force(Point center, vector2D vector) : center(center), vector(vector)
 	{
-	
-	}
 
+	}
 
 	Point center;
-	float direction;
-	float value;
-
+	vector2D vector;
 };

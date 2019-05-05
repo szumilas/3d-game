@@ -79,6 +79,7 @@ namespace Game
 {
 	TextureManager textureManager;
 	SoundManager soundManager;
+	Screen2D screen2D;
 }
 
 int current_time;
@@ -117,8 +118,6 @@ std::vector<Car> cars;
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
-
-Screen2D screen2D(&carGauge);
 
 
 void display();
@@ -184,8 +183,9 @@ int main(int argc, char**agrv)
 	windowRealHeight = windowHeight;
 #endif
 
-	screen2D.setSize(windowRealWidth, windowRealHeight);
-	screen2D.loadFonts();
+	//Game::screen2D.setCarGauge(&carGauge);
+	Game::screen2D.setSize(windowRealWidth, windowRealHeight);
+	Game::screen2D.loadFonts();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -211,12 +211,7 @@ int main(int argc, char**agrv)
 		Game::textureManager.readTextures();
 		Game::soundManager.readSounds();
 
-		cars = { Car(CarBrand::LamborghiniHuracan, 0, 0, &camera.center, &camera.lookAt), Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt) };
-
-		for (auto& car : cars)
-		{
-			car.importFromObjFile();
-		}
+		cars = { Car(CarBrand::LamborghiniHuracan, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
 
 		carGauge.load(&cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
@@ -327,7 +322,7 @@ void display()
 	carGauge.setRPM(cars[0].getRPM());
 	carGauge.display();*/
 
-	screen2D.display();
+	Game::screen2D.display();
 
 	//freetype::print(our_font, 0.5 * windowRealWidth + 0.522 * windowRealHeight, 0.174 * windowRealHeight, "%i", 8);
 	//freetype::print(our_font, 0.5 * windowRealWidth + 0.522 * windowRealHeight, 0.174 * windowRealHeight, "%i", cars[0].getCurrentGear());

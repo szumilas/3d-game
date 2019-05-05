@@ -112,8 +112,8 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 			}
 
 			newPolygon.noOfPoints = newPolygon.points.size();
-			newPolygon.color = Color::white();
-			newPolygon.additionalColor = Color::white();
+			newPolygon.color = Color(ColorName::WHITE);
+			newPolygon.additionalColor = Color(ColorName::WHITE);
 			newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(textureName)].idTexture;
 			polygons.push_back(newPolygon);
 
@@ -171,4 +171,18 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 	}
 
 	file.close();
+}
+
+void Object3D::cretateGlobalVertex(const Point& localPoint)
+{
+	Point toPrint;
+	toPrint.x = position.x + localPoint.x * cos_rz - localPoint.y * sin_rz;
+	toPrint.y = position.y + localPoint.x * sin_rz + localPoint.y * cos_rz;
+	toPrint.z = position.z + localPoint.z;
+	glVertex3f(toPrint.x, toPrint.y, toPrint.z);
+}
+
+vector2D Object3D::getGlobalVector(const vector2D& vLocal)
+{
+	return { vLocal.x * cos(rz) - vLocal.y * sin(rz), vLocal.x * sin(rz) + vLocal.y * cos(rz) };
 }

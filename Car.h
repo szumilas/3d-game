@@ -8,6 +8,7 @@
 #include "enum.h"
 #include "TextureManager.h"
 #include "CarParts.h"
+#include "PacejkaModel.h"
 
 #include "carDB.h"
 
@@ -35,7 +36,7 @@ public:
 	Point getCameraCenter();
 	Point getCameraLookAt();
 
-	float getVelocity() { return v; } //[m/s]
+	float getVelocity() { return v.length(); } //[m/s]
 	float getRPM() { return engine.getRPM(); } //[m/s]
 	unsigned int getCurrentGear() { return gearBox.getCurrentGear(); } //[-]
 	void importFromObjFile();
@@ -47,6 +48,7 @@ private:
 	void setLastWheelPosition();
 	void calculateCarDrift();
 	void playEngineSound();
+	void calculateNetForces();
 
 	template <typename T> int sgn(T val)
 	{
@@ -60,8 +62,6 @@ private:
 
 public:
 
-	float resultantTorque;
-
 private:
 
 	CarBrand carBrand;
@@ -74,10 +74,11 @@ private:
 	std::list<Point> wheelsTrace;
 
 	float a = 0;
-	float v = 0; //[m/s]
-	float vx = 0; //[m/s]
-	float vy = 0; //[m/s]
+	vector2D v{0.0, 0}; //[m/s]
+	float velocity = 0; //[m/s]
+	float angularVelocity = 0; //[rad/s]
 	float mass; //[kg]
+	float momentOfInertia; //[kg * m^2]
 	float rd = 0.3; //[m]
 	float vMax; //[m / s]
 	float resistanceRatio; //[kN / (m / s)^2]
@@ -89,14 +90,17 @@ private:
 
 	float acceleration; //[m/s^s]
 
-	bool tryAccelerate;
-	bool trySlow;
+	bool tryAccelerate = false;
+	bool trySlow = false;
 
 	std::vector<Wheel> wheels;
 	float frontWheelsYoffset;
 	float frontWheelsXoffset;
 	float backWheelsXoffset;
-			
+
+	float width;
+	float length;
+				
 	Point cameraCenter;
 	Point cameraLookAt;
 
@@ -107,6 +111,10 @@ private:
 	GearBox gearBox;
 
 	std::vector<Force> forces;
+	Force netForce; //[N]
+	float netTorque; //[N * m]
 
 	ALLEGRO_SAMPLE_INSTANCE* engineSound;
+
+	PacejkaModel pacejkaModel;
 };

@@ -202,7 +202,7 @@ void pop_projection_matrix()
 }
 
 
-void display(const font_data &ft_font, float x, float y, const char *fmt, ...)
+void display(ColorName colorName, const font_data &ft_font, float x, float y, const char *fmt, ...)
 {
 
 	GLuint font = ft_font.list_base;
@@ -259,8 +259,7 @@ void display(const font_data &ft_font, float x, float y, const char *fmt, ...)
 	float modelview_matrix[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelview_matrix);
 
-
-	glColor3f(1.0f, 0.0f, 0.0f);
+	setGLcolor(colorName);
 	//This is where the text display actually happens.
 	//For each line of text we reset the modelview matrix
 	//so that the line's text will start in the correct position.
