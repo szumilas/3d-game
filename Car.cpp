@@ -143,7 +143,7 @@ void Car::slow()
 void Car::turnRight()
 {
 	//rz -= 0.005;
-	steeringWheelAngle -= 0.06;
+	steeringWheelAngle -= 0.16;
 
 	/*if (steeringWheelAngle > -0.1 && steeringWheelAngle < 0.1)
 		steeringWheelAngle -= 0.016;
@@ -159,7 +159,7 @@ void Car::turnRight()
 void Car::turnLeft()
 {
 	//rz += 0.005;
-	steeringWheelAngle += 0.06;
+	steeringWheelAngle += 0.16;
 
 	/*if (steeringWheelAngle > -0.1 && steeringWheelAngle < 0.1)
 		steeringWheelAngle += 0.016;
@@ -197,7 +197,7 @@ void Car::display()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
 
-		bool prin3DtModel = true;
+		bool prin3DtModel = false;
 		if(prin3DtModel)
 		{
 			for (auto& polygon : polygons)
@@ -343,10 +343,10 @@ void Car::straightenSteeringWheelAngle()
 {
 	if (v.length() != 0)
 	{
-		if (steeringWheelAngle > 0.05f)
-			steeringWheelAngle -= 0.05f * v.length() / 100;
-		else if (steeringWheelAngle < -0.05f)
-			steeringWheelAngle += 0.05f * v.length() / 100;
+		if (steeringWheelAngle > 0.15f)
+			steeringWheelAngle -= 0.15f * v.length() / 50;
+		else if (steeringWheelAngle < -0.15f)
+			steeringWheelAngle += 0.15f * v.length() / 50;
 		else
 			steeringWheelAngle = 0.0f;
 	}

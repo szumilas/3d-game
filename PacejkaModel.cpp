@@ -113,11 +113,11 @@ void PacejkaModel::calculateSlipRatios()
 {
 	for (auto& wheel : allWheels)
 	{
-		if (wheel.angularVelocity > 0 && wheel.localVelocity.x < 0)
+		if (wheel.angularVelocity > 0 && wheel.localVelocity.x <= 0)
 		{
 			wheel.slipRatio = 100;
 		}
-		else if (wheel.angularVelocity < 0 && wheel.localVelocity.x > 0)
+		else if (wheel.angularVelocity <= 0 && wheel.localVelocity.x > 0)
 		{
 			wheel.slipRatio = -100;
 		}
