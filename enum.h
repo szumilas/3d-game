@@ -78,6 +78,7 @@ enum class Sounds : long
 {
 	engine,
 	engine2,
+	drift,
 };
 
 enum class Exceptions : long

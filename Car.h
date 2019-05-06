@@ -48,6 +48,7 @@ private:
 	void setLastWheelPosition();
 	void calculateCarDrift();
 	void playEngineSound();
+	void playDriftSound(bool carDrifting);
 	void calculateNetForces();
 
 	template <typename T> int sgn(T val)
@@ -92,6 +93,7 @@ private:
 
 	bool tryAccelerate = false;
 	bool trySlow = false;
+	bool turning = false;
 
 	std::vector<Wheel> wheels;
 	float frontWheelsYoffset;
@@ -115,6 +117,7 @@ private:
 	float netTorque; //[N * m]
 
 	ALLEGRO_SAMPLE_INSTANCE* engineSound;
+	ALLEGRO_SAMPLE_INSTANCE* driftSound;
 
 	PacejkaModel pacejkaModel;
 };

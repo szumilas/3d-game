@@ -40,6 +40,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 
 	engineSound = Game::soundManager.registerSoundInstance(carDB.at(carBrand).engineSound);
+	driftSound = Game::soundManager.registerSoundInstance(Sounds::drift);
 
 	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd);
 
@@ -47,7 +48,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 void Car::move()
 {
-	//cameraCenter.y = sin(steeringWheelAngle) * 10.0;
+	cameraCenter.y = sin(steeringWheelAngle) * 1.0;
 
 	if (trySlow && vLoc.x > 1.0)
 	{
@@ -120,10 +121,14 @@ void Car::move()
 	calculateNetForces();
 	calculateMovement();
 
-	straightenSteeringWheelAngle();
+	if (!turning)
+		straightenSteeringWheelAngle();
+	else
+		turning = false;
 	calculateCarDrift();
-	
+
 	playEngineSound();
+	playDriftSound(pacejkaModel.carDrifting);
 
 	tryAccelerate = false;
 	trySlow = false;
@@ -143,7 +148,7 @@ void Car::slow()
 void Car::turnRight()
 {
 	//rz -= 0.005;
-	steeringWheelAngle -= 0.16;
+	steeringWheelAngle -= 0.1;
 
 	/*if (steeringWheelAngle > -0.1 && steeringWheelAngle < 0.1)
 		steeringWheelAngle -= 0.016;
@@ -154,12 +159,14 @@ void Car::turnRight()
 
 	if (steeringWheelAngle < -PI / 4)
 		steeringWheelAngle = -PI / 4;
+
+	turning = true;
 }
 
 void Car::turnLeft()
 {
 	//rz += 0.005;
-	steeringWheelAngle += 0.16;
+	steeringWheelAngle += 0.1;
 
 	/*if (steeringWheelAngle > -0.1 && steeringWheelAngle < 0.1)
 		steeringWheelAngle += 0.016;
@@ -170,6 +177,8 @@ void Car::turnLeft()
 
 	if (steeringWheelAngle > PI / 4)
 		steeringWheelAngle = PI / 4;
+
+	turning = true;
 }
 
 Point Car::getCameraCenter()
@@ -197,7 +206,7 @@ void Car::display()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
 
-		bool prin3DtModel = false;
+		bool prin3DtModel = true;
 		if(prin3DtModel)
 		{
 			for (auto& polygon : polygons)
@@ -444,6 +453,29 @@ void Car::playEngineSound()
 		finalPan = (2 * PI - angle) / (PI / 2);
 
 	Game::soundManager.playSound(engineSound, volume, finalPan, speed);
+}
+
+void Car::playDriftSound(bool carDrifting)
+{
+	float volume = carDrifting * sqrt(1 / (std::max(1.0, position.distance2D(*globalCameraCenter))));
+
+	vector2D lookingLine(*globalCameraCenter, *globalCameraLookAt);
+	vector2D objectLine(*globalCameraCenter, position);
+
+	float angle = vector2D::directedAngle(lookingLine, objectLine);
+
+	float finalPan = 0.0f;
+
+	if (angle >= 0.0f && angle < PI / 2)
+		finalPan = -angle / (PI / 2);
+	else if (angle >= PI / 2 && angle < PI)
+		finalPan = -(PI - angle) / (PI / 2);
+	else if (angle >= PI && angle < 3 / 2 * PI)
+		finalPan = (angle - PI) / (PI / 2);
+	else if (angle >= 3 / 2 * PI && angle < 2 * PI)
+		finalPan = (2 * PI - angle) / (PI / 2);
+
+	Game::soundManager.playSound(driftSound, volume, finalPan, 1.0f);
 }
 
 void Car::calculateNetForces()

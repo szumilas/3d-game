@@ -47,5 +47,6 @@ public:
 	std::vector<SoundData> sounds{
 		{ Sounds::engine, "engine.wav" },
 		{ Sounds::engine2, "engine2.wav" },
+		{ Sounds::drift, "drift.wav" },
 	};
 };

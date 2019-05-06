@@ -90,6 +90,18 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 		resultForces.push_back({ wheel.position, force });
 	}
 
+
+	carDrifting = false;
+	for (auto& wheel : allWheels)
+	{
+		if (abs(wheel.slipAngle) > 15 && vCarGlobal.length() > 5)
+		{
+			carDrifting = true;
+			break;
+		}
+	}
+
+
 	return resultForces;
 }
 

@@ -46,6 +46,8 @@ public:
 
 	std::vector<PacejkaWheelData> allWheels;
 
+	bool carDrifting = false;
+
 private:
 
 	float mass;
