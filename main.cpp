@@ -316,17 +316,10 @@ void display()
 
 	glPopMatrix();
 
-
-
-	/*carGauge.setVelocity(cars[0].getVelocity());
-	carGauge.setRPM(cars[0].getRPM());
-	carGauge.display();*/
-
+	Screen2D::pushScreenCoordinateMatrix();
+	carGauge.display();
 	Game::screen2D.display();
-
-	//freetype::print(our_font, 0.5 * windowRealWidth + 0.522 * windowRealHeight, 0.174 * windowRealHeight, "%i", 8);
-	//freetype::print(our_font, 0.5 * windowRealWidth + 0.522 * windowRealHeight, 0.174 * windowRealHeight, "%i", cars[0].getCurrentGear());
-	//freetype::print(our_font, 625, 152, "%i", windowRealWidth);
+	Screen2D::pop_projection_matrix();
 
 	glutSwapBuffers();
 

@@ -21,23 +21,11 @@ void Screen2D::loadFonts()
 
 void Screen2D::display()
 {
-	pushScreenCoordinateMatrix();
-
-
-	//carGauge->display();
-	//freetype::display(digital_counter, 0.5 * width + 0.495 * height, 0.035 * height, "%i", carGauge->car->getCurrentGear());
-	//freetype::display(digital_counter, 0.5 * width - 0.495 * height, 0.035 * height, "%i", static_cast<int>(carGauge->car->netTorque));
-	//
-	//freetype::display(stocky, 0.5 * width - 0.695 * height, 0.15 * height, "vLoc.x: %f", carGauge->car->vLoc.x);
-	//freetype::display(stocky, 0.5 * width - 0.695 * height, 0.10 * height, "vLoc.y: %f", carGauge->car->vLoc.y);
-
-	for (auto& testValue : testValues)
+	for (auto& textValue : textValues)
 	{
-		freetype::display(testValue.colorName, roboto_modo_regular, 0.5 * width + testValue.x * height / 100, testValue.y * height / 100, "%s", testValue.text.c_str());
+		freetype::display(textValue.colorName, *textValue.font, 0.5 * width + textValue.x / 100 * height, textValue.y / 100 * height, "%s", textValue.text.c_str());
 	}
-	testValues.clear();
-
-	pop_projection_matrix();
+	textValues.clear();
 }
 
 void Screen2D::pushScreenCoordinateMatrix()

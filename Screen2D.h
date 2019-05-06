@@ -9,9 +9,10 @@ class Screen2D
 	struct Screen2Dtext
 	{
 		ColorName colorName;
-		int x; //[%]
-		int y; //[%]
+		float x; //[%]
+		float y; //[%]
 		std::string text;
+		freetype::font_data* font;
 	};
 
 public:
@@ -21,18 +22,21 @@ public:
 	void setSize(int width, int height);
 	void loadFonts();
 	void display();
-	void addTestValueToPrint(ColorName colorName, int xp, int yp, std::string text)
+	void addTestValueToPrint(ColorName colorName, float xp, float yp, std::string text, freetype::font_data* font)
 	{
-		testValues.push_back({ colorName, xp, yp, text });
+		textValues.push_back({ colorName, xp, yp, text, font });
 	}
+	static void pushScreenCoordinateMatrix(); 
+	static void pop_projection_matrix(); 
 
 private:
 
-	void pushScreenCoordinateMatrix();
-	void pop_projection_matrix();
 
 public:
 
+	freetype::font_data digital_counter;
+	freetype::font_data stocky;
+	freetype::font_data roboto_modo_regular;
 
 
 private:
@@ -41,10 +45,6 @@ private:
 	int height;
 
 
-	freetype::font_data digital_counter;
-	freetype::font_data stocky;
-	freetype::font_data roboto_modo_regular;
-
-	std::vector<Screen2Dtext> testValues;
+	std::vector<Screen2Dtext> textValues;
 
 };
