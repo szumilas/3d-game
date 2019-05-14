@@ -21,9 +21,14 @@ public:
 	void importFromObjFile(const char* filePath, Textures textureName, float scaleRatio = 1.0f);
 	void cretateGlobalVertex(const Point& localPoint);
 	vector2D getGlobalVector(const vector2D& vLocal);
+	vector2D getLocalVector(const vector2D& vGlobal);
+
+protected:
+
+	void myglDrawCircle(const Point& center, float r, int segments = 100);
+	void myglDrawFillCircle(const Point& center, float r, int segments = 100);
 
 private:
-
 
 public:
 

@@ -211,7 +211,7 @@ int main(int argc, char**agrv)
 		Game::textureManager.readTextures();
 		Game::soundManager.readSounds();
 
-		cars = { Car(CarBrand::LamborghiniHuracan, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
+		cars = { Car(CarBrand::SuzukiVitara, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
 
 		carGauge.load(&cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
@@ -296,6 +296,10 @@ void display()
 	{
 		car.display();
 		car.alreadyPrinted = false;
+		if (F1Pressed)
+			car.setObstacle(orbit.getFlatCursorX(), orbit.getFlatCursorY());
+		if (F2Pressed)
+			car.setObstacleVelocity(orbit.getFlatCursorX(), orbit.getFlatCursorY());
 	}
 		
 	glBegin(GL_LINES);

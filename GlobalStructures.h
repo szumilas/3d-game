@@ -78,6 +78,21 @@ struct Point
 	bool operator==(const Point& second) const { return x == second.x && y == second.y && z == second.z; }
 	bool operator!=(const Point& second) const { return x != second.x || y != second.y || z != second.z; }
 	bool operator<(const Point& second) const { return x < second.x || x == second.x && y < second.y || x == second.x && y == second.y && z < second.z; }
+	Point operator+(const Point& p2) const
+	{
+		return { x + p2.x, y + p2.y, z + p2.z };
+	}
+};
+
+struct Circle
+{
+	Point center;
+	float r;
+
+	bool isColliding(const Circle& with)
+	{
+		return center.distance2D(with.center) < r + with.r;
+	}
 };
 
 struct Line2D

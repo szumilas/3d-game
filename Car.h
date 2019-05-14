@@ -21,6 +21,23 @@ class Car : public Object3D
 
 public:
 
+	void setObstacle(float x, float y)
+	{
+		obstacle.center.x = x;
+		obstacle.center.y = y;
+	}
+
+	void setObstacleVelocity(float x, float y)
+	{
+		obstacleV.x = x - obstacle.center.x;
+		obstacleV.y = y - obstacle.center.y;
+	}
+
+	vector2D obstacleV;
+	float obstacleMass = 50;
+
+	Circle obstacle{ {0.0f, 0.0f, 0.05f }, 1.0f };
+
 	Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt);
 
 	void display();
@@ -50,6 +67,7 @@ private:
 	void playEngineSound();
 	void playDriftSound(bool carDrifting);
 	void calculateNetForces();
+	void calculateCollisions();
 
 	template <typename T> int sgn(T val)
 	{
@@ -102,6 +120,8 @@ private:
 
 	float width;
 	float length;
+
+	std::vector<Circle> collisionCircles;
 				
 	Point cameraCenter;
 	Point cameraLookAt;

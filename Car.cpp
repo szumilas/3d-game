@@ -12,6 +12,14 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	Car::globalCameraCenter = globalCameraCenter;
 	Car::globalCameraLookAt = globalCameraLookAt;
 
+	collisionCircles.push_back(Circle{ { 0.0f, 0.0f, 0.53f }, width / 2 });
+	//collisionCircles.push_back(Circle{ { length / 2 - width / 2, 0.0f, 0.53f }, width / 2 });
+	//collisionCircles.push_back(Circle{ { -length / 2 + width / 2, 0.0f, 0.53f }, width / 2 });
+	//collisionCircles.push_back(Circle{ { length / 2 - width / 6, width / 3.0f, 0.53f }, width / 6 });
+	//collisionCircles.push_back(Circle{ { length / 2 - width / 6, -width / 3.0f, 0.53f }, width / 6 });
+	//collisionCircles.push_back(Circle{ { -length / 2 + width / 6, width / 3.0f, 0.53f }, width / 6 });
+	//collisionCircles.push_back(Circle{ { -length / 2 + width / 6, -width / 3.0f, 0.53f }, width / 6 });
+
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
 	momentOfInertia = 1.0f / 12.0f * mass * (length * length + width * width);
@@ -31,8 +39,8 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 		wheel.loadModel();
 	}
 
-	cameraCenter = Point{-8, 0, 5};
-	//cameraCenter = Point{ -0.001, 0, 15 };
+	//cameraCenter = Point{-8, 0, 5};
+	cameraCenter = Point{ -0.001, 0, 15 };
 	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
 
@@ -116,8 +124,9 @@ void Car::move()
 
 	forces = globalForces;*/
 
-	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, getGlobalVector(v), angularVelocity, steeringWheelAngle, rz);
+	//forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, getGlobalVector(v), angularVelocity, steeringWheelAngle, rz);
 	
+	calculateCollisions();
 	calculateNetForces();
 	calculateMovement();
 
@@ -206,7 +215,7 @@ void Car::display()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
 
-		bool prin3DtModel = true;
+		bool prin3DtModel = false;
 		if(prin3DtModel)
 		{
 			for (auto& polygon : polygons)
@@ -258,8 +267,20 @@ void Car::display()
 
 			glEnd();
 
-			glDisable(GL_BLEND);
-			glDisable(GL_TEXTURE_2D);
+			glColor3f(1.0f, 0.5f, 0.0f);
+
+			for (auto& collisionCircle : collisionCircles)
+			{
+				Point globalCollisionCircleCenter;
+				globalCollisionCircleCenter.x = position.x + collisionCircle.center.x;
+				globalCollisionCircleCenter.y = position.y + collisionCircle.center.y;
+				globalCollisionCircleCenter.z = collisionCircle.center.z;
+				Point::rotate(globalCollisionCircleCenter, position, rz);
+				myglDrawFillCircle({ globalCollisionCircleCenter }, collisionCircle.r);
+			}
+
+			//glDisable(GL_BLEND);
+			//glDisable(GL_TEXTURE_2D);
 
 			//center point
 			glPointSize(10.0);
@@ -308,6 +329,18 @@ void Car::display()
 		glEnd();
 		glPointSize(1);
 	}
+
+	glColor3f(1.0f, 0.0f, 1.0f);
+	glPointSize(10);
+	glBegin(GL_POINTS);
+
+	glVertex3f(obstacle.center.x, obstacle.center.y, obstacle.center.z);
+
+	glEnd();
+	glPointSize(1);
+
+	glColor3f(1.0f, 0.0f, 0.5f);
+	myglDrawFillCircle(obstacle.center, obstacle.r);
 }
 
 void Car::importFromObjFile()
@@ -399,6 +432,10 @@ void Car::calculateMovement()
 
 
 	rz += angularVelocity / FPS;
+
+
+	obstacle.center.x += obstacleV.x / FPS;
+	obstacle.center.y += obstacleV.y / FPS;
 }
 
 void Car::setLastWheelPosition()
@@ -494,4 +531,161 @@ void Car::calculateNetForces()
 
 	netForce = newNetForce;
 	netTorque = newNetTorque;
+}
+
+void Car::calculateCollisions()
+{
+	std::vector<Circle*> collidingObjects;
+
+	for (auto& collisionCircle : collisionCircles)
+	{
+		Point globalCollisionCircleCenter;
+		globalCollisionCircleCenter.x = position.x + collisionCircle.center.x;
+		globalCollisionCircleCenter.y = position.y + collisionCircle.center.y;
+		globalCollisionCircleCenter.z = collisionCircle.center.z;
+		Point::rotate(globalCollisionCircleCenter, position, rz);
+
+		Circle globalCollisionCircle{ globalCollisionCircleCenter, collisionCircle.r };
+
+		if (globalCollisionCircle.isColliding(obstacle))
+		{
+			collidingObjects.push_back(&obstacle);
+
+			Game::screen2D.addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &Game::screen2D.roboto_modo_regular);
+
+			float fDistance = sqrtf((globalCollisionCircle.center.x - obstacle.center.x)*(globalCollisionCircle.center.x - obstacle.center.x) + (globalCollisionCircle.center.y - obstacle.center.y)*(globalCollisionCircle.center.y - obstacle.center.y));
+
+			// Calculate displacement required
+			float fOverlap = 0.5f * (fDistance - globalCollisionCircle.r - obstacle.r);
+
+			// Displace Current Ball away from collision
+			position.x -= 2.0f * fOverlap * (globalCollisionCircle.center.x - obstacle.center.x) / fDistance;
+			position.y -= 2.0f * fOverlap * (globalCollisionCircle.center.y - obstacle.center.y) / fDistance;
+
+			// Displace Target Ball away from collision
+			//obstacle.center.x += fOverlap * (globalCollisionCircle.center.x - obstacle.center.x) / fDistance;
+			//obstacle.center.y += fOverlap * (globalCollisionCircle.center.y - obstacle.center.y) / fDistance;
+
+
+
+
+			//vector2D vec(obstacle.center, globalCollisionCircle.center);
+			//vec.convertIntoUnitVector();
+			//vec *= globalCollisionCircle.r + obstacle.r - globalCollisionCircle.center.distance2D(obstacle.center);
+			//
+			//position.x += vec.x;
+			//position.y += vec.y;
+			//
+			//
+			//
+			//float kx = v.x - obstacleV.x;
+			//float ky = v.y - obstacleV.y;
+			//
+			//float distance = position.distance2D(globalCollisionCircle.center);
+			//
+			//float nx = (globalCollisionCircle.center.x - position.x) / distance;
+			//float ny = (globalCollisionCircle.center.y - position.y) / distance;
+			//
+			//float p = (2 * (nx * kx + ny - ky)) / (mass + obstacleMass);
+			//
+			////v.x -= p * obstacleMass * nx;
+			////v.y -= p * obstacleMass * ny;
+			//obstacleV.x += p * mass * nx;
+			//obstacleV.y += p * mass * ny;
+			//
+			//
+			////v.x = (v.x * (mass - obstacleMass) + 2 * obstacleMass * obstacleV.x) / (mass + obstacleMass);
+			////v.y = (v.y * (mass - obstacleMass) + 2 * obstacleMass * obstacleV.y) / (mass + obstacleMass);
+			////
+			////
+			////obstacleV.x = (obstacleV.x * (obstacleMass - mass) + 2 * mass * v.x) / (mass + obstacleMass);
+			////obstacleV.y = (obstacleV.y * (obstacleMass - mass) + 2 * mass * v.y) / (mass + obstacleMass);
+			//
+			//
+			//
+			//
+			//
+			////break;
+		}
+	}
+
+	//Point localObstacle = obstacle.center;
+	//Point::rotate(localObstacle, position, -rz);
+
+	//localObstacle.x -= position.x;
+	//localObstacle.y -= position.y;
+	//localObstacle.z = 0.55f;
+
+	//if (-length / 2 < localObstacle.x && localObstacle.x < length / 2 && -width / 2 < localObstacle.y && localObstacle.y < width / 2)
+	//{
+	//	Game::screen2D.addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &Game::screen2D.roboto_modo_regular);
+	//	//forces.push_back({ localObstacle, { -v.x * 50000, -v.y * 50000 } });
+	//	position.x -= (v.x * cos_rz - v.y * sin_rz) / FPS;
+	//	position.y -= (v.x * sin_rz + v.y * cos_rz) / FPS;
+	//	rz -= angularVelocity / FPS;
+	//}
+
+
+	if (!collidingObjects.empty())
+	{
+		Point globalCollisionCircleCenter;
+		globalCollisionCircleCenter.x = position.x + collisionCircles[0].center.x;
+		globalCollisionCircleCenter.y = position.y + collisionCircles[0].center.y;
+		globalCollisionCircleCenter.z = collisionCircles[0].center.z;
+		Point::rotate(globalCollisionCircleCenter, position, rz);
+
+		Circle globalCollisionCircle{ globalCollisionCircleCenter, collisionCircles[0].r };
+
+		for (auto& collidingObject : collidingObjects)
+		{
+			auto& collisionCircle = globalCollisionCircle;
+			// Distance between balls
+			float fDistance = sqrtf((collisionCircle.center.x - collidingObject->center.x)*(collisionCircle.center.x - collidingObject->center.x) + (collisionCircle.center.y - collidingObject->center.y)*(collisionCircle.center.y - collidingObject->center.y));
+			
+			// Normal
+			float nx = (collidingObject->center.x - collisionCircle.center.x) / fDistance;
+			float ny = (collidingObject->center.y - collisionCircle.center.y) / fDistance;
+			
+			// Tangent
+			//float tx = -ny;
+			//float ty = nx;
+			//
+			vector2D vCarGlobal = getGlobalVector(v);
+			//
+			//// Dot Product Tangent
+			//float dpTan1 = vCarGlobal.x * tx + vCarGlobal.y * ty;
+			//float dpTan2 = obstacleV.x * tx + obstacleV.y * ty;
+			//
+			//// Dot Product Normal
+			//float dpNorm1 = vCarGlobal.x * nx + vCarGlobal.y * ny;
+			//float dpNorm2 = obstacleV.x * nx + obstacleV.y * ny;
+			//
+			//// Conservation of momentum in 1D
+			//float m1 = (dpNorm1 * (mass - obstacleMass) + 2.0f * obstacleMass * dpNorm2) / (mass + obstacleMass);
+			//float m2 = (dpNorm2 * (obstacleMass - mass) + 2.0f * mass * dpNorm1) / (mass + obstacleMass);
+			//
+			//// Update ball velocities
+			////v.x = tx * dpTan1 + nx * m1;
+			////v.y = ty * dpTan1 + ny * m1;
+			//obstacleV.x = tx * dpTan2 + nx * m2;
+			//obstacleV.y = ty * dpTan2 + ny * m2;
+
+			//vector2D vCarGlobal;
+			//vCarGlobal.x = v.x * cos(-rz) - v.y * sin(-rz);
+			//vCarGlobal.y = v.x * sin(-rz) + v.y * cos(-rz);
+			//
+			float kx = (vCarGlobal.x - obstacleV.x);
+			float ky = (vCarGlobal.y - obstacleV.y);
+			float p = 2.0 * (nx * kx + ny * ky) / (mass + obstacleMass);
+			vCarGlobal.x = vCarGlobal.x - p * obstacleMass * nx;
+			vCarGlobal.y = vCarGlobal.y - p * obstacleMass * ny;
+			obstacleV.x = obstacleV.x + p * mass * nx;
+			obstacleV.y = obstacleV.y + p * mass * ny;
+
+			//v.x = vCarGlobal.x * cos(-rz) - vCarGlobal.y * sin(-rz);
+			//v.y = vCarGlobal.x * sin(-rz) + vCarGlobal.y * cos(-rz);
+			v = getLocalVector(vCarGlobal);
+		}
+		collidingObjects.clear();
+	}
 }

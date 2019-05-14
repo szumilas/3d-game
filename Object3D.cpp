@@ -186,3 +186,28 @@ vector2D Object3D::getGlobalVector(const vector2D& vLocal)
 {
 	return { vLocal.x * cos(rz) - vLocal.y * sin(rz), vLocal.x * sin(rz) + vLocal.y * cos(rz) };
 }
+
+vector2D Object3D::getLocalVector(const vector2D& vGlobal)
+{
+	return { vGlobal.x * cos(-rz) - vGlobal.y * sin(-rz), vGlobal.x * sin(-rz) + vGlobal.y * cos(-rz) };
+}
+
+void Object3D::myglDrawCircle(const Point& center, float r, int segments)
+{
+	glBegin(GL_LINE_LOOP);
+	for (float alpha = 0.0f; alpha < 2 * PI; alpha += 2 * PI / segments)
+	{
+		glVertex3f(center.x + r * cos(alpha), center.y + r * sin(alpha), center.z);
+	}
+	glEnd();
+}
+
+void Object3D::myglDrawFillCircle(const Point& center, float r, int segments)
+{
+	glBegin(GL_POLYGON);
+	for (float alpha = 0.0f; alpha < 2 * PI; alpha += 2 * PI / segments)
+	{
+		glVertex3f(center.x + r * cos(alpha), center.y + r * sin(alpha), center.z);
+	}
+	glEnd();
+}
