@@ -45,6 +45,7 @@ public:
 	void move();
 	void accelerate();
 	void slow();
+	void stop() { a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; }
 	void turnRight();
 	void turnLeft();
 	void gearUp() { gearBox.gearUp(); engine.changeRPM(gearBox.getCurrentTransmission(), gearBox.getNextTransmission()); };
@@ -93,7 +94,7 @@ private:
 	std::list<Point> wheelsTrace;
 
 	float a = 0;
-	vector2D v{0.0, 0}; //[m/s]
+	vector2D v{0.0, 0}; //[m/s] global
 	float velocity = 0; //[m/s]
 	float angularVelocity = 0; //[rad/s]
 	float mass; //[kg]
@@ -121,7 +122,7 @@ private:
 	float width;
 	float length;
 
-	std::vector<Circle> collisionCircles;
+	std::vector<Circle> carModelCircles;
 				
 	Point cameraCenter;
 	Point cameraLookAt;

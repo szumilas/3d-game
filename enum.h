@@ -65,6 +65,7 @@ enum class Textures : long
 	lamborghini_huracan,
 	toyota_yaris,
 	suzuki_vitara,
+	subaru_brz,
 	rolls_royce_phantom,
 	alfa_romeo_147,
 	audi_r8_v10_coupe,

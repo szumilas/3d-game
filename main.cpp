@@ -141,8 +141,10 @@ GLboolean leftPressed = false;
 GLboolean rightPressed = false;
 GLboolean F1Pressed = false;
 GLboolean F2Pressed = false;
+GLboolean F3Pressed = false;
 GLboolean F1Released = true;
 GLboolean F2Released = true;
+GLboolean F3Released = true;
 
 GLboolean leftMouseButtonDown = false;
 GLboolean rightMouseButtonDown = false;
@@ -211,7 +213,7 @@ int main(int argc, char**agrv)
 		Game::textureManager.readTextures();
 		Game::soundManager.readSounds();
 
-		cars = { Car(CarBrand::SuzukiVitara, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
+		cars = { Car(CarBrand::SubaruBRZ, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
 
 		carGauge.load(&cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
@@ -300,6 +302,8 @@ void display()
 			car.setObstacle(orbit.getFlatCursorX(), orbit.getFlatCursorY());
 		if (F2Pressed)
 			car.setObstacleVelocity(orbit.getFlatCursorX(), orbit.getFlatCursorY());
+		if (F3Pressed)
+			car.stop();
 	}
 		
 	glBegin(GL_LINES);
@@ -436,6 +440,8 @@ void SpecialKeys(int key, int x, int y)
 		F1Pressed = true;
 	if (GLUT_KEY_F2 == key && F2Released)
 		F2Pressed = true;
+	if (GLUT_KEY_F3 == key && F3Released)
+		F3Pressed = true;
 
 }
 
@@ -459,6 +465,11 @@ void SpecialKeysUp(int key, int x, int y)
 		F2Pressed = false;
 		F2Released = true;
 	}
+	if (GLUT_KEY_F3 == key)
+	{
+		F3Pressed = false;
+		F3Released = true;
+	}
 
 }
 
@@ -481,6 +492,10 @@ void Update()
 	{
 		cars[0].gearDown();
 		F2Released = false;
+	}
+	if (F3Pressed && F3Released)
+	{
+		F3Released = false;
 	}
 
 	for(auto& car : cars)
