@@ -34,7 +34,7 @@ public:
 	}
 
 	vector2D obstacleV;
-	float obstacleMass = 50;
+	float obstacleMass = 1500;
 
 	Circle obstacle{ {0.0f, 0.0f, 0.05f }, 1.0f };
 

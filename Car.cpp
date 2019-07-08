@@ -12,13 +12,13 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	Car::globalCameraCenter = globalCameraCenter;
 	Car::globalCameraLookAt = globalCameraLookAt;
 
-	//carModelCircles.push_back(Circle{ { 0.0f, 0.0f, 0.53f }, width / 2 });
+	carModelCircles.push_back(Circle{ { 0.0f, 0.0f, 0.53f }, width / 2 });
 	carModelCircles.push_back(Circle{ { length / 2 - width / 2, 0.0f, 0.53f }, width / 2 });
-	//carModelCircles.push_back(Circle{ { -length / 2 + width / 2, 0.0f, 0.53f }, width / 2 });
-	//carModelCircles.push_back(Circle{ { length / 2 - width / 6, width / 3.0f, 0.53f }, width / 6 });
-	//carModelCircles.push_back(Circle{ { length / 2 - width / 6, -width / 3.0f, 0.53f }, width / 6 });
-	//carModelCircles.push_back(Circle{ { -length / 2 + width / 6, width / 3.0f, 0.53f }, width / 6 });
-	//carModelCircles.push_back(Circle{ { -length / 2 + width / 6, -width / 3.0f, 0.53f }, width / 6 });
+	carModelCircles.push_back(Circle{ { -length / 2 + width / 2, 0.0f, 0.53f }, width / 2 });
+	carModelCircles.push_back(Circle{ { length / 2 - width / 6, width / 3.0f, 0.53f }, width / 6 });
+	carModelCircles.push_back(Circle{ { length / 2 - width / 6, -width / 3.0f, 0.53f }, width / 6 });
+	carModelCircles.push_back(Circle{ { -length / 2 + width / 6, width / 3.0f, 0.53f }, width / 6 });
+	carModelCircles.push_back(Circle{ { -length / 2 + width / 6, -width / 3.0f, 0.53f }, width / 6 });
 
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
@@ -56,7 +56,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 void Car::move()
 {
-	cameraCenter.y = sin(steeringWheelAngle) * 1.0;
+	//cameraCenter.y = sin(steeringWheelAngle) * 1.0;
 
 	if (trySlow && vLoc.x > 1.0)
 	{
@@ -125,7 +125,6 @@ void Car::move()
 	forces = globalForces;*/
 
 	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, getGlobalVector(v), angularVelocity, steeringWheelAngle, rz);
-	//forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, v, angularVelocity, steeringWheelAngle, rz);
 	
 	calculateCollisions();
 	calculateNetForces();
@@ -538,7 +537,7 @@ void Car::calculateNetForces()
 
 void Car::calculateCollisions()
 {
-	std::vector<Circle*> collidingObjects;
+	std::vector<std::pair<Circle*, Circle*>> collidingObjects;
 
 	for (auto& carModelCircle : carModelCircles)
 	{
@@ -552,7 +551,7 @@ void Car::calculateCollisions()
 
 		if (globalCollisionCircle.isColliding(obstacle))
 		{
-			collidingObjects.push_back(&obstacle);
+			collidingObjects.push_back({ &obstacle, &carModelCircle });
 
 			Game::screen2D.addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &Game::screen2D.roboto_modo_regular);
 
@@ -575,23 +574,23 @@ void Car::calculateCollisions()
 
 	if (!collidingObjects.empty())
 	{
-		Point carModelCircleGlobalCenter;
-		carModelCircleGlobalCenter.x = position.x + carModelCircles[0].center.x;
-		carModelCircleGlobalCenter.y = position.y + carModelCircles[0].center.y;
-		carModelCircleGlobalCenter.z = carModelCircles[0].center.z;
-		Point::rotate(carModelCircleGlobalCenter, position, rz);
-
-		Circle carModelGlobalCircle{ carModelCircleGlobalCenter, carModelCircles[0].r };
-
 		for (auto& collidingObject : collidingObjects)
 		{
+			Point carModelCircleGlobalCenter;
+			carModelCircleGlobalCenter.x = position.x + collidingObject.second->center.x;
+			carModelCircleGlobalCenter.y = position.y + collidingObject.second->center.y;
+			carModelCircleGlobalCenter.z = collidingObject.second->center.z;
+			Point::rotate(carModelCircleGlobalCenter, position, rz);
+
+			Circle carModelGlobalCircle{ carModelCircleGlobalCenter, collidingObject.second->r };
+
 			auto& collisionCircle = carModelGlobalCircle;
 			// Distance between balls
-			float fDistance = sqrtf((collisionCircle.center.x - collidingObject->center.x)*(collisionCircle.center.x - collidingObject->center.x) + (collisionCircle.center.y - collidingObject->center.y)*(collisionCircle.center.y - collidingObject->center.y));
+			float fDistance = sqrtf((collisionCircle.center.x - collidingObject.first->center.x)*(collisionCircle.center.x - collidingObject.first->center.x) + (collisionCircle.center.y - collidingObject.first->center.y)*(collisionCircle.center.y - collidingObject.first->center.y));
 			
 			// Normal
-			float nx = (collidingObject->center.x - collisionCircle.center.x) / fDistance;
-			float ny = (collidingObject->center.y - collisionCircle.center.y) / fDistance;
+			float nx = (collidingObject.first->center.x - collisionCircle.center.x) / fDistance;
+			float ny = (collidingObject.first->center.y - collisionCircle.center.y) / fDistance;
 			
 			// Tangent
 			//float tx = -ny;
@@ -637,11 +636,13 @@ void Car::calculateCollisions()
 
 			//v.x = vCarGlobal.x * cos(-rz) - vCarGlobal.y * sin(-rz);
 			//v.y = vCarGlobal.x * sin(-rz) + vCarGlobal.y * cos(-rz);
-			v = vCarGlobal;
+			v = getLocalVector(vCarGlobal);
 			//v = getLocalVector(vCarGlobal);
 
-			angularVelocity -= modelCircleGlobalVelocity.x / (collisionCircle.center.y - position.y);
-			angularVelocity += modelCircleGlobalVelocity.y / (collisionCircle.center.x - position.x);
+			if(abs(collisionCircle.center.y - position.y) > 0.1)
+				angularVelocity -= modelCircleGlobalVelocity.x / (collisionCircle.center.y - position.y);
+			if (abs(collisionCircle.center.x - position.x) > 0.1)
+				angularVelocity += modelCircleGlobalVelocity.y / (collisionCircle.center.x - position.x);
 		}
 		collidingObjects.clear();
 	}
