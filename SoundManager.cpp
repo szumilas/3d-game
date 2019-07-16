@@ -2,6 +2,20 @@
 
 #include <algorithm>
 
+SoundManager* SoundManager::_instance;
+std::vector<SoundManager::SoundData> SoundManager::sounds
+{
+	{ Sounds::engine, "engine.wav" },
+	{ Sounds::engine2, "engine2.wav" },
+	{ Sounds::drift, "drift.wav" },
+};
+
+ALLEGRO_VOICE *SoundManager::voice;
+ALLEGRO_MIXER *SoundManager::mixer;
+
+std::vector<ALLEGRO_MIXER*> SoundManager::submixers;
+std::vector<ALLEGRO_SAMPLE_INSTANCE*> SoundManager::sampleInstances;
+
 SoundManager::SoundManager()
 {
 	if (!al_init())
@@ -30,7 +44,7 @@ SoundManager::SoundManager()
 	}
 }
 
-SoundManager::~SoundManager()
+void SoundManager::DeInit()
 {	
 	for (auto& sampleInstance : sampleInstances)
 	{
@@ -52,6 +66,20 @@ SoundManager::~SoundManager()
 	al_destroy_voice(voice);
 
 	al_uninstall_audio();
+
+	delete(_instance);
+	_instance = nullptr;
+}
+
+
+void SoundManager::Init()
+{
+	_instance = new SoundManager;
+}
+
+SoundManager* SoundManager::Instance()
+{
+	return _instance;
 }
 
 void SoundManager::readSounds()

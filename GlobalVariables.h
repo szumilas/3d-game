@@ -8,5 +8,4 @@ class Screen2D;
 namespace Game
 {
 	extern TextureManager textureManager;
-	extern SoundManager soundManager;
 }

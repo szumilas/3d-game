@@ -47,8 +47,8 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	setLastWheelPosition();
 
 
-	engineSound = Game::soundManager.registerSoundInstance(carDB.at(carBrand).engineSound);
-	driftSound = Game::soundManager.registerSoundInstance(Sounds::drift);
+	engineSound = SoundManager::Instance()->registerSoundInstance(carDB.at(carBrand).engineSound);
+	driftSound = SoundManager::Instance()->registerSoundInstance(Sounds::drift);
 
 	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd);
 
@@ -491,7 +491,7 @@ void Car::playEngineSound()
 	else if (angle >= 3 / 2 * PI && angle < 2 * PI)
 		finalPan = (2 * PI - angle) / (PI / 2);
 
-	Game::soundManager.playSound(engineSound, volume, finalPan, speed);
+	SoundManager::Instance()->playSound(engineSound, volume, finalPan, speed);
 }
 
 void Car::playDriftSound(bool carDrifting)
@@ -514,7 +514,7 @@ void Car::playDriftSound(bool carDrifting)
 	else if (angle >= 3 / 2 * PI && angle < 2 * PI)
 		finalPan = (2 * PI - angle) / (PI / 2);
 
-	Game::soundManager.playSound(driftSound, volume, finalPan, 1.0f);
+	SoundManager::Instance()->playSound(driftSound, volume, finalPan, 1.0f);
 }
 
 void Car::calculateNetForces()

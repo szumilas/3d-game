@@ -78,7 +78,6 @@
 namespace Game
 {
 	TextureManager textureManager;
-	SoundManager soundManager;
 }
 
 int current_time;
@@ -185,6 +184,7 @@ int main(int argc, char**agrv)
 #endif
 
 	Screen2D::Init(windowRealWidth, windowRealHeight);
+	SoundManager::Init();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -208,7 +208,7 @@ int main(int argc, char**agrv)
 		wheel.loadModel();
 
 		Game::textureManager.readTextures();
-		Game::soundManager.readSounds();
+		SoundManager::Instance()->readSounds();
 
 		cars = { Car(CarBrand::SubaruBRZ, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
 
@@ -285,7 +285,7 @@ void display()
 	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
 		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
 		0, 0, 1); //up
-	Game::soundManager.serCameraPosition(camera.center, camera.lookAt);
+	SoundManager::Instance()->setCameraPosition(camera.center, camera.lookAt);
 
 
 	mapContainer.displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
@@ -380,6 +380,8 @@ void keyboard(unsigned char key, int x, int y)
 		orbit.savePosition();
 		if(!mapManager.loadedFromPolygonsFile)
 			mapManager.saveOverlays();
+
+		SoundManager::DeInit();
 		exit(0);
 		break;
 	case 32:
