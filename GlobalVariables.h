@@ -9,5 +9,4 @@ namespace Game
 {
 	extern TextureManager textureManager;
 	extern SoundManager soundManager;
-	extern Screen2D screen2D;
 }

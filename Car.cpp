@@ -39,9 +39,9 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 		wheel.loadModel();
 	}
 
-	//cameraCenter = Point{-8, 0, 5};
+	cameraCenter = Point{-8, 0, 5};
 	//cameraCenter = Point{ -0.001, 0, 15 };
-	cameraCenter = Point{ -0.001, 0, 50 };
+	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
 
 	setLastWheelPosition();
@@ -553,7 +553,7 @@ void Car::calculateCollisions()
 		{
 			collidingObjects.push_back({ &obstacle, &carModelCircle });
 
-			Game::screen2D.addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &Game::screen2D.roboto_modo_regular);
+			Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
 
 			float fDistance = sqrtf((globalCollisionCircle.center.x - obstacle.center.x)*(globalCollisionCircle.center.x - obstacle.center.x) + (globalCollisionCircle.center.y - obstacle.center.y)*(globalCollisionCircle.center.y - obstacle.center.y));
 

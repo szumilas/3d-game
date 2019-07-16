@@ -1,9 +1,28 @@
 #include "Screen2D.h"
 
+std::unique_ptr<Screen2D> Screen2D::_instance;
+
+Screen2D::Screen2D(int width, int height)
+{
+	setSize(width, height);
+	loadFonts();
+}
+
 Screen2D::~Screen2D()
 {
 	digital_counter.clean();
 	stocky.clean();
+	roboto_modo_regular.clean();
+}
+
+void Screen2D::Init(int width, int height)
+{
+	_instance = std::unique_ptr<Screen2D>(new Screen2D(width, height));
+}
+
+std::unique_ptr<Screen2D>& Screen2D::Instance()
+{
+	return _instance;
 }
 
 void Screen2D::setSize(int width, int height)

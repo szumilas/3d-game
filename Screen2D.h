@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "GlobalStructures.h"
 #include "freetype.h"
 
@@ -18,6 +20,8 @@ class Screen2D
 public:
 
 	~Screen2D();
+	static void Init(int width, int height);
+	static std::unique_ptr<Screen2D>& Instance();
 
 	void setSize(int width, int height);
 	void loadFonts();
@@ -31,6 +35,7 @@ public:
 
 private:
 
+	Screen2D(int width, int height);
 
 public:
 
@@ -46,5 +51,7 @@ private:
 
 
 	std::vector<Screen2Dtext> textValues;
+
+	static std::unique_ptr<Screen2D> _instance;
 
 };

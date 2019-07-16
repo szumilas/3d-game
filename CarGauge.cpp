@@ -74,7 +74,7 @@ void CarGauge::display()
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 
-	Game::screen2D.addTestValueToPrint(ColorName::RED, 49.5, 3.5, std::to_string(car->getCurrentGear()), &Game::screen2D.digital_counter);
+	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 49.5, 3.5, std::to_string(car->getCurrentGear()), &(Screen2D::Instance()->digital_counter));
 }
 
 void CarGauge::calculateClockTipPositions()

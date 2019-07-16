@@ -79,7 +79,6 @@ namespace Game
 {
 	TextureManager textureManager;
 	SoundManager soundManager;
-	Screen2D screen2D;
 }
 
 int current_time;
@@ -185,9 +184,7 @@ int main(int argc, char**agrv)
 	windowRealHeight = windowHeight;
 #endif
 
-	//Game::screen2D.setCarGauge(&carGauge);
-	Game::screen2D.setSize(windowRealWidth, windowRealHeight);
-	Game::screen2D.loadFonts();
+	Screen2D::Init(windowRealWidth, windowRealHeight);
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -326,7 +323,7 @@ void display()
 
 	Screen2D::pushScreenCoordinateMatrix();
 	carGauge.display();
-	Game::screen2D.display();
+	Screen2D::Instance()->display();
 	Screen2D::pop_projection_matrix();
 
 	glutSwapBuffers();
