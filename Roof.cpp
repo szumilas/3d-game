@@ -36,11 +36,11 @@ void Roof::calculateFinalGeometry()
 				for (auto& point : roofSurface.points)
 				{
 					newPolygon.points.push_back({ point.x, point.y, point.z });
-					newPolygon.texturePoints.push_back({ point.x / Game::textureManager.textures[static_cast<long>(Textures::roof)].realWidth, point.y / Game::textureManager.textures[static_cast<long>(Textures::roof)].realHeight });
+					newPolygon.texturePoints.push_back({ point.x / TextureManager::Instance()->textures[static_cast<long>(Textures::roof)].realWidth, point.y / TextureManager::Instance()->textures[static_cast<long>(Textures::roof)].realHeight });
 				}
 
 				newPolygon.noOfPoints = newPolygon.texturePoints.size();
-				newPolygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::roof_asphalt)].idTexture;
+				newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<long>(Textures::roof_asphalt)].idTexture;
 				newPolygon.color = Color{ 0.7f, 0.7f, 0.7f };
 
 				newPolygon.additionalColor = Color{ 1.0f, 0.0f, 0.0f };
@@ -75,11 +75,11 @@ void Roof::calculateFinalGeometry()
 					rotatedPoint.x = pointToBeRotated.x * cos(angle) - pointToBeRotated.y * sin(angle);
 					rotatedPoint.y = pointToBeRotated.x * sin(angle) + pointToBeRotated.y * cos(angle);
 
-					newPolygon.texturePoints.push_back({ rotatedPoint.x / Game::textureManager.textures[static_cast<long>(Textures::roof)].realWidth, rotatedPoint.y / Game::textureManager.textures[static_cast<long>(Textures::roof)].realHeight });
+					newPolygon.texturePoints.push_back({ rotatedPoint.x / TextureManager::Instance()->textures[static_cast<long>(Textures::roof)].realWidth, rotatedPoint.y / TextureManager::Instance()->textures[static_cast<long>(Textures::roof)].realHeight });
 				}
 
 				newPolygon.noOfPoints = newPolygon.texturePoints.size();
-				newPolygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::roof)].idTexture;
+				newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<long>(Textures::roof)].idTexture;
 				newPolygon.color = roofSurface.color;
 
 				auto newColor = roofSurface.color.mixColor(Color{ 1.0f, 0.0f, 0.0f });

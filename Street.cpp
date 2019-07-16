@@ -6,7 +6,7 @@ void Street::calculateFinalGeometry()
 
 	for (auto& polygon : polygons)
 	{
-		polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::asphalt)].idTexture;
+		polygon.idTexture = TextureManager::Instance()->textures[static_cast<long>(Textures::asphalt)].idTexture;
 
 		if (area_highway == "cycleway")
 		{
@@ -16,7 +16,7 @@ void Street::calculateFinalGeometry()
 		}
 		else if (area_highway == "footway")
 		{
-			polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::paving)].idTexture;
+			polygon.idTexture = TextureManager::Instance()->textures[static_cast<long>(Textures::paving)].idTexture;
 		}
 		else  if (area_highway == "service")
 		{

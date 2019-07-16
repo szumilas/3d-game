@@ -6,6 +6,6 @@ void Water::calculateFinalGeometry()
 
 	for (auto& polygon : polygons)
 	{
-		polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::water)].idTexture;
+		polygon.idTexture = TextureManager::Instance()->textures[static_cast<long>(Textures::water)].idTexture;
 	}
 }

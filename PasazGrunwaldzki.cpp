@@ -85,7 +85,7 @@ void PasazGrunwaldzki::calculateFinalGeometry()
 			newPolygon.texturePoints.push_back({ 0.0f, wall.yRatio });
 
 			newPolygon.noOfPoints = newPolygon.texturePoints.size();
-			newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(Textures::glass_elevation)].idTexture;
+			newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::glass_elevation)].idTexture;
 			newPolygon.color = wall.color;
 
 			auto newColor = wall.color.mixColor(selectedColor);

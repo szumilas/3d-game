@@ -27,9 +27,9 @@ void Riverbank::calculateFinalGeometry()
 		
 		auto wallTexture = Textures::retaining_wall;
 
-		wall.idTexture = Game::textureManager.textures[static_cast<long>(wallTexture)].idTexture;
-		wall.xRatio = static_cast<int>(wall.wallLenght / Game::textureManager.textures[static_cast<long>(wallTexture)].realWidth);
-		wall.yRatio = static_cast<int>(_height - _min_height) / Game::textureManager.textures[static_cast<long>(wallTexture)].realHeight;
+		wall.idTexture = TextureManager::Instance()->textures[static_cast<long>(wallTexture)].idTexture;
+		wall.xRatio = static_cast<int>(wall.wallLenght / TextureManager::Instance()->textures[static_cast<long>(wallTexture)].realWidth);
+		wall.yRatio = static_cast<int>(_height - _min_height) / TextureManager::Instance()->textures[static_cast<long>(wallTexture)].realHeight;
 
 		if (!wall.xRatio)
 			wall.xRatio = 1.0f;

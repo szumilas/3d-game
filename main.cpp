@@ -75,11 +75,6 @@
 
 #include "carDB.h"
 
-namespace Game
-{
-	TextureManager textureManager;
-}
-
 int current_time;
 int previos_time = time(NULL);
 int noOfFrames = 0;
@@ -185,6 +180,7 @@ int main(int argc, char**agrv)
 
 	Screen2D::Init(windowRealWidth, windowRealHeight);
 	SoundManager::Init();
+	TextureManager::Init();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -207,7 +203,7 @@ int main(int argc, char**agrv)
 		//obj.loadModel();
 		wheel.loadModel();
 
-		Game::textureManager.readTextures();
+		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
 		cars = { Car(CarBrand::SubaruBRZ, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
@@ -382,6 +378,7 @@ void keyboard(unsigned char key, int x, int y)
 			mapManager.saveOverlays();
 
 		SoundManager::DeInit();
+		TextureManager::DeInit();
 		exit(0);
 		break;
 	case 32:

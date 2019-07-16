@@ -71,7 +71,6 @@ void SoundManager::DeInit()
 	_instance = nullptr;
 }
 
-
 void SoundManager::Init()
 {
 	_instance = new SoundManager;

@@ -11,6 +11,6 @@ void Common::calculateFinalGeometry()
 
 	for (auto& polygon : polygons)
 	{
-		polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::sett)].idTexture;
+		polygon.idTexture = TextureManager::Instance()->textures[static_cast<long>(Textures::sett)].idTexture;
 	}
 }

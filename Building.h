@@ -14,7 +14,7 @@ public:
 private:
 
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
-	void applyGenericTextures(TextureManager* textureManager);
+	void applyGenericTextures();
 
 protected:
 

@@ -17,7 +17,7 @@ void Footway::calculateFinalGeometry()
 		newPolygon.texturePoints.push_back({ finalRightRail[q].x, finalRightRail[q].y });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(textureName)].idTexture;
+		newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(textureName)].idTexture;
 		newPolygon.color = Color{ _color.red, _color.green, _color.blue };
 
 		newPolygon.additionalColor = newPolygon.color.mixColor(selectedColor);

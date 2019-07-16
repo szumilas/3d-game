@@ -74,7 +74,7 @@ void GrunwaldzkiCenter::calculateFinalGeometry()
 			newPolygon.texturePoints.push_back({ 0.0f, 3.0f });
 
 			newPolygon.noOfPoints = newPolygon.texturePoints.size();
-			newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(Textures::glass_elevation)].idTexture;
+			newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::glass_elevation)].idTexture;
 			newPolygon.color = Color(ColorName::WHITE);
 
 			auto newColor = wall.color.mixColor(selectedColor);
@@ -106,8 +106,8 @@ void GrunwaldzkiCenter::calculateFinalGeometry()
 		newPolygon.points.push_back({ additionalWall.p2.x, additionalWall.p2.y, _height });
 		newPolygon.points.push_back({ additionalWall.p1.x, additionalWall.p1.y, _height });
 
-		additionalWall.xRatio = static_cast<int>(additionalWall.wallLenght / Game::textureManager.textures[static_cast<long>(additionalWall.textureName)].realWidth);
-		additionalWall.yRatio = static_cast<int>(_height - _min_height) / Game::textureManager.textures[static_cast<long>(additionalWall.textureName)].realHeight;
+		additionalWall.xRatio = static_cast<int>(additionalWall.wallLenght / TextureManager::Instance()->textures[static_cast<long>(additionalWall.textureName)].realWidth);
+		additionalWall.yRatio = static_cast<int>(_height - _min_height) / TextureManager::Instance()->textures[static_cast<long>(additionalWall.textureName)].realHeight;
 
 
 		newPolygon.texturePoints.push_back({ 0.0f, 0.0f });
@@ -116,7 +116,7 @@ void GrunwaldzkiCenter::calculateFinalGeometry()
 		newPolygon.texturePoints.push_back({ 0.0f, additionalWall.yRatio });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = Game::textureManager.textures[static_cast<int>(additionalWall.textureName)].idTexture;
+		newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(additionalWall.textureName)].idTexture;
 		newPolygon.color = Color(ColorName::WHITE);
 
 		auto newColor = additionalWall.color.mixColor(selectedColor);

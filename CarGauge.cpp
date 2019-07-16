@@ -29,12 +29,12 @@ void CarGauge::load(Car* car)
 {
 	if (car->vMax > 220 / 3.6)
 	{
-		idTexture = Game::textureManager.textures[static_cast<int>(Textures::car_gauge_330)].idTexture;
+		idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::car_gauge_330)].idTexture;
 		velocityClock.maxValue = 330;
 	}
 	else
 	{
-		idTexture = Game::textureManager.textures[static_cast<int>(Textures::car_gauge)].idTexture;
+		idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::car_gauge)].idTexture;
 		velocityClock.maxValue = 220;
 	}
 	CarGauge::car = car;

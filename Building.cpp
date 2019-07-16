@@ -91,16 +91,16 @@ void Building::calculateFinalGeometry()
 {
 	if (genericWallTexture)
 	{
-		applyGenericTextures(&Game::textureManager);
+		applyGenericTextures();
 	}
 
 	for (auto& wall : walls)
 	{
-		wall.idTexture = Game::textureManager.textures[static_cast<long>(wall.textureName)].idTexture;
+		wall.idTexture = TextureManager::Instance()->textures[static_cast<long>(wall.textureName)].idTexture;
 		if(!wall.xRatio)
-			wall.xRatio = round(wall.wallLenght / Game::textureManager.textures[static_cast<long>(wall.textureName)].realWidth);
+			wall.xRatio = round(wall.wallLenght / TextureManager::Instance()->textures[static_cast<long>(wall.textureName)].realWidth);
 		if (!wall.yRatio)
-			wall.yRatio = round(_height - _min_height) / Game::textureManager.textures[static_cast<long>(wall.textureName)].realHeight;
+			wall.yRatio = round(_height - _min_height) / TextureManager::Instance()->textures[static_cast<long>(wall.textureName)].realHeight;
 
 		if (!wall.xRatio)
 			wall.xRatio = 1.0f;
@@ -247,11 +247,11 @@ void Building::generateWalls()
 	}
 }
 
-void Building::applyGenericTextures(TextureManager* textureManager)
+void Building::applyGenericTextures()
 {
 	for (auto& wall : walls)
 	{
-		auto exactBigTextureRatio = wall.wallLenght / textureManager->textures[static_cast<long>(bigWallTextureName)].realWidth;
+		auto exactBigTextureRatio = wall.wallLenght / TextureManager::Instance()->textures[static_cast<long>(bigWallTextureName)].realWidth;
 		auto roundedBigTextureRation = round(exactBigTextureRatio);
 
 		if (roundedBigTextureRation)
@@ -268,7 +268,7 @@ void Building::applyGenericTextures(TextureManager* textureManager)
 			}
 		}
 
-		auto exactSmallTextureRatio = wall.wallLenght / textureManager->textures[static_cast<long>(smallWallTextureName)].realWidth;
+		auto exactSmallTextureRatio = wall.wallLenght / TextureManager::Instance()->textures[static_cast<long>(smallWallTextureName)].realWidth;
 		auto roundedSmallTextureRation = round(exactSmallTextureRatio);
 
 		if (roundedSmallTextureRation)

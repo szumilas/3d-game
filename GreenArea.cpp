@@ -6,6 +6,6 @@ void GreenArea::calculateFinalGeometry()
 
 	for (auto& polygon : polygons)
 	{
-		polygon.idTexture = Game::textureManager.textures[static_cast<long>(Textures::grass)].idTexture;
+		polygon.idTexture = TextureManager::Instance()->textures[static_cast<long>(Textures::grass)].idTexture;
 	}
 }

@@ -17,7 +17,7 @@ void River::calculateFinalGeometry()
 		newPolygon.texturePoints.push_back({ finalRightRail[q].x, finalRightRail[q].y, _min_height });
 
 		newPolygon.noOfPoints = newPolygon.texturePoints.size();
-		newPolygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(Textures::water)].idTexture;
+		newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(Textures::water)].idTexture;
 		newPolygon.color = Color{ 1.0f, 1.0f, 1.0f };
 
 		newPolygon.additionalColor = newPolygon.color.mixColor(selectedColor);

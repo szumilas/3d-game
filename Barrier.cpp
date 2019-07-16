@@ -32,8 +32,8 @@ void Barrier::calculateFinalGeometry()
 			polygon.points.push_back({ nextPoint.x, nextPoint.y, _height });
 			polygon.points.push_back({ point.x, point.y, _height });
 
-			float xRatio = static_cast<int>(point.distance2D(nextPoint) / Game::textureManager.textures[static_cast<long>(textureName)].realWidth);
-			float yRatio = static_cast<int>(_height) / Game::textureManager.textures[static_cast<long>(textureName)].realHeight;
+			float xRatio = static_cast<int>(point.distance2D(nextPoint) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realWidth);
+			float yRatio = static_cast<int>(_height) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight;
 
 			if (!xRatio)
 				xRatio = 1.0f;
@@ -51,7 +51,7 @@ void Barrier::calculateFinalGeometry()
 			polygon.noOfPoints = polygon.points.size();
 			polygon.color = Color{ 1.0f, 1.0f, 1.0f };
 
-			polygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(textureName)].idTexture;
+			polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(textureName)].idTexture;
 
 			polygons.push_back(polygon);
 
@@ -74,7 +74,7 @@ void Barrier::calculateFinalGeometry()
 			polygon.points.push_back({ rightSide[q + 1].x, rightSide[q + 1].y, _height });
 			polygon.points.push_back({ rightSide[q].x, rightSide[q].y, _height });
 
-			float xRatio = static_cast<int>(leftSide[q].distance2D(leftSide[q + 1]) / Game::textureManager.textures[static_cast<long>(textureName)].realWidth);
+			float xRatio = static_cast<int>(leftSide[q].distance2D(leftSide[q + 1]) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realWidth);
 			float yRatio = 1;
 
 			if (!xRatio)
@@ -93,7 +93,7 @@ void Barrier::calculateFinalGeometry()
 			polygon.noOfPoints = polygon.points.size();
 			polygon.color = Color{ 1.0f, 1.0f, 1.0f };
 
-			polygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(textureName)].idTexture;
+			polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(textureName)].idTexture;
 
 			polygons.push_back(polygon);
 		}

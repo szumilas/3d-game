@@ -80,7 +80,7 @@ void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 		polygon.noOfPoints = polygon.points.size();
 		polygon.color = Color{ 1.0f, 1.0f, 1.0f };
 
-		polygon.idTexture = Game::textureManager.textures[static_cast<unsigned int>(Textures::elm_tree)].idTexture;
+		polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(Textures::elm_tree)].idTexture;
 
 		polygons.push_back(polygon);
 	}
