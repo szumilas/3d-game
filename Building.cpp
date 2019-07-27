@@ -71,6 +71,9 @@ Building::Building(MapObject& mapObject) : MapObject(mapObject)
 			_color = Color(ColorName::GRAY);
 		}
 	}
+
+	if(_min_height < 0.5)
+		collidable = Collidable::polygon;
 };
 
 void Building::calculateXYfromRef(const std::map<long long, node> &nodes)

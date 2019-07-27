@@ -220,6 +220,7 @@ int main(int argc, char**agrv)
 
 		mapManager.readMap("grunwaldWithRiver.osm");
 		//mapManager.readMap("trees2.osm");
+		//mapManager.readMap("singlebuilding.osm");
 		//mapManager.readMap("walls.osm");
 
 		//mapManager.readMap("streetDetail.osm");

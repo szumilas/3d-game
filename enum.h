@@ -127,4 +127,5 @@ enum class Collidable : long
 {
 	no,
 	point,
+	polygon,
 };

@@ -18,7 +18,7 @@ public:
 	static void displayWorld(Point& center, Point& lookAt);
 	void displayAllWorld();
 
-	static std::vector<std::unique_ptr<MapObject>*>& getCollidableObjectsInPosition(const Point& position);
+	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 
 private:
 

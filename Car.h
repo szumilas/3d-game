@@ -23,20 +23,20 @@ public:
 
 	void setObstacle(float x, float y)
 	{
-		obstacle.center.x = x;
-		obstacle.center.y = y;
+		//obstacle.center.x = x;
+		//obstacle.center.y = y;
 	}
 
 	void setObstacleVelocity(float x, float y)
 	{
-		obstacleV.x = x - obstacle.center.x;
-		obstacleV.y = y - obstacle.center.y;
+		//obstacleV.x = x - obstacle.center.x;
+		//obstacleV.y = y - obstacle.center.y;
 	}
 
 	vector2D obstacleV;
 	float obstacleMass = 1500;
 
-	Circle obstacle{ {0.0f, 0.0f, 0.05f }, 1.0f };
+	//Circle obstacle{ {0.0f, 0.0f, 0.05f }, 1.0f };
 
 	Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt);
 
@@ -123,6 +123,7 @@ private:
 	float length;
 
 	std::vector<Circle> carModelCircles;
+	std::vector<Point> temporary;
 				
 	Point cameraCenter;
 	Point cameraLookAt;

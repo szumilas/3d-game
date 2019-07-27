@@ -21,19 +21,57 @@ std::unique_ptr<MapContainer>& MapContainer::Instance()
 	return _instance;
 }
 
-std::vector<std::unique_ptr<MapObject>*>& MapContainer::getCollidableObjectsInPosition(const Point& position)
+std::vector<std::vector<std::unique_ptr<MapObject>*>*> MapContainer::getCollidableObjectsInPosition(const Point& position)
 {
+	std::vector<std::vector<std::unique_ptr<MapObject>*>*> result;
+
 	int yToReturn = static_cast<int>(100 * (position.y - minY) / deltaY);
 	int xToReturn = static_cast<int>(100 * (position.x - minX) / deltaX);
 
 	if (yToReturn >= 100 || xToReturn >= 100 || yToReturn < 0 || xToReturn < 0)
-		return mapCollidableObjectSections[0][0];
-	
-	return mapCollidableObjectSections[xToReturn][yToReturn];
+		return result;
+
+	result.push_back(&mapCollidableObjectSections[xToReturn][yToReturn]);
+	if(yToReturn > 0)
+		result.push_back(&mapCollidableObjectSections[xToReturn][yToReturn - 1]);
+	if (yToReturn < 99)
+		result.push_back(&mapCollidableObjectSections[xToReturn][yToReturn + 1]);
+	if (xToReturn > 0)
+		result.push_back(&mapCollidableObjectSections[xToReturn - 1][yToReturn]);
+	if (xToReturn < 99)
+		result.push_back(&mapCollidableObjectSections[xToReturn + 1][yToReturn]);
+
+	if (xToReturn > 0 && yToReturn > 0)
+		result.push_back(&mapCollidableObjectSections[xToReturn - 1][yToReturn - 1]);
+	if (xToReturn > 0 && yToReturn < 99)
+		result.push_back(&mapCollidableObjectSections[xToReturn - 1][yToReturn + 1]);
+	if (xToReturn < 99 && yToReturn > 0)
+		result.push_back(&mapCollidableObjectSections[xToReturn + 1][yToReturn - 1]);
+	if (xToReturn < 99 && yToReturn < 99)
+		result.push_back(&mapCollidableObjectSections[xToReturn + 1][yToReturn + 1]);
+
+	return result;
 }
 
 void MapContainer::displayWorld(Point& center, Point& lookAt)
 {
+	glColor3f(0.0f, 0.0f, 0.0f);
+	for (int xx = 0; xx < 100; xx++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f(minX + xx * deltaX / 100, minY, 0.05);
+		glVertex3f(minX + xx * deltaX / 100, maxY, 0.05);
+		glEnd();
+	}
+	for (int yy = 0; yy < 100; yy++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f(minX, minY + yy * deltaY / 100, 0.05);
+		glVertex3f(maxX, minY + yy * deltaY / 100, 0.05);
+		glEnd();
+	}
+
+
 	int yToDraw = static_cast<int>(100 * (center.y - minY) / deltaY);
 	int xToDraw = static_cast<int>(100 * (center.x - minX) / deltaX);
 
