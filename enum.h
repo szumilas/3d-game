@@ -122,3 +122,9 @@ enum
 	rearLeftWheel,
 	rearRightWheel,
 };
+
+enum class Collidable : long
+{
+	no,
+	point,
+};

@@ -1,5 +1,37 @@
 #include "MapContainer.h"
 
+std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapObjectSections;
+std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapCollidableObjectSections;
+std::unique_ptr<MapObject>* MapContainer::background;
+float MapContainer::deltaX;
+float MapContainer::deltaY;
+float MapContainer::maxX;
+float MapContainer::minX;
+float MapContainer::maxY;
+float MapContainer::minY;
+std::unique_ptr<MapContainer> MapContainer::_instance;
+
+void MapContainer::Init()
+{
+	_instance = std::unique_ptr<MapContainer>(new MapContainer());
+}
+
+std::unique_ptr<MapContainer>& MapContainer::Instance()
+{
+	return _instance;
+}
+
+std::vector<std::unique_ptr<MapObject>*>& MapContainer::getCollidableObjectsInPosition(const Point& position)
+{
+	int yToReturn = static_cast<int>(100 * (position.y - minY) / deltaY);
+	int xToReturn = static_cast<int>(100 * (position.x - minX) / deltaX);
+
+	if (yToReturn >= 100 || xToReturn >= 100 || yToReturn < 0 || xToReturn < 0)
+		return mapCollidableObjectSections[0][0];
+	
+	return mapCollidableObjectSections[xToReturn][yToReturn];
+}
+
 void MapContainer::displayWorld(Point& center, Point& lookAt)
 {
 	int yToDraw = static_cast<int>(100 * (center.y - minY) / deltaY);
@@ -10,7 +42,7 @@ void MapContainer::displayWorld(Point& center, Point& lookAt)
 	
 	std::vector<std::pair<int, int>> sectionsToDisplay;
 
-	sectionsToDisplay.push_back({ static_cast<int>(100 * (center.x - minX) / deltaX), static_cast<int>(100 * (center.y - minY) / deltaY) });
+	sectionsToDisplay.push_back({ xToDraw, yToDraw });
 
 	vector2D frontRay(center, lookAt);
 	frontRay.convertIntoUnitVector();
@@ -94,8 +126,13 @@ void MapContainer::displayWorld(Point& center, Point& lookAt)
 void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
 {
 	mapObjectSections.resize(100);
+	mapCollidableObjectSections.resize(100);
 
 	for (auto& row : mapObjectSections)
+	{
+		row.resize(100);
+	}
+	for (auto& row : mapCollidableObjectSections)
 	{
 		row.resize(100);
 	}
@@ -147,6 +184,10 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 		for (auto& sectionXY : sectionsXY)
 		{
 			mapObjectSections[sectionXY.first][sectionXY.second].push_back(&mapObject);
+			if (mapObject->collidable != Collidable::no)
+			{
+				mapCollidableObjectSections[sectionXY.first][sectionXY.second].push_back(&mapObject);
+			}
 		}
 
 	}

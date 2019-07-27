@@ -98,4 +98,6 @@ public:
 	Color _color;
 
 	Color _colorCopy;
+
+	Collidable collidable = Collidable::no;
 };

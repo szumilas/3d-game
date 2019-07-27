@@ -1,7 +1,7 @@
 #define NOMINMAX
 
-
 #include "Car.h"
+#include "MapContainer.h"
 
 #include <algorithm>
 
@@ -215,7 +215,7 @@ void Car::display()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
 
-		bool prin3DtModel = false;
+		bool prin3DtModel = true;
 		if(prin3DtModel)
 		{
 			for (auto& polygon : polygons)
@@ -538,38 +538,48 @@ void Car::calculateNetForces()
 void Car::calculateCollisions()
 {
 	std::vector<std::pair<Circle*, Circle*>> collidingObjects;
+	Circle obstacle;
+	float obstacleMass = 999999999.0;
 
-	for (auto& carModelCircle : carModelCircles)
+	for (auto& currentObstacle : MapContainer::Instance()->getCollidableObjectsInPosition(position))
 	{
-		Point globalCollisionCircleCenter;
-		globalCollisionCircleCenter.x = position.x + carModelCircle.center.x;
-		globalCollisionCircleCenter.y = position.y + carModelCircle.center.y;
-		globalCollisionCircleCenter.z = carModelCircle.center.z;
-		Point::rotate(globalCollisionCircleCenter, position, rz);
+		obstacle.center = currentObstacle->get()->position;
+		obstacle.r = 0.5f;
 
-		Circle globalCollisionCircle{ globalCollisionCircleCenter, carModelCircle.r };
+		if (obstacle.center.distance2D(position) > 5.0)
+			continue;
 
-		if (globalCollisionCircle.isColliding(obstacle))
+		for (auto& carModelCircle : carModelCircles)
 		{
-			collidingObjects.push_back({ &obstacle, &carModelCircle });
+			Point globalCollisionCircleCenter;
+			globalCollisionCircleCenter.x = position.x + carModelCircle.center.x;
+			globalCollisionCircleCenter.y = position.y + carModelCircle.center.y;
+			globalCollisionCircleCenter.z = carModelCircle.center.z;
+			Point::rotate(globalCollisionCircleCenter, position, rz);
 
-			Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
+			Circle globalCollisionCircle{ globalCollisionCircleCenter, carModelCircle.r };
 
-			float fDistance = sqrtf((globalCollisionCircle.center.x - obstacle.center.x)*(globalCollisionCircle.center.x - obstacle.center.x) + (globalCollisionCircle.center.y - obstacle.center.y)*(globalCollisionCircle.center.y - obstacle.center.y));
+			if (globalCollisionCircle.isColliding(obstacle))
+			{
+				collidingObjects.push_back({ &obstacle, &carModelCircle });
 
-			// Calculate displacement required
-			float fOverlap = 0.5f * (fDistance - globalCollisionCircle.r - obstacle.r);
+				Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
 
-			// Displace Current Ball away from collision
-			position.x -= 2.0f * fOverlap * (globalCollisionCircle.center.x - obstacle.center.x) / fDistance;
-			position.y -= 2.0f * fOverlap * (globalCollisionCircle.center.y - obstacle.center.y) / fDistance;
+				float fDistance = sqrtf((globalCollisionCircle.center.x - obstacle.center.x)*(globalCollisionCircle.center.x - obstacle.center.x) + (globalCollisionCircle.center.y - obstacle.center.y)*(globalCollisionCircle.center.y - obstacle.center.y));
 
-			// Displace Target Ball away from collision
-			//obstacle.center.x += fOverlap * (globalCollisionCircle.center.x - obstacle.center.x) / fDistance;
-			//obstacle.center.y += fOverlap * (globalCollisionCircle.center.y - obstacle.center.y) / fDistance;
+				// Calculate displacement required
+				float fOverlap = 0.5f * (fDistance - globalCollisionCircle.r - obstacle.r);
 
-			break;
+				// Displace Current Ball away from collision
+				position.x -= 2.0f * fOverlap * (globalCollisionCircle.center.x - obstacle.center.x) / fDistance;
+				position.y -= 2.0f * fOverlap * (globalCollisionCircle.center.y - obstacle.center.y) / fDistance;
+
+				break;
+			}
 		}
+
+		if (!collidingObjects.empty())
+			break;
 	}
 
 	if (!collidingObjects.empty())
@@ -591,35 +601,8 @@ void Car::calculateCollisions()
 			// Normal
 			float nx = (collidingObject.first->center.x - collisionCircle.center.x) / fDistance;
 			float ny = (collidingObject.first->center.y - collisionCircle.center.y) / fDistance;
-			
-			// Tangent
-			//float tx = -ny;
-			//float ty = nx;
-			//
-			vector2D vCarGlobal = getGlobalVector(v);
-			//
-			//// Dot Product Tangent
-			//float dpTan1 = vCarGlobal.x * tx + vCarGlobal.y * ty;
-			//float dpTan2 = obstacleV.x * tx + obstacleV.y * ty;
-			//
-			//// Dot Product Normal
-			//float dpNorm1 = vCarGlobal.x * nx + vCarGlobal.y * ny;
-			//float dpNorm2 = obstacleV.x * nx + obstacleV.y * ny;
-			//
-			//// Conservation of momentum in 1D
-			//float m1 = (dpNorm1 * (mass - obstacleMass) + 2.0f * obstacleMass * dpNorm2) / (mass + obstacleMass);
-			//float m2 = (dpNorm2 * (obstacleMass - mass) + 2.0f * mass * dpNorm1) / (mass + obstacleMass);
-			//
-			//// Update ball velocities
-			////v.x = tx * dpTan1 + nx * m1;
-			////v.y = ty * dpTan1 + ny * m1;
-			//obstacleV.x = tx * dpTan2 + nx * m2;
-			//obstacleV.y = ty * dpTan2 + ny * m2;
 
-			//vector2D vCarGlobal;
-			//vCarGlobal.x = v.x * cos(-rz) - v.y * sin(-rz);
-			//vCarGlobal.y = v.x * sin(-rz) + v.y * cos(-rz);
-			//
+			vector2D vCarGlobal = getGlobalVector(v);
 
 			vector2D vCircleGlobal(vCarGlobal.x, vCarGlobal.y);
 
@@ -634,15 +617,17 @@ void Car::calculateCollisions()
 			obstacleV.x = obstacleV.x + p * mass * nx;
 			obstacleV.y = obstacleV.y + p * mass * ny;
 
-			//v.x = vCarGlobal.x * cos(-rz) - vCarGlobal.y * sin(-rz);
-			//v.y = vCarGlobal.x * sin(-rz) + vCarGlobal.y * cos(-rz);
 			v = getLocalVector(vCarGlobal);
-			//v = getLocalVector(vCarGlobal);
 
-			if(abs(collisionCircle.center.y - position.y) > 0.1)
+			if(abs(collisionCircle.center.y - position.y) > 0.2)
 				angularVelocity -= modelCircleGlobalVelocity.x / (collisionCircle.center.y - position.y);
-			if (abs(collisionCircle.center.x - position.x) > 0.1)
+			if (abs(collisionCircle.center.x - position.x) > 0.2)
 				angularVelocity += modelCircleGlobalVelocity.y / (collisionCircle.center.x - position.x);
+
+			if (angularVelocity > PI / 2)
+				angularVelocity = PI / 2;
+			if (angularVelocity < -PI / 2)
+				angularVelocity = -PI / 2;
 		}
 		collidingObjects.clear();
 	}

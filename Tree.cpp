@@ -4,6 +4,7 @@ Tree::Tree(long long ref)
 {
 	refs.push_back(ref);
 	_height = 4.0f;
+	collidable = Collidable::point;
 }
 /*
 void Tree::display()
@@ -60,6 +61,8 @@ void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 
 	newPoint.x = nodes.at(refs[0]).posX;
 	newPoint.y = nodes.at(refs[0]).posY;
+
+	position = newPoint;
 
 	std::vector<std::pair<Point, Point>> treePoints{ {{ newPoint.x - size / 2, newPoint.y }, { newPoint.x + size / 2, newPoint.y, 0 }},
 	{ { newPoint.x, newPoint.y - size / 2},{ newPoint.x, newPoint.y + size / 2, 0 } } };

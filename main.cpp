@@ -158,7 +158,6 @@ void init()
 
 
 MapManager mapManager;
-MapContainer mapContainer;
 
 int main(int argc, char**agrv)
 {
@@ -181,6 +180,7 @@ int main(int argc, char**agrv)
 	Screen2D::Init(windowRealWidth, windowRealHeight);
 	SoundManager::Init();
 	TextureManager::Init();
+	MapContainer::Init();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -218,8 +218,8 @@ int main(int argc, char**agrv)
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		//mapManager.readMap("grunwaldWithRiver.osm");
-		mapManager.readMap("trees2.osm");
+		mapManager.readMap("grunwaldWithRiver.osm");
+		//mapManager.readMap("trees2.osm");
 		//mapManager.readMap("walls.osm");
 
 		//mapManager.readMap("streetDetail.osm");
@@ -238,7 +238,7 @@ int main(int argc, char**agrv)
 		//mapManager.generatePolygonsFile();
 		//mapManager.loadPolygonsFromFile();
 		//mapContainer.loadWorldIntoBuckets(&mapManager.polygonsObjects);
-		mapContainer.loadWorldIntoSections(mapManager.mapObjects);
+		MapContainer::loadWorldIntoSections(mapManager.mapObjects);
 
 		camera.cameraViews.push_back({ cars[0].getCameraCenter(), cars[0].getCameraLookAt() });
 		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
@@ -284,7 +284,7 @@ void display()
 	SoundManager::Instance()->setCameraPosition(camera.center, camera.lookAt);
 
 
-	mapContainer.displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
+	MapContainer::displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
 	//mapContainer.displayAllWorld();
 
 	for (auto& car : cars)

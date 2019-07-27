@@ -9,12 +9,16 @@
 
 class MapContainer
 {
-
 public:
 
-	void loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
-	void displayWorld(Point& center, Point& lookAt);
+	static void Init();
+	static std::unique_ptr<MapContainer>& Instance();
+
+	static void loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
+	static void displayWorld(Point& center, Point& lookAt);
 	void displayAllWorld();
+
+	static std::vector<std::unique_ptr<MapObject>*>& getCollidableObjectsInPosition(const Point& position);
 
 private:
 
@@ -26,19 +30,23 @@ private:
 
 	std::vector<std::unique_ptr<Object3D>>* polygonsObjects = nullptr;
 
-	std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapObjectSections;
-	std::unique_ptr<MapObject>* background;
+	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapObjectSections;
+	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;
+	static std::unique_ptr<MapObject>* background;
 
 	std::vector<Object3D> myMap;
 
-	float deltaX;
-	float deltaY;
+	static float deltaX;
+	static float deltaY;
 
-	float maxX;
-	float minX;
-	float maxY;
-	float minY;
+	static float maxX;
+	static float minX;
+	static float maxY;
+	static float minY;
 
 	vector2D equator{ Point{0,0}, Point{1,0} };
+
+
+	static std::unique_ptr<MapContainer> _instance;
 
 };
