@@ -727,5 +727,8 @@
 		<tag k="height" v="10.00"/>
 		<tag k="building" v="office"/>
 	</way>
+	<way id="101215649">
+		<tag k="_skip" v="yes"/>
+	</way>
 </osm>
 
