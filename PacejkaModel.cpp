@@ -43,6 +43,10 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 				if (wheel.angularVelocity > vMax / rd)
 					wheel.angularVelocity = vMax / rd;
 			}
+			else
+			{
+				wheel.angularVelocity = vCarGlobal.length() / rd;
+			}
 		}
 	}
 	if (trySlow)
@@ -194,5 +198,13 @@ void PacejkaModel::calculateLateralForces()
 	for (auto& wheel : allWheels)
 	{
 		wheel.lateralForce = mass / 4 * GRAVITY * D_Peak * sin(C_Shape_Lateral * atan(B_Stiffness * wheel.slipAngle - E_Curvature * (B_Stiffness * wheel.slipAngle - atan(B_Stiffness * wheel.slipAngle))));
+	}
+}
+
+void PacejkaModel::recalculateWheelAngularVelocity(float v)
+{
+	for (auto& wheel : allWheels)
+	{
+		wheel.angularVelocity = v / rd;
 	}
 }

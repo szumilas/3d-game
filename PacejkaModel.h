@@ -38,6 +38,7 @@ public:
 	void calculateLocalVelocities(const vector2D& vCarGlobal, float angularVelocity, float rz);
 	void calculateSlipRatios();
 	void calculateSlipAngles();
+	void recalculateWheelAngularVelocity(float v);
 
 private:
 

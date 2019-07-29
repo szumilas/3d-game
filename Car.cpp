@@ -694,6 +694,8 @@ void Car::calculateCollisions()
 			if (angularVelocity < -PI / 2)
 				angularVelocity = -PI / 2;
 		}
+
+		pacejkaModel.recalculateWheelAngularVelocity(v.length());
 		collidingObjects.clear();
 	}
 }
