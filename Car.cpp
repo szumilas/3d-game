@@ -26,8 +26,8 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 	//position.x = startX -140;
 	//position.y = startY -347;
-	position.x = startX - 350;
-	position.y = startY + 200;
+	position.x = startX - 350*0;
+	position.y = startY + 200*0;
 	position.z = 0.01;
 
 	rz = 3.14 / 4 * 0 + 4.36;
@@ -570,10 +570,10 @@ void Car::calculateCollisions()
 			{
 				for (auto& carModelCircle : carModelCircles)
 				{
-					for (int i = 0; i < currentObstacle->get()->points.size(); i++)
+					for (int i = 0; i < currentObstacle->get()->points.size() - 1; i++)
 					{
 						auto& p1 = currentObstacle->get()->points[i];
-						auto& p2 = currentObstacle->get()->points[(i + 1) % currentObstacle->get()->points.size()];
+						auto& p2 = currentObstacle->get()->points[i + 1];
 						Point globalCollisionCircleCenter;
 						globalCollisionCircleCenter.x = position.x + carModelCircle.center.x;
 						globalCollisionCircleCenter.y = position.y + carModelCircle.center.y;
@@ -665,17 +665,27 @@ void Car::calculateCollisions()
 
 			vector2D modelCircleGlobalVelocity{ -p * obstacleMass * nx, -p * obstacleMass * ny };
 
+			auto energyBeforeCollision = pow(vCarGlobal.length(), 2);
 			vCarGlobal.x += modelCircleGlobalVelocity.x;
 			vCarGlobal.y += modelCircleGlobalVelocity.y;
+			auto energyAfterCollision = pow(vCarGlobal.length(), 2);
+
+			static double maxEneryRatio = 0.3;
+
+			if (energyAfterCollision / energyBeforeCollision > maxEneryRatio)
+			{
+				vCarGlobal *= maxEneryRatio;
+			}
+
 			obstacleV.x = obstacleV.x + p * mass * nx;
 			obstacleV.y = obstacleV.y + p * mass * ny;
 
 			v = getLocalVector(vCarGlobal);
 
 			if(abs(collisionCircle.center.y - position.y) > 0.2)
-				angularVelocity -= modelCircleGlobalVelocity.x / (collisionCircle.center.y - position.y);
+				angularVelocity -= modelCircleGlobalVelocity.x / (collisionCircle.center.y - position.y) / 6;
 			if (abs(collisionCircle.center.x - position.x) > 0.2)
-				angularVelocity += modelCircleGlobalVelocity.y / (collisionCircle.center.x - position.x);
+				angularVelocity += modelCircleGlobalVelocity.y / (collisionCircle.center.x - position.x) / 6;
 
 			if (angularVelocity > PI / 2)
 				angularVelocity = PI / 2;

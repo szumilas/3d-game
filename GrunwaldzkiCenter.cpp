@@ -28,6 +28,11 @@ GrunwaldzkiCenter::GrunwaldzkiCenter(MapObject& mapObject) : Building(mapObject)
 	{
 		_height = 18.0f;
 	}
+
+	if (_min_height < 0.5)
+		collidable = Collidable::polygon;
+	else
+		collidable = Collidable::no;
 }
 
 void GrunwaldzkiCenter::generateWalls()
