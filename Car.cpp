@@ -26,11 +26,11 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 	//position.x = startX -140;
 	//position.y = startY -347;
-	position.x = startX - 350*0;
-	position.y = startY + 200*0;
+	position.x = startX + 355;
+	position.y = startY - 130;
 	position.z = 0.01;
 
-	rz = 3.14 / 4 * 0 + 4.36;
+	rz = 3.14 / 4 * 0 + 3.6;
 
 	steeringWheelAngle = 0;
 
@@ -42,6 +42,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	}
 
 	cameraCenter = Point{-8, 0, 5};
+	//cameraCenter = Point{-8, -5, 5};
 	//cameraCenter = Point{ -0.001, 0, 15 };
 	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
@@ -52,7 +53,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	engineSound = SoundManager::Instance()->registerSoundInstance(carDB.at(carBrand).engineSound);
 	driftSound = SoundManager::Instance()->registerSoundInstance(Sounds::drift);
 
-	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd);
+	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd, 100.0f / 3.6f / carDB.at(carBrand).acceleration_0_100, carDB.at(carBrand).vMax / 3.6);
 
 }
 
@@ -144,6 +145,7 @@ void Car::move()
 	tryAccelerate = false;
 	trySlow = false;
 
+	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "x: " + std::to_string(position.x) + "   y: " + std::to_string(position.y), &(Screen2D::Instance()->roboto_modo_regular));
 }
 
 void Car::accelerate()

@@ -31,7 +31,7 @@ public:
 
 	PacejkaModel();
 
-	void setCarGeometry(float mass, float frontWheelsXoffset, float frontWheelsYoffset, float backWheelsXoffset, float rd);
+	void setCarGeometry(float mass, float frontWheelsXoffset, float frontWheelsYoffset, float backWheelsXoffset, float rd, float acceleration, float vMax);
 	std::vector<Force> calculateForces(bool tryAccelerate, bool trySlow, const vector2D& vCarGlobal, float angularVelocity, float steeringWheelAngle, float rz);
 	void calculateLongitudinalForces();
 	void calculateLateralForces();
@@ -50,6 +50,8 @@ public:
 
 private:
 
+	float acceleration; //[m / s^2]
+	float vMax; //[m / s]
 	float mass;
 	float frontWheelsXoffset;
 	float frontWheelsYoffset;

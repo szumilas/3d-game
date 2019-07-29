@@ -7,13 +7,15 @@ PacejkaModel::PacejkaModel()
 	allWheels.resize(4);
 }
 
-void PacejkaModel::setCarGeometry(float mass, float frontWheelsXoffset, float frontWheelsYoffset, float backWheelsXoffset, float rd)
+void PacejkaModel::setCarGeometry(float mass, float frontWheelsXoffset, float frontWheelsYoffset, float backWheelsXoffset, float rd, float acceleration, float vMax)
 {
 	PacejkaModel::mass = mass;
 	PacejkaModel::frontWheelsXoffset = frontWheelsXoffset;
 	PacejkaModel::frontWheelsYoffset = frontWheelsYoffset;
 	PacejkaModel::backWheelsXoffset = backWheelsXoffset;
 	PacejkaModel::rd = rd;
+	PacejkaModel::acceleration = acceleration;
+	PacejkaModel::vMax = vMax;
 
 	allWheels[frontLeftWheel].position = { frontWheelsXoffset, frontWheelsYoffset, 0.52f };
 	allWheels[frontRightWheel].position = { frontWheelsXoffset, -frontWheelsYoffset, 0.52f };
@@ -35,8 +37,12 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 	{
 		for (auto& wheel : allWheels)
 		{
-			if(wheel.WD)
-				wheel.angularVelocity += 0.5;
+			if (wheel.WD)
+			{
+				wheel.angularVelocity += acceleration / rd / FPS;
+				if (wheel.angularVelocity > vMax / rd)
+					wheel.angularVelocity = vMax / rd;
+			}
 		}
 	}
 	if (trySlow)
@@ -44,19 +50,14 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 		for (auto& wheel : allWheels)
 		{
 			if (wheel.WD)
-				wheel.angularVelocity = 0;
+			{
+				if (wheel.angularVelocity > 5.0)
+					wheel.angularVelocity -= 5.0;
+				else
+					wheel.angularVelocity -= 0.5;
+			}
 		}
 	}
-
-	if (allWheels[frontLeftWheel].angularVelocity > 200)
-		allWheels[frontLeftWheel].angularVelocity = 200;
-	if (allWheels[frontLeftWheel].angularVelocity < -200)
-		allWheels[frontLeftWheel].angularVelocity = -200;
-
-	if (allWheels[frontRightWheel].angularVelocity > 200)
-		allWheels[frontRightWheel].angularVelocity = 200;
-	if (allWheels[frontRightWheel].angularVelocity < -200)
-		allWheels[frontRightWheel].angularVelocity = -200;
 
 	calculateLocalVelocities(vCarGlobal, angularVelocity, rz);
 
