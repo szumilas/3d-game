@@ -74,6 +74,7 @@
 #include "Screen2D.h"
 
 #include "carDB.h"
+#include "KeyboardManager.h"
 
 int current_time;
 int previos_time = time(NULL);
@@ -382,9 +383,6 @@ void keyboard(unsigned char key, int x, int y)
 		TextureManager::DeInit();
 		exit(0);
 		break;
-	case 32:
-		cars[0].slow();
-		break;
 	}
 
 	mapManager.applyMapEditorKeys(orbit);
@@ -472,6 +470,8 @@ void SpecialKeysUp(int key, int x, int y)
 
 void Update()
 {
+	KeyboardManager::Instance()->getKeys();
+
 	if (upPressed)
 		cars[0].accelerate();
 	if (downPressed)
@@ -480,6 +480,8 @@ void Update()
 		cars[0].turnLeft();
 	if (rightPressed)
 		cars[0].turnRight();
+	if (KeyboardManager::Instance()->checkKey(' '))
+		cars[0].breakPressed();
 	if (F1Pressed && F1Released)
 	{
 		cars[0].gearUp();

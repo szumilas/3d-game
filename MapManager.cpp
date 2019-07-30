@@ -9,6 +9,8 @@
 
 #include "rapidxml_print.hpp"
 
+#include "KeyboardManager.h"
+
 void printAttributes(rapidxml::xml_node <>* node)
 {
 	for (rapidxml::xml_attribute <>* a = node->first_attribute(); a; a = a->next_attribute())
@@ -655,70 +657,68 @@ void MapManager::deselectObjects()
 
 void MapManager::applyMapEditorKeys(Orbit& orbit)
 {
-	std::vector<bool> keys(200);
-	for (int q = 0; q < keys.size(); q++)
-		keys[q] = GetAsyncKeyState(q);
+	KeyboardManager::Instance()->getKeys();
 
-	if (keys[static_cast<int>('Z')])
+	if (KeyboardManager::Instance()->checkKey('Z'))
 	{
 		selectObject(orbit.getFlatCursorX(), orbit.getFlatCursorY());
 	}
-	if (keys[static_cast<int>('B')])
+	if (KeyboardManager::Instance()->checkKey('B'))
 	{
 		selectObject(orbit.getFlatCursorX(), orbit.getFlatCursorY(), &MapManager::isBuildingCheck);
 	}
-	if (keys[static_cast<int>('D')])
+	if (KeyboardManager::Instance()->checkKey('D'))
 	{
 		deselectObjects();
 	}
-	if (keys[static_cast<int>('H')])
+	if (KeyboardManager::Instance()->checkKey('H'))
 	{
 		hideObjects();
 	}
-	if (keys[static_cast<int>('U')])
+	if (KeyboardManager::Instance()->checkKey('U'))
 	{
 		unhideObjects();
 	}
-	if (keys[static_cast<int>('C')])
+	if (KeyboardManager::Instance()->checkKey('C'))
 	{
 		currentCameraView++;
 		currentCameraView %= 2;
 	}
 
-	if (keys[static_cast<int>('0')])
+	if (KeyboardManager::Instance()->checkKey('0'))
 	{
 		addOverlayAttribute("_skip", "yes");
 	}
-	if (keys[static_cast<int>('1')])
+	if (KeyboardManager::Instance()->checkKey('1'))
 	{
 		addOverlayAttribute("height", "5.00");
 	}
-	if (keys[static_cast<int>('2')])
+	if (KeyboardManager::Instance()->checkKey('2'))
 	{
 		addOverlayAttribute("height", "10.00");
 	}
-	if (keys[static_cast<int>('3')])
+	if (KeyboardManager::Instance()->checkKey('3'))
 	{
 		addOverlayAttribute("height", "15.00");
 	}
-	if (keys[static_cast<int>('4')])
+	if (KeyboardManager::Instance()->checkKey('4'))
 	{
 		addOverlayAttribute("height", "20.00");
 	}
-	if (keys[static_cast<int>('5')])
+	if (KeyboardManager::Instance()->checkKey('5'))
 	{
 		addOverlayAttribute("height", "25.00");
 	}
-	if (keys[static_cast<int>('6')])
+	if (KeyboardManager::Instance()->checkKey('6'))
 	{
 		addOverlayAttribute("height", "30.00");
 	}
-	if (keys[static_cast<int>('7')])
+	if (KeyboardManager::Instance()->checkKey('7'))
 	{
 		addOverlayAttribute("height", "35.00");
 	}
 
-	if (keys[static_cast<int>('F')])
+	if (KeyboardManager::Instance()->checkKey('F'))
 	{
 		addOverlayAttribute("roof:shape", "flat");
 	}

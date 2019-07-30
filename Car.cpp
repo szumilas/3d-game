@@ -124,7 +124,7 @@ void Car::move()
 
 	forces = globalForces;*/
 
-	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, getGlobalVector(v), angularVelocity, steeringWheelAngle, rz);
+	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, tryBreak, getGlobalVector(v), angularVelocity, steeringWheelAngle, rz);
 	
 	calculateCollisions();
 	calculateNetForces();
@@ -139,8 +139,12 @@ void Car::move()
 	playEngineSound();
 	playDriftSound(pacejkaModel.carDrifting);
 
+	if (tryAccelerate == false && trySlow == false && v.length() < 0.5)
+		stop();
+
 	tryAccelerate = false;
 	trySlow = false;
+	tryBreak = false;
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "x: " + std::to_string(position.x) + "   y: " + std::to_string(position.y), &(Screen2D::Instance()->roboto_modo_regular));
 }
@@ -153,6 +157,11 @@ void Car::accelerate()
 void Car::slow()
 {
 	trySlow = true;
+}
+
+void Car::breakPressed()
+{
+	tryBreak = true;
 }
 
 void Car::turnRight()
@@ -507,7 +516,7 @@ void Car::playEngineSound()
 
 void Car::playDriftSound(bool carDrifting)
 {
-	float volume = carDrifting * sqrt(1 / (std::max(1.0, position.distance2D(*globalCameraCenter))));
+	float volume = 0.8 * carDrifting * sqrt(1 / (std::max(1.0, position.distance2D(*globalCameraCenter))));
 
 	vector2D lookingLine(*globalCameraCenter, *globalCameraLookAt);
 	vector2D objectLine(*globalCameraCenter, position);

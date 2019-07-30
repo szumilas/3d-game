@@ -26,7 +26,7 @@ void PacejkaModel::setCarGeometry(float mass, float frontWheelsXoffset, float fr
 	allWheels[frontRightWheel].WD = true;
 }
 
-std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlow,  const vector2D& vCarGlobal, float angularVelocity, float steeringWheelAngle, float rz)
+std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, float angularVelocity, float steeringWheelAngle, float rz)
 {
 	std::vector<Force> resultForces;
 
@@ -49,7 +49,7 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 			}
 		}
 	}
-	if (trySlow)
+	else if (trySlow)
 	{
 		for (auto& wheel : allWheels)
 		{
@@ -65,11 +65,46 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 			}
 		}
 	}
+	else if (tryBreak)
+	{
+		for (auto& wheel : allWheels)
+		{
+			auto diff = std::max(0.1 * abs(wheel.angularVelocity), 1.0);
+			if(wheel.angularVelocity > 0)
+				wheel.angularVelocity = std::max(wheel.angularVelocity - diff, 0.0);
+			else
+				wheel.angularVelocity = std::min(wheel.angularVelocity + diff, 0.0);
+		}
+	}
+	else
+	{
+		recalculateWheelAngularVelocity(vCarGlobal.length());
+		for (auto& wheel : allWheels)
+		{
+			if (wheel.angularVelocity > 0)
+			{
+				wheel.angularVelocity -= 0.5 / FPS;
+				if (abs(wheel.angularVelocity < 1.0))
+					wheel.angularVelocity = 0.0;
+			}
+			else
+			{
+				wheel.angularVelocity += 0.5 / FPS;
+				if (abs(wheel.angularVelocity > -1.0))
+					wheel.angularVelocity = 0.0;
+			}
+		}
+	}
 
 	calculateLocalVelocities(vCarGlobal, angularVelocity, rz);
 
 	calculateSlipRatios();
 	calculateLongitudinalForces();
+
+	if (allWheels[frontLeftWheel].angularVelocity > 0 && allWheels[frontLeftWheel].angularVelocity < 0.8 * vCarGlobal.length() / rd)
+		allWheels[frontLeftWheel].longitudinalForce *= 3;
+	if (allWheels[frontRightWheel].angularVelocity > 0 && allWheels[frontRightWheel].angularVelocity < 0.8 * vCarGlobal.length() / rd)
+		allWheels[frontRightWheel].longitudinalForce *= 3;
 
 	calculateSlipAngles();
 	calculateLateralForces();
@@ -102,10 +137,13 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 	carDrifting = false;
 	for (auto& wheel : allWheels)
 	{
-		if (abs(wheel.slipAngle) > 15 && vCarGlobal.length() > 5)
+		if (vCarGlobal.length() > 5)
 		{
-			carDrifting = true;
-			break;
+			if (abs(wheel.slipAngle) > 15 || (abs(wheel.angularVelocity) / vCarGlobal.length()) < 0.8)
+			{
+				carDrifting = true;
+				break;
+			}
 		}
 	}
 

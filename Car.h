@@ -45,6 +45,7 @@ public:
 	void move();
 	void accelerate();
 	void slow();
+	void breakPressed();
 	void stop() { a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; }
 	void turnRight();
 	void turnLeft();
@@ -111,6 +112,7 @@ private:
 
 	bool tryAccelerate = false;
 	bool trySlow = false;
+	bool tryBreak = false;
 	bool turning = false;
 
 	std::vector<Wheel> wheels;
