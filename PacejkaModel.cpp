@@ -39,7 +39,7 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 		{
 			if (wheel.WD)
 			{
-				wheel.angularVelocity += acceleration / rd / FPS;
+				wheel.angularVelocity += (wheel.angularVelocity < 0 ? 2 : 1) * acceleration / rd / FPS;
 				if (wheel.angularVelocity > vMax / rd)
 					wheel.angularVelocity = vMax / rd;
 			}
@@ -55,10 +55,13 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 		{
 			if (wheel.WD)
 			{
-				if (wheel.angularVelocity > 5.0)
-					wheel.angularVelocity -= 5.0;
-				else
-					wheel.angularVelocity -= 0.5;
+				wheel.angularVelocity -= (wheel.angularVelocity > 0 ? 2 : 1) * acceleration / rd / FPS;
+				if (wheel.angularVelocity < -vMax / 4 / rd)
+					wheel.angularVelocity = -vMax / 4 / rd;
+			}
+			else
+			{
+				wheel.angularVelocity = vCarGlobal.length() / rd;
 			}
 		}
 	}

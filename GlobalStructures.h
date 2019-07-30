@@ -277,7 +277,12 @@ struct vector2D
 
 	static double angle(const vector2D& v1, const vector2D& v2)
 	{
-		return acos(dotProduct(v1, v2) / (v1.length() * v2.length()));
+		auto argument = dotProduct(v1, v2) / (v1.length() * v2.length());
+		if (argument > 1.0)
+			argument = 1.0;
+		else if (argument < -1.0)
+			argument = -1.0;
+		return acos(argument);
 	}
 
 	static double realAngle(const vector2D& v1, const vector2D& v2)

@@ -698,9 +698,9 @@ void Car::calculateCollisions()
 
 int Car::drivingDirection()
 {
-	auto angle = vector2D::angle(vector2D(sin(rz), cos(rz)), getGlobalVector(v));
-	if (angle < PI / 2.0)
-		return 1;
-	else
+	auto angle = vector2D::angle(vector2D(cos(rz), sin(rz)), getGlobalVector(v));
+	if (angle > PI / 2.0)
 		return -1;
+	else
+		return 1;
 }
