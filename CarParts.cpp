@@ -91,4 +91,5 @@ GearBox::GearBox(CarBrand carBrand)
 {
 	gears = carDB.at(carBrand).gears;
 	mainTransmission = carDB.at(carBrand).mainTransmission;
+	reverseGear = carDB.at(carBrand).reverseGear;
 }

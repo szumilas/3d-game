@@ -52,15 +52,16 @@ public:
 
 	GearBox(CarBrand carBrand);
 
-	inline float getTransmission(unsigned int gear) { return gears[gear]; }
-	inline float getCurrentTransmission() { return gears[currentGear]; }
-	inline float getNextTransmission() { if (currentGear == gears.size() - 1) return gears[currentGear]; return gears[currentGear + 1]; }
+	inline float getCurrentTransmission() { return reverse ? reverseGear : gears[currentGear]; }
+	inline float getNextTransmission() { reverse = false; if (currentGear == gears.size() - 1) return gears[currentGear]; return gears[currentGear + 1]; }
 	inline float getPreviousTransmission() { if (currentGear == 0) return gears[currentGear]; return gears[currentGear - 1]; }
 	inline float getTopTransmission() { return gears.back(); }
 	inline float getMainTransmission() { return mainTransmission; }
 	inline void gearUp() { if (currentGear < gears.size() - 1) currentGear++; }
 	inline void gearDown() { if (currentGear > 0) currentGear--; }
+	inline void setReverseGear() { currentGear = 0; reverse = true; }
 	inline unsigned int getCurrentGear() { return currentGear; };
+	inline char getCurrentGearTxt() { return reverse ? 'R' : static_cast<char>(currentGear + '0'); };
 
 private:
 
@@ -71,7 +72,9 @@ public:
 private:
 
 	unsigned int currentGear = 0;
-	std::vector<float> gears{0.0f, 3.5f, 2.0f, 1.4f, 1.1f, 0.7f};
-	float mainTransmission = 4.0f;
+	std::vector<float> gears;
+	float mainTransmission;
+	float reverseGear;
+	bool reverse = false;
 
 };

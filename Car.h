@@ -56,7 +56,7 @@ public:
 
 	float getVelocity() { return v.length(); } //[m/s]
 	float getRPM() { return engine.getRPM(); } //[m/s]
-	unsigned int getCurrentGear() { return gearBox.getCurrentGear(); } //[-]
+	char getCurrentGearTxt() { return gearBox.getCurrentGearTxt(); } //[-]
 	void importFromObjFile();
 
 private:
@@ -69,6 +69,7 @@ private:
 	void playDriftSound(bool carDrifting);
 	void calculateNetForces();
 	void calculateCollisions();
+	int drivingDirection();
 
 	template <typename T> int sgn(T val)
 	{
@@ -94,7 +95,7 @@ private:
 	std::list<Point> wheelsTrace;
 
 	float a = 0;
-	vector2D v{0.0, 0}; //[m/s] global
+	vector2D v{0.0, 0}; //[m/s] local
 	float velocity = 0; //[m/s]
 	float angularVelocity = 0; //[rad/s]
 	float mass; //[kg]
@@ -103,8 +104,6 @@ private:
 	float vMax; //[m / s]
 	float resistanceRatio; //[kN / (m / s)^2]
 	float nm = 0.8; //[-]
-
-	vector2D vLoc{0.0, 0.0};
 
 	float steeringWheelAngle;
 

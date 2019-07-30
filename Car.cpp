@@ -61,25 +61,22 @@ void Car::move()
 {
 	//cameraCenter.y = sin(steeringWheelAngle) * 1.0;
 
-	if (trySlow && vLoc.x > 1.0)
-	{
-		vLoc.x -= 1;
-	}
-	if (!tryAccelerate && vLoc.x <= 1.0)
-	{
-		vLoc.x = 0.0;
-		vLoc.y = 0.0;
-	}
-
 	//Automatic Transmission
 	//------------------------
 
-	if(tryAccelerate && gearBox.getCurrentGear() == 0)
-		gearBox.gearUp();
-	else if (engine.nextGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getNextTransmission(), rd, v.length()))
-		gearBox.gearUp();
-	else if (engine.previousGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getPreviousTransmission(), rd, v.length()))
-		gearBox.gearDown();
+	if (drivingDirection() == 1 || v.length() < 0.2)
+	{
+		if (tryAccelerate && gearBox.getCurrentGear() == 0)
+			gearBox.gearUp();
+		else if (engine.nextGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getNextTransmission(), rd, v.length()))
+			gearBox.gearUp();
+		else if (engine.previousGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getPreviousTransmission(), rd, v.length()))
+			gearBox.gearDown();
+	}
+	else
+	{
+		gearBox.setReverseGear();
+	}
 
 	//------------------------
 
@@ -694,8 +691,16 @@ void Car::calculateCollisions()
 			if (angularVelocity < -PI / 2)
 				angularVelocity = -PI / 2;
 		}
-
-		pacejkaModel.recalculateWheelAngularVelocity(v.length());
+		pacejkaModel.recalculateWheelAngularVelocity(drivingDirection() * v.length());
 		collidingObjects.clear();
 	}
+}
+
+int Car::drivingDirection()
+{
+	auto angle = vector2D::angle(vector2D(sin(rz), cos(rz)), getGlobalVector(v));
+	if (angle < PI / 2.0)
+		return 1;
+	else
+		return -1;
 }
