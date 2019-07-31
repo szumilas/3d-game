@@ -124,7 +124,7 @@ void Car::move()
 
 	forces = globalForces;*/
 
-	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, tryBreak, getGlobalVector(v), angularVelocity, steeringWheelAngle, rz);
+	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, angularVelocity, steeringWheelAngle, rz);
 	
 	calculateCollisions();
 	calculateNetForces();

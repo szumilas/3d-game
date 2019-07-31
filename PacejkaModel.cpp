@@ -26,7 +26,7 @@ void PacejkaModel::setCarGeometry(float mass, float frontWheelsXoffset, float fr
 	allWheels[frontRightWheel].WD = true;
 }
 
-std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, float angularVelocity, float steeringWheelAngle, float rz)
+std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, const vector2D& vCarLocal, float angularVelocity, float steeringWheelAngle, float rz)
 {
 	std::vector<Force> resultForces;
 
@@ -127,7 +127,10 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 	{
 		vector2D force;
 		force.x = wheel.longitudinalForce * cos(wheel.steeringWheelAngle) * longitudinalForceCoefficient;
-		force.y = abs(wheel.longitudinalForce) * sin(wheel.steeringWheelAngle);
+		if(vCarLocal.x > 5 && wheel.longitudinalForce < 0)
+			force.y = abs(wheel.longitudinalForce) * sin(wheel.steeringWheelAngle);
+		else
+			force.y = wheel.longitudinalForce * sin(wheel.steeringWheelAngle);
 		resultForces.push_back({ wheel.position, force });
 
 		force.x = - wheel.lateralForce * sin(wheel.steeringWheelAngle);
