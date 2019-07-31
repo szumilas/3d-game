@@ -101,31 +101,33 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 	calculateSlipRatios();
 	calculateLongitudinalForces();
 
+	double longitudinalForceCoefficient = 1.0;
+
 	if (allWheels[frontLeftWheel].angularVelocity > 0 && allWheels[frontLeftWheel].angularVelocity < 0.8 * vCarGlobal.length() / rd)
-		allWheels[frontLeftWheel].longitudinalForce *= 3;
+		longitudinalForceCoefficient = 6;
 	if (allWheels[frontRightWheel].angularVelocity > 0 && allWheels[frontRightWheel].angularVelocity < 0.8 * vCarGlobal.length() / rd)
-		allWheels[frontRightWheel].longitudinalForce *= 3;
+		longitudinalForceCoefficient = 6;
 
 	calculateSlipAngles();
 	calculateLateralForces();
 
 
 
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 65, "car velocity x: " + std::to_string(vCarGlobal.x) + "y: " + std::to_string(vCarGlobal.y), &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "car w: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::YELLOW, -100, 55, "[ANGULAR VELOCITY]", &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 50, "front-left: " + std::to_string(allWheels[frontLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 45, "front-right: " + std::to_string(allWheels[frontRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 40, "rear-left: " + std::to_string(allWheels[rearLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 35, "rear-right: " + std::to_string(allWheels[rearRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 65, "car velocity x: " + std::to_string(vCarGlobal.x) + "y: " + std::to_string(vCarGlobal.y), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "car w: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::YELLOW, -100, 55, "[ANGULAR VELOCITY]", &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 50, "front-left: " + std::to_string(allWheels[frontLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 45, "front-right: " + std::to_string(allWheels[frontRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 40, "rear-left: " + std::to_string(allWheels[rearLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 35, "rear-right: " + std::to_string(allWheels[rearRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
 
 
 	for (auto& wheel : allWheels)
 	{
 		vector2D force;
-		force.x = wheel.longitudinalForce * cos(wheel.steeringWheelAngle);
-		force.y = wheel.longitudinalForce * sin(wheel.steeringWheelAngle);
+		force.x = wheel.longitudinalForce * cos(wheel.steeringWheelAngle) * longitudinalForceCoefficient;
+		force.y = abs(wheel.longitudinalForce) * sin(wheel.steeringWheelAngle);
 		resultForces.push_back({ wheel.position, force });
 
 		force.x = - wheel.lateralForce * sin(wheel.steeringWheelAngle);
