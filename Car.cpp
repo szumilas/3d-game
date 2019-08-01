@@ -124,7 +124,7 @@ void Car::move()
 
 	forces = globalForces;*/
 
-	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, angularVelocity, steeringWheelAngle, rz);
+	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, acceleration, angularVelocity, steeringWheelAngle, rz);
 	
 	calculateCollisions();
 	calculateNetForces();
@@ -147,6 +147,7 @@ void Car::move()
 	tryBreak = false;
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "x: " + std::to_string(position.x) + "   y: " + std::to_string(position.y), &(Screen2D::Instance()->roboto_modo_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, -50, 80, "a.x: " + std::to_string(acceleration.x) + "   a.y: " + std::to_string(acceleration.y), &(Screen2D::Instance()->roboto_modo_regular));
 }
 
 void Car::accelerate()
@@ -418,14 +419,26 @@ void Car::calculateMovement()
 {
 	
 	if (v.x * (v.x + netForce.vector.x / mass / FPS) < 0)
+	{
 		v.x = 0.0f;
+		acceleration.x = 0.0f;
+	}
 	else
-		v.x += netForce.vector.x / mass / FPS;
+	{
+		acceleration.x = netForce.vector.x / mass;
+		v.x += acceleration.x / FPS;
+	}
 	
 	if (v.y * (v.y + netForce.vector.y / mass / FPS) < 0)
+	{
 		v.y = 0.0f;
+		acceleration.y = 0.0f;
+	}
 	else
-		v.y += netForce.vector.y / mass / FPS;
+	{
+		acceleration.y = netForce.vector.y / mass;
+		v.y += acceleration.y / FPS;
+	}
 
 	if (abs(v.x) < 0.01f)
 		v.x = 0;
@@ -436,12 +449,11 @@ void Car::calculateMovement()
 
 	sin_rz = sin(rz);
 	cos_rz = cos(rz);
-
 	
-	//position.x += v.x / FPS;
-	//position.y += v.y / FPS;
 	position.x += (v.x * cos_rz - v.y * sin_rz) / FPS;
 	position.y += (v.x * sin_rz + v.y * cos_rz) / FPS;
+
+	//acceleration = getLocalVector(acceleration);
 
 
 	if (angularVelocity * (angularVelocity + netTorque / momentOfInertia / FPS) < 0)

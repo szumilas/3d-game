@@ -23,6 +23,7 @@ class PacejkaModel
 		float steeringWheelAngle = 0.0f;
 
 		vector2D localVelocity;
+		bool frontWheel = false;
 
 		bool WD = false;
 	};
@@ -32,7 +33,7 @@ public:
 	PacejkaModel();
 
 	void setCarGeometry(float mass, float frontWheelsXoffset, float frontWheelsYoffset, float backWheelsXoffset, float rd, float acceleration, float vMax);
-	std::vector<Force> calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, const vector2D& vCarLocal, float angularVelocity, float steeringWheelAngle, float rz);
+	std::vector<Force> calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, const vector2D& vCarLocal, const vector2D& aLocal, float angularVelocity, float steeringWheelAngle, float rz);
 	void calculateLongitudinalForces();
 	void calculateLateralForces();
 	void calculateLocalVelocities(const vector2D& vCarGlobal, float angularVelocity, float rz);

@@ -24,9 +24,12 @@ void PacejkaModel::setCarGeometry(float mass, float frontWheelsXoffset, float fr
 
 	allWheels[frontLeftWheel].WD = true;
 	allWheels[frontRightWheel].WD = true;
+
+	allWheels[frontLeftWheel].frontWheel = true;
+	allWheels[frontRightWheel].frontWheel = true;
 }
 
-std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, const vector2D& vCarLocal, float angularVelocity, float steeringWheelAngle, float rz)
+std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, const vector2D& vCarLocal, const vector2D& aLocal, float angularVelocity, float steeringWheelAngle, float rz)
 {
 	std::vector<Force> resultForces;
 
@@ -100,20 +103,13 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 
 	calculateSlipRatios();
 	calculateLongitudinalForces();
-
-	double longitudinalForceCoefficient = 1.0;
-
-	if (allWheels[frontLeftWheel].angularVelocity > 0 && allWheels[frontLeftWheel].angularVelocity < 0.8 * vCarGlobal.length() / rd)
-		longitudinalForceCoefficient = 6;
-	if (allWheels[frontRightWheel].angularVelocity > 0 && allWheels[frontRightWheel].angularVelocity < 0.8 * vCarGlobal.length() / rd)
-		longitudinalForceCoefficient = 6;
-
+	
 	calculateSlipAngles();
 	calculateLateralForces();
 
 
 
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
 	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 65, "car velocity x: " + std::to_string(vCarGlobal.x) + "y: " + std::to_string(vCarGlobal.y), &(Screen2D::Instance()->roboto_modo_regular));
 	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "car w: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
 	//Screen2D::Instance()->addTestValueToPrint(ColorName::YELLOW, -100, 55, "[ANGULAR VELOCITY]", &(Screen2D::Instance()->roboto_modo_regular));
@@ -126,7 +122,16 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 	for (auto& wheel : allWheels)
 	{
 		vector2D force;
+
+		float longitudinalForceCoefficient = 1.0;
+
+		if (wheel.frontWheel && aLocal.x < 0 || !wheel.frontWheel && aLocal.x > 0)
+		{
+			longitudinalForceCoefficient = 1 + abs(aLocal.x) / 4;
+		}
+
 		force.x = wheel.longitudinalForce * cos(wheel.steeringWheelAngle) * longitudinalForceCoefficient;
+
 		if(vCarLocal.x > 5 && wheel.longitudinalForce < 0)
 			force.y = abs(wheel.longitudinalForce) * sin(wheel.steeringWheelAngle);
 		else

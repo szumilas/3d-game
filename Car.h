@@ -97,6 +97,7 @@ private:
 
 	float a = 0;
 	vector2D v{0.0, 0}; //[m/s] local
+	vector2D acceleration{ 0.0, 0.0 }; //[m/s^s] local
 	float velocity = 0; //[m/s]
 	float angularVelocity = 0; //[rad/s]
 	float mass; //[kg]
@@ -108,7 +109,6 @@ private:
 
 	float steeringWheelAngle;
 
-	float acceleration; //[m/s^s]
 
 	bool tryAccelerate = false;
 	bool trySlow = false;

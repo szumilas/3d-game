@@ -207,7 +207,7 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		cars = { Car(CarBrand::SubaruBRZ, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
+		cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
 
 		carGauge.load(&cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
