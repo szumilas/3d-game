@@ -107,6 +107,8 @@ private:
 	float resistanceRatio; //[kN / (m / s)^2]
 	float nm = 0.8; //[-]
 
+	int drivingDir = 0;
+
 	float steeringWheelAngle;
 
 

@@ -29,7 +29,7 @@ void PacejkaModel::setCarGeometry(float mass, float frontWheelsXoffset, float fr
 	allWheels[frontRightWheel].frontWheel = true;
 }
 
-std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, const vector2D& vCarLocal, const vector2D& aLocal, float angularVelocity, float steeringWheelAngle, float rz)
+std::vector<Force> PacejkaModel::calculateForces(int drivingDir, bool tryAccelerate, bool trySlow, bool tryBreak, const vector2D& vCarGlobal, const vector2D& vCarLocal, const vector2D& aLocal, float angularVelocity, float steeringWheelAngle, float rz)
 {
 	std::vector<Force> resultForces;
 
@@ -48,10 +48,6 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 				if (wheel.angularVelocity < vCarLocal.x / rd)
 					wheel.angularVelocity = vCarLocal.x / rd;
 			}
-			else
-			{
-				wheel.angularVelocity = vCarGlobal.length() / rd;
-			}
 		}
 	}
 	else if (trySlow)
@@ -63,10 +59,6 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 				wheel.angularVelocity -= (wheel.angularVelocity > 0 ? 2 : 1) * acceleration / rd / FPS;
 				if (wheel.angularVelocity < -vMax / 4 / rd)
 					wheel.angularVelocity = -vMax / 4 / rd;
-			}
-			else
-			{
-				wheel.angularVelocity = vCarGlobal.length() / rd;
 			}
 		}
 	}
@@ -83,23 +75,28 @@ std::vector<Force> PacejkaModel::calculateForces(bool tryAccelerate, bool trySlo
 	}
 	else
 	{
-		recalculateWheelAngularVelocity(vCarGlobal.length());
 		for (auto& wheel : allWheels)
 		{
-			if (wheel.angularVelocity > 0)
+			if (abs(wheel.angularVelocity) < 0.1f)
 			{
-				wheel.angularVelocity -= 0.5 / FPS;
+				wheel.angularVelocity = 0.0f;
+			}
+			else if (wheel.angularVelocity > 0)
+			{
+				wheel.angularVelocity -= 2.0 / FPS;
 				if (abs(wheel.angularVelocity < 1.0))
 					wheel.angularVelocity = 0.0;
 			}
 			else
 			{
-				wheel.angularVelocity += 0.5 / FPS;
+				wheel.angularVelocity += 2.0 / FPS;
 				if (abs(wheel.angularVelocity > -1.0))
 					wheel.angularVelocity = 0.0;
 			}
 		}
 	}
+
+	recalculateWheelAngularVelocity(vCarGlobal.length() * drivingDir);
 
 	calculateLocalVelocities(vCarGlobal, angularVelocity, rz);
 
@@ -183,7 +180,7 @@ void PacejkaModel::calculateSlipRatios()
 {
 	for (auto& wheel : allWheels)
 	{
-		if (wheel.angularVelocity > 0 && wheel.localVelocity.x <= 0)
+		if (wheel.angularVelocity >= 0 && wheel.localVelocity.x < 0)
 		{
 			wheel.slipRatio = 100;
 		}
@@ -256,8 +253,21 @@ void PacejkaModel::calculateLateralForces()
 
 void PacejkaModel::recalculateWheelAngularVelocity(float v)
 {
+	float drivingWheelVelocity = 0.0f;
 	for (auto& wheel : allWheels)
 	{
-		wheel.angularVelocity = v / rd;
+		if (wheel.WD)
+			drivingWheelVelocity = wheel.angularVelocity;
+		else
+			wheel.angularVelocity = v / rd;
+	}
+
+	if (abs(v) < 0.5f)
+	{
+		for (auto& wheel : allWheels)
+		{
+			if (!wheel.WD)
+				wheel.angularVelocity = drivingWheelVelocity;
+		}
 	}
 }

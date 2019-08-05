@@ -42,7 +42,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	}
 
 	cameraCenter = Point{-8, 0, 5};
-	//cameraCenter = Point{-8, -5, 5};
+	cameraCenter = Point{-8, -5, 5};
 	//cameraCenter = Point{ -0.001, 0, 15 };
 	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
@@ -59,12 +59,13 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 void Car::move()
 {
+	drivingDir = drivingDirection();
 	//cameraCenter.y = sin(steeringWheelAngle) * 1.0;
 
 	//Automatic Transmission
 	//------------------------
 
-	if (drivingDirection() == 1 || v.length() < 0.2)
+	if (drivingDir == 1 || v.length() < 0.2)
 	{
 		if (tryAccelerate && gearBox.getCurrentGear() == 0)
 			gearBox.gearUp();
@@ -124,7 +125,7 @@ void Car::move()
 
 	forces = globalForces;*/
 
-	forces = pacejkaModel.calculateForces(tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, acceleration, angularVelocity, steeringWheelAngle, rz);
+	forces = pacejkaModel.calculateForces(drivingDir, tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, acceleration, angularVelocity, steeringWheelAngle, rz);
 	
 	calculateCollisions();
 	calculateNetForces();
@@ -141,6 +142,9 @@ void Car::move()
 
 	if (tryAccelerate == false && trySlow == false && v.length() < 0.5)
 		stop();
+
+	//if (v.x <= -2)
+	//	v.x = 50;
 
 	tryAccelerate = false;
 	trySlow = false;
@@ -712,7 +716,7 @@ void Car::calculateCollisions()
 			if (angularVelocity < -PI / 2)
 				angularVelocity = -PI / 2;
 		}
-		pacejkaModel.recalculateWheelAngularVelocity(drivingDirection() * v.length());
+		pacejkaModel.recalculateWheelAngularVelocity(drivingDir * v.length());
 		collidingObjects.clear();
 	}
 }

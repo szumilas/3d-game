@@ -207,7 +207,7 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt)/*, Car(CarBrand::ToyotaHilux, 10, 10, &camera.center, &camera.lookAt)*/ };
+		cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt), /*Car(CarBrand::SuzukiVitara, 10, 10, &camera.center, &camera.lookAt)*/ };
 
 		carGauge.load(&cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
@@ -219,7 +219,7 @@ int main(int argc, char**agrv)
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		mapManager.readMap("grunwaldWithRiver.osm");
+		//mapManager.readMap("grunwaldWithRiver.osm");
 		//mapManager.readMap("trees2.osm");
 		//mapManager.readMap("singlebuilding.osm");
 		//mapManager.readMap("walls.osm");
@@ -232,7 +232,7 @@ int main(int argc, char**agrv)
 		//mapManager.readMap("curie3.osm");
 		//mapManager.readMap("shelter.osm");
 		//mapManager.readMap("stairs.osm");
-		//mapManager.readMap("pasaz.osm");
+		mapManager.readMap("pasaz.osm");
 		//mapManager.readMap("sedesowce.osm");
 		//mapManager.readMap("grunwaldzki.osm");
 		//mapManager.readMap("c13.osm");
