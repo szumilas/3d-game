@@ -292,7 +292,7 @@ void display()
 	{
 		car.display();
 		car.alreadyPrinted = false;
-		if (F1Pressed)
+		//if (F1Pressed)
 			car.setObstacle(orbit.getFlatCursorX(), orbit.getFlatCursorY());
 		if (F2Pressed)
 			car.setObstacleVelocity(orbit.getFlatCursorX(), orbit.getFlatCursorY());

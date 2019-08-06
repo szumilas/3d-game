@@ -60,6 +60,9 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 void Car::move()
 {
+	if (!humanCar)
+		AImove();
+
 	drivingDir = drivingDirection();
 	//cameraCenter.y = sin(steeringWheelAngle) * 1.0;
 
@@ -532,9 +535,10 @@ void Car::calculateNetForces()
 
 void Car::calculateCollisions()
 {
-	std::vector<std::pair<Circle*, Circle*>> collidingObjects;
+	std::vector<std::tuple<Circle*, Circle*, float>> collidingObjects;
 	std::vector<std::pair<Circle, float>> obstaclesWithPossibleCollision;
 	static float infiniteMass = 999999999.0;
+	vector2D obstacleV;
 
 	for (auto& enemyCar : MapContainer::Instance()->cars)
 	{
@@ -617,7 +621,7 @@ void Car::calculateCollisions()
 		{
 			if (globalCollisionCircle.isColliding(obstacle.first))
 			{
-				collidingObjects.push_back({ &obstacle.first, &carModelCircle });
+				collidingObjects.push_back({ &obstacle.first, &carModelCircle, obstacle.second });
 
 				Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
 
@@ -643,20 +647,20 @@ void Car::calculateCollisions()
 		for (auto& collidingObject : collidingObjects)
 		{
 			Point carModelCircleGlobalCenter;
-			carModelCircleGlobalCenter.x = position.x + collidingObject.second->center.x;
-			carModelCircleGlobalCenter.y = position.y + collidingObject.second->center.y;
-			carModelCircleGlobalCenter.z = collidingObject.second->center.z;
+			carModelCircleGlobalCenter.x = position.x + std::get<1>(collidingObject)->center.x;
+			carModelCircleGlobalCenter.y = position.y + std::get<1>(collidingObject)->center.y;
+			carModelCircleGlobalCenter.z = std::get<1>(collidingObject)->center.z;
 			Point::rotate(carModelCircleGlobalCenter, position, rz);
 
-			Circle carModelGlobalCircle{ carModelCircleGlobalCenter, collidingObject.second->r };
+			Circle carModelGlobalCircle{ carModelCircleGlobalCenter, std::get<1>(collidingObject)->r };
 
 			auto& collisionCircle = carModelGlobalCircle;
 			// Distance between balls
-			float fDistance = sqrtf((collisionCircle.center.x - collidingObject.first->center.x)*(collisionCircle.center.x - collidingObject.first->center.x) + (collisionCircle.center.y - collidingObject.first->center.y)*(collisionCircle.center.y - collidingObject.first->center.y));
+			float fDistance = sqrtf((collisionCircle.center.x - std::get<0>(collidingObject)->center.x)*(collisionCircle.center.x - std::get<0>(collidingObject)->center.x) + (collisionCircle.center.y - std::get<0>(collidingObject)->center.y)*(collisionCircle.center.y - std::get<0>(collidingObject)->center.y));
 			
 			// Normal
-			float nx = (collidingObject.first->center.x - collisionCircle.center.x) / fDistance;
-			float ny = (collidingObject.first->center.y - collisionCircle.center.y) / fDistance;
+			float nx = (std::get<0>(collidingObject)->center.x - collisionCircle.center.x) / fDistance;
+			float ny = (std::get<0>(collidingObject)->center.y - collisionCircle.center.y) / fDistance;
 
 			vector2D vCarGlobal = getGlobalVector(v);
 
@@ -664,9 +668,9 @@ void Car::calculateCollisions()
 
 			float kx = (vCircleGlobal.x - obstacleV.x);
 			float ky = (vCircleGlobal.y - obstacleV.y);
-			float p = 2.0 * (nx * kx + ny * ky) / (mass + obstacleMass);
+			float p = 2.0 * (nx * kx + ny * ky) / (mass + std::get<2>(collidingObject));
 
-			vector2D modelCircleGlobalVelocity{ -p * obstacleMass * nx, -p * obstacleMass * ny };
+			vector2D modelCircleGlobalVelocity{ -p * std::get<2>(collidingObject) * nx, -p * std::get<2>(collidingObject) * ny };
 
 			auto energyBeforeCollision = pow(vCarGlobal.length(), 2);
 			vCarGlobal.x += modelCircleGlobalVelocity.x;
@@ -708,4 +712,10 @@ int Car::drivingDirection()
 		return -1;
 	else
 		return 1;
+}
+
+void Car::AImove()
+{
+	if(position.distance2D(AIdirection) < 10)
+		accelerate();
 }

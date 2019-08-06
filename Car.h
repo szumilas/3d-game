@@ -21,10 +21,12 @@ class Car : public Object3D
 
 public:
 
+	Point AIdirection;
+
 	void setObstacle(float x, float y)
 	{
-		//obstacle.center.x = x;
-		//obstacle.center.y = y;
+		AIdirection.x = x;
+		AIdirection.y = y;
 	}
 
 	void setObstacleVelocity(float x, float y)
@@ -33,10 +35,7 @@ public:
 		//obstacleV.y = y - obstacle.center.y;
 	}
 
-	vector2D obstacleV;
-	float obstacleMass = 1500;
 
-	//Circle obstacle{ {0.0f, 0.0f, 0.05f }, 1.0f };
 
 	Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt, bool humanCar = false);
 
@@ -71,6 +70,7 @@ private:
 	void calculateNetForces();
 	void calculateCollisions();
 	int drivingDirection();
+	void AImove();
 
 	template <typename T> int sgn(T val)
 	{
