@@ -5,7 +5,7 @@
 
 #include <algorithm>
 
-Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt) : carBrand(carBrand), engine(carBrand), gearBox(carBrand)
+Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt, bool humanCar) : carBrand(carBrand), engine(carBrand), gearBox(carBrand), humanCar(humanCar)
 {
 	importFromObjFile();
 
@@ -42,7 +42,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	}
 
 	cameraCenter = Point{-8, 0, 5};
-	cameraCenter = Point{-8, -5, 5};
+	//cameraCenter = Point{-8, -5, 5};
 	//cameraCenter = Point{ -0.001, 0, 15 };
 	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
@@ -53,6 +53,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 	engineSound = SoundManager::Instance()->registerSoundInstance(carDB.at(carBrand).engineSound);
 	driftSound = SoundManager::Instance()->registerSoundInstance(Sounds::drift);
 
+	pacejkaModel.setHumanCar(humanCar);
 	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd, 100.0f / 3.6f / carDB.at(carBrand).acceleration_0_100, carDB.at(carBrand).vMax / 3.6);
 
 }
@@ -82,49 +83,7 @@ void Car::move()
 	//------------------------
 
 	engine.setRPM(Engine::calculateRMP(gearBox.getCurrentTransmission() * gearBox.getMainTransmission(), rd, v.length()));
-
-
-
-
-
-
-	/*float drivingForce = 0.0f;
-	float drivingResistance = 0.0f;
-
-	if(tryAccelerate)
-		drivingForce = engine.getCurrentTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() / rd * nm;
-
-	resistanceRatio = (engine.getMaxTorque() * gearBox.getCurrentTransmission() * gearBox.getMainTransmission() * nm) / (rd * vMax * vMax);
-
-	drivingResistance = resistanceRatio * v * v;
-	if (v > 0 && v < 15)
-		drivingResistance = resistanceRatio * 15 * 15;
 	
-	acceleration = (drivingForce - drivingResistance) / mass;
-	
-	forces.clear();
-
-	forces.push_back({ {frontWheelsXoffset, 0}, steeringWheelAngle, std::max((drivingForce - drivingResistance) / 2, 0.0f) });
-
-	float forceVal = mass * vLoc.x * vLoc.x * tan(steeringWheelAngle) / (frontWheelsXoffset - backWheelsXoffset);
-
-	forceVal = sgn(tan(steeringWheelAngle)) * std::min(abs(forceVal), mass * 9.81f * 0.8f);
-
-	forces.push_back({ { frontWheelsXoffset, 0 }, vector2D(-forceVal * tan(steeringWheelAngle) / 2, forceVal / 2) });
-	forces.push_back({ { backWheelsXoffset, 0 }, vector2D(0, forceVal / 2) });
-
-
-	calculateMovement();
-
-	std::vector<Force> globalForces;
-
-	for (auto& force : forces)
-	{
-		globalForces.push_back({{ position.x + force.center.x * cos(rz) - force.center.y * sin(rz), position.y + force.center.x * sin(rz) + force.center.y * cos(rz) }, force.direction + rz, force.value});
-	}
-
-	forces = globalForces;*/
-
 	forces = pacejkaModel.calculateForces(drivingDir, tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, acceleration, angularVelocity, steeringWheelAngle, rz);
 	
 	calculateCollisions();
@@ -150,8 +109,8 @@ void Car::move()
 	trySlow = false;
 	tryBreak = false;
 
-	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "x: " + std::to_string(position.x) + "   y: " + std::to_string(position.y), &(Screen2D::Instance()->roboto_modo_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, -50, 80, "a.x: " + std::to_string(acceleration.x) + "   a.y: " + std::to_string(acceleration.y), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "x: " + std::to_string(position.x) + "   y: " + std::to_string(position.y), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, -50, 80, "a.x: " + std::to_string(acceleration.x) + "   a.y: " + std::to_string(acceleration.y), &(Screen2D::Instance()->roboto_modo_regular));
 }
 
 void Car::accelerate()
@@ -574,8 +533,31 @@ void Car::calculateNetForces()
 void Car::calculateCollisions()
 {
 	std::vector<std::pair<Circle*, Circle*>> collidingObjects;
-	std::vector<Circle> obstaclesWithPossibleCollision;
-	float obstacleMass = 999999999.0;
+	std::vector<std::pair<Circle, float>> obstaclesWithPossibleCollision;
+	static float infiniteMass = 999999999.0;
+
+	for (auto& enemyCar : MapContainer::Instance()->cars)
+	{
+		if (enemyCar.carBrand != carBrand)
+		{
+			for (auto& enemyCarModelCircle : enemyCar.carModelCircles)
+			{
+				Circle newObstacle;
+
+				Point globalCollisionCircleCenter;
+				globalCollisionCircleCenter.x = enemyCar.position.x + enemyCarModelCircle.center.x;
+				globalCollisionCircleCenter.y = enemyCar.position.y + enemyCarModelCircle.center.y;
+				globalCollisionCircleCenter.z = enemyCarModelCircle.center.z;
+				Point::rotate(globalCollisionCircleCenter, enemyCar.position, enemyCar.rz);
+
+				newObstacle.center = globalCollisionCircleCenter;
+				newObstacle.r = enemyCarModelCircle.r;
+				if (newObstacle.center.distance2D(position) > 10.0)
+					continue;
+				obstaclesWithPossibleCollision.push_back({ newObstacle, enemyCar.mass });
+			}
+		}
+	}
 
 	for (auto& obstacles : MapContainer::Instance()->getCollidableObjectsInPosition(position))
 	{
@@ -588,7 +570,7 @@ void Car::calculateCollisions()
 				newObstacle.r = 0.5f;
 				if (newObstacle.center.distance2D(position) > 5.0)
 					continue;
-				obstaclesWithPossibleCollision.push_back(newObstacle);
+				obstaclesWithPossibleCollision.push_back({ newObstacle, infiniteMass });
 			}
 			else if (currentObstacle->get()->collidable == Collidable::polygon)
 			{
@@ -613,50 +595,47 @@ void Car::calculateCollisions()
 						if (u > 0 && u < 1.0 && globalCollisionCircleCenter.distance2D(wallPoint) < 5.0)
 						{
 							temporary.push_back(wallPoint);
-							obstaclesWithPossibleCollision.push_back({ wallPoint, 0.2f});
+							obstaclesWithPossibleCollision.push_back({{ wallPoint, 0.2f }, infiniteMass});
 						}
 					}
 				}
 			}
-
-			for (auto& carModelCircle : carModelCircles)
-			{
-				Point globalCollisionCircleCenter;
-				globalCollisionCircleCenter.x = position.x + carModelCircle.center.x;
-				globalCollisionCircleCenter.y = position.y + carModelCircle.center.y;
-				globalCollisionCircleCenter.z = carModelCircle.center.z;
-				Point::rotate(globalCollisionCircleCenter, position, rz);
-
-				Circle globalCollisionCircle{ globalCollisionCircleCenter, carModelCircle.r };
-
-				for (auto& obstacle : obstaclesWithPossibleCollision)
-				{
-					if (globalCollisionCircle.isColliding(obstacle))
-					{
-						collidingObjects.push_back({ &obstacle, &carModelCircle });
-
-						Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
-
-						float fDistance = sqrtf((globalCollisionCircle.center.x - obstacle.center.x)*(globalCollisionCircle.center.x - obstacle.center.x) + (globalCollisionCircle.center.y - obstacle.center.y)*(globalCollisionCircle.center.y - obstacle.center.y));
-
-						// Calculate displacement required
-						float fOverlap = 0.5f * (fDistance - globalCollisionCircle.r - obstacle.r);
-
-						// Displace Current Ball away from collision
-						position.x -= 2.0f * fOverlap * (globalCollisionCircle.center.x - obstacle.center.x) / fDistance;
-						position.y -= 2.0f * fOverlap * (globalCollisionCircle.center.y - obstacle.center.y) / fDistance;
-
-						break;
-					}
-				}
-
-				if (!collidingObjects.empty())
-					break;
-			}
-
-			if (!collidingObjects.empty())
-				break;
 		}
+	}
+
+	for (auto& carModelCircle : carModelCircles)
+	{
+		Point globalCollisionCircleCenter;
+		globalCollisionCircleCenter.x = position.x + carModelCircle.center.x;
+		globalCollisionCircleCenter.y = position.y + carModelCircle.center.y;
+		globalCollisionCircleCenter.z = carModelCircle.center.z;
+		Point::rotate(globalCollisionCircleCenter, position, rz);
+
+		Circle globalCollisionCircle{ globalCollisionCircleCenter, carModelCircle.r };
+
+		for (auto& obstacle : obstaclesWithPossibleCollision)
+		{
+			if (globalCollisionCircle.isColliding(obstacle.first))
+			{
+				collidingObjects.push_back({ &obstacle.first, &carModelCircle });
+
+				Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
+
+				float fDistance = sqrtf((globalCollisionCircle.center.x - obstacle.first.center.x)*(globalCollisionCircle.center.x - obstacle.first.center.x) + (globalCollisionCircle.center.y - obstacle.first.center.y)*(globalCollisionCircle.center.y - obstacle.first.center.y));
+
+				// Calculate displacement required
+				float fOverlap = 0.5f * (fDistance - globalCollisionCircle.r - obstacle.first.r);
+
+				// Displace Current Ball away from collision
+				position.x -= 2.0f * fOverlap * (globalCollisionCircle.center.x - obstacle.first.center.x) / fDistance;
+				position.y -= 2.0f * fOverlap * (globalCollisionCircle.center.y - obstacle.first.center.y) / fDistance;
+
+				break;
+			}
+		}
+
+		if (!collidingObjects.empty())
+			break;
 	}
 
 	if (!collidingObjects.empty())
@@ -716,7 +695,8 @@ void Car::calculateCollisions()
 			if (angularVelocity < -PI / 2)
 				angularVelocity = -PI / 2;
 		}
-		pacejkaModel.recalculateWheelAngularVelocity(drivingDir * v.length());
+		drivingDir = drivingDirection();
+		pacejkaModel.recalculateWheelAngularVelocity(drivingDir * v.length(), true);
 		collidingObjects.clear();
 	}
 }

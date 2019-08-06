@@ -6,6 +6,7 @@
 
 #include "Object3D.h"
 #include "PointInsidePolygonDetector.h"
+#include "Car.h"
 
 class MapContainer
 {
@@ -15,7 +16,7 @@ public:
 	static std::unique_ptr<MapContainer>& Instance();
 
 	static void loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
-	static void displayWorld(Point& center, Point& lookAt);
+	static void displayWorld();
 	void displayAllWorld();
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
@@ -25,6 +26,7 @@ private:
 
 public:
 
+	static std::vector<Car> cars;
 
 private:
 
@@ -33,6 +35,7 @@ private:
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapObjectSections;
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;
 	static std::unique_ptr<MapObject>* background;
+
 
 	std::vector<Object3D> myMap;
 

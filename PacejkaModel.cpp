@@ -107,16 +107,17 @@ std::vector<Force> PacejkaModel::calculateForces(int drivingDir, bool tryAcceler
 	calculateLateralForces();
 
 
-
-	Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 65, "car velocity x: " + std::to_string(vCarGlobal.x) + "y: " + std::to_string(vCarGlobal.y), &(Screen2D::Instance()->roboto_modo_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "car w: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::YELLOW, -100, 55, "[ANGULAR VELOCITY]", &(Screen2D::Instance()->roboto_modo_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 50, "front-left: " + std::to_string(allWheels[frontLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 45, "front-right: " + std::to_string(allWheels[frontRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 40, "rear-left: " + std::to_string(allWheels[rearLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 35, "rear-right: " + std::to_string(allWheels[rearRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
-
+	if (humanCar)
+	{
+		Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 65, "car velocity x: " + std::to_string(vCarGlobal.x) + "y: " + std::to_string(vCarGlobal.y), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "car w: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::YELLOW, -100, 55, "[ANGULAR VELOCITY]", &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 50, "front-left: " + std::to_string(allWheels[frontLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 45, "front-right: " + std::to_string(allWheels[frontRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 40, "rear-left: " + std::to_string(allWheels[rearLeftWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 35, "rear-right: " + std::to_string(allWheels[rearRightWheel].lateralForce), &(Screen2D::Instance()->roboto_modo_regular));
+	}
 
 	for (auto& wheel : allWheels)
 	{
@@ -251,15 +252,15 @@ void PacejkaModel::calculateLateralForces()
 	}
 }
 
-void PacejkaModel::recalculateWheelAngularVelocity(float v)
+void PacejkaModel::recalculateWheelAngularVelocity(float v, bool allWheelsRecalculation)
 {
 	float drivingWheelVelocity = 0.0f;
 	for (auto& wheel : allWheels)
 	{
+		if (!wheel.WD || allWheelsRecalculation)
+			wheel.angularVelocity = v / rd;
 		if (wheel.WD)
 			drivingWheelVelocity = wheel.angularVelocity;
-		else
-			wheel.angularVelocity = v / rd;
 	}
 
 	if (abs(v) < 0.5f)

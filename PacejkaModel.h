@@ -39,7 +39,8 @@ public:
 	void calculateLocalVelocities(const vector2D& vCarGlobal, float angularVelocity, float rz);
 	void calculateSlipRatios();
 	void calculateSlipAngles();
-	void recalculateWheelAngularVelocity(float v);
+	void recalculateWheelAngularVelocity(float v, bool allWheelsRecalculation = false);
+	void setHumanCar(bool humanCar) { PacejkaModel::humanCar = humanCar; }
 
 private:
 
@@ -59,6 +60,8 @@ private:
 	float frontWheelsYoffset;
 	float backWheelsXoffset;
 	float rd;
+
+	bool humanCar = false;
 
 	//Coefficients
 

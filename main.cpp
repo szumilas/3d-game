@@ -108,7 +108,6 @@ public:
 
 };
 
-std::vector<Car> cars;
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
@@ -207,9 +206,9 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt), /*Car(CarBrand::SuzukiVitara, 10, 10, &camera.center, &camera.lookAt)*/ };
+		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, true), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt) };
 
-		carGauge.load(&cars[0]);
+		carGauge.load(&MapContainer::Instance()->cars[0]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
 		//mapManager.readMap("szczytnicka.osm");
@@ -242,7 +241,7 @@ int main(int argc, char**agrv)
 		//mapContainer.loadWorldIntoBuckets(&mapManager.polygonsObjects);
 		MapContainer::loadWorldIntoSections(mapManager.mapObjects);
 
-		camera.cameraViews.push_back({ cars[0].getCameraCenter(), cars[0].getCameraLookAt() });
+		camera.cameraViews.push_back({ MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() });
 		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
 
 	#ifdef FULLSCREEN  
@@ -273,7 +272,7 @@ void display()
 	//camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
 	//camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
 
-	camera.cameraViews[0] = { cars[0].getCameraCenter(), cars[0].getCameraLookAt() };
+	camera.cameraViews[0] = { MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() };
 	camera.cameraViews[1] = { orbit.getCameraCenter(), orbit.getCameraLookAt() };
 
 
@@ -286,10 +285,10 @@ void display()
 	SoundManager::Instance()->setCameraPosition(camera.center, camera.lookAt);
 
 
-	MapContainer::displayWorld(cars[0].getCameraCenter(), cars[0].getCameraLookAt());
+	MapContainer::displayWorld();
 	//mapContainer.displayAllWorld();
 
-	for (auto& car : cars)
+	for (auto& car : MapContainer::Instance()->cars)
 	{
 		car.display();
 		car.alreadyPrinted = false;
@@ -473,23 +472,23 @@ void Update()
 	KeyboardManager::Instance()->getKeys();
 
 	if (upPressed)
-		cars[0].accelerate();
+		MapContainer::Instance()->cars[0].accelerate();
 	if (downPressed)
-		cars[0].slow();
+		MapContainer::Instance()->cars[0].slow();
 	if (leftPressed)
-		cars[0].turnLeft();
+		MapContainer::Instance()->cars[0].turnLeft();
 	if (rightPressed)
-		cars[0].turnRight();
+		MapContainer::Instance()->cars[0].turnRight();
 	if (KeyboardManager::Instance()->checkKey(' '))
-		cars[0].breakPressed();
+		MapContainer::Instance()->cars[0].breakPressed();
 	if (F1Pressed && F1Released)
 	{
-		cars[0].gearUp();
+		MapContainer::Instance()->cars[0].gearUp();
 		F1Released = false;
 	}
 	if (F2Pressed && F2Released)
 	{
-		cars[0].gearDown();
+		MapContainer::Instance()->cars[0].gearDown();
 		F2Released = false;
 	}
 	if (F3Pressed && F3Released)
@@ -497,7 +496,7 @@ void Update()
 		F3Released = false;
 	}
 
-	for(auto& car : cars)
+	for(auto& car : MapContainer::Instance()->cars)
 		car.move();
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));

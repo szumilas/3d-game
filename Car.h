@@ -38,7 +38,7 @@ public:
 
 	//Circle obstacle{ {0.0f, 0.0f, 0.05f }, 1.0f };
 
-	Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt);
+	Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt, bool humanCar = false);
 
 	void display();
 
@@ -145,4 +145,5 @@ private:
 	ALLEGRO_SAMPLE_INSTANCE* driftSound;
 
 	PacejkaModel pacejkaModel;
+	bool humanCar = false;
 };

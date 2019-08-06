@@ -10,6 +10,7 @@ float MapContainer::minX;
 float MapContainer::maxY;
 float MapContainer::minY;
 std::unique_ptr<MapContainer> MapContainer::_instance;
+std::vector<Car> MapContainer::cars;
 
 void MapContainer::Init()
 {
@@ -53,8 +54,11 @@ std::vector<std::vector<std::unique_ptr<MapObject>*>*> MapContainer::getCollidab
 	return result;
 }
 
-void MapContainer::displayWorld(Point& center, Point& lookAt)
+void MapContainer::displayWorld()
 {
+	Point& center = cars[0].getCameraCenter();
+	Point& lookAt = cars[0].getCameraLookAt();
+
 	glColor3f(0.0f, 0.0f, 0.0f);
 	for (int xx = 0; xx < 100; xx++)
 	{
