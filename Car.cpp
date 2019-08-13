@@ -112,6 +112,10 @@ void Car::move()
 	trySlow = false;
 	tryBreak = false;
 
+	if (humanCar)
+	{
+		Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "wheel velocity: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+	}
 	//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "x: " + std::to_string(position.x) + "   y: " + std::to_string(position.y), &(Screen2D::Instance()->roboto_modo_regular));
 	//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, -50, 80, "a.x: " + std::to_string(acceleration.x) + "   a.y: " + std::to_string(acceleration.y), &(Screen2D::Instance()->roboto_modo_regular));
 }
@@ -681,7 +685,7 @@ void Car::calculateCollisions()
 
 			if (energyAfterCollision / energyBeforeCollision > maxEneryRatio)
 			{
-				vCarGlobal *= maxEneryRatio;
+				//vCarGlobal *= maxEneryRatio;
 			}
 
 			obstacleV.x = obstacleV.x + p * mass * nx;
@@ -716,6 +720,51 @@ int Car::drivingDirection()
 
 void Car::AImove()
 {
-	if(position.distance2D(AIdirection) < 10)
+	vector2D AIpathAngle(position, AIdirection);
+	AIpathAngle.rotate(-rz - steeringWheelAngle);
+	auto angleToFollow = vector2D::realAngle(AIpathAngle, vector2D({ 0,0 }, { 1,0 }));
+	angleToFollow -= angularVelocity * 2 / FPS;
+	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "angle to follow: " + std::to_string(angleToFollow), &(Screen2D::Instance()->roboto_modo_regular));
+	
+	if (angleToFollow < PI * 0.04 || angleToFollow > PI * 2 * 0.96)
+	{
+		//direction is correct, do nothing
+	}
+	else if (angleToFollow < PI)
+	{
+		turnLeft();
+	}
+	else if (angleToFollow > PI)
+	{
+		turnRight();
+	}
+
+	if (angleToFollow > PI * 0.5 && angleToFollow < 2 * PI - PI * 0.5)
+	{
+		slow();
+	}
+	else if (angleToFollow > PI * 0.4 && angleToFollow < 2 * PI - PI * 0.4 && v.length() > 0.8 * vMax)
+	{
+		slow();
+	}
+	else if (angleToFollow > PI * 0.3 && angleToFollow < 2 * PI - PI * 0.3 && v.length() > 0.6 * vMax)
+	{
+		slow();
+	}
+	else if (angleToFollow > PI * 0.2 && angleToFollow < 2 * PI - PI * 0.2 && v.length() > 0.4 * vMax)
+	{
+		slow();
+	}
+	else if (angleToFollow > PI * 0.1 && angleToFollow < 2 * PI - PI * 0.1 && v.length() > 0.2 * vMax)
+	{
+		slow();
+	}
+	else if(pacejkaModel.carDrifting)
+	{
+		slow();
+	}
+	else
+	{
 		accelerate();
+	}
 }
