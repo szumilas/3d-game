@@ -41,8 +41,8 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 		wheel.loadModel();
 	}
 
-	cameraCenter = Point{-8, 0, 5};
-	//cameraCenter = Point{-8, -5, 5};
+	//cameraCenter = Point{-8, 0, 5};
+	cameraCenter = Point{-8, -5, 5};
 	//cameraCenter = Point{ -0.001, 0, 15 };
 	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
@@ -685,7 +685,7 @@ void Car::calculateCollisions()
 
 			if (energyAfterCollision / energyBeforeCollision > maxEneryRatio)
 			{
-				//vCarGlobal *= maxEneryRatio;
+				vCarGlobal *= maxEneryRatio;
 			}
 
 			obstacleV.x = obstacleV.x + p * mass * nx;
@@ -720,13 +720,27 @@ int Car::drivingDirection()
 
 void Car::AImove()
 {
+	if (MapContainer::Instance()->AIPoints.size() < 3 || MapContainer::Instance()->getAIPathActive() == false)
+		return;
+
+	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position) < 5.0)
+		AIcurrentPoint = MapContainer::Instance()->GetNextPoint(AIcurrentPoint);
+
+	auto possibleCloserPoint = MapContainer::Instance()->GetNextPoint(AIcurrentPoint);
+	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position) > MapContainer::Instance()->AIPoints[possibleCloserPoint].first.distance2D(position))
+	{
+		AIcurrentPoint = possibleCloserPoint;
+	}
+
+	Point& AIdirection = MapContainer::Instance()->AIPoints[AIcurrentPoint].first;
+
 	vector2D AIpathAngle(position, AIdirection);
 	AIpathAngle.rotate(-rz - steeringWheelAngle);
 	auto angleToFollow = vector2D::realAngle(AIpathAngle, vector2D({ 0,0 }, { 1,0 }));
-	angleToFollow -= angularVelocity * 2 / FPS;
+	angleToFollow -= angularVelocity * 10 / FPS;
 	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "angle to follow: " + std::to_string(angleToFollow), &(Screen2D::Instance()->roboto_modo_regular));
 	
-	if (angleToFollow < PI * 0.04 || angleToFollow > PI * 2 * 0.96)
+	if (angleToFollow < PI * 0.02 || angleToFollow > PI + PI * 0.98)
 	{
 		//direction is correct, do nothing
 	}
@@ -739,29 +753,64 @@ void Car::AImove()
 		turnRight();
 	}
 
-	if (angleToFollow > PI * 0.5 && angleToFollow < 2 * PI - PI * 0.5)
+
+	float maxFutureSpeedAngleToFollow = 0;
+
+	MapContainer::Instance()->ClearFuturePoints();
+	int AIfuturePoint = AIcurrentPoint;
+	int next = 0;
+
+	float q = 0;
+
+	for(float time = 3.5f - (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position)) / v.length(); time > 0; time -= MapContainer::Instance()->GetNextPointDistance(AIfuturePoint) / v.length())
 	{
-		slow();
+		Screen2D::Instance()->addTestValueToPrint(ColorName::GREEN, 25, 60 - q * 3, "time: " + std::to_string(time), &(Screen2D::Instance()->roboto_modo_regular));
+
+		MapContainer::Instance()->SetFuturePoints(AIfuturePoint);
+		Point& AIdirection = MapContainer::Instance()->AIPoints[AIfuturePoint].first;
+		vector2D AIpathAngle(position, AIdirection);
+		AIpathAngle.rotate(-rz - steeringWheelAngle);
+		auto futureSpeedAngleToFollow = vector2D::realAngle(AIpathAngle, vector2D({ 0,0 }, { 1,0 }));
+		futureSpeedAngleToFollow -= angularVelocity * 10 / FPS;
+
+		while (futureSpeedAngleToFollow < 0)
+			futureSpeedAngleToFollow += 2 * PI;
+
+		AIfuturePoint = MapContainer::Instance()->GetNextPoint(AIfuturePoint);
+
+		if (futureSpeedAngleToFollow > PI)
+			futureSpeedAngleToFollow = 2 * PI - futureSpeedAngleToFollow;
+
+		if (futureSpeedAngleToFollow > maxFutureSpeedAngleToFollow)
+			maxFutureSpeedAngleToFollow = futureSpeedAngleToFollow;
+
+		q++;
 	}
-	else if (angleToFollow > PI * 0.4 && angleToFollow < 2 * PI - PI * 0.4 && v.length() > 0.8 * vMax)
+
+
+	if (maxFutureSpeedAngleToFollow > PI * 0.5 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.5)
 	{
-		slow();
+		breakPressed();
 	}
-	else if (angleToFollow > PI * 0.3 && angleToFollow < 2 * PI - PI * 0.3 && v.length() > 0.6 * vMax)
+	else if (maxFutureSpeedAngleToFollow > PI * 0.4 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.4 && v.length() > 0.8 * vMax)
 	{
-		slow();
+		breakPressed();
 	}
-	else if (angleToFollow > PI * 0.2 && angleToFollow < 2 * PI - PI * 0.2 && v.length() > 0.4 * vMax)
+	else if (maxFutureSpeedAngleToFollow > PI * 0.3 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.3 && v.length() > 0.6 * vMax)
 	{
-		slow();
+		breakPressed();
 	}
-	else if (angleToFollow > PI * 0.1 && angleToFollow < 2 * PI - PI * 0.1 && v.length() > 0.2 * vMax)
+	else if (maxFutureSpeedAngleToFollow > PI * 0.2 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.2 && v.length() > 0.4 * vMax)
 	{
-		slow();
+		breakPressed();
+	}
+	else if (maxFutureSpeedAngleToFollow > PI * 0.1 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.1 && v.length() > 0.2 * vMax)
+	{
+		breakPressed();
 	}
 	else if(pacejkaModel.carDrifting)
 	{
-		slow();
+		breakPressed();
 	}
 	else
 	{

@@ -21,13 +21,11 @@ class Car : public Object3D
 
 public:
 
-	Point AIdirection;
-
-	void setObstacle(float x, float y)
-	{
-		AIdirection.x = x;
-		AIdirection.y = y;
-	}
+	//void setObstacle(float x, float y)
+	//{
+	//	AIdirection.x = x;
+	//	AIdirection.y = y;
+	//}
 
 	void setObstacleVelocity(float x, float y)
 	{
@@ -146,4 +144,5 @@ private:
 
 	PacejkaModel pacejkaModel;
 	bool humanCar = false;
+	int AIcurrentPoint = 0;
 };

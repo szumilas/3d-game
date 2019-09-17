@@ -17,6 +17,7 @@ public:
 	void changeAlpha() { if (alpha < 3.14 / 2) alpha += 3.14159265f / 180.0f; else alpha = 3.14f / 36.0f; };
 	float getFlatCursorX() { return flatCursor.x; }
 	float getFlatCursorY() { return flatCursor.y; }
+	Point getFlatCursor() { return flatCursor; }
 	float getLookAtX() { return lookAtX; }
 	float getLookAtY() { return lookAtY; }
 

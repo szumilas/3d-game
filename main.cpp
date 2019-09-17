@@ -206,9 +206,9 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, true), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt) };
+		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, true), Car(CarBrand::RollsRoycePhantom, -5, -5, &camera.center, &camera.lookAt)/*, Car(CarBrand::SubaruBRZ, -50, -5, &camera.center, &camera.lookAt)*/ };
 
-		carGauge.load(&MapContainer::Instance()->cars[0]);
+		carGauge.load(&MapContainer::Instance()->cars[1]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
 		//mapManager.readMap("szczytnicka.osm");
@@ -218,7 +218,7 @@ int main(int argc, char**agrv)
 		//mapManager.readMap("grunwald.osm");
 		//mapManager.readMap("parkCheck.osm");
 
-		//mapManager.readMap("grunwaldWithRiver.osm");
+		mapManager.readMap("grunwaldWithRiver.osm");
 		//mapManager.readMap("trees2.osm");
 		//mapManager.readMap("singlebuilding.osm");
 		//mapManager.readMap("walls.osm");
@@ -231,7 +231,7 @@ int main(int argc, char**agrv)
 		//mapManager.readMap("curie3.osm");
 		//mapManager.readMap("shelter.osm");
 		//mapManager.readMap("stairs.osm");
-		mapManager.readMap("pasaz.osm");
+		//mapManager.readMap("pasaz.osm");
 		//mapManager.readMap("sedesowce.osm");
 		//mapManager.readMap("grunwaldzki.osm");
 		//mapManager.readMap("c13.osm");
@@ -241,8 +241,10 @@ int main(int argc, char**agrv)
 		//mapContainer.loadWorldIntoBuckets(&mapManager.polygonsObjects);
 		MapContainer::loadWorldIntoSections(mapManager.mapObjects);
 
-		camera.cameraViews.push_back({ MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() });
 		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
+		camera.cameraViews.push_back({ MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() });
+		camera.cameraViews.push_back({ MapContainer::Instance()->cars[1].getCameraCenter(), MapContainer::Instance()->cars[1].getCameraLookAt() });
+		
 
 	#ifdef FULLSCREEN  
 		glutFullScreen();
@@ -272,8 +274,10 @@ void display()
 	//camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
 	//camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
 
-	camera.cameraViews[0] = { MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() };
-	camera.cameraViews[1] = { orbit.getCameraCenter(), orbit.getCameraLookAt() };
+	camera.cameraViews[0] = { orbit.getCameraCenter(), orbit.getCameraLookAt() };
+	camera.cameraViews[1] = { MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() };
+	camera.cameraViews[2] = { MapContainer::Instance()->cars[1].getCameraCenter(), MapContainer::Instance()->cars[1].getCameraLookAt() };
+	
 
 
 	camera.adjustCamera(camera.cameraViews[mapManager.currentCameraView].first, camera.cameraViews[mapManager.currentCameraView].second);
@@ -284,8 +288,10 @@ void display()
 		0, 0, 1); //up
 	SoundManager::Instance()->setCameraPosition(camera.center, camera.lookAt);
 
-
-	MapContainer::displayWorld();
+	if (mapManager.currentCameraView == 0)
+		MapContainer::displaySector(orbit.getFlatCursor());
+	else
+		MapContainer::displayWorld(camera.cameraViews[mapManager.currentCameraView]);
 	//mapContainer.displayAllWorld();
 
 	for (auto& car : MapContainer::Instance()->cars)
@@ -293,7 +299,7 @@ void display()
 		car.display();
 		car.alreadyPrinted = false;
 		//if (F1Pressed)
-			car.setObstacle(orbit.getFlatCursorX(), orbit.getFlatCursorY());
+			//car.setObstacle(orbit.getFlatCursorX(), orbit.getFlatCursorY());
 		if (F2Pressed)
 			car.setObstacleVelocity(orbit.getFlatCursorX(), orbit.getFlatCursorY());
 		if (F3Pressed)
@@ -516,15 +522,23 @@ void Update()
 	else if (rightMouseButtonDown)
 	{
 		orbit.changeAlpha();
+		if(F1Pressed)
+			MapContainer::Instance()->removeAIPoints();
 	}
 	else if (scrollMouseButtonDown)
 	{
 		orbit.rotate();
 	}
+	if (F3Pressed)
+	{
+		MapContainer::Instance()->setAIPathActive();
+	}
 
 	else if (leftMouseButtonDown)
 	{
 		orbit.activateMovingXY();
+		if(F1Pressed)
+			MapContainer::Instance()->addAIPoint(orbit.getFlatCursor());
 	}
 
 	orbit.calculateFlatCursorPosition(windowWidth, windowHeight, mouseXPos, mouseYPos, angle);

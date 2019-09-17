@@ -6,6 +6,7 @@
 #include "MapManager.h"
 #include "Skybox.h"
 #include "RelationalMapObject.h"
+#include "MapContainer.h"
 
 #include "rapidxml_print.hpp"
 
@@ -682,7 +683,15 @@ void MapManager::applyMapEditorKeys(Orbit& orbit)
 	if (KeyboardManager::Instance()->checkKey('C'))
 	{
 		currentCameraView++;
-		currentCameraView %= 2;
+		currentCameraView %= 3;
+	}
+	if (KeyboardManager::Instance()->checkKey('S'))
+	{
+		MapContainer::Instance()->SaveAIPoints();
+	}
+	if (KeyboardManager::Instance()->checkKey('L'))
+	{
+		MapContainer::Instance()->LoadAIPoints();
 	}
 
 	if (KeyboardManager::Instance()->checkKey('0'))

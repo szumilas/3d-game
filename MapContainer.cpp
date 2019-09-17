@@ -1,4 +1,5 @@
 #include "MapContainer.h"
+#include <fstream>
 
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapObjectSections;
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapCollidableObjectSections;
@@ -11,6 +12,8 @@ float MapContainer::maxY;
 float MapContainer::minY;
 std::unique_ptr<MapContainer> MapContainer::_instance;
 std::vector<Car> MapContainer::cars;
+std::vector<std::pair<Point, bool>> MapContainer::AIPoints;
+std::vector<float> MapContainer::AIPointsDistances;
 
 void MapContainer::Init()
 {
@@ -54,26 +57,15 @@ std::vector<std::vector<std::unique_ptr<MapObject>*>*> MapContainer::getCollidab
 	return result;
 }
 
-void MapContainer::displayWorld()
+void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 {
-	Point& center = cars[0].getCameraCenter();
-	Point& lookAt = cars[0].getCameraLookAt();
+	//Point& center = cars[0].getCameraCenter();
+	//Point& lookAt = cars[0].getCameraLookAt();
 
-	glColor3f(0.0f, 0.0f, 0.0f);
-	for (int xx = 0; xx < 100; xx++)
-	{
-		glBegin(GL_LINES);
-		glVertex3f(minX + xx * deltaX / 100, minY, 0.05);
-		glVertex3f(minX + xx * deltaX / 100, maxY, 0.05);
-		glEnd();
-	}
-	for (int yy = 0; yy < 100; yy++)
-	{
-		glBegin(GL_LINES);
-		glVertex3f(minX, minY + yy * deltaY / 100, 0.05);
-		glVertex3f(maxX, minY + yy * deltaY / 100, 0.05);
-		glEnd();
-	}
+	Point& center = camera.first;
+	Point& lookAt = camera.second;
+
+	displayLines();
 
 
 	int yToDraw = static_cast<int>(100 * (center.y - minY) / deltaY);
@@ -158,11 +150,8 @@ void MapContainer::displayWorld()
 		}
 	}
 	
-	if(background != nullptr)
-	{
-		background->get()->display();
-		background->get()->alreadyPrinted = false;
-	}
+	displayBackground();
+	displayAIPoints();
 }
 
 void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
@@ -253,10 +242,172 @@ void MapContainer::displayAllWorld()
 		}
 	}
 
+	displayBackground();
+	displayAIPoints();
+}
+
+void MapContainer::displaySector(const Point& point)
+{
+	int yToDraw = static_cast<int>(100 * (point.y - minY) / deltaY);
+	int xToDraw = static_cast<int>(100 * (point.x - minX) / deltaX);
+
+	std::vector<std::pair<int, int>> sectorsToDisplay;
+	for (int q = -5; q <= 5; q++)
+	{
+		for (int w = -5; w <= 5; w++)
+		{
+			sectorsToDisplay.push_back({ xToDraw + q, yToDraw + w });
+		}
+	}
+
+	for (auto& sectionToDisplay : sectorsToDisplay)
+	{
+		if (sectionToDisplay.first < 100 && sectionToDisplay.second < 100 &&
+			sectionToDisplay.first >= 0 && sectionToDisplay.second >= 0)
+			for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
+			{
+				if (!object->get()->isHidden)
+					object->get()->display();
+			}
+	}
+
+	for (auto& sectionToDisplay : sectorsToDisplay)
+	{
+		for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
+		{
+			object->get()->alreadyPrinted = false;
+		}
+	}
+
+	displayLines();
+	displayBackground();
+	displayAIPoints();
+}
+
+void MapContainer::displayBackground()
+{
 	if (background != nullptr)
 	{
 		background->get()->display();
 		background->get()->alreadyPrinted = false;
 	}
+}
 
+void MapContainer::displayLines()
+{
+	glColor3f(0.0f, 0.0f, 0.0f);
+	for (int xx = 0; xx < 100; xx++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f(minX + xx * deltaX / 100, minY, 0.05);
+		glVertex3f(minX + xx * deltaX / 100, maxY, 0.05);
+		glEnd();
+	}
+	for (int yy = 0; yy < 100; yy++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f(minX, minY + yy * deltaY / 100, 0.05);
+		glVertex3f(maxX, minY + yy * deltaY / 100, 0.05);
+		glEnd();
+	}
+}
+
+void MapContainer::recalculateAIPointsDistances()
+{
+	AIPointsDistances.clear();
+	if (AIPoints.size() <= 1)
+	{
+		AIPointsDistances.push_back(0.0f);
+	}
+	else
+	{
+		for (int q = 0; q < AIPoints.size(); q++)
+		{
+			AIPointsDistances.push_back(AIPoints[q].first.distance2D(AIPoints[(q + 1) % AIPoints.size()].first));
+		}
+	}
+}
+
+void MapContainer::addAIPoint(const Point& point)
+{
+	AIPoints.push_back({ point, false });
+	recalculateAIPointsDistances();
+}
+
+void MapContainer::removeAIPoints()
+{
+	AIPoints.clear();
+	recalculateAIPointsDistances();
+}
+
+void MapContainer::displayAIPoints()
+{
+	glPointSize(10.0);
+	for (auto& AIPoint : AIPoints)
+	{
+		if(AIPoint.second)
+			glColor3f(1.0f, 0.0f, 1.0f);
+		else
+			glColor3f(0.0f, 0.0f, 1.0f);
+
+		glBegin(GL_POINTS);
+		glVertex3f(AIPoint.first.x, AIPoint.first.y, AIPoint.first.z);
+		glEnd();
+	}
+	glPointSize(1.0);
+
+	glColor3f(0.0f, 0.0f, 1.0f);
+	for (int q = 0; q < static_cast<int>(AIPoints.size()) - 1; q++)
+	{
+		glBegin(GL_LINES);
+		glVertex3f(AIPoints[q].first.x, AIPoints[q].first.y, 0.05);
+		glVertex3f(AIPoints[q + 1].first.x, AIPoints[q + 1].first.y, 0.05);
+		glEnd();
+	}
+}
+
+void MapContainer::SetFuturePoints(const int& futurePoint)
+{
+	AIPoints[futurePoint].second = true;
+}
+
+void MapContainer::ClearFuturePoints()
+{
+	for (auto& AIPoint : AIPoints)
+	{
+		AIPoint.second = false;
+	}
+}
+
+void MapContainer::SaveAIPoints()
+{
+	std::ofstream file;
+	file.open("Data/AIPoints.txt", std::ios::out);
+
+	for (auto& AIPoint : AIPoints)
+	{
+		file << AIPoint.first.x << " " << AIPoint.first.y << " " << AIPoint.first.z << "\n";
+	}
+
+	file.close();
+}
+
+void MapContainer::LoadAIPoints()
+{
+	std::ifstream file;
+	file.open("Data/AIPoints.txt", std::ios::out);
+
+	if (file)
+	{
+		removeAIPoints();
+		float x, y, z;
+		while (file >> x >> y >> z)
+		{
+			Point newPoint(x, y, z);
+			AIPoints.push_back({ newPoint, false });
+		}
+		recalculateAIPointsDistances();
+	}
+
+	file.close();
 }
