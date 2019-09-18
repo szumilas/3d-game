@@ -41,8 +41,8 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 		wheel.loadModel();
 	}
 
-	//cameraCenter = Point{-8, 0, 5};
-	cameraCenter = Point{-8, -5, 5};
+	cameraCenter = Point{-8, 0, 5};
+	//cameraCenter = Point{-8, -5, 5};
 	//cameraCenter = Point{ -0.001, 0, 15 };
 	//cameraCenter = Point{ -0.001, 0, 50 };
 	cameraLookAt = Point{0, 0, 3};
@@ -540,7 +540,7 @@ void Car::calculateNetForces()
 void Car::calculateCollisions()
 {
 	std::vector<std::tuple<Circle*, Circle*, float>> collidingObjects;
-	std::vector<std::pair<Circle, float>> obstaclesWithPossibleCollision;
+	std::vector<std::tuple<Circle, float, vector2D>> obstaclesWithPossibleCollision;
 	static float infiniteMass = 999999999.0;
 	vector2D obstacleV;
 
@@ -562,7 +562,10 @@ void Car::calculateCollisions()
 				newObstacle.r = enemyCarModelCircle.r;
 				if (newObstacle.center.distance2D(position) > 10.0)
 					continue;
-				obstaclesWithPossibleCollision.push_back({ newObstacle, enemyCar.mass });
+
+				vector2D enemyCarGlobalVelocity = { enemyCar.v.x * cos(enemyCar.rz) - enemyCar.v.y * sin(enemyCar.rz), enemyCar.v.x * sin(enemyCar.rz) + enemyCar.v.y * cos(enemyCar.rz) };
+
+				obstaclesWithPossibleCollision.push_back({ newObstacle, enemyCar.mass, enemyCarGlobalVelocity });
 			}
 		}
 	}
@@ -578,7 +581,7 @@ void Car::calculateCollisions()
 				newObstacle.r = 0.5f;
 				if (newObstacle.center.distance2D(position) > 5.0)
 					continue;
-				obstaclesWithPossibleCollision.push_back({ newObstacle, infiniteMass });
+				obstaclesWithPossibleCollision.push_back({ newObstacle, infiniteMass, {0, 0} });
 			}
 			else if (currentObstacle->get()->collidable == Collidable::polygon)
 			{
@@ -603,7 +606,7 @@ void Car::calculateCollisions()
 						if (u > 0 && u < 1.0 && globalCollisionCircleCenter.distance2D(wallPoint) < 5.0)
 						{
 							temporary.push_back(wallPoint);
-							obstaclesWithPossibleCollision.push_back({{ wallPoint, 0.2f }, infiniteMass});
+							obstaclesWithPossibleCollision.push_back({ { wallPoint, 0.2f }, infiniteMass,{ 0, 0 } });
 						}
 					}
 				}
@@ -623,20 +626,22 @@ void Car::calculateCollisions()
 
 		for (auto& obstacle : obstaclesWithPossibleCollision)
 		{
-			if (globalCollisionCircle.isColliding(obstacle.first))
+			if (globalCollisionCircle.isColliding(std::get<0>(obstacle)))
 			{
-				collidingObjects.push_back({ &obstacle.first, &carModelCircle, obstacle.second });
+				obstacleV = std::get<2>(obstacle);
+
+				collidingObjects.push_back({ &std::get<0>(obstacle), &carModelCircle, std::get<1>(obstacle) });
 
 				Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
 
-				float fDistance = sqrtf((globalCollisionCircle.center.x - obstacle.first.center.x)*(globalCollisionCircle.center.x - obstacle.first.center.x) + (globalCollisionCircle.center.y - obstacle.first.center.y)*(globalCollisionCircle.center.y - obstacle.first.center.y));
+				float fDistance = sqrtf((globalCollisionCircle.center.x - std::get<0>(obstacle).center.x)*(globalCollisionCircle.center.x - std::get<0>(obstacle).center.x) + (globalCollisionCircle.center.y - std::get<0>(obstacle).center.y)*(globalCollisionCircle.center.y - std::get<0>(obstacle).center.y));
 
 				// Calculate displacement required
-				float fOverlap = 0.5f * (fDistance - globalCollisionCircle.r - obstacle.first.r);
+				float fOverlap = 0.5f * (fDistance - globalCollisionCircle.r - std::get<0>(obstacle).r);
 
 				// Displace Current Ball away from collision
-				position.x -= 2.0f * fOverlap * (globalCollisionCircle.center.x - obstacle.first.center.x) / fDistance;
-				position.y -= 2.0f * fOverlap * (globalCollisionCircle.center.y - obstacle.first.center.y) / fDistance;
+				position.x -= 2.0f * fOverlap * (globalCollisionCircle.center.x - std::get<0>(obstacle).center.x) / fDistance;
+				position.y -= 2.0f * fOverlap * (globalCollisionCircle.center.y - std::get<0>(obstacle).center.y) / fDistance;
 
 				break;
 			}
@@ -683,7 +688,7 @@ void Car::calculateCollisions()
 
 			static double maxEneryRatio = 0.3;
 
-			if (energyAfterCollision / energyBeforeCollision > maxEneryRatio)
+			if (obstacleV.length() < 0.1 && abs(energyBeforeCollision) > 0.1 && energyAfterCollision / energyBeforeCollision > maxEneryRatio)
 			{
 				vCarGlobal *= maxEneryRatio;
 			}
