@@ -743,7 +743,7 @@ void Car::AImove()
 	AIpathAngle.rotate(-rz - steeringWheelAngle);
 	auto angleToFollow = vector2D::realAngle(AIpathAngle, vector2D({ 0,0 }, { 1,0 }));
 	angleToFollow -= angularVelocity * 10 / FPS;
-	Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "angle to follow: " + std::to_string(angleToFollow), &(Screen2D::Instance()->roboto_modo_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "angle to follow: " + std::to_string(angleToFollow), &(Screen2D::Instance()->roboto_modo_regular));
 	
 	if (angleToFollow < PI * 0.02 || angleToFollow > PI + PI * 0.98)
 	{
@@ -767,9 +767,9 @@ void Car::AImove()
 
 	float q = 0;
 
-	for(float time = 3.5f - (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position)) / v.length(); time > 0; time -= MapContainer::Instance()->GetNextPointDistance(AIfuturePoint) / v.length())
+	for(float time = 4.0f - (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position)) / v.length(); time > 0; time -= MapContainer::Instance()->GetNextPointDistance(AIfuturePoint) / v.length())
 	{
-		Screen2D::Instance()->addTestValueToPrint(ColorName::GREEN, 25, 60 - q * 3, "time: " + std::to_string(time), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::GREEN, 25, 60 - q * 3, "time: " + std::to_string(time), &(Screen2D::Instance()->roboto_modo_regular));
 
 		MapContainer::Instance()->SetFuturePoints(AIfuturePoint);
 		Point& AIdirection = MapContainer::Instance()->AIPoints[AIfuturePoint].first;
@@ -792,33 +792,48 @@ void Car::AImove()
 		q++;
 	}
 
+	static float safeVelocity = 100.0 / 3.6; //[m/s]
+
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::GREEN, 25, 85, std::to_string(maxFutureSpeedAngleToFollow), &(Screen2D::Instance()->roboto_modo_regular));
 
 	if (maxFutureSpeedAngleToFollow > PI * 0.5 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.5)
 	{
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 1", &(Screen2D::Instance()->roboto_modo_regular));
 		breakPressed();
 	}
-	else if (maxFutureSpeedAngleToFollow > PI * 0.4 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.4 && v.length() > 0.8 * vMax)
+	else if (maxFutureSpeedAngleToFollow > PI * 0.4 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.4 && v.length() > 0.3 * safeVelocity)
 	{
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 2", &(Screen2D::Instance()->roboto_modo_regular));
 		breakPressed();
 	}
-	else if (maxFutureSpeedAngleToFollow > PI * 0.3 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.3 && v.length() > 0.6 * vMax)
+	else if (maxFutureSpeedAngleToFollow > PI * 0.3 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.3 && v.length() > 0.5 * safeVelocity)
 	{
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 3", &(Screen2D::Instance()->roboto_modo_regular));
 		breakPressed();
 	}
-	else if (maxFutureSpeedAngleToFollow > PI * 0.2 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.2 && v.length() > 0.4 * vMax)
+	else if (maxFutureSpeedAngleToFollow > PI * 0.2 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.2 && v.length() > 0.7 * safeVelocity)
 	{
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 4", &(Screen2D::Instance()->roboto_modo_regular));
 		breakPressed();
 	}
-	else if (maxFutureSpeedAngleToFollow > PI * 0.1 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.1 && v.length() > 0.2 * vMax)
+	else if (maxFutureSpeedAngleToFollow > PI * 0.1 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.1 && v.length() > 0.8 * safeVelocity)
 	{
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 5", &(Screen2D::Instance()->roboto_modo_regular));
+		breakPressed();
+	}
+	else if (maxFutureSpeedAngleToFollow > PI * 0.05 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.05 && v.length() > 1.0 * safeVelocity)
+	{
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 6", &(Screen2D::Instance()->roboto_modo_regular));
 		breakPressed();
 	}
 	else if(pacejkaModel.carDrifting)
 	{
-		breakPressed();
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "drift", &(Screen2D::Instance()->roboto_modo_regular));
+		//breakPressed();
 	}
 	else
 	{
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "accelerate", &(Screen2D::Instance()->roboto_modo_regular));
 		accelerate();
 	}
 }
