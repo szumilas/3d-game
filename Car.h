@@ -17,6 +17,7 @@ class Car : public Object3D
 
 	friend class CarGauge;
 	friend class Screen2D;
+	friend class RaceTimer;
 
 
 public:

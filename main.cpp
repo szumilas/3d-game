@@ -206,7 +206,8 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, true), Car(CarBrand::RollsRoycePhantom, -5, -5, &camera.center, &camera.lookAt)/*, Car(CarBrand::SubaruBRZ, -50, -5, &camera.center, &camera.lookAt)*/ };
+		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, false), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt), Car(CarBrand::SubaruBRZ, -10, -10, &camera.center, &camera.lookAt), Car(CarBrand::RollsRoycePhantom, -15, -15, &camera.center, &camera.lookAt), Car(CarBrand::LamborghiniHuracan, -20, -20, &camera.center, &camera.lookAt) };
+		MapContainer::Instance()->initRaceTimer();
 
 		carGauge.load(&MapContainer::Instance()->cars[1]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
@@ -305,6 +306,8 @@ void display()
 		if (F3Pressed)
 			car.stop();
 	}
+
+	MapContainer::Instance()->displayRaceTimer();
 		
 	glBegin(GL_LINES);
 	glColor3f(1, 0, 0);
@@ -504,6 +507,8 @@ void Update()
 
 	for(auto& car : MapContainer::Instance()->cars)
 		car.move();
+
+	MapContainer::Instance()->updateRaceTimer();
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 

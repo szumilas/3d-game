@@ -14,6 +14,7 @@ std::unique_ptr<MapContainer> MapContainer::_instance;
 std::vector<Car> MapContainer::cars;
 std::vector<std::pair<Point, bool>> MapContainer::AIPoints;
 std::vector<float> MapContainer::AIPointsDistances;
+RaceTimer MapContainer::raceTimer;
 
 void MapContainer::Init()
 {
@@ -410,4 +411,21 @@ void MapContainer::LoadAIPoints()
 	}
 
 	file.close();
+}
+
+void MapContainer::initRaceTimer()
+{
+	raceTimer.init(&cars);
+}
+
+void MapContainer::updateRaceTimer()
+{
+
+
+}
+
+void MapContainer::displayRaceTimer()
+{
+	raceTimer.display();
+
 }

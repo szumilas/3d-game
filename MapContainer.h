@@ -7,6 +7,7 @@
 #include "Object3D.h"
 #include "PointInsidePolygonDetector.h"
 #include "Car.h"
+#include "RaceTimer.h"
 
 class MapContainer
 {
@@ -31,6 +32,9 @@ public:
 	void LoadAIPoints();
 	static int GetNextPoint(const int& currentPoint) { return (currentPoint + 1) % AIPoints.size(); }
 	static float GetNextPointDistance(const int& currentPoint) { return AIPointsDistances[currentPoint]; }
+	static void initRaceTimer();
+	static void updateRaceTimer();
+	static void displayRaceTimer();
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 
@@ -51,6 +55,8 @@ private:
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapObjectSections;
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;
 	static std::unique_ptr<MapObject>* background;
+
+	static RaceTimer raceTimer;
 
 
 	std::vector<Object3D> myMap;
