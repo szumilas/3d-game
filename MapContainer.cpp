@@ -12,7 +12,7 @@ float MapContainer::maxY;
 float MapContainer::minY;
 std::unique_ptr<MapContainer> MapContainer::_instance;
 std::vector<Car> MapContainer::cars;
-std::vector<std::pair<Point, bool>> MapContainer::AIPoints;
+std::vector<MapContainer::AIPointStruct> MapContainer::AIPoints;
 std::vector<float> MapContainer::AIPointsDistances;
 RaceTimer MapContainer::raceTimer;
 
@@ -324,15 +324,44 @@ void MapContainer::recalculateAIPointsDistances()
 	{
 		for (int q = 0; q < AIPoints.size(); q++)
 		{
-			AIPointsDistances.push_back(AIPoints[q].first.distance2D(AIPoints[(q + 1) % AIPoints.size()].first));
+			AIPointsDistances.push_back(AIPoints[q].center.distance2D(AIPoints[(q + 1) % AIPoints.size()].center));
 		}
 	}
 }
 
 void MapContainer::addAIPoint(const Point& point)
 {
-	AIPoints.push_back({ point, false });
+	AIPoints.push_back({ point, Color(ColorName::BLUE), false });
 	recalculateAIPointsDistances();
+}
+
+void MapContainer::selectAIPoint(const Point& point)
+{
+	for (auto& AIPoint : AIPoints)
+	{
+		AIPoint.selected = false;
+	}
+
+	for (auto& AIPoint : AIPoints)
+	{
+		if (AIPoint.center.distance2D(point) < 2.0)
+		{
+			AIPoint.selected = true;
+			break;
+		}
+	}
+}
+
+void MapContainer::moveAIPoint(const Point& point)
+{
+	for (auto& AIPoint : AIPoints)
+	{
+		if (AIPoint.selected == true)
+		{
+			AIPoint.center = point;
+			break;
+		}
+	}
 }
 
 void MapContainer::removeAIPoints()
@@ -346,14 +375,15 @@ void MapContainer::displayAIPoints()
 	glPointSize(10.0);
 	for (auto& AIPoint : AIPoints)
 	{
-		if(AIPoint.second)
-			glColor3f(1.0f, 0.0f, 1.0f);
-		else
-			glColor3f(0.0f, 0.0f, 1.0f);
+		if (AIPoint.selected == true)
+			glPointSize(15.0);
+		
+		glColor3f(AIPoint.color.red, AIPoint.color.green, AIPoint.color.blue);
 
 		glBegin(GL_POINTS);
-		glVertex3f(AIPoint.first.x, AIPoint.first.y, AIPoint.first.z);
+		glVertex3f(AIPoint.center.x, AIPoint.center.y, AIPoint.center.z);
 		glEnd();
+		glPointSize(10.0);
 	}
 	glPointSize(1.0);
 
@@ -361,22 +391,22 @@ void MapContainer::displayAIPoints()
 	for (int q = 0; q < static_cast<int>(AIPoints.size()) - 1; q++)
 	{
 		glBegin(GL_LINES);
-		glVertex3f(AIPoints[q].first.x, AIPoints[q].first.y, 0.05);
-		glVertex3f(AIPoints[q + 1].first.x, AIPoints[q + 1].first.y, 0.05);
+		glVertex3f(AIPoints[q].center.x, AIPoints[q].center.y, 0.05);
+		glVertex3f(AIPoints[q + 1].center.x, AIPoints[q + 1].center.y, 0.05);
 		glEnd();
 	}
 }
 
 void MapContainer::SetFuturePoints(const int& futurePoint)
 {
-	AIPoints[futurePoint].second = true;
+	AIPoints[futurePoint].color = Color(ColorName::PINK);
 }
 
 void MapContainer::ClearFuturePoints()
 {
 	for (auto& AIPoint : AIPoints)
 	{
-		AIPoint.second = false;
+		AIPoint.color = Color(ColorName::BLUE);
 	}
 }
 
@@ -387,7 +417,7 @@ void MapContainer::SaveAIPoints()
 
 	for (auto& AIPoint : AIPoints)
 	{
-		file << AIPoint.first.x << " " << AIPoint.first.y << " " << AIPoint.first.z << "\n";
+		file << AIPoint.center.x << " " << AIPoint.center.y << " " << AIPoint.center.z << "\n";
 	}
 
 	file.close();
@@ -405,7 +435,7 @@ void MapContainer::LoadAIPoints()
 		while (file >> x >> y >> z)
 		{
 			Point newPoint(x, y, z);
-			AIPoints.push_back({ newPoint, false });
+			AIPoints.push_back({ newPoint, Color(ColorName::BLUE), false });
 		}
 		recalculateAIPointsDistances();
 	}

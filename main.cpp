@@ -534,16 +534,21 @@ void Update()
 	{
 		orbit.rotate();
 	}
-	if (F3Pressed)
+	if (F2Pressed && F3Pressed)
 	{
 		MapContainer::Instance()->setAIPathActive();
 	}
 
 	else if (leftMouseButtonDown)
 	{
-		orbit.activateMovingXY();
-		if(F1Pressed)
+		if (F1Pressed)
 			MapContainer::Instance()->addAIPoint(orbit.getFlatCursor());
+		else if (F2Pressed)
+			MapContainer::Instance()->selectAIPoint(orbit.getFlatCursor());
+		else if (F3Pressed)
+			MapContainer::Instance()->moveAIPoint(orbit.getFlatCursor());
+		else
+			orbit.activateMovingXY();
 	}
 
 	orbit.calculateFlatCursorPosition(windowWidth, windowHeight, mouseXPos, mouseYPos, angle);

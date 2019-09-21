@@ -728,16 +728,16 @@ void Car::AImove()
 	if (MapContainer::Instance()->AIPoints.size() < 3 || MapContainer::Instance()->getAIPathActive() == false)
 		return;
 
-	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position) < 5.0)
+	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].center.distance2D(position) < 5.0)
 		AIcurrentPoint = MapContainer::Instance()->GetNextPoint(AIcurrentPoint);
 
 	auto possibleCloserPoint = MapContainer::Instance()->GetNextPoint(AIcurrentPoint);
-	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position) > MapContainer::Instance()->AIPoints[possibleCloserPoint].first.distance2D(position))
+	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].center.distance2D(position) > MapContainer::Instance()->AIPoints[possibleCloserPoint].center.distance2D(position))
 	{
 		AIcurrentPoint = possibleCloserPoint;
 	}
 
-	Point& AIdirection = MapContainer::Instance()->AIPoints[AIcurrentPoint].first;
+	Point& AIdirection = MapContainer::Instance()->AIPoints[AIcurrentPoint].center;
 
 	vector2D AIpathAngle(position, AIdirection);
 	AIpathAngle.rotate(-rz - steeringWheelAngle);
@@ -767,12 +767,12 @@ void Car::AImove()
 
 	float q = 0;
 
-	for(float time = 4.0f - (MapContainer::Instance()->AIPoints[AIcurrentPoint].first.distance2D(position)) / v.length(); time > 0; time -= MapContainer::Instance()->GetNextPointDistance(AIfuturePoint) / v.length())
+	for(float time = 4.0f - (MapContainer::Instance()->AIPoints[AIcurrentPoint].center.distance2D(position)) / v.length(); time > 0; time -= MapContainer::Instance()->GetNextPointDistance(AIfuturePoint) / v.length())
 	{
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::GREEN, 25, 60 - q * 3, "time: " + std::to_string(time), &(Screen2D::Instance()->roboto_modo_regular));
 
 		MapContainer::Instance()->SetFuturePoints(AIfuturePoint);
-		Point& AIdirection = MapContainer::Instance()->AIPoints[AIfuturePoint].first;
+		Point& AIdirection = MapContainer::Instance()->AIPoints[AIfuturePoint].center;
 		vector2D AIpathAngle(position, AIdirection);
 		AIpathAngle.rotate(-rz - steeringWheelAngle);
 		auto futureSpeedAngleToFollow = vector2D::realAngle(AIpathAngle, vector2D({ 0,0 }, { 1,0 }));

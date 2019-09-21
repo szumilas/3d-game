@@ -13,6 +13,15 @@ class MapContainer
 {
 public:
 
+	struct AIPointStruct
+	{
+		Point center;
+		Color color;
+		bool selected;
+
+
+	};
+
 	static void Init();
 	static std::unique_ptr<MapContainer>& Instance();
 
@@ -23,6 +32,8 @@ public:
 	static void displayBackground();
 	static void displayLines();
 	void addAIPoint(const Point& point);
+	void selectAIPoint(const Point& point);
+	void moveAIPoint(const Point& point);
 	void removeAIPoints();
 	void setAIPathActive() { AIPathActive = true; }
 	bool getAIPathActive() { return AIPathActive; }
@@ -46,7 +57,7 @@ private:
 public:
 
 	static std::vector<Car> cars;
-	static std::vector<std::pair<Point, bool>> AIPoints;
+	static std::vector<AIPointStruct> AIPoints;
 
 private:
 
