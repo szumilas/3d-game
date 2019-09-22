@@ -257,7 +257,8 @@ void MapContainer::displaySector(const Point& point)
 	{
 		for (int w = -5; w <= 5; w++)
 		{
-			sectorsToDisplay.push_back({ xToDraw + q, yToDraw + w });
+			if(xToDraw + q >= 0 && xToDraw + q < 100 && yToDraw + w >= 0 && yToDraw + w < 100)
+				sectorsToDisplay.push_back({ xToDraw + q, yToDraw + w });
 		}
 	}
 
