@@ -15,9 +15,65 @@ std::vector<Car> MapContainer::cars;
 std::vector<MapContainer::AIPointStruct> MapContainer::AIPoints;
 std::vector<float> MapContainer::AIPointsDistances;
 RaceTimer MapContainer::raceTimer;
+int MapContainer::w;
+int MapContainer::h;
+int MapContainer::mapEditorSelectedPanel = 0;
+int MapContainer::mapEditorSelectedTool = 0;
+int MapContainer::currentToolId = MapContainer::AddPoint;
+std::vector<std::vector<int>> MapContainer::tools = MapContainer::createTools();
+std::map<int, void (MapContainer::*)(const Point&)> MapContainer::toolsMap = createToolsMap();
 
-void MapContainer::Init()
+std::vector<std::vector<int>> MapContainer::createTools()
 {
+	std::vector<std::vector<int>> tools;
+
+	std::vector<int> AITools{
+		MapContainer::AddPoint,
+		MapContainer::RemovePoint,
+		MapContainer::MovePoint,
+		MapContainer::SelectPoint,
+		MapContainer::SaveAIPath,
+		MapContainer::LoadAIPath,
+		MapContainer::AIPlay,
+		MapContainer::AIPause,
+		MapContainer::AIStop,
+		MapContainer::AIStopAndResumePosition,
+	};
+
+	tools.push_back(AITools);
+	tools.push_back({});
+	tools.push_back({});
+
+	return tools;
+}
+
+std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap()
+{
+	std::map<int, void (MapContainer::*)(const Point&)> map = {
+	
+		{ AddPoint, &MapContainer::addAIPoint },
+		//{ RemovePoint, &MapContainer::RemovePoint },
+		{ MovePoint, &MapContainer::moveAIPoint },
+		{ SelectPoint, &MapContainer::selectAIPoint },
+		{ SaveAIPath, &MapContainer::SaveAIPoints },
+		{ LoadAIPath, &MapContainer::LoadAIPoints },
+		{ AIPlay, &MapContainer::setAIPathActive },
+		{ AIPause, &MapContainer::pauseAllCars },
+		//{ AIStop, &MapContainer::addAIPoint },
+		//{ AIStopAndResumePosition, &MapContainer::addAIPoint },
+	
+	};
+
+	return map;
+}
+
+
+
+
+void MapContainer::Init(int w, int h)
+{
+	MapContainer::w = w;
+	MapContainer::h = h;
 	_instance = std::unique_ptr<MapContainer>(new MapContainer());
 }
 
@@ -314,6 +370,110 @@ void MapContainer::displayLines()
 	}
 }
 
+void MapContainer::displayMapEditorPanel()
+{
+
+	glEnable(GL_BLEND);
+
+	glLineWidth(3);
+
+	glBegin(GL_LINE_LOOP);
+
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedPanel * 0.05 * h, 0.95 * h);
+	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedPanel + 1) * 0.05 * h, 0.95 * h);
+	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedPanel + 1) * 0.05 * h, h);
+	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedPanel * 0.05 * h, h);
+
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedTool * 0.05 * h, 0.9 * h);
+	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedTool + 1) * 0.05 * h, 0.9 * h);
+	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedTool + 1) * 0.05 * h, 0.95 * h);
+	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedTool * 0.05 * h, 0.95 * h);
+
+	glEnd();
+
+	glLineWidth(1.0);
+
+	glDisable(GL_BLEND);
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_TEXTURE_2D);
+	
+	static int idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::map_editor_panel)].idTexture;
+
+	glBindTexture(GL_TEXTURE_2D, idTexture);
+	glBegin(GL_POLYGON);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glTexCoord2f(0, static_cast<float>(tools.size()) / (tools.size() + 1));
+	glVertex2f(0.5 * w - 0.5 * h, 0.95 * h);
+	glTexCoord2f(1, static_cast<float>(tools.size()) / (tools.size() + 1));
+	glVertex2f(0.5 * w + 0.5 * h, 0.95 * h);
+	glTexCoord2f(1, 1);
+	glVertex2f(0.5 * w + 0.5 * h, h);
+	glTexCoord2f(0, 1);
+	glVertex2f(0.5 * w - 0.5 * h, h);
+
+	glEnd();
+
+
+	glBegin(GL_POLYGON);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glTexCoord2f(0, static_cast<float>(tools.size() - 1 - mapEditorSelectedPanel) / (tools.size() + 1));
+	glVertex2f(0.5 * w - 0.5 * h, 0.9 * h);
+	glTexCoord2f(1, static_cast<float>(tools.size() - 1 - mapEditorSelectedPanel) / (tools.size() + 1));
+	glVertex2f(0.5 * w + 0.5 * h, 0.9 * h);
+	glTexCoord2f(1, static_cast<float>(tools.size() - mapEditorSelectedPanel) / (tools.size() + 1));
+	glVertex2f(0.5 * w + 0.5 * h, 0.95 * h);
+	glTexCoord2f(0, static_cast<float>(tools.size() - mapEditorSelectedPanel) / (tools.size() + 1));
+	glVertex2f(0.5 * w - 0.5 * h, 0.95 * h);
+
+	glEnd();
+
+
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+}
+
+void MapContainer::pickTool(float pX, float pY)
+{
+	if (pY >= 0.95 && pX >= -0.5 && pX <= 0.5)
+	{
+		auto nextSelectedPanel = (pX + 0.5) * 20;
+		if (tools.size() >= nextSelectedPanel)
+			mapEditorSelectedPanel = nextSelectedPanel;
+
+		mapEditorSelectedTool = 0;
+	}
+	else if (pY >= 0.9 && pY <= 0.95 && pX >= -0.5 && pX <= 0.5)
+	{
+		mapEditorSelectedTool = (pX + 0.5) * 20;
+	}
+
+	if (tools[mapEditorSelectedPanel].size() > mapEditorSelectedTool)
+	{
+		currentToolId = tools[mapEditorSelectedPanel][mapEditorSelectedTool];
+	}
+}
+void MapContainer::useTool(const Point& point)
+{
+	auto toolIt = toolsMap.find(currentToolId);
+	if (toolIt != toolsMap.end())
+	{
+		auto tool = toolIt->second;
+		(Instance().get()->*tool)(point);
+	}
+
+}
+
 void MapContainer::recalculateAIPointsDistances()
 {
 	AIPointsDistances.clear();
@@ -365,6 +525,13 @@ void MapContainer::moveAIPoint(const Point& point)
 	}
 }
 
+void MapContainer::pauseAllCars(const Point& point)
+{
+	AIPathActive = false;
+	for (auto& car : MapContainer::Instance()->cars)
+		car.stop();
+}
+
 void MapContainer::removeAIPoints()
 {
 	AIPoints.clear();
@@ -411,7 +578,7 @@ void MapContainer::ClearFuturePoints()
 	}
 }
 
-void MapContainer::SaveAIPoints()
+void MapContainer::SaveAIPoints(const Point& point)
 {
 	std::ofstream file;
 	file.open("Data/AIPoints.txt", std::ios::out);
@@ -424,7 +591,7 @@ void MapContainer::SaveAIPoints()
 	file.close();
 }
 
-void MapContainer::LoadAIPoints()
+void MapContainer::LoadAIPoints(const Point& point)
 {
 	std::ifstream file;
 	file.open("Data/AIPoints.txt", std::ios::out);

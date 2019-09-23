@@ -41,6 +41,7 @@ public:
 	void calculateSlipAngles();
 	void recalculateWheelAngularVelocity(float v, bool allWheelsRecalculation = false);
 	void setHumanCar(bool humanCar) { PacejkaModel::humanCar = humanCar; }
+	void stop();
 
 private:
 

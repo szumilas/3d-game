@@ -180,7 +180,7 @@ int main(int argc, char**agrv)
 	Screen2D::Init(windowRealWidth, windowRealHeight);
 	SoundManager::Init();
 	TextureManager::Init();
-	MapContainer::Init();
+	MapContainer::Init(windowRealWidth, windowRealHeight);
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -329,6 +329,7 @@ void display()
 
 	Screen2D::pushScreenCoordinateMatrix();
 	carGauge.display();
+	MapContainer::displayMapEditorPanel();
 	Screen2D::Instance()->display();
 	Screen2D::pop_projection_matrix();
 
@@ -542,13 +543,11 @@ void Update()
 	else if (leftMouseButtonDown)
 	{
 		if (F1Pressed)
-			MapContainer::Instance()->addAIPoint(orbit.getFlatCursor());
-		else if (F2Pressed)
-			MapContainer::Instance()->selectAIPoint(orbit.getFlatCursor());
-		else if (F3Pressed)
-			MapContainer::Instance()->moveAIPoint(orbit.getFlatCursor());
-		else
 			orbit.activateMovingXY();
+		else if (1.0 - static_cast<float>(mouseYPos) / windowHeight > 0.9)
+			MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowWidth - 0.5) * windowWidth / windowHeight, 1.0 - static_cast<float>(mouseYPos) / windowHeight);
+		else
+			MapContainer::Instance()->useTool(orbit.getFlatCursor());
 	}
 
 	orbit.calculateFlatCursorPosition(windowWidth, windowHeight, mouseXPos, mouseYPos, angle);

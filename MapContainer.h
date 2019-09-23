@@ -13,6 +13,21 @@ class MapContainer
 {
 public:
 
+	enum Tools
+	{
+		AddPoint,
+		RemovePoint,
+		MovePoint,
+		SelectPoint,
+		SaveAIPath,
+		LoadAIPath,
+		AIPlay,
+		AIPause,
+		AIStop,
+		AIStopAndResumePosition,
+	};
+
+
 	struct AIPointStruct
 	{
 		Point center;
@@ -22,7 +37,7 @@ public:
 
 	};
 
-	static void Init();
+	static void Init(int w, int h);
 	static std::unique_ptr<MapContainer>& Instance();
 
 	static void loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
@@ -31,16 +46,22 @@ public:
 	static void displaySector(const Point& point);
 	static void displayBackground();
 	static void displayLines();
+	static void displayMapEditorPanel();
+	static void pickTool(float pX, float pY);
+	static void useTool(const Point& point);
 	void addAIPoint(const Point& point);
 	void selectAIPoint(const Point& point);
 	void moveAIPoint(const Point& point);
 	void removeAIPoints();
-	void setAIPathActive() { AIPathActive = true; }
+	void setAIPathActive(const Point& point = Point()) { AIPathActive = true; }
 	bool getAIPathActive() { return AIPathActive; }
+	void pauseAllCars(const Point& point = Point());
 	static void SetFuturePoints(const int& futurePoint);
 	static void ClearFuturePoints();
-	void SaveAIPoints();
-	void LoadAIPoints();
+	void SaveAIPoints(const Point& point = Point());
+	void LoadAIPoints(const Point& point = Point());
+	static std::vector<std::vector<int>> createTools();
+	static std::map<int, void (MapContainer::*)(const Point&)> createToolsMap();
 	static int GetNextPoint(const int& currentPoint) { return (currentPoint + 1) % AIPoints.size(); }
 	static float GetNextPointDistance(const int& currentPoint) { return AIPointsDistances[currentPoint]; }
 	static void initRaceTimer();
@@ -60,6 +81,16 @@ public:
 	static std::vector<AIPointStruct> AIPoints;
 
 private:
+
+	static int w;
+	static int h;
+
+	static int mapEditorSelectedPanel;
+	static int mapEditorSelectedTool;
+	static int currentToolId;
+
+	static std::vector<std::vector<int>> tools;
+	static std::map<int, void (MapContainer::*)(const Point&)> toolsMap;
 
 	std::vector<std::unique_ptr<Object3D>>* polygonsObjects = nullptr;
 

@@ -272,3 +272,12 @@ void PacejkaModel::recalculateWheelAngularVelocity(float v, bool allWheelsRecalc
 		}
 	}
 }
+
+void PacejkaModel::stop()
+{
+	for (auto& wheel : allWheels)
+	{
+		wheel.angularVelocity = 0;
+	}
+
+}

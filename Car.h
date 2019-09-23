@@ -44,7 +44,7 @@ public:
 	void accelerate();
 	void slow();
 	void breakPressed();
-	void stop() { a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; }
+	void stop() { a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; pacejkaModel.stop(); }
 	void turnRight();
 	void turnLeft();
 	void gearUp() { gearBox.gearUp(); engine.changeRPM(gearBox.getCurrentTransmission(), gearBox.getNextTransmission()); };

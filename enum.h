@@ -73,6 +73,7 @@ enum class Textures : long
 	car_gauge_330,
 	elm_tree,
 	no_texture,
+	map_editor_panel,
 };
 
 enum class Sounds : long
