@@ -75,6 +75,12 @@ struct Point
 		p.y = newY;
 	}
 
+	void move2D(double dx, double dy)
+	{
+		x += dx;
+		y += dy;
+	}
+
 	bool operator==(const Point& second) const { return x == second.x && y == second.y && z == second.z; }
 	bool operator!=(const Point& second) const { return x != second.x || y != second.y || z != second.z; }
 	bool operator<(const Point& second) const { return x < second.x || x == second.x && y < second.y || x == second.x && y == second.y && z < second.z; }

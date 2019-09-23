@@ -52,15 +52,15 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 	std::map<int, void (MapContainer::*)(const Point&)> map = {
 	
 		{ AddPoint, &MapContainer::addAIPoint },
-		//{ RemovePoint, &MapContainer::RemovePoint },
+		{ RemovePoint, &MapContainer::removeAIPoint },
 		{ MovePoint, &MapContainer::moveAIPoint },
 		{ SelectPoint, &MapContainer::selectAIPoint },
 		{ SaveAIPath, &MapContainer::SaveAIPoints },
 		{ LoadAIPath, &MapContainer::LoadAIPoints },
 		{ AIPlay, &MapContainer::setAIPathActive },
 		{ AIPause, &MapContainer::pauseAllCars },
-		//{ AIStop, &MapContainer::addAIPoint },
-		//{ AIStopAndResumePosition, &MapContainer::addAIPoint },
+		{ AIStop, &MapContainer::stopAllCars },
+		{ AIStopAndResumePosition, &MapContainer::stopAllCarsToSelectedPoint },
 	
 	};
 
@@ -496,6 +496,79 @@ void MapContainer::addAIPoint(const Point& point)
 	recalculateAIPointsDistances();
 }
 
+void MapContainer::removeAIPoint(const Point& point)
+{
+	for (int q = 0; q < AIPoints.size(); q++)
+	{
+		if (AIPoints[q].selected)
+		{
+			AIPoints.erase(AIPoints.begin() + q);
+			break;
+		}
+	}
+}
+
+void MapContainer::resetCarPositionsToPoint(int idPoint)
+{
+	vector2D direction(AIPoints[idPoint + 1].center, AIPoints[idPoint].center);
+	direction.convertIntoUnitVector();
+	float newRz = vector2D::directedAngle(vector2D({ 0, 0 }, { 1, 0 }), direction) + PI;
+
+	vector2D perpendicular(direction);
+	perpendicular.rotate(PI / 2);
+
+	Point firstCarPosition = AIPoints[idPoint].center;
+
+	int index = 0;
+	for (auto& car : MapContainer::Instance()->cars)
+	{
+		Point carPosition = firstCarPosition;
+		carPosition.move2D(index * 5 * direction.x, index * 5 * direction.y);
+		carPosition.move2D(((index % 2) * 2 - 1) * perpendicular.x * 2, ((index % 2) * 2 - 1) * perpendicular.y * 2);
+		car.setPosition(carPosition, newRz);
+		car.setAIcurrentPoint(idPoint);
+		index++;
+	}
+
+}
+
+void MapContainer::stopAllCars(const Point& point)
+{
+	pauseAllCars();
+
+	if (AIPoints.size() > 1)
+	{
+		resetCarPositionsToPoint(0);
+	}
+}
+
+void MapContainer::stopAllCarsToSelectedPoint(const Point& point)
+{
+	pauseAllCars();
+
+	int selectedPoint = getSelectedPointIndex();
+
+	if (AIPoints.size() > selectedPoint + 1)
+	{
+		resetCarPositionsToPoint(selectedPoint);
+	}
+}
+
+int MapContainer::getSelectedPointIndex()
+{
+	int index = 0;
+	for (auto& AIPoint : AIPoints)
+	{
+		if (AIPoint.selected)
+		{
+			return index;
+		}
+		index++;
+	}
+
+	return 0;
+}
+
 void MapContainer::selectAIPoint(const Point& point)
 {
 	for (auto& AIPoint : AIPoints)
@@ -583,9 +656,15 @@ void MapContainer::SaveAIPoints(const Point& point)
 	std::ofstream file;
 	file.open("Data/AIPoints.txt", std::ios::out);
 
+	Point previous(-1000000, -100000);
+
 	for (auto& AIPoint : AIPoints)
 	{
-		file << AIPoint.center.x << " " << AIPoint.center.y << " " << AIPoint.center.z << "\n";
+		if (AIPoint.center.distance2D(previous) > 1)
+		{
+			file << AIPoint.center.x << " " << AIPoint.center.y << " " << AIPoint.center.z << "\n";
+			previous = AIPoint.center;
+		}
 	}
 
 	file.close();

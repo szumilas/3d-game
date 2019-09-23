@@ -50,7 +50,11 @@ public:
 	static void pickTool(float pX, float pY);
 	static void useTool(const Point& point);
 	void addAIPoint(const Point& point);
+	void removeAIPoint(const Point& point = Point());
 	void selectAIPoint(const Point& point);
+	void stopAllCars(const Point& point = Point());
+	void stopAllCarsToSelectedPoint(const Point& point = Point());
+	void resetCarPositionsToPoint(int idPoint);
 	void moveAIPoint(const Point& point);
 	void removeAIPoints();
 	void setAIPathActive(const Point& point = Point()) { AIPathActive = true; }
@@ -64,6 +68,7 @@ public:
 	static std::map<int, void (MapContainer::*)(const Point&)> createToolsMap();
 	static int GetNextPoint(const int& currentPoint) { return (currentPoint + 1) % AIPoints.size(); }
 	static float GetNextPointDistance(const int& currentPoint) { return AIPointsDistances[currentPoint]; }
+	int getSelectedPointIndex();
 	static void initRaceTimer();
 	static void updateRaceTimer();
 	static void displayRaceTimer();
