@@ -57,7 +57,7 @@ public:
 	void resetCarPositionsToPoint(int idPoint);
 	void moveAIPoint(const Point& point);
 	void removeAIPoints();
-	void setAIPathActive(const Point& point = Point()) { AIPathActive = true; }
+	void setAIPathActive(const Point& point = Point()) { AIPathActive = true; raceTimer.startRace(); }
 	bool getAIPathActive() { return AIPathActive; }
 	void pauseAllCars(const Point& point = Point());
 	static void SetFuturePoints(const int& futurePoint);

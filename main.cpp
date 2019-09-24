@@ -206,7 +206,7 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, false), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt), Car(CarBrand::SubaruBRZ, -10, -10, &camera.center, &camera.lookAt), Car(CarBrand::RollsRoycePhantom, -15, -15, &camera.center, &camera.lookAt), Car(CarBrand::LamborghiniHuracan, -20, -20, &camera.center, &camera.lookAt) };
+		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, true), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt), Car(CarBrand::SubaruBRZ, -10, -10, &camera.center, &camera.lookAt), Car(CarBrand::RollsRoycePhantom, -15, -15, &camera.center, &camera.lookAt), Car(CarBrand::LamborghiniHuracan, -20, -20, &camera.center, &camera.lookAt) };
 		MapContainer::Instance()->initRaceTimer();
 
 		carGauge.load(&MapContainer::Instance()->cars[1]);

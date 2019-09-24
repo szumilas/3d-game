@@ -1,5 +1,6 @@
 #include "MapContainer.h"
 #include <fstream>
+#include <algorithm>
 
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapObjectSections;
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapCollidableObjectSections;
@@ -540,6 +541,8 @@ void MapContainer::stopAllCars(const Point& point)
 	{
 		resetCarPositionsToPoint(0);
 	}
+
+	raceTimer.resetTimer();
 }
 
 void MapContainer::stopAllCarsToSelectedPoint(const Point& point)
@@ -552,6 +555,8 @@ void MapContainer::stopAllCarsToSelectedPoint(const Point& point)
 	{
 		resetCarPositionsToPoint(selectedPoint);
 	}
+
+	raceTimer.resetTimer();
 }
 
 int MapContainer::getSelectedPointIndex()
@@ -688,6 +693,12 @@ void MapContainer::LoadAIPoints(const Point& point)
 	}
 
 	file.close();
+
+
+	std::vector<Point> AIpointsPositions;
+	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const AIPointStruct& data) {AIpointsPositions.push_back(data.center); });
+
+	raceTimer.setAIpointsPosition(AIpointsPositions);
 }
 
 void MapContainer::initRaceTimer()
@@ -697,12 +708,10 @@ void MapContainer::initRaceTimer()
 
 void MapContainer::updateRaceTimer()
 {
-
-
+	raceTimer.update();
 }
 
 void MapContainer::displayRaceTimer()
 {
 	raceTimer.display();
-
 }

@@ -58,9 +58,25 @@ Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCente
 
 }
 
+void Car::findAproximateAIPathPosition()
+{
+	if (MapContainer::Instance()->AIPoints.size() > 1)
+	{
+		Point& p1 = MapContainer::Instance()->AIPoints[AIcurrentPoint].center;
+		Point& p2 = MapContainer::Instance()->AIPoints[(AIcurrentPoint + 1) % MapContainer::Instance()->AIPoints.size()].center;
+
+		auto u = vector2D::dotProduct(vector2D(p1, position), vector2D(p1, p2)) / vector2D::dotProduct(vector2D(p2, p1), vector2D(p2, p1));
+
+		if (u > 0)
+			AIcurrentPoint = (AIcurrentPoint + 1) % MapContainer::Instance()->AIPoints.size();
+	}
+}
+
 void Car::move()
 {
-	if (!humanCar)
+	if (humanCar)
+		findAproximateAIPathPosition();
+	else
 		AImove();
 
 	drivingDir = drivingDirection();

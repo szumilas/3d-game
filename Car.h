@@ -46,6 +46,7 @@ public:
 	void breakPressed();
 	void stop() { a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; pacejkaModel.stop(); }
 	void setAIcurrentPoint(int newAIcurrentPoint) { AIcurrentPoint = newAIcurrentPoint; }
+	int getAIcurrentPoint() { return AIcurrentPoint; }
 	void setPosition(const Point& newPosition, float newRz) { position = newPosition, rz = newRz; }
 	void turnRight();
 	void turnLeft();
@@ -72,6 +73,7 @@ private:
 	void calculateCollisions();
 	int drivingDirection();
 	void AImove();
+	void findAproximateAIPathPosition();
 
 	template <typename T> int sgn(T val)
 	{
