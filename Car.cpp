@@ -535,6 +535,21 @@ void Car::playDriftSound(bool carDrifting)
 	SoundManager::Instance()->playSound(driftSound, volume, finalPan, 1.0f);
 }
 
+void Car::playCrashSound(const vector2D& modelCircleGlobalVelocity)
+{
+	float volume = std::min(modelCircleGlobalVelocity.length() / 5, 1.0) * sqrt(1 / (std::max(1.0, position.distance2D(*globalCameraCenter))));
+
+	Sounds crash;
+	if (static_cast<int>(position.x * 100) % 3 == 0)
+		crash = Sounds::crash_01;
+	else if (static_cast<int>(position.x * 100) % 3 == 1)
+		crash = Sounds::crash_02;
+	else
+		crash = Sounds::crash_03;
+
+	SoundManager::Instance()->playSample(crash, volume, 0, 1);
+}
+
 void Car::calculateNetForces()
 {
 	Force newNetForce;
@@ -709,9 +724,8 @@ void Car::calculateCollisions()
 				vCarGlobal *= maxEneryRatio;
 			}
 
-			float volume = std::min(modelCircleGlobalVelocity.length() / 5, 1.0) * sqrt(1 / (std::max(1.0, position.distance2D(*globalCameraCenter))));
-			SoundManager::Instance()->playSample(Sounds::crash_01, volume, 0, 1);
-
+			playCrashSound(modelCircleGlobalVelocity);
+			
 			obstacleV.x = obstacleV.x + p * mass * nx;
 			obstacleV.y = obstacleV.y + p * mass * ny;
 

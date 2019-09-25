@@ -69,6 +69,7 @@ private:
 	void calculateCarDrift();
 	void playEngineSound();
 	void playDriftSound(bool carDrifting);
+	void playCrashSound(const vector2D& modelCircleGlobalVelocity);
 	void calculateNetForces();
 	void calculateCollisions();
 	int drivingDirection();

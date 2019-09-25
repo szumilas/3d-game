@@ -82,6 +82,8 @@ enum class Sounds : long
 	engine2,
 	drift,
 	crash_01,
+	crash_02,
+	crash_03,
 };
 
 enum class Exceptions : long
