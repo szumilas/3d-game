@@ -8,6 +8,7 @@ std::vector<SoundManager::SoundData> SoundManager::sounds
 	{ Sounds::engine, "engine.wav" },
 	{ Sounds::engine2, "engine2.wav" },
 	{ Sounds::drift, "drift.wav" },
+	{ Sounds::crash_01, "crash01.wav" },
 };
 
 ALLEGRO_VOICE *SoundManager::voice;
@@ -42,6 +43,8 @@ SoundManager::SoundManager()
 	{
 		throw Exceptions::ERR_WHILE_ATTACHING_MIXER_TO_VOICE;
 	}
+
+	al_reserve_samples(1);
 }
 
 void SoundManager::DeInit()
@@ -105,6 +108,11 @@ void SoundManager::playSound(ALLEGRO_SAMPLE_INSTANCE* sample, float volume, floa
 	al_set_sample_instance_speed(sample, speed);
 }
 
+void SoundManager::playSample(Sounds soundName, float volume, float pan, float speed)
+{
+	al_play_sample(sounds[static_cast<int>(soundName)].soundData, volume, pan, speed, ALLEGRO_PLAYMODE_ONCE, NULL);
+}
+
 ALLEGRO_SAMPLE_INSTANCE* SoundManager::registerSoundInstance(Sounds soundName)
 {
 	submixers.push_back(al_create_mixer(44100, ALLEGRO_AUDIO_DEPTH_FLOAT32, ALLEGRO_CHANNEL_CONF_2));
@@ -136,6 +144,8 @@ ALLEGRO_SAMPLE_INSTANCE* SoundManager::registerSoundInstance(Sounds soundName)
 
 	al_set_sample_instance_playmode(newInstance, ALLEGRO_PLAYMODE_LOOP);
 	al_play_sample_instance(newInstance);
+
+	al_set_sample_instance_gain(newInstance, 0);
 
 	return newInstance;
 }

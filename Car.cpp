@@ -709,6 +709,9 @@ void Car::calculateCollisions()
 				vCarGlobal *= maxEneryRatio;
 			}
 
+			float volume = std::min(modelCircleGlobalVelocity.length() / 5, 1.0) * sqrt(1 / (std::max(1.0, position.distance2D(*globalCameraCenter))));
+			SoundManager::Instance()->playSample(Sounds::crash_01, volume, 0, 1);
+
 			obstacleV.x = obstacleV.x + p * mass * nx;
 			obstacleV.y = obstacleV.y + p * mass * ny;
 
