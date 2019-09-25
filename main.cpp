@@ -330,6 +330,7 @@ void display()
 	Screen2D::pushScreenCoordinateMatrix();
 	carGauge.display();
 	MapContainer::displayMapEditorPanel();
+	MapContainer::displayCounter();
 	Screen2D::Instance()->display();
 	Screen2D::pop_projection_matrix();
 

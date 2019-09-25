@@ -446,6 +446,40 @@ void MapContainer::displayMapEditorPanel()
 	glDisable(GL_BLEND);
 }
 
+void MapContainer::displayCounter()
+{
+	if (raceTimer.state >= 0)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_TEXTURE_2D);
+	
+		static int idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::counter)].idTexture;
+
+		glBindTexture(GL_TEXTURE_2D, idTexture);
+		glBegin(GL_POLYGON);
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		glTexCoord2f(0.2 * raceTimer.state, 0);
+		glVertex2f(0.5 * w - 0.15 * h, 0.7 * h);
+
+		glTexCoord2f(0.2 * raceTimer.state + 0.2, 0);
+		glVertex2f(0.5 * w + 0.15 * h, 0.7 * h);
+
+		glTexCoord2f(0.2 * raceTimer.state + 0.2, 1);
+		glVertex2f(0.5 * w + 0.15 * h, 0.9 * h);
+
+		glTexCoord2f(0.2 * raceTimer.state, 1);
+		glVertex2f(0.5 * w - 0.15 * h, 0.9 * h);
+
+		glEnd();
+
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+	}
+}
+
 void MapContainer::pickTool(float pX, float pY)
 {
 	if (pY >= 0.95 && pX >= -0.5 && pX <= 0.5)
@@ -565,7 +599,9 @@ void MapContainer::startRace(const Point& point)
 {
 	LoadAIPoints();
 	stopAllCars();
-	setAIPathActive();
+	raceTimer.state = RaceTimer::State::Red4;
+	raceTimer.beforeRace = true;
+	raceTimer.startTimer();
 }
 
 int MapContainer::getSelectedPointIndex()
@@ -718,6 +754,20 @@ void MapContainer::initRaceTimer()
 void MapContainer::updateRaceTimer()
 {
 	raceTimer.update();
+
+	if (raceTimer.state == RaceTimer::State::Red3)
+	{
+		SoundManager::Instance()->playSample(Sounds::race_timer);
+	}
+	else if (raceTimer.state == RaceTimer::State::Green)
+	{
+		Instance().get()->setAIPathActive();
+		raceTimer.beforeRace = false;
+		raceTimer.resetTimer();
+		raceTimer.startTimer();
+		raceTimer.state = RaceTimer::State::WaitingToDisappear;
+	}
+
 }
 
 void MapContainer::displayRaceTimer()

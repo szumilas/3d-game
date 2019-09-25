@@ -48,6 +48,7 @@ public:
 	static void displayBackground();
 	static void displayLines();
 	static void displayMapEditorPanel();
+	static void displayCounter();
 	static void pickTool(float pX, float pY);
 	static void useTool(const Point& point);
 	void addAIPoint(const Point& point);
@@ -59,7 +60,7 @@ public:
 	void resetCarPositionsToPoint(int idPoint);
 	void moveAIPoint(const Point& point);
 	void removeAIPoints();
-	void setAIPathActive(const Point& point = Point()) { AIPathActive = true; raceTimer.startRace(); }
+	void setAIPathActive(const Point& point = Point()) { AIPathActive = true; raceTimer.startTimer(); }
 	bool getAIPathActive() { return AIPathActive; }
 	void pauseAllCars(const Point& point = Point());
 	static void SetFuturePoints(const int& futurePoint);
