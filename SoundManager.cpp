@@ -46,7 +46,7 @@ SoundManager::SoundManager()
 		throw Exceptions::ERR_WHILE_ATTACHING_MIXER_TO_VOICE;
 	}
 
-	al_reserve_samples(1);
+	al_reserve_samples(5);
 }
 
 void SoundManager::DeInit()

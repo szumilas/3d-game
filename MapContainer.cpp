@@ -39,6 +39,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::AIPause,
 		MapContainer::AIStop,
 		MapContainer::AIStopAndResumePosition,
+		MapContainer::StartRace,
 	};
 
 	tools.push_back(AITools);
@@ -62,6 +63,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ AIPause, &MapContainer::pauseAllCars },
 		{ AIStop, &MapContainer::stopAllCars },
 		{ AIStopAndResumePosition, &MapContainer::stopAllCarsToSelectedPoint },
+		{ StartRace, &MapContainer::startRace },
 	
 	};
 
@@ -557,6 +559,13 @@ void MapContainer::stopAllCarsToSelectedPoint(const Point& point)
 	}
 
 	raceTimer.resetTimer();
+}
+
+void MapContainer::startRace(const Point& point)
+{
+	LoadAIPoints();
+	stopAllCars();
+	setAIPathActive();
 }
 
 int MapContainer::getSelectedPointIndex()

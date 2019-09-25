@@ -74,6 +74,7 @@ enum class Textures : long
 	elm_tree,
 	no_texture,
 	map_editor_panel,
+	counter,
 };
 
 enum class Sounds : long

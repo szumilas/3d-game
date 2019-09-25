@@ -25,6 +25,7 @@ public:
 		AIPause,
 		AIStop,
 		AIStopAndResumePosition,
+		StartRace,
 	};
 
 
@@ -54,6 +55,7 @@ public:
 	void selectAIPoint(const Point& point);
 	void stopAllCars(const Point& point = Point());
 	void stopAllCarsToSelectedPoint(const Point& point = Point());
+	void startRace(const Point& point = Point());
 	void resetCarPositionsToPoint(int idPoint);
 	void moveAIPoint(const Point& point);
 	void removeAIPoints();
