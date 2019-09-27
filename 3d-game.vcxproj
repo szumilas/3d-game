@@ -143,6 +143,7 @@
     <ClCompile Include="Crossing.cpp" />
     <ClCompile Include="Footway.cpp" />
     <ClCompile Include="freetype.cpp" />
+    <ClCompile Include="GlobalStructures.cpp" />
     <ClCompile Include="GreenArea.cpp" />
     <ClCompile Include="GrunwaldzkiCenter.cpp" />
     <ClCompile Include="HighlightedObject.cpp" />
