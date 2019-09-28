@@ -374,19 +374,13 @@ Point Spline::getSplineSubpoint(float t)
 
 float Spline::length()
 {
-	if (size() > 3)
+	float length = 0.0f;
+	for (auto& segmentLength : lengths)
 	{
-		float sum = 0.0f;
-		for (int q = 1; q < size() - 1; q++)
-		{
-			sum += points[q].distance2D(points[q + 1]);
-		}
-		return sum;
+		length += segmentLength;
 	}
-	else
-	{
-		return 0.0f;
-	}
+
+	return length;
 }
 
 void Spline::push_back(const Point& point)
@@ -396,4 +390,53 @@ void Spline::push_back(const Point& point)
 unsigned int Spline::size()
 {
 	return points.size();
+}
+
+void Spline::calculateLengths()
+{
+	lengths.clear();
+	for (int q = 0; q < size(); q++)
+	{
+		if (q > 0 && q < size() - 2)
+		{
+			lengths.push_back(calculateSegmentLength(q - 1));
+		}
+		else
+		{
+			lengths.push_back(0);
+		}
+	}
+}
+
+float Spline::calculateSegmentLength(int index)
+{
+	float segmentLength = 0.0f;
+	float stepSize = 0.005;
+
+	Point oldPoint, newPoint;
+	oldPoint = getSplineSubpoint(static_cast<float>(index));
+
+	for (float t = 0; t < 1.0f; t += stepSize)
+	{
+		newPoint = getSplineSubpoint(static_cast<float>(index) + t);
+		segmentLength += sqrtf((newPoint.x - oldPoint.x)*(newPoint.x - oldPoint.x)
+			+ (newPoint.y - oldPoint.y)*(newPoint.y - oldPoint.y));
+		oldPoint = newPoint;
+	}
+
+	return segmentLength;
+}
+
+float Spline::getNormalisedOffset(float p)
+{
+	// Which node is the base?
+	int i = 0;
+	while (p > lengths[i + 1])
+	{
+		p -= lengths[i + 1];
+		i++;
+	}
+
+	// The fractional is the offset 
+	return static_cast<int>(i) + (p / lengths[i + 1]);
 }

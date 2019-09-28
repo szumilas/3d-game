@@ -138,7 +138,11 @@ struct Spline
 	void push_back(const Point& point);
 	unsigned int size();
 	float length();
+	void calculateLengths();
+	float calculateSegmentLength(int index);
+	float getNormalisedOffset(float p);
 
 	std::vector<Point> basePoints;
 	std::vector<Point> points;
+	std::vector<float> lengths;
 };

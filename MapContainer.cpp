@@ -696,17 +696,17 @@ void MapContainer::RemoveSplinePoints(const Point& point)
 
 void MapContainer::DivideSpline(const Point& point)
 {
-	currentSpline.subpointsDistance = 0.1f;
+	currentSpline.subpointsDistance = 5.0f;
 }
 
 void MapContainer::IncreaseSplineSubpoints(const Point& point)
 {
-	currentSpline.subpointsDistance -= 0.01f;
+	currentSpline.subpointsDistance -= 0.5f;
 }
 
 void MapContainer::DecreaseSplineSubpoints(const Point& point)
 {
-	currentSpline.subpointsDistance += 0.01f;
+	currentSpline.subpointsDistance += 0.5f;
 }
 
 void MapContainer::ConvertSplineToCurrentPath(const Point& point)
@@ -890,7 +890,7 @@ void MapContainer::displayCurrentSpline()
 
 	displayPath(splinePath, splinePointsColor);
 
-	if (currentSpline.subpointsDistance > 0.01f && currentSpline.spline.size() > 3)
+	if (currentSpline.subpointsDistance > 0.1f && currentSpline.spline.size() > 3)
 	{
 		std::vector<PathStruct> subsplinePath = generateSubsplinePath();
 		displayPath(subsplinePath, splineSubointsColor);
@@ -899,23 +899,21 @@ void MapContainer::displayCurrentSpline()
 
 std::vector<MapContainer::PathStruct> MapContainer::generateSubsplinePath()
 {
+	currentSpline.spline.calculateLengths();
+
 	std::vector<PathStruct> subsplinePath;
 	int previousIndex = -1;
-	float approximateDistance = 0.0f;
-	for (float t = currentSpline.subpointsDistance; t < static_cast<float>(currentSpline.spline.size() - 3); t += currentSpline.subpointsDistance)
+	for (float t = currentSpline.subpointsDistance; t < currentSpline.spline.length(); t += currentSpline.subpointsDistance)
 	{
-		if (static_cast<int>(t) > previousIndex)
-		{
-			subsplinePath.push_back({ currentSpline.spline.points[static_cast<int>(t) + 1], splineSubointsColor, false });
-			previousIndex = static_cast<int>(t);
-		}
+		auto normalisedOffset = currentSpline.spline.getNormalisedOffset(t);
 
-		if (subsplinePath.size() == 2)
+		if (static_cast<int>(normalisedOffset) > previousIndex)
 		{
-			approximateDistance = subsplinePath.front().center.distance2D(subsplinePath.back().center);
+			previousIndex = static_cast<int>(normalisedOffset);
+			subsplinePath.push_back({ currentSpline.spline.points[previousIndex + 1], splineSubointsColor, false });
 		}
-
-		Point p = currentSpline.spline.getSplineSubpoint(t);
+		
+		Point p = currentSpline.spline.getSplineSubpoint(normalisedOffset);
 		subsplinePath.push_back({ p, splineSubointsColor, false });
 	}
 	subsplinePath.push_back({ currentSpline.spline.points[currentSpline.spline.size() - 2], splineSubointsColor, false });
