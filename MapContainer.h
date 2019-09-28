@@ -51,7 +51,8 @@ public:
 	struct SplineStruct
 	{
 		Spline spline;
-		int selected = -1;;
+		int selected = -1;
+		float subpointsDistance = 0;
 	};
 
 	static void Init(int w, int h);
@@ -86,6 +87,7 @@ public:
 	void DecreaseSplineSubpoints(const Point& point = Point());
 	void ConvertSplineToCurrentPath(const Point& point = Point());
 
+	static std::vector<PathStruct> generateSubsplinePath();
 	void resetCarPositionsToPoint(int idPoint);
 	void movePoint(const Point& point);
 	void removePoints(const Point& point = Point());

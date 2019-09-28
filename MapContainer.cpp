@@ -696,22 +696,23 @@ void MapContainer::RemoveSplinePoints(const Point& point)
 
 void MapContainer::DivideSpline(const Point& point)
 {
-
+	currentSpline.subpointsDistance = 0.1f;
 }
 
 void MapContainer::IncreaseSplineSubpoints(const Point& point)
 {
-
+	currentSpline.subpointsDistance -= 0.01f;
 }
 
 void MapContainer::DecreaseSplineSubpoints(const Point& point)
 {
-
+	currentSpline.subpointsDistance += 0.01f;
 }
 
 void MapContainer::ConvertSplineToCurrentPath(const Point& point)
 {
-
+	currentPath = generateSubsplinePath();
+	currentSpline = SplineStruct{};
 }
 
 
@@ -888,6 +889,38 @@ void MapContainer::displayCurrentSpline()
 	}
 
 	displayPath(splinePath, splinePointsColor);
+
+	if (currentSpline.subpointsDistance > 0.01f && currentSpline.spline.size() > 3)
+	{
+		std::vector<PathStruct> subsplinePath = generateSubsplinePath();
+		displayPath(subsplinePath, splineSubointsColor);
+	}
+}
+
+std::vector<MapContainer::PathStruct> MapContainer::generateSubsplinePath()
+{
+	std::vector<PathStruct> subsplinePath;
+	int previousIndex = -1;
+	float approximateDistance = 0.0f;
+	for (float t = currentSpline.subpointsDistance; t < static_cast<float>(currentSpline.spline.size() - 3); t += currentSpline.subpointsDistance)
+	{
+		if (static_cast<int>(t) > previousIndex)
+		{
+			subsplinePath.push_back({ currentSpline.spline.points[static_cast<int>(t) + 1], splineSubointsColor, false });
+			previousIndex = static_cast<int>(t);
+		}
+
+		if (subsplinePath.size() == 2)
+		{
+			approximateDistance = subsplinePath.front().center.distance2D(subsplinePath.back().center);
+		}
+
+		Point p = currentSpline.spline.getSplineSubpoint(t);
+		subsplinePath.push_back({ p, splineSubointsColor, false });
+	}
+	subsplinePath.push_back({ currentSpline.spline.points[currentSpline.spline.size() - 2], splineSubointsColor, false });
+
+	return subsplinePath;
 }
 
 void MapContainer::SetFuturePoints(const int& futurePoint)

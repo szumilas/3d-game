@@ -134,8 +134,10 @@ struct Force
 struct Spline
 {
 
+	Point getSplineSubpoint(float t);
 	void push_back(const Point& point);
 	unsigned int size();
+	float length();
 
 	std::vector<Point> basePoints;
 	std::vector<Point> points;

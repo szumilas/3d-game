@@ -341,6 +341,54 @@ Force::Force(Point center, vector2D vector) : center(center), vector(vector)
 
 }
 
+Point Spline::getSplineSubpoint(float t)
+{
+	if (size() > 3)
+	{
+		int p0, p1, p2, p3;
+
+		p1 = static_cast<int>(t) + 1;
+		p2 = p1 + 1;
+		p3 = p2 + 1;
+		p0 = p1 - 1;
+
+
+		t = t - static_cast<int>(t);
+
+		float tt = t * t;
+		float ttt = tt * t;
+
+		float q1 = -ttt + 2.0f*tt - t;
+		float q2 = 3.0f*ttt - 5.0f*tt + 2.0f;
+		float q3 = -3.0f*ttt + 4.0f*tt + t;
+		float q4 = ttt - tt;
+
+		float tx = 0.5f * (points[p0].x * q1 + points[p1].x * q2 + points[p2].x * q3 + points[p3].x * q4);
+		float ty = 0.5f * (points[p0].y * q1 + points[p1].y * q2 + points[p2].y * q3 + points[p3].y * q4);
+
+		return Point(tx, ty);
+	}
+	else
+		return Point();
+}
+
+float Spline::length()
+{
+	if (size() > 3)
+	{
+		float sum = 0.0f;
+		for (int q = 1; q < size() - 1; q++)
+		{
+			sum += points[q].distance2D(points[q + 1]);
+		}
+		return sum;
+	}
+	else
+	{
+		return 0.0f;
+	}
+}
+
 void Spline::push_back(const Point& point)
 {
 	points.push_back(point);
