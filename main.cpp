@@ -538,7 +538,7 @@ void Update()
 	}
 	if (F2Pressed && F3Pressed)
 	{
-		MapContainer::Instance()->setAIPathActive();
+		MapContainer::Instance()->AIStop();
 	}
 
 	else if (leftMouseButtonDown)

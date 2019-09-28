@@ -15,27 +15,27 @@ public:
 
 	enum Tools
 	{
-		AddPoint,
-		RemovePoint,
-		MovePoint,
-		SelectPoint,
-		SaveAIPath,
-		LoadAIPath,
-		AIPlay,
-		AIPause,
-		AIStop,
-		AIStopAndResumePosition,
-		StartRace,
+		e_AddPoint,
+		e_RemovePoint,
+		e_MovePoint,
+		e_SelectPoint,
+		e_SaveAIPoints,
+		e_LoadAIPoints,
+		e_AIPlay,
+		e_AIPause,
+		e_AIStop,
+		e_AIStopAndRestartToSelectedPoint,
+		e_StartRace,
+		e_ConvertPathToAIPoints,
+		e_ConvertAIPointsToPath,
 	};
 
 
-	struct AIPointStruct
+	struct PathStruct
 	{
 		Point center;
 		Color color;
 		bool selected;
-
-
 	};
 
 	static void Init(int w, int h);
@@ -51,18 +51,22 @@ public:
 	static void displayCounter();
 	static void pickTool(float pX, float pY);
 	static void useTool(const Point& point);
-	void addAIPoint(const Point& point);
-	void removeAIPoint(const Point& point = Point());
-	void selectAIPoint(const Point& point);
-	void stopAllCars(const Point& point = Point());
-	void stopAllCarsToSelectedPoint(const Point& point = Point());
+
+	void addPoint(const Point& point);
+	void removePoint(const Point& point = Point());
+	void selectPoint(const Point& point);
+	void AIStop(const Point& point = Point());
+	void AIStopAndRestartToSelectedPoint(const Point& point = Point());
 	void startRace(const Point& point = Point());
+	void ConvertPathToAIPoints(const Point& point = Point());
+	void ConvertAIPointsToPath(const Point& point = Point());
+
 	void resetCarPositionsToPoint(int idPoint);
-	void moveAIPoint(const Point& point);
+	void movePoint(const Point& point);
 	void removeAIPoints();
-	void setAIPathActive(const Point& point = Point()) { AIPathActive = true; raceTimer.startTimer(); }
+	void AIPlay(const Point& point = Point());
 	bool getAIPathActive() { return AIPathActive; }
-	void pauseAllCars(const Point& point = Point());
+	void AIPause(const Point& point = Point());
 	static void SetFuturePoints(const int& futurePoint);
 	static void ClearFuturePoints();
 	void SaveAIPoints(const Point& point = Point());
@@ -80,13 +84,16 @@ public:
 
 private:
 
+	static void displayPath(const std::vector<PathStruct>& path, const Color& color);
 	static void displayAIPoints();
+	static void displayCurrentPath();
 	static void recalculateAIPointsDistances();
 
 public:
 
 	static std::vector<Car> cars;
-	static std::vector<AIPointStruct> AIPoints;
+	static std::vector<PathStruct> currentPath;
+	static std::vector<PathStruct> AIPoints;
 
 private:
 
@@ -123,6 +130,9 @@ private:
 
 	static std::vector<float> AIPointsDistances;
 	bool AIPathActive = false;
+
+	static Color AIPointsColor;
+	static Color pointsColor;
 
 	static std::unique_ptr<MapContainer> _instance;
 

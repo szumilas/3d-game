@@ -13,37 +13,46 @@ float MapContainer::maxY;
 float MapContainer::minY;
 std::unique_ptr<MapContainer> MapContainer::_instance;
 std::vector<Car> MapContainer::cars;
-std::vector<MapContainer::AIPointStruct> MapContainer::AIPoints;
+std::vector<MapContainer::PathStruct> MapContainer::currentPath;
+std::vector<MapContainer::PathStruct> MapContainer::AIPoints;
 std::vector<float> MapContainer::AIPointsDistances;
 RaceTimer MapContainer::raceTimer;
 int MapContainer::w;
 int MapContainer::h;
 int MapContainer::mapEditorSelectedPanel = 0;
 int MapContainer::mapEditorSelectedTool = 0;
-int MapContainer::currentToolId = MapContainer::AddPoint;
+int MapContainer::currentToolId = MapContainer::e_AddPoint;
 std::vector<std::vector<int>> MapContainer::tools = MapContainer::createTools();
 std::map<int, void (MapContainer::*)(const Point&)> MapContainer::toolsMap = createToolsMap();
+Color MapContainer::AIPointsColor = Color(ColorName::ORANGE);
+Color MapContainer::pointsColor = Color(ColorName::BLUE);
 
 std::vector<std::vector<int>> MapContainer::createTools()
 {
 	std::vector<std::vector<int>> tools;
 
-	std::vector<int> AITools{
-		MapContainer::AddPoint,
-		MapContainer::RemovePoint,
-		MapContainer::MovePoint,
-		MapContainer::SelectPoint,
-		MapContainer::SaveAIPath,
-		MapContainer::LoadAIPath,
-		MapContainer::AIPlay,
-		MapContainer::AIPause,
-		MapContainer::AIStop,
-		MapContainer::AIStopAndResumePosition,
-		MapContainer::StartRace,
+	std::vector<int> PathTools{
+		MapContainer::e_AddPoint,
+		MapContainer::e_RemovePoint,
+		MapContainer::e_MovePoint,
+		MapContainer::e_SelectPoint,
 	};
+	tools.push_back(PathTools);
 
+	std::vector<int> AITools{
+		MapContainer::e_LoadAIPoints,
+		MapContainer::e_SaveAIPoints,
+		MapContainer::e_ConvertPathToAIPoints,
+		MapContainer::e_ConvertAIPointsToPath,
+		MapContainer::e_AIPlay,
+		MapContainer::e_AIPause,
+		MapContainer::e_AIStop,
+		MapContainer::e_AIStopAndRestartToSelectedPoint,
+		MapContainer::e_StartRace,
+	};
 	tools.push_back(AITools);
-	tools.push_back({});
+
+
 	tools.push_back({});
 
 	return tools;
@@ -53,17 +62,19 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 {
 	std::map<int, void (MapContainer::*)(const Point&)> map = {
 	
-		{ AddPoint, &MapContainer::addAIPoint },
-		{ RemovePoint, &MapContainer::removeAIPoint },
-		{ MovePoint, &MapContainer::moveAIPoint },
-		{ SelectPoint, &MapContainer::selectAIPoint },
-		{ SaveAIPath, &MapContainer::SaveAIPoints },
-		{ LoadAIPath, &MapContainer::LoadAIPoints },
-		{ AIPlay, &MapContainer::setAIPathActive },
-		{ AIPause, &MapContainer::pauseAllCars },
-		{ AIStop, &MapContainer::stopAllCars },
-		{ AIStopAndResumePosition, &MapContainer::stopAllCarsToSelectedPoint },
-		{ StartRace, &MapContainer::startRace },
+		{ e_AddPoint, &MapContainer::addPoint },
+		{ e_RemovePoint, &MapContainer::removePoint },
+		{ e_MovePoint, &MapContainer::movePoint },
+		{ e_SelectPoint, &MapContainer::selectPoint },
+		{ e_SaveAIPoints, &MapContainer::SaveAIPoints },
+		{ e_LoadAIPoints, &MapContainer::LoadAIPoints },
+		{ e_AIPlay, &MapContainer::AIPlay },
+		{ e_AIPause, &MapContainer::AIPause },
+		{ e_AIStop, &MapContainer::AIStop },
+		{ e_AIStopAndRestartToSelectedPoint, &MapContainer::AIStopAndRestartToSelectedPoint },
+		{ e_StartRace, &MapContainer::startRace },
+		{ e_ConvertPathToAIPoints, &MapContainer::ConvertPathToAIPoints },
+		{ e_ConvertAIPointsToPath, &MapContainer::ConvertAIPointsToPath },
 	
 	};
 
@@ -212,6 +223,7 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 	
 	displayBackground();
 	displayAIPoints();
+	displayCurrentPath();
 }
 
 void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
@@ -304,6 +316,7 @@ void MapContainer::displayAllWorld()
 
 	displayBackground();
 	displayAIPoints();
+	displayCurrentPath();
 }
 
 void MapContainer::displaySector(const Point& point)
@@ -343,6 +356,7 @@ void MapContainer::displaySector(const Point& point)
 	displayLines();
 	displayBackground();
 	displayAIPoints();
+	displayCurrentPath();
 }
 
 void MapContainer::displayBackground()
@@ -492,12 +506,15 @@ void MapContainer::pickTool(float pX, float pY)
 	}
 	else if (pY >= 0.9 && pY <= 0.95 && pX >= -0.5 && pX <= 0.5)
 	{
-		mapEditorSelectedTool = (pX + 0.5) * 20;
+		auto nextMapEditorSelectedTool = (pX + 0.5) * 20;
+		if (tools[mapEditorSelectedPanel].size() >= nextMapEditorSelectedTool)
+			mapEditorSelectedTool = nextMapEditorSelectedTool;
 	}
 
 	if (tools[mapEditorSelectedPanel].size() > mapEditorSelectedTool)
 	{
-		currentToolId = tools[mapEditorSelectedPanel][mapEditorSelectedTool];
+		if(tools[mapEditorSelectedPanel].size() > mapEditorSelectedTool)
+			currentToolId = tools[mapEditorSelectedPanel][mapEditorSelectedTool];
 	}
 }
 void MapContainer::useTool(const Point& point)
@@ -527,21 +544,54 @@ void MapContainer::recalculateAIPointsDistances()
 	}
 }
 
-void MapContainer::addAIPoint(const Point& point)
+void MapContainer::addPoint(const Point& point)
 {
-	AIPoints.push_back({ point, Color(ColorName::BLUE), false });
-	recalculateAIPointsDistances();
+	if(currentPath.empty() || currentPath.back().center.distance2D(point) > 0.1)
+		currentPath.push_back({ point, pointsColor, false });
 }
 
-void MapContainer::removeAIPoint(const Point& point)
+void MapContainer::removePoint(const Point& point)
 {
-	for (int q = 0; q < AIPoints.size(); q++)
+	for (int q = 0; q < currentPath.size(); q++)
 	{
-		if (AIPoints[q].selected)
+		if (currentPath[q].selected)
 		{
-			AIPoints.erase(AIPoints.begin() + q);
+			currentPath.erase(currentPath.begin() + q);
+			if (!currentPath.empty())
+			{
+				if (q >= currentPath.size())
+				{
+					currentPath.back().selected = true;
+				}
+				else
+				{
+					currentPath[q].selected = true;
+				}
+			}
 			break;
 		}
+	}
+}
+
+void MapContainer::ConvertPathToAIPoints(const Point& point)
+{
+	if (!currentPath.empty())
+	{
+		AIPoints = currentPath;
+		currentPath.clear();
+		recalculateAIPointsDistances();
+		std::for_each(AIPoints.begin(), AIPoints.end(), [&](PathStruct& a) {a.color = AIPointsColor; });
+	}
+}
+
+void MapContainer::ConvertAIPointsToPath(const Point& point)
+{
+	if (!AIPoints.empty())
+	{
+		currentPath = AIPoints;
+		AIPoints.clear();
+		recalculateAIPointsDistances();
+		std::for_each(currentPath.begin(), currentPath.end(), [&](PathStruct& a) {a.color = pointsColor; });
 	}
 }
 
@@ -569,9 +619,9 @@ void MapContainer::resetCarPositionsToPoint(int idPoint)
 
 }
 
-void MapContainer::stopAllCars(const Point& point)
+void MapContainer::AIStop(const Point& point)
 {
-	pauseAllCars();
+	AIPause();
 
 	if (AIPoints.size() > 1)
 	{
@@ -581,9 +631,9 @@ void MapContainer::stopAllCars(const Point& point)
 	raceTimer.resetTimer();
 }
 
-void MapContainer::stopAllCarsToSelectedPoint(const Point& point)
+void MapContainer::AIStopAndRestartToSelectedPoint(const Point& point)
 {
-	pauseAllCars();
+	AIPause();
 
 	int selectedPoint = getSelectedPointIndex();
 
@@ -598,7 +648,7 @@ void MapContainer::stopAllCarsToSelectedPoint(const Point& point)
 void MapContainer::startRace(const Point& point)
 {
 	LoadAIPoints();
-	stopAllCars();
+	AIStop();
 	raceTimer.state = RaceTimer::State::Red4;
 	raceTimer.beforeRace = true;
 	raceTimer.startTimer();
@@ -619,40 +669,47 @@ int MapContainer::getSelectedPointIndex()
 	return 0;
 }
 
-void MapContainer::selectAIPoint(const Point& point)
+void MapContainer::selectPoint(const Point& point)
 {
-	for (auto& AIPoint : AIPoints)
+	for (auto& currentPoint : currentPath)
 	{
-		AIPoint.selected = false;
+		currentPoint.selected = false;
 	}
 
-	for (auto& AIPoint : AIPoints)
+	for (auto& currentPoint : currentPath)
 	{
-		if (AIPoint.center.distance2D(point) < 2.0)
+		if (currentPoint.center.distance2D(point) < 1.0)
 		{
-			AIPoint.selected = true;
+			currentPoint.selected = true;
 			break;
 		}
 	}
 }
 
-void MapContainer::moveAIPoint(const Point& point)
+void MapContainer::movePoint(const Point& point)
 {
-	for (auto& AIPoint : AIPoints)
+	for (auto& currentPoint : currentPath)
 	{
-		if (AIPoint.selected == true)
+		if (currentPoint.selected == true)
 		{
-			AIPoint.center = point;
+			currentPoint.center = point;
 			break;
 		}
 	}
 }
 
-void MapContainer::pauseAllCars(const Point& point)
+void MapContainer::AIPause(const Point& point)
 {
 	AIPathActive = false;
 	for (auto& car : MapContainer::Instance()->cars)
 		car.stop();
+}
+
+void MapContainer::AIPlay(const Point& point)
+{
+	AIPathActive = true;
+	raceTimer.startTimer();
+	raceTimer.state = RaceTimer::WaitingToDisappear;
 }
 
 void MapContainer::removeAIPoints()
@@ -661,31 +718,41 @@ void MapContainer::removeAIPoints()
 	recalculateAIPointsDistances();
 }
 
-void MapContainer::displayAIPoints()
+void MapContainer::displayPath(const std::vector<PathStruct>& path, const Color& color)
 {
 	glPointSize(10.0);
-	for (auto& AIPoint : AIPoints)
+	for (auto& pathPoint : path)
 	{
-		if (AIPoint.selected == true)
+		if (pathPoint.selected == true)
 			glPointSize(15.0);
-		
-		glColor3f(AIPoint.color.red, AIPoint.color.green, AIPoint.color.blue);
+
+		glColor3f(pathPoint.color.red, pathPoint.color.green, pathPoint.color.blue);
 
 		glBegin(GL_POINTS);
-		glVertex3f(AIPoint.center.x, AIPoint.center.y, AIPoint.center.z);
+		glVertex3f(pathPoint.center.x, pathPoint.center.y, pathPoint.center.z);
 		glEnd();
 		glPointSize(10.0);
 	}
 	glPointSize(1.0);
 
-	glColor3f(0.0f, 0.0f, 1.0f);
-	for (int q = 0; q < static_cast<int>(AIPoints.size()) - 1; q++)
+	glColor3f(color.red, color.green, color.blue);
+	for (int q = 0; q < static_cast<int>(path.size()) - 1; q++)
 	{
 		glBegin(GL_LINES);
-		glVertex3f(AIPoints[q].center.x, AIPoints[q].center.y, 0.05);
-		glVertex3f(AIPoints[q + 1].center.x, AIPoints[q + 1].center.y, 0.05);
+		glVertex3f(path[q].center.x, path[q].center.y, 0.05);
+		glVertex3f(path[q + 1].center.x, path[q + 1].center.y, 0.05);
 		glEnd();
 	}
+}
+
+void MapContainer::displayCurrentPath()
+{
+	displayPath(currentPath, pointsColor);
+}
+
+void MapContainer::displayAIPoints()
+{
+	displayPath(AIPoints, AIPointsColor);
 }
 
 void MapContainer::SetFuturePoints(const int& futurePoint)
@@ -697,7 +764,7 @@ void MapContainer::ClearFuturePoints()
 {
 	for (auto& AIPoint : AIPoints)
 	{
-		AIPoint.color = Color(ColorName::BLUE);
+		AIPoint.color = AIPointsColor;
 	}
 }
 
@@ -732,7 +799,7 @@ void MapContainer::LoadAIPoints(const Point& point)
 		while (file >> x >> y >> z)
 		{
 			Point newPoint(x, y, z);
-			AIPoints.push_back({ newPoint, Color(ColorName::BLUE), false });
+			AIPoints.push_back({ newPoint, AIPointsColor, false });
 		}
 		recalculateAIPointsDistances();
 	}
@@ -741,7 +808,7 @@ void MapContainer::LoadAIPoints(const Point& point)
 
 
 	std::vector<Point> AIpointsPositions;
-	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const AIPointStruct& data) {AIpointsPositions.push_back(data.center); });
+	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const PathStruct& data) {AIpointsPositions.push_back(data.center); });
 
 	raceTimer.setAIpointsPosition(AIpointsPositions);
 }
@@ -761,7 +828,7 @@ void MapContainer::updateRaceTimer()
 	}
 	else if (raceTimer.state == RaceTimer::State::Green)
 	{
-		Instance().get()->setAIPathActive();
+		Instance().get()->AIPlay();
 		raceTimer.beforeRace = false;
 		raceTimer.resetTimer();
 		raceTimer.startTimer();
