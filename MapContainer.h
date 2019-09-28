@@ -29,6 +29,15 @@ public:
 		e_ConvertPathToAIPoints,
 		e_ConvertAIPointsToPath,
 		e_RemovePoints,
+		e_AddSplinePoint,
+		e_RemoveSplinePoint,
+		e_MoveSplinePoint,
+		e_SelectSplinePoint,
+		e_RemoveSplinePoints,
+		e_DivideSpline,
+		e_IncreaseSplineSubpoints,
+		e_DecreaseSplineSubpoints,
+		e_ConvertSplineToCurrentPath,
 	};
 
 
@@ -37,6 +46,12 @@ public:
 		Point center;
 		Color color;
 		bool selected;
+	};
+
+	struct SplineStruct
+	{
+		Spline spline;
+		int selected = -1;;
 	};
 
 	static void Init(int w, int h);
@@ -61,6 +76,15 @@ public:
 	void startRace(const Point& point = Point());
 	void ConvertPathToAIPoints(const Point& point = Point());
 	void ConvertAIPointsToPath(const Point& point = Point());
+	void AddSplinePoint(const Point& point);
+	void RemoveSplinePoint(const Point& point = Point());
+	void MoveSplinePoint(const Point& point);
+	void SelectSplinePoint(const Point& point);
+	void RemoveSplinePoints(const Point& point = Point());
+	void DivideSpline(const Point& point = Point());
+	void IncreaseSplineSubpoints(const Point& point = Point());
+	void DecreaseSplineSubpoints(const Point& point = Point());
+	void ConvertSplineToCurrentPath(const Point& point = Point());
 
 	void resetCarPositionsToPoint(int idPoint);
 	void movePoint(const Point& point);
@@ -88,6 +112,7 @@ private:
 	static void displayPath(const std::vector<PathStruct>& path, const Color& color);
 	static void displayAIPoints();
 	static void displayCurrentPath();
+	static void displayCurrentSpline();
 	static void recalculateAIPointsDistances();
 
 public:
@@ -95,6 +120,7 @@ public:
 	static std::vector<Car> cars;
 	static std::vector<PathStruct> currentPath;
 	static std::vector<PathStruct> AIPoints;
+	static SplineStruct currentSpline;
 
 private:
 
@@ -134,6 +160,8 @@ private:
 
 	static Color AIPointsColor;
 	static Color pointsColor;
+	static Color splinePointsColor;
+	static Color splineSubointsColor;
 
 	static std::unique_ptr<MapContainer> _instance;
 

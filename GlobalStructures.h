@@ -31,20 +31,7 @@ public:
 	float blue;
 
 private:
-	std::vector<ColorData> colors{
-		{ ColorName::WHITE, 1.0f, 1.0f, 1.0f },
-		{ ColorName::BLACK, 0.0f, 0.0f, 0.0f },
-		{ ColorName::LIGHT_GRAY, 0.8f, 0.8f, 0.8f },
-		{ ColorName::DARK_GRAY, 0.2f, 0.2f, 0.2f },
-		{ ColorName::GRAY, 0.5f, 0.5f, 0.5f },
-		{ ColorName::RED, 1.0f, 0.0f, 0.0f },
-		{ ColorName::GREEN, 0.0f, 1.0f, 0.0f },
-		{ ColorName::BLUE, 0.0f, 0.0f, 1.0f },
-		{ ColorName::ORANGE, 1.0f, 0.5f, 0.0f },
-		{ ColorName::BROWN, 0.5f, 0.25f, 0.0f },
-		{ ColorName::YELLOW, 1.0f, 1.0f, 0.0f },
-		{ ColorName::PINK, 1.0f, 0.0f, 0.5f },
-	};
+	static std::vector<ColorData> colors;
 };
 
 struct Point
@@ -142,4 +129,14 @@ struct Force
 
 	Point center;
 	vector2D vector;
+};
+
+struct Spline
+{
+
+	void push_back(const Point& point);
+	unsigned int size();
+
+	std::vector<Point> basePoints;
+	std::vector<Point> points;
 };

@@ -15,6 +15,7 @@ std::unique_ptr<MapContainer> MapContainer::_instance;
 std::vector<Car> MapContainer::cars;
 std::vector<MapContainer::PathStruct> MapContainer::currentPath;
 std::vector<MapContainer::PathStruct> MapContainer::AIPoints;
+MapContainer::SplineStruct MapContainer::currentSpline;
 std::vector<float> MapContainer::AIPointsDistances;
 RaceTimer MapContainer::raceTimer;
 int MapContainer::w;
@@ -26,6 +27,8 @@ std::vector<std::vector<int>> MapContainer::tools = MapContainer::createTools();
 std::map<int, void (MapContainer::*)(const Point&)> MapContainer::toolsMap = createToolsMap();
 Color MapContainer::AIPointsColor = Color(ColorName::ORANGE);
 Color MapContainer::pointsColor = Color(ColorName::BLUE);
+Color MapContainer::splinePointsColor = Color(ColorName::PINK);
+Color MapContainer::splineSubointsColor = Color(ColorName::BLACK);
 
 std::vector<std::vector<int>> MapContainer::createTools()
 {
@@ -37,6 +40,15 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_MovePoint,
 		MapContainer::e_SelectPoint,
 		MapContainer::e_RemovePoints,
+		MapContainer::e_AddSplinePoint,
+		MapContainer::e_RemoveSplinePoint,
+		MapContainer::e_MoveSplinePoint,
+		MapContainer::e_SelectSplinePoint,
+		MapContainer::e_RemoveSplinePoints,
+		MapContainer::e_DivideSpline,
+		MapContainer::e_IncreaseSplineSubpoints,
+		MapContainer::e_DecreaseSplineSubpoints,
+		MapContainer::e_ConvertSplineToCurrentPath,
 	};
 	tools.push_back(PathTools);
 
@@ -77,6 +89,15 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_ConvertPathToAIPoints, &MapContainer::ConvertPathToAIPoints },
 		{ e_ConvertAIPointsToPath, &MapContainer::ConvertAIPointsToPath },
 		{ e_RemovePoints, &MapContainer::removePoints },
+		{ e_AddSplinePoint, &MapContainer::AddSplinePoint },
+		{ e_RemoveSplinePoint, &MapContainer::RemoveSplinePoint },
+		{ e_MoveSplinePoint, &MapContainer::MoveSplinePoint },
+		{ e_SelectSplinePoint, &MapContainer::SelectSplinePoint },
+		{ e_RemoveSplinePoints, &MapContainer::RemoveSplinePoints },
+		{ e_DivideSpline, &MapContainer::DivideSpline },
+		{ e_IncreaseSplineSubpoints, &MapContainer::IncreaseSplineSubpoints },
+		{ e_DecreaseSplineSubpoints, &MapContainer::DecreaseSplineSubpoints },
+		{ e_ConvertSplineToCurrentPath, &MapContainer::ConvertSplineToCurrentPath },
 	
 	};
 
@@ -226,6 +247,7 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 	displayBackground();
 	displayAIPoints();
 	displayCurrentPath();
+	displayCurrentSpline();
 }
 
 void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
@@ -319,6 +341,7 @@ void MapContainer::displayAllWorld()
 	displayBackground();
 	displayAIPoints();
 	displayCurrentPath();
+	displayCurrentSpline();
 }
 
 void MapContainer::displaySector(const Point& point)
@@ -359,6 +382,7 @@ void MapContainer::displaySector(const Point& point)
 	displayBackground();
 	displayAIPoints();
 	displayCurrentPath();
+	displayCurrentSpline();
 }
 
 void MapContainer::displayBackground()
@@ -597,6 +621,100 @@ void MapContainer::ConvertAIPointsToPath(const Point& point)
 	}
 }
 
+void MapContainer::AddSplinePoint(const Point& point)
+{
+	currentSpline.spline.push_back(point);
+}
+
+void MapContainer::RemoveSplinePoint(const Point& point)
+{
+	if (currentSpline.selected >= 0 && currentSpline.selected < currentSpline.spline.size())
+	{
+		currentSpline.spline.points.erase(currentSpline.spline.points.begin() + currentSpline.selected);
+
+		if (!currentSpline.spline.points.empty())
+		{
+			if (currentSpline.selected >= currentSpline.spline.size())
+			{
+				currentSpline.selected = currentSpline.spline.size() - 1;
+			}
+		}
+		else
+		{
+			currentSpline.selected = -1;
+		}
+	}
+
+	for (int q = 0; q < currentPath.size(); q++)
+	{
+		if (currentPath[q].selected)
+		{
+			currentPath.erase(currentPath.begin() + q);
+			if (!currentPath.empty())
+			{
+				if (q >= currentPath.size())
+				{
+					currentPath.back().selected = true;
+				}
+				else
+				{
+					currentPath[q].selected = true;
+				}
+			}
+			break;
+		}
+	}
+}
+
+void MapContainer::MoveSplinePoint(const Point& point)
+{
+	if (currentSpline.selected >= 0 && currentSpline.selected < currentSpline.spline.size())
+	{
+		currentSpline.spline.points[currentSpline.selected] = point;
+	}
+}
+
+void MapContainer::SelectSplinePoint(const Point& point)
+{
+	currentSpline.selected = -1;
+
+	for (int q = 0; q < currentSpline.spline.points.size(); q++)
+	{
+		if (currentSpline.spline.points[q].distance2D(point) < 1.0)
+		{
+			currentSpline.selected = q;
+			break;
+		}
+	}
+}
+
+void MapContainer::RemoveSplinePoints(const Point& point)
+{
+	currentSpline.spline.points.clear();
+	currentSpline.selected = -1;
+}
+
+void MapContainer::DivideSpline(const Point& point)
+{
+
+}
+
+void MapContainer::IncreaseSplineSubpoints(const Point& point)
+{
+
+}
+
+void MapContainer::DecreaseSplineSubpoints(const Point& point)
+{
+
+}
+
+void MapContainer::ConvertSplineToCurrentPath(const Point& point)
+{
+
+}
+
+
 void MapContainer::resetCarPositionsToPoint(int idPoint)
 {
 	vector2D direction(AIPoints[idPoint + 1].center, AIPoints[idPoint].center);
@@ -754,6 +872,22 @@ void MapContainer::displayCurrentPath()
 void MapContainer::displayAIPoints()
 {
 	displayPath(AIPoints, AIPointsColor);
+}
+
+void MapContainer::displayCurrentSpline()
+{
+	std::vector<PathStruct> splinePath;
+	std::for_each(currentSpline.spline.points.begin(), currentSpline.spline.points.end(), [&](const Point& p)
+	{
+		splinePath.push_back({p, splinePointsColor, false });
+	});
+
+	if (currentSpline.selected >= 0 && currentSpline.selected < currentSpline.spline.size())
+	{
+		splinePath[currentSpline.selected].selected = true;
+	}
+
+	displayPath(splinePath, splinePointsColor);
 }
 
 void MapContainer::SetFuturePoints(const int& futurePoint)

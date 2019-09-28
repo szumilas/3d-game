@@ -1,5 +1,21 @@
 #include "GlobalStructures.h"
 
+std::vector<Color::ColorData> Color::colors{
+	{ ColorName::WHITE, 1.0f, 1.0f, 1.0f },
+	{ ColorName::BLACK, 0.0f, 0.0f, 0.0f },
+	{ ColorName::LIGHT_GRAY, 0.8f, 0.8f, 0.8f },
+	{ ColorName::DARK_GRAY, 0.2f, 0.2f, 0.2f },
+	{ ColorName::GRAY, 0.5f, 0.5f, 0.5f },
+	{ ColorName::RED, 1.0f, 0.0f, 0.0f },
+	{ ColorName::GREEN, 0.0f, 1.0f, 0.0f },
+	{ ColorName::BLUE, 0.0f, 0.0f, 1.0f },
+	{ ColorName::ORANGE, 1.0f, 0.5f, 0.0f },
+	{ ColorName::BROWN, 0.5f, 0.25f, 0.0f },
+	{ ColorName::YELLOW, 1.0f, 1.0f, 0.0f },
+	{ ColorName::PINK, 1.0f, 0.0f, 0.5f },
+	{ ColorName::VIOLET, 0.62f, 0.0f, 0.72f },
+};
+
 Color::Color()
 {
 	red = 0.0f;
@@ -323,4 +339,13 @@ Force::Force()
 Force::Force(Point center, vector2D vector) : center(center), vector(vector)
 {
 
+}
+
+void Spline::push_back(const Point& point)
+{
+	points.push_back(point);
+}
+unsigned int Spline::size()
+{
+	return points.size();
 }

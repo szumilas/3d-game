@@ -119,6 +119,7 @@ enum class ColorName : long
 	BROWN,
 	YELLOW,
 	PINK,
+	VIOLET,
 };
 
 enum
