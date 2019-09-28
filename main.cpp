@@ -558,7 +558,7 @@ void Update()
 			orbit.activateMovingXY();
 	}
 
-	if (leftMouseButtonClicked)
+	if (!F1Pressed && leftMouseButtonClicked)
 	{
 		if (1.0 - static_cast<float>(mouseYPos) / windowHeight > 0.9)
 			MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowWidth - 0.5) * windowWidth / windowHeight, 1.0 - static_cast<float>(mouseYPos) / windowHeight);
