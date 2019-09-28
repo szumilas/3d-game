@@ -140,6 +140,8 @@ GLboolean F2Released = true;
 GLboolean F3Released = true;
 
 GLboolean leftMouseButtonDown = false;
+GLboolean leftMouseButtonDownPrevious = false;
+GLboolean leftMouseButtonClicked = false;
 GLboolean rightMouseButtonDown = false;
 GLboolean scrollMouseButtonDown = false;
 GLboolean scrollUpMouse = false;
@@ -404,6 +406,7 @@ void mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON)
 	{
+		leftMouseButtonDownPrevious = leftMouseButtonDown;
 		leftMouseButtonDown = (state == GLUT_DOWN);
 	}
 	else if (button == GLUT_RIGHT_BUTTON)
@@ -480,6 +483,14 @@ void SpecialKeysUp(int key, int x, int y)
 
 void Update()
 {
+	if (!leftMouseButtonDown && leftMouseButtonDownPrevious)
+	{
+		leftMouseButtonDownPrevious = false;
+		leftMouseButtonClicked = true;
+	}
+	else
+		leftMouseButtonClicked = false;
+
 	KeyboardManager::Instance()->getKeys();
 
 	if (upPressed)
@@ -545,7 +556,11 @@ void Update()
 	{
 		if (F1Pressed)
 			orbit.activateMovingXY();
-		else if (1.0 - static_cast<float>(mouseYPos) / windowHeight > 0.9)
+	}
+
+	if (leftMouseButtonClicked)
+	{
+		if (1.0 - static_cast<float>(mouseYPos) / windowHeight > 0.9)
 			MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowWidth - 0.5) * windowWidth / windowHeight, 1.0 - static_cast<float>(mouseYPos) / windowHeight);
 		else
 			MapContainer::Instance()->useTool(orbit.getFlatCursor());
