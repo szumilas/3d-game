@@ -36,6 +36,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_RemovePoint,
 		MapContainer::e_MovePoint,
 		MapContainer::e_SelectPoint,
+		MapContainer::e_RemovePoints,
 	};
 	tools.push_back(PathTools);
 
@@ -75,6 +76,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_StartRace, &MapContainer::startRace },
 		{ e_ConvertPathToAIPoints, &MapContainer::ConvertPathToAIPoints },
 		{ e_ConvertAIPointsToPath, &MapContainer::ConvertAIPointsToPath },
+		{ e_RemovePoints, &MapContainer::removePoints },
 	
 	};
 
@@ -712,10 +714,9 @@ void MapContainer::AIPlay(const Point& point)
 	raceTimer.state = RaceTimer::WaitingToDisappear;
 }
 
-void MapContainer::removeAIPoints()
+void MapContainer::removePoints(const Point& point)
 {
-	AIPoints.clear();
-	recalculateAIPointsDistances();
+	currentPath.clear();
 }
 
 void MapContainer::displayPath(const std::vector<PathStruct>& path, const Color& color)
@@ -794,7 +795,7 @@ void MapContainer::LoadAIPoints(const Point& point)
 
 	if (file)
 	{
-		removeAIPoints();
+		AIPoints.clear();
 		float x, y, z;
 		while (file >> x >> y >> z)
 		{

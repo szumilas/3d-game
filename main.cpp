@@ -541,7 +541,7 @@ void Update()
 	{
 		orbit.changeAlpha();
 		if(F1Pressed)
-			MapContainer::Instance()->removeAIPoints();
+			MapContainer::Instance()->removePoints();
 	}
 	else if (scrollMouseButtonDown)
 	{

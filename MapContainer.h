@@ -28,6 +28,7 @@ public:
 		e_StartRace,
 		e_ConvertPathToAIPoints,
 		e_ConvertAIPointsToPath,
+		e_RemovePoints,
 	};
 
 
@@ -63,7 +64,7 @@ public:
 
 	void resetCarPositionsToPoint(int idPoint);
 	void movePoint(const Point& point);
-	void removeAIPoints();
+	void removePoints(const Point& point = Point());
 	void AIPlay(const Point& point = Point());
 	bool getAIPathActive() { return AIPathActive; }
 	void AIPause(const Point& point = Point());
