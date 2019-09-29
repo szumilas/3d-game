@@ -31,7 +31,7 @@ void RaceTimer::display()
 		std::string time = std::to_string(carData.timeDelay / 1000 / 60) + ":" + std::to_string(100 + (carData.timeDelay / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + carData.timeDelay / 10).substr(1, 2);
 		if (carData.timeDelay < 10)
 			time = "-:--.--";
-		Screen2D::Instance()->addTestValueToPrint(curentColor, -90, 5 + possition * 3, carDB.at(carData.car->carBrand).name + " " + time, &(Screen2D::Instance()->squada_one_regular));
+		Screen2D::Instance()->addTestValueToPrint(curentColor, -80, 5 + possition * 3, carDB.at(carData.car->carBrand).name + " " + time, &(Screen2D::Instance()->squada_one_regular));
 		possition++;
 	}
 }

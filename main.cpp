@@ -208,7 +208,7 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, true), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt), Car(CarBrand::SubaruBRZ, -10, -10, &camera.center, &camera.lookAt), Car(CarBrand::RollsRoycePhantom, -15, -15, &camera.center, &camera.lookAt), Car(CarBrand::LamborghiniHuracan, -20, -20, &camera.center, &camera.lookAt) };
+		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, false), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt), Car(CarBrand::SubaruBRZ, -10, -10, &camera.center, &camera.lookAt), Car(CarBrand::RollsRoycePhantom, -15, -15, &camera.center, &camera.lookAt), Car(CarBrand::LamborghiniHuracan, -20, -20, &camera.center, &camera.lookAt) };
 		MapContainer::Instance()->initRaceTimer();
 
 		carGauge.load(&MapContainer::Instance()->cars[1]);
@@ -561,12 +561,12 @@ void Update()
 	if (!F1Pressed && leftMouseButtonClicked)
 	{
 		if (1.0 - static_cast<float>(mouseYPos) / windowHeight > 0.9)
-			MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowWidth - 0.5) * windowWidth / windowHeight, 1.0 - static_cast<float>(mouseYPos) / windowHeight);
+			MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowRealWidth - 0.5) * windowRealWidth / windowRealHeight, 1.0 - static_cast<float>(mouseYPos) / windowRealHeight);
 		else
 			MapContainer::Instance()->useTool(orbit.getFlatCursor());
 	}
 
-	orbit.calculateFlatCursorPosition(windowWidth, windowHeight, mouseXPos, mouseYPos, angle);
+	orbit.calculateFlatCursorPosition(windowRealWidth, windowRealHeight, mouseXPos, mouseYPos, angle);
 
 
 	scrollUpMouse = false;
