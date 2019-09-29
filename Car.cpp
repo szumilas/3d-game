@@ -130,7 +130,7 @@ void Car::move()
 
 	if (humanCar)
 	{
-		Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "wheel velocity: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "wheel velocity: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
 	}
 	//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 80, "x: " + std::to_string(position.x) + "   y: " + std::to_string(position.y), &(Screen2D::Instance()->roboto_modo_regular));
 	//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, -50, 80, "a.x: " + std::to_string(acceleration.x) + "   a.y: " + std::to_string(acceleration.y), &(Screen2D::Instance()->roboto_modo_regular));

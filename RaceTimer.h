@@ -26,6 +26,8 @@ public:
 		int timeDelay = 0;
 		bool checkboxVisited = false;
 		int lapsDone = 0;
+		bool useForStats = false;
+		std::vector<int> lapTimes;
 	};
 
 	void init(std::vector<Car>* cars);
@@ -44,6 +46,7 @@ private:
 	int calculateCurrentPositionId(const RaceTimerData& leader);
 	void checkCheckboxes();
 	void countLaps();
+	void setCarForStats();
 
 public:
 
@@ -57,6 +60,7 @@ private:
 
 	std::vector<RaceTimerData> carsData;
 	std::vector<Point> AIpointsPositions;
+	RaceTimerData* carForStats;
 
 	ColorName AIcolor = ColorName::DARK_GRAY;
 	ColorName HumanColor = ColorName::RED;

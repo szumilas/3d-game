@@ -8,7 +8,11 @@ void RaceTimer::init(std::vector<Car>* cars)
 	for (auto& car : *cars)
 	{
 		carsData.push_back({ &car });
+		if (car.humanCar)
+			carsData.back().useForStats = true;
 	}
+
+	setCarForStats();
 }
 
 void RaceTimer::setAIpointsPosition(std::vector<Point> AIpointsPositions)
@@ -16,8 +20,37 @@ void RaceTimer::setAIpointsPosition(std::vector<Point> AIpointsPositions)
 	RaceTimer::AIpointsPositions = AIpointsPositions;
 }
 
+void RaceTimer::setCarForStats()
+{
+	for (auto& carData : carsData)
+	{
+		if (carData.useForStats)
+		{
+			carForStats = &carData;
+			return;
+		}
+	}
+	carForStats = &carsData.back();
+}
+
 void RaceTimer::display()
 {
+	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 95, "Lap " + std::to_string(carForStats->lapsDone + 1) + "/8", &(Screen2D::Instance()->squada_one_regular_big));
+
+	long currentLapTime = 0;
+	if(!carForStats->lapTimes.empty())
+		currentLapTime = clock() - carForStats->lapTimes[carForStats->lapsDone];
+	std::string s_currentLapTime = std::to_string(currentLapTime / 1000 / 60) + ":" + std::to_string(100 + (currentLapTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (currentLapTime / 10) % 100).substr(1, 2);
+	auto raceTime = clock() - begin_time;
+	std::string s_raceTime = std::to_string(raceTime / 1000 / 60) + ":" + std::to_string(100 + (raceTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (raceTime / 10) % 100).substr(1, 2);
+	if (begin_time == 0 || beforeRace)
+	{
+		s_currentLapTime = "0:00.00";
+		s_raceTime = "0:00.00";
+	}
+	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 92, s_currentLapTime, &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, 62, 95, s_raceTime, &(Screen2D::Instance()->squada_one_regular_big));
+
 	auto possition = 0;
 	for (auto& carData : carsData)
 	{
@@ -28,10 +61,13 @@ void RaceTimer::display()
 		else
 			curentColor = AIcolor;
 
-		std::string time = std::to_string(carData.timeDelay / 1000 / 60) + ":" + std::to_string(100 + (carData.timeDelay / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + carData.timeDelay / 10).substr(1, 2);
+		std::string time = std::to_string(carData.timeDelay / 1000 / 60) + ":" + std::to_string(100 + (carData.timeDelay / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (carData.timeDelay / 10) % 100).substr(1, 2);
 		if (carData.timeDelay < 10)
 			time = "-:--.--";
-		Screen2D::Instance()->addTestValueToPrint(curentColor, -80, 5 + possition * 3, carDB.at(carData.car->carBrand).name + " " + time, &(Screen2D::Instance()->squada_one_regular));
+
+		Screen2D::Instance()->addTestValueToPrint(curentColor, -80, 5 + possition * 3, time, &(Screen2D::Instance()->squada_one_regular));
+		Screen2D::Instance()->addTestValueToPrint(curentColor, -72, 5 + possition * 3, carDB.at(carData.car->carBrand).name, &(Screen2D::Instance()->squada_one_regular));
+		
 		possition++;
 	}
 }
@@ -60,7 +96,10 @@ void RaceTimer::update()
 			carData.AISegmentDone = getAISegmentDoneValue(carData.nextAIPoint, carData.car->position);
 		}
 
+		countLaps();
+
 		std::sort(carsData.begin(), carsData.end(), [](const RaceTimerData& d1, const RaceTimerData& d2) {return (d1.lapsDone < d2.lapsDone) || (d1.lapsDone == d2.lapsDone && d1.nextAIPoint < d2.nextAIPoint) || (d1.lapsDone == d2.lapsDone && d1.nextAIPoint == d2.nextAIPoint && d1.AISegmentDone < d2.AISegmentDone); });
+		setCarForStats();
 
 		setLeaderTime(carsData.back());
 
@@ -71,7 +110,6 @@ void RaceTimer::update()
 
 		carsData.back().timeDelay = 0;
 
-		countLaps();
 		checkCheckboxes();
 	}
 }
@@ -87,12 +125,14 @@ void RaceTimer::checkCheckboxes()
 
 void RaceTimer::countLaps()
 {
+	auto currentTime = clock();
 	for (auto& carData : carsData)
 	{
 		if (carData.checkboxVisited && carData.nextAIPoint == 0)
 		{
 			carData.checkboxVisited = false;
 			carData.lapsDone++;
+			carData.lapTimes.push_back(currentTime);
 		}
 	}
 }
@@ -163,8 +203,15 @@ float RaceTimer::getAISegmentDoneValue(int nextAIPoint, const Point& position)
 
 void RaceTimer::startTimer()
 {
-	if(begin_time == 0)
+	if (begin_time == 0)
+	{
 		begin_time = clock();
+		for (auto& carData : carsData)
+		{
+			carData.lapTimes.clear();
+			carData.lapTimes.push_back(begin_time);
+		}
+	}
 }
 
 void RaceTimer::resetTimer()

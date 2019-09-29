@@ -43,6 +43,7 @@ public:
 	freetype::font_data stocky;
 	freetype::font_data roboto_modo_regular;
 	freetype::font_data squada_one_regular;
+	freetype::font_data squada_one_regular_big;
 
 
 private:

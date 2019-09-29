@@ -731,11 +731,14 @@ void MapContainer::ConvertSplineToCurrentPath(const Point& point)
 
 void MapContainer::ConvertPathToRaceBarriers(const Point& point)
 {
-	for (int q = 0; q < currentPath.size() - 1; q++)
+	if (currentPath.size() > 1)
 	{
-		if (currentPath[q].center.distance2D(currentPath[q + 1].center) > 1.5)
+		for (int q = 0; q < currentPath.size() - 1; q++)
 		{
-			raceBarriers.push_back({ currentPath[q].center, currentPath[q + 1].center });
+			if (currentPath[q].center.distance2D(currentPath[q + 1].center) > 1.5)
+			{
+				raceBarriers.push_back({ currentPath[q].center, currentPath[q + 1].center });
+			}
 		}
 	}
 }

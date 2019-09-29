@@ -109,7 +109,7 @@ std::vector<Force> PacejkaModel::calculateForces(int drivingDir, bool tryAcceler
 
 	if (humanCar)
 	{
-		Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
+		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 70, "wheel velocity: " + std::to_string(allWheels[frontLeftWheel].angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 65, "car velocity x: " + std::to_string(vCarGlobal.x) + "y: " + std::to_string(vCarGlobal.y), &(Screen2D::Instance()->roboto_modo_regular));
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::BLACK, -100, 60, "car w: " + std::to_string(angularVelocity), &(Screen2D::Instance()->roboto_modo_regular));
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::YELLOW, -100, 55, "[ANGULAR VELOCITY]", &(Screen2D::Instance()->roboto_modo_regular));

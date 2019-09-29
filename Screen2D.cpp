@@ -36,7 +36,8 @@ void Screen2D::loadFonts()
 	digital_counter.init("data/digital_counter_7.ttf", 1.0f / 53 * height);
 	stocky.init("data/stocky.ttf", 1.0f / 53 * height * 2);
 	roboto_modo_regular.init("data/RobotoMono-Bold.ttf", 1.0f / 53 * height * 1.5);
-	squada_one_regular.init("data/SquadaOne-Regular.ttf", 1.0f / 53 * height * 1.5);
+	squada_one_regular.init("data/SquadaOne-Regular.ttf", 1.0f / 53 * height * 1.0);
+	squada_one_regular_big.init("data/SquadaOne-Regular.ttf", 1.0f / 53 * height * 1.5);
 }
 
 void Screen2D::display()
