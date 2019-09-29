@@ -75,6 +75,8 @@ enum class Textures : long
 	no_texture,
 	map_editor_panel,
 	counter,
+	meta,
+	race_barrier,
 };
 
 enum class Sounds : long

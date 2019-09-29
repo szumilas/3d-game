@@ -15,6 +15,7 @@ public:
 	MapObject() {};
 	MapObject(long long id) { MapObject::id = id; };
 	virtual void calculateXYfromRef(const std::map<long long, node> &nodes);
+	virtual void calculateXYfromPoints(const std::vector<Point>& points);
 	virtual void calculateFinalGeometry();
 	void calculateBoundingCoordinates();
 

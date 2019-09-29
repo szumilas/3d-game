@@ -76,6 +76,10 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::car_gauge_330, -1.0f, -1.0f, "car_gauge_330.png" },
 	{ Textures::elm_tree, -1.0f, -1.0f, "elm_tree.png" },
 	{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
+	{ Textures::map_editor_panel, 1.0f, 1.0f, "map_editor_panel.png" },
+	{ Textures::counter, 1.0f, 1.0f, "counter.png" },
+	{ Textures::meta, 0.972f, 0.972f, "meta.png" },
+	{ Textures::race_barrier, 2.0f, 1.2f, "race_barrier.png" },
 };
 
 void TextureManager::DeInit()
@@ -113,11 +117,11 @@ void TextureManager::readTextures()
 		glGenTextures(1, &textureIdCreated); /* Texture name generation */
 		glBindTexture(GL_TEXTURE_2D, textureIdCreated); /* Binding of texture name */
 		
-		if (1 || texture.textureName == Textures::crossing || texture.textureName == Textures::fence || texture.textureName == Textures::car_gauge)
+		if (2 || texture.textureName == Textures::meta || texture.textureName == Textures::race_barrier || texture.textureName == Textures::counter || texture.textureName == Textures::meta || texture.textureName == Textures::crossing || texture.textureName == Textures::fence || texture.textureName == Textures::car_gauge)
 		{
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); /* We will use linear interpolation for magnification filter */
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); /* We will use linear interpolation for minifying filter */
-
+	
 			glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
 				0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
 		}
@@ -128,7 +132,7 @@ void TextureManager::readTextures()
 		
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
+	
 			gluBuild2DMipmaps(GL_TEXTURE_2D, 4, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
 		
 		}
@@ -137,7 +141,7 @@ void TextureManager::readTextures()
 		texture.idTexture = textureIdCreated;
 		//textureIds.({ texturePath.first.textureName, { texturePath.first.textureName, texturePath.first.realWidth, texturePath.first.realHeight, textureName} });
 		ilDeleteImages(1, &textureIdCreated); /* Because we have already copied image data into texture data we can release memory used by image. */
-
+	
 	}
 
 	std::sort(textures.begin(), textures.end(), [](TextureData& a, TextureData& b) { return a.textureName < b.textureName; });

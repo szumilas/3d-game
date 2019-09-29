@@ -1,4 +1,7 @@
 #include "MapContainer.h"
+
+#include "MapManager.h"
+#include "MetaLine.h"
 #include <fstream>
 #include <algorithm>
 
@@ -15,6 +18,8 @@ std::unique_ptr<MapContainer> MapContainer::_instance;
 std::vector<Car> MapContainer::cars;
 std::vector<MapContainer::PathStruct> MapContainer::currentPath;
 std::vector<MapContainer::PathStruct> MapContainer::AIPoints;
+std::vector<std::pair<Point, Point>> MapContainer::raceBarriers;
+std::pair<Point, Point> MapContainer::meta;
 MapContainer::SplineStruct MapContainer::currentSpline;
 std::vector<float> MapContainer::AIPointsDistances;
 RaceTimer MapContainer::raceTimer;
@@ -62,6 +67,8 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_AIStop,
 		MapContainer::e_AIStopAndRestartToSelectedPoint,
 		MapContainer::e_StartRace,
+		MapContainer::e_ConvertPathToRaceBarriers,
+		MapContainer::e_ConvertPathToMeta,
 	};
 	tools.push_back(AITools);
 
@@ -98,6 +105,8 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_IncreaseSplineSubpoints, &MapContainer::IncreaseSplineSubpoints },
 		{ e_DecreaseSplineSubpoints, &MapContainer::DecreaseSplineSubpoints },
 		{ e_ConvertSplineToCurrentPath, &MapContainer::ConvertSplineToCurrentPath },
+		{ e_ConvertPathToRaceBarriers, &MapContainer::ConvertPathToRaceBarriers },
+		{ e_ConvertPathToMeta, &MapContainer::ConvertPathToMeta },
 	
 	};
 
@@ -252,6 +261,7 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 
 void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
 {
+	mapObjectSections.clear();
 	mapObjectSections.resize(100);
 	mapCollidableObjectSections.resize(100);
 
@@ -293,6 +303,15 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 	deltaX = maxX - minX;
 	deltaY = maxY - minY;
 
+	addObjectsToSections(mapObjects);
+	
+	if(!mapObjects.empty())
+		background = &mapObjects.back();
+
+}
+
+void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
+{
 	for (auto& mapObject : mapObjects)
 	{
 		std::vector<std::pair<int, int>> sectionsXY;
@@ -301,7 +320,7 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 		{
 			for (auto& point : polygon.points)
 			{
-				sectionsXY.push_back({(point.x - minX) * 100 / deltaX, (point.y - minY) * 100 / deltaY});
+				sectionsXY.push_back({ (point.x - minX) * 100 / deltaX, (point.y - minY) * 100 / deltaY });
 			}
 		}
 
@@ -316,12 +335,7 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 				mapCollidableObjectSections[sectionXY.first][sectionXY.second].push_back(&mapObject);
 			}
 		}
-
 	}
-	
-	if(!mapObjects.empty())
-		background = &mapObjects.back();
-
 }
 
 void MapContainer::displayAllWorld()
@@ -715,6 +729,25 @@ void MapContainer::ConvertSplineToCurrentPath(const Point& point)
 	currentSpline = SplineStruct{};
 }
 
+void MapContainer::ConvertPathToRaceBarriers(const Point& point)
+{
+	for (int q = 0; q < currentPath.size() - 1; q++)
+	{
+		if (currentPath[q].center.distance2D(currentPath[q + 1].center) > 1.5)
+		{
+			raceBarriers.push_back({ currentPath[q].center, currentPath[q + 1].center });
+		}
+	}
+}
+
+void MapContainer::ConvertPathToMeta(const Point& point)
+{
+	if (currentPath.size() == 2)
+	{
+		meta.first = currentPath[0].center;
+		meta.second = currentPath[1].center;
+	}
+}
 
 void MapContainer::resetCarPositionsToPoint(int idPoint)
 {
@@ -773,6 +806,33 @@ void MapContainer::startRace(const Point& point)
 	raceTimer.state = RaceTimer::State::Red4;
 	raceTimer.beforeRace = true;
 	raceTimer.startTimer();
+
+	createRaceObjects();
+}
+
+void MapContainer::createRaceObjects()
+{
+	MapManager::Instance()->raceObjects.clear();
+
+	for (auto& raceBarrier : raceBarriers)
+	{
+		MapObject raceBarierObject;
+		raceBarierObject.calculateXYfromPoints(std::vector<Point>{raceBarrier.first, raceBarrier.second});
+		raceBarierObject.barrier = "race_barrier";
+		Barrier raceBarier(raceBarierObject);
+		raceBarier.calculateFinalGeometry();
+
+		MapManager::Instance()->raceObjects.push_back(std::make_unique<Barrier>(Barrier(raceBarier)));
+	}
+
+	MapObject metaObject;
+	metaObject.calculateXYfromPoints(std::vector<Point>{meta.first, meta.second});
+	MetaLine metaLine(metaObject);
+	meta = metaLine.getMetaLinePoints();
+
+	MapManager::Instance()->raceObjects.push_back(std::make_unique<Crossing>(Crossing(metaLine)));
+
+	MapContainer::addObjectsToSections(MapManager::Instance()->raceObjects);
 }
 
 int MapContainer::getSelectedPointIndex()
@@ -945,10 +1005,17 @@ void MapContainer::SaveAIPoints(const Point& point)
 	{
 		if (AIPoint.center.distance2D(previous) > 1)
 		{
-			file << AIPoint.center.x << " " << AIPoint.center.y << " " << AIPoint.center.z << "\n";
+			file << "p " << AIPoint.center.x << " " << AIPoint.center.y << " " << AIPoint.center.z << "\n";
 			previous = AIPoint.center;
 		}
 	}
+
+	for (auto& raceBarrier : raceBarriers)
+	{
+		file << "b " << raceBarrier.first.x << " " << raceBarrier.first.y << " " << raceBarrier.first.z << " " << raceBarrier.second.x << " " << raceBarrier.second.y << " " << raceBarrier.second.z << "\n";
+	}
+
+	file << "m " << meta.first.x << " " << meta.first.y << " " << meta.first.z << " " << meta.second.x << " " << meta.second.y << " " << meta.second.z << "\n";
 
 	file.close();
 }
@@ -961,12 +1028,37 @@ void MapContainer::LoadAIPoints(const Point& point)
 	if (file)
 	{
 		AIPoints.clear();
-		float x, y, z;
-		while (file >> x >> y >> z)
+		raceBarriers.clear();
+		char type;
+		while (file >> type)
 		{
-			Point newPoint(x, y, z);
-			AIPoints.push_back({ newPoint, AIPointsColor, false });
+			if (type == 'p')
+			{
+				float x, y, z;
+				file >> x >> y >> z;
+				Point newPoint(x, y, z);
+				AIPoints.push_back({ newPoint, AIPointsColor, false });
+			}
+			else if (type == 'b')
+			{
+				float x1, y1, z1;
+				float x2, y2, z2;
+				file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2;
+				Point newPoint1(x1, y1, z1);
+				Point newPoint2(x2, y2, z2);
+				raceBarriers.push_back({ newPoint1, newPoint2 });
+			}
+			else if (type == 'm')
+			{
+				float x1, y1, z1;
+				float x2, y2, z2;
+				file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2;
+				Point newPoint1(x1, y1, z1);
+				Point newPoint2(x2, y2, z2);
+				meta = { newPoint1, newPoint2 };
+			}
 		}
+
 		recalculateAIPointsDistances();
 	}
 

@@ -27,6 +27,7 @@ double MapManager::latitudeRatio = 111220.165038003;
 
 std::map<long long, node> MapManager::nodes;
 std::vector<std::unique_ptr<MapObject>> MapManager::mapObjects;
+std::vector<std::unique_ptr<MapObject>> MapManager::raceObjects;
 std::vector<std::unique_ptr<Object3D>> MapManager::polygonsObjects;
 
 std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> MapManager::objectDetector
@@ -134,8 +135,11 @@ void MapManager::Init()
 	//mapManager.readMap("grunwald.osm");
 	//mapManager.readMap("parkCheck.osm");
 
+#ifdef _DEBUG
+	Instance()->readMap("trees2.osm");
+#else
 	Instance()->readMap("grunwaldWithRiver.osm");
-	//mapManager.readMap("trees2.osm");
+#endif
 	//mapManager.readMap("singlebuilding.osm");
 	//mapManager.readMap("walls.osm");
 

@@ -38,6 +38,8 @@ public:
 		e_IncreaseSplineSubpoints,
 		e_DecreaseSplineSubpoints,
 		e_ConvertSplineToCurrentPath,
+		e_ConvertPathToRaceBarriers,
+		e_ConvertPathToMeta,
 	};
 
 
@@ -59,6 +61,7 @@ public:
 	static std::unique_ptr<MapContainer>& Instance();
 
 	static void loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
+	static void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
 	static void displayWorld(std::pair<Point, Point>& camera);
 	static void displayAllWorld();
 	static void displaySector(const Point& point);
@@ -86,7 +89,10 @@ public:
 	void IncreaseSplineSubpoints(const Point& point = Point());
 	void DecreaseSplineSubpoints(const Point& point = Point());
 	void ConvertSplineToCurrentPath(const Point& point = Point());
+	void ConvertPathToRaceBarriers(const Point& point = Point());
+	void ConvertPathToMeta(const Point& point = Point());
 
+	void createRaceObjects();
 	static std::vector<PathStruct> generateSubsplinePath();
 	void resetCarPositionsToPoint(int idPoint);
 	void movePoint(const Point& point);
@@ -122,6 +128,8 @@ public:
 	static std::vector<Car> cars;
 	static std::vector<PathStruct> currentPath;
 	static std::vector<PathStruct> AIPoints;
+	static std::vector<std::pair<Point, Point>> raceBarriers;
+	static std::pair<Point, Point> meta;
 	static SplineStruct currentSpline;
 
 private:

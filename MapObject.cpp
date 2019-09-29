@@ -12,6 +12,11 @@ void MapObject::calculateXYfromRef(const std::map<long long, node> &nodes)
 	}
 }
 
+void MapObject::calculateXYfromPoints(const std::vector<Point>& points)
+{
+	MapObject::points = points;
+}
+
 void MapObject::calculateFinalGeometry()
 {
 

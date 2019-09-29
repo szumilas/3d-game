@@ -153,6 +153,9 @@
     <ClCompile Include="GlobalStructures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MetaLine.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -289,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="RaceTimer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaLine.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -23,9 +23,9 @@ protected:
 	float gauge = 2.0f;
 	Textures textureName;
 
-private:
-
 	std::vector<Point> finalLeftRail;
 	std::vector<Point> finalRightRail;
+
+private:
 
 };

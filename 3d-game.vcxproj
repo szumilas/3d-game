@@ -153,6 +153,7 @@
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mesh.h" />
+    <ClCompile Include="MetaLine.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Orbit.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="MapContainer.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />
+    <ClInclude Include="MetaLine.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="Orbit.h" />
     <ClInclude Include="PacejkaModel.h" />

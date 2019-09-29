@@ -13,6 +13,7 @@ Barrier::Barrier(MapObject& mapObject) : MapObject(mapObject)
 		else if (barrier == "retaining_wall") { _color.red = 213.0f / 256; _color.green = 205.0f / 256; _color.blue = 195.0f / 256; textureName = Textures::retaining_wall; _width = 0.2f; }
 		else if (barrier == "guard_rail") { _color.red = 179.0f / 256; _color.green = 225.0f / 256; _color.blue = 251.0f / 256; textureName = Textures::guard_rail; }
 		else if (barrier == "fence") { _color.red = 171.0f / 256; _color.green = 187.0f / 256; _color.blue = 197.0f / 256; textureName = Textures::fence; }
+		else if (barrier == "race_barrier") { _color.red = 171.0f / 256; _color.green = 187.0f / 256; _color.blue = 197.0f / 256; textureName = Textures::race_barrier; }
 		else { _color.red = 128.0f / 256; _color.green = 128.0f / 256; _color.blue = 128.0f / 256; textureName = Textures::concrete_wall; }
 	}
 	if (height.empty())

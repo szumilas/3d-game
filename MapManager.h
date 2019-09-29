@@ -136,6 +136,7 @@ public:
 
 	static std::map<long long, node> nodes;
 	static std::vector<std::unique_ptr<MapObject>> mapObjects;
+	static std::vector<std::unique_ptr<MapObject>> raceObjects;
 	static std::vector<std::unique_ptr<Object3D>> polygonsObjects;
 
 private:
