@@ -158,9 +158,6 @@ void init()
 	glAlphaFunc(GL_GREATER, 0.1f);
 }
 
-
-MapManager mapManager;
-
 int main(int argc, char**agrv)
 {
 	glutInit(&argc, agrv);
@@ -214,35 +211,10 @@ int main(int argc, char**agrv)
 		carGauge.load(&MapContainer::Instance()->cars[1]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
-		//mapManager.readMap("szczytnicka.osm");
-		//mapManager.readMap("szczytnickaB4.osm");
-		//mapManager.readMap("szczytnickaB.osm");
-		//mapManager.readMap("map.osm");
-		//mapManager.readMap("grunwald.osm");
-		//mapManager.readMap("parkCheck.osm");
+		MapManager::Init();
 
-		mapManager.readMap("grunwaldWithRiver.osm");
-		//mapManager.readMap("trees2.osm");
-		//mapManager.readMap("singlebuilding.osm");
-		//mapManager.readMap("walls.osm");
-
-		//mapManager.readMap("streetDetail.osm");
-		//mapManager.readMap("lake.osm");
-		//mapManager.readMap("A1.osm");
-		//mapManager.readMap("d1only.osm");
-		//mapManager.readMap("river.osm");
-		//mapManager.readMap("curie3.osm");
-		//mapManager.readMap("shelter.osm");
-		//mapManager.readMap("stairs.osm");
-		//mapManager.readMap("pasaz.osm");
-		//mapManager.readMap("sedesowce.osm");
-		//mapManager.readMap("grunwaldzki.osm");
-		//mapManager.readMap("c13.osm");
-
-		//mapManager.generatePolygonsFile();
-		//mapManager.loadPolygonsFromFile();
-		//mapContainer.loadWorldIntoBuckets(&mapManager.polygonsObjects);
-		MapContainer::loadWorldIntoSections(mapManager.mapObjects);
+		
+		MapContainer::loadWorldIntoSections(MapManager::Instance()->mapObjects);
 
 		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
 		camera.cameraViews.push_back({ MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() });
@@ -283,7 +255,7 @@ void display()
 	
 
 
-	camera.adjustCamera(camera.cameraViews[mapManager.currentCameraView].first, camera.cameraViews[mapManager.currentCameraView].second);
+	camera.adjustCamera(camera.cameraViews[MapManager::Instance()->currentCameraView].first, camera.cameraViews[MapManager::Instance()->currentCameraView].second);
 
 	glPushMatrix();
 	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
@@ -291,10 +263,10 @@ void display()
 		0, 0, 1); //up
 	SoundManager::Instance()->setCameraPosition(camera.center, camera.lookAt);
 
-	if (mapManager.currentCameraView == 0)
+	if (MapManager::Instance()->currentCameraView == 0)
 		MapContainer::displaySector(orbit.getFlatCursor());
 	else
-		MapContainer::displayWorld(camera.cameraViews[mapManager.currentCameraView]);
+		MapContainer::displayWorld(camera.cameraViews[MapManager::Instance()->currentCameraView]);
 	//mapContainer.displayAllWorld();
 
 	for (auto& car : MapContainer::Instance()->cars)
@@ -388,8 +360,8 @@ void keyboard(unsigned char key, int x, int y)
 	{
 	case 27: // Escape key
 		orbit.savePosition();
-		if(!mapManager.loadedFromPolygonsFile)
-			mapManager.saveOverlays();
+		if(!MapManager::Instance()->loadedFromPolygonsFile)
+			MapManager::Instance()->saveOverlays();
 
 		SoundManager::DeInit();
 		TextureManager::DeInit();
@@ -397,7 +369,7 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	}
 
-	mapManager.applyMapEditorKeys(orbit);
+	MapManager::Instance()->applyMapEditorKeys(orbit);
 
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }

@@ -12,12 +12,159 @@
 
 #include "KeyboardManager.h"
 
+MapManager* MapManager::_instance;
+
+rapidxml::xml_document <> MapManager::document;
+rapidxml::xml_document <> MapManager::overlays;
+std::unique_ptr<char[]> MapManager::overlayContent;
+
+float MapManager::maxX = -10000000.0f;
+float MapManager::minX = 10000000.0f;
+float MapManager::maxY = -10000000.0f;
+float MapManager::minY = 10000000.0f;
+double MapManager::longituteRatio = 69797.5460045862;
+double MapManager::latitudeRatio = 111220.165038003;
+
+std::map<long long, node> MapManager::nodes;
+std::vector<std::unique_ptr<MapObject>> MapManager::mapObjects;
+std::vector<std::unique_ptr<Object3D>> MapManager::polygonsObjects;
+
+std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> MapManager::objectDetector
+{
+	{ &MapManager::isPasazGrunwaldzkiCheck, &MapManager::addObject<PasazGrunwaldzki> },
+	{ &MapManager::isGrunwaldzkiCenterCheck, &MapManager::addObject<GrunwaldzkiCenter> },
+	{ &MapManager::isPwrC13Check, &MapManager::addObject<PwrC13> },
+	{ &MapManager::isSedesowiecCheck, &MapManager::addObject<Sedesowiec> },
+	{ &MapManager::isBusShelterCheck, &MapManager::addObject<BusShelter> },
+	{ &MapManager::isCrossingCheck, &MapManager::addObject<Crossing> },
+	{ &MapManager::isHighlightedObjectCheck, &MapManager::addObject<HighlightedObject> },
+	{ &MapManager::isStreetCheck, &MapManager::addObject<Street> },
+	{ &MapManager::isBuildingCheck, &MapManager::addObject<Building> },
+	{ &MapManager::isRiverCheck, &MapManager::addObject<River> },
+	{ &MapManager::isBridgeCheck, &MapManager::addObject<Bridge> },
+	{ &MapManager::isGreenAreaCheck, &MapManager::addObject<GreenArea> },
+	{ &MapManager::isBarrierCheck, &MapManager::addObject<Barrier> },
+	{ &MapManager::isCommonCheck, &MapManager::addObject<Common> },
+	{ &MapManager::isParkingCheck, &MapManager::addObject<Parking> },
+	{ &MapManager::isRailwayCheck, &MapManager::addObject<Railway> },
+	{ &MapManager::isFootwayCheck, &MapManager::addObject<Footway> },
+	{ &MapManager::isWater, &MapManager::addObject<Water> },
+	{ &MapManager::isRiverbank, &MapManager::addObject<Riverbank> },
+};
+
+std::unordered_set<std::string> MapManager::skippedTags{
+	/*"cycleway:right",
+	"description",
+	"maxspeed",
+	"name:etymology:wikidata",
+	"source:maxspeed",*/
+};
+
+std::unordered_set<std::string> MapManager::temporarySkippedTags{
+};
+
+std::unordered_set<std::string> MapManager::acceptedTags{
+	"area:highway",
+	"building",
+	"landuse",
+	"waterway",
+	"height",
+	"building:part",
+	"min_height",
+	"barrier",
+	"leisure",
+	"amenity",
+	"highway",
+	"man_made",
+	"railway",
+	"colour",
+	"building:colour",
+	"roof:shape",
+	"_skip",
+	"natural",
+	"width",
+	"type",
+	"footway",
+};
+
+std::map<std::string, long MapObject::*> MapManager::tagLongPtrs{
+
+};
+
+std::map<std::string, std::string MapObject::*> MapManager::tagPtrs{
+	{ "area:highway", &MapObject::area_highway },
+	{ "building", &MapObject::building },
+	{ "landuse", &MapObject::landuse },
+	{ "waterway", &MapObject::waterway },
+	{ "height", &MapObject::height },
+	{ "building:part", &MapObject::building_part },
+	{ "min_height", &MapObject::min_height },
+	{ "barrier", &MapObject::barrier },
+	{ "leisure", &MapObject::leisure },
+	{ "amenity", &MapObject::amenity },
+	{ "highway", &MapObject::highway },
+	{ "man_made", &MapObject::man_made },
+	{ "railway", &MapObject::railway },
+	{ "colour", &MapObject::colour },
+	{ "building:colour", &MapObject::colour },
+	{ "roof:shape", &MapObject::roof_shape },
+	{ "_skip", &MapObject::_skip },
+	{ "natural", &MapObject::natural },
+	{ "width", &MapObject::width },
+	{ "type", &MapObject::type },
+	{ "footway", &MapObject::footway },
+};
+
 void printAttributes(rapidxml::xml_node <>* node)
 {
 	for (rapidxml::xml_attribute <>* a = node->first_attribute(); a; a = a->next_attribute())
 	{
 		std::cout << a->name() << "' = '" << a->value() << "'\t";
 	}
+}
+
+void MapManager::Init()
+{
+	_instance = new MapManager;
+
+	//mapManager.readMap("szczytnicka.osm");
+	//mapManager.readMap("szczytnickaB4.osm");
+	//mapManager.readMap("szczytnickaB.osm");
+	//mapManager.readMap("map.osm");
+	//mapManager.readMap("grunwald.osm");
+	//mapManager.readMap("parkCheck.osm");
+
+	Instance()->readMap("grunwaldWithRiver.osm");
+	//mapManager.readMap("trees2.osm");
+	//mapManager.readMap("singlebuilding.osm");
+	//mapManager.readMap("walls.osm");
+
+	//mapManager.readMap("streetDetail.osm");
+	//mapManager.readMap("lake.osm");
+	//mapManager.readMap("A1.osm");
+	//mapManager.readMap("d1only.osm");
+	//mapManager.readMap("river.osm");
+	//mapManager.readMap("curie3.osm");
+	//mapManager.readMap("shelter.osm");
+	//mapManager.readMap("stairs.osm");
+	//mapManager.readMap("pasaz.osm");
+	//mapManager.readMap("sedesowce.osm");
+	//mapManager.readMap("grunwaldzki.osm");
+	//mapManager.readMap("c13.osm");
+
+	//mapManager.generatePolygonsFile();
+	//mapManager.loadPolygonsFromFile();
+	//mapContainer.loadWorldIntoBuckets(&mapManager.polygonsObjects);
+}
+
+MapManager* MapManager::Instance()
+{
+	return _instance;
+}
+
+MapManager::~MapManager()
+{
+	delete _instance;
 }
 
 std::unique_ptr<char[]> MapManager::fileToCharReader(const char * fileName)
@@ -190,9 +337,9 @@ void MapManager::createMapObjectsArray()
 
 			for (auto& check : objectDetector)
 			{
-				if ((this->*check.first)(mapObject))
+				if ((Instance()->*check.first)(mapObject))
 				{
-					(this->*check.second)(mapObject);
+					(Instance()->*check.second)(mapObject);
 					break;
 				}
 			}
@@ -297,9 +444,9 @@ void MapManager::addRelationalMapObjectsToArray()
 		{
 			for (auto& check : objectDetector)
 			{
-				if ((this->*check.first)(relationalMapObject))
+				if ((Instance()->*check.first)(relationalMapObject))
 				{
-					(this->*check.second)(relationalMapObject);
+					(Instance()->*check.second)(relationalMapObject);
 					break;
 				}
 			}

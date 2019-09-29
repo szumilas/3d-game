@@ -42,9 +42,14 @@ class MapManager
 {
 
 public:
-	void readMap(const char * fileName);
-	void calculateNodesPositions();
-	void removeSkippedObjects();
+
+	static void Init();
+	static MapManager* Instance();
+	~MapManager();
+
+	static void readMap(const char * fileName);
+	static void calculateNodesPositions();
+	static void removeSkippedObjects();
 	void selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&) = nullptr);
 	void hideObjects();
 	void unhideObjects();
@@ -56,15 +61,15 @@ public:
 	void loadPolygonsFromFile();
 
 private:
-	std::unique_ptr<char[]> fileToCharReader(const char * fileName);
-	void createNodesMap();
-	void createMapObjectsArray();
-	void addRelationalMapObjectsToArray();
-	void calculateObjectsFinalGeometry();
-	void calculateObjectsBoundingCoordinates();
-	void calculateMapBoundingCoordinates();
-	void applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a);
-	void applyOverlays(MapObject& mapObject);
+	static std::unique_ptr<char[]> fileToCharReader(const char * fileName);
+	static void createNodesMap();
+	static void createMapObjectsArray();
+	static void addRelationalMapObjectsToArray();
+	static void calculateObjectsFinalGeometry();
+	static void calculateObjectsBoundingCoordinates();
+	static void calculateMapBoundingCoordinates();
+	static void applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a);
+	static void applyOverlays(MapObject& mapObject);
 
 	bool isPasazGrunwaldzkiCheck(MapObject& mapObject);
 	bool isGrunwaldzkiCenterCheck(MapObject& mapObject);
@@ -107,109 +112,32 @@ public:
 
 private:
 
-	float maxX = -10000000.0f;
-	float minX =  10000000.0f;
-	float maxY = -10000000.0f;
-	float minY =  10000000.0f;
+	static float maxX;
+	static float minX;
+	static float maxY;
+	static float minY;
 
-	double longituteRatio = 69797.5460045862;
-	double latitudeRatio = 111220.165038003;
+	static double longituteRatio;
+	static double latitudeRatio;
 
-	rapidxml::xml_document <> document;
-	rapidxml::xml_document <> overlays;
+	static rapidxml::xml_document <> document;
+	static rapidxml::xml_document <> overlays;
 
-	std::unique_ptr<char[]> overlayContent;
+	static std::unique_ptr<char[]> overlayContent;
 
-	std::unordered_set<std::string> skippedTags{
-		/*"cycleway:right",
-		"description",
-		"maxspeed",
-		"name:etymology:wikidata",
-		"source:maxspeed",*/
-	};
-
-	std::unordered_set<std::string> temporarySkippedTags{
-	};
-
-	std::unordered_set<std::string> acceptedTags{
-		"area:highway",
-		"building",
-		"landuse",
-		"waterway",
-		"height",
-		"building:part",
-		"min_height",
-		"barrier",
-		"leisure",
-		"amenity",
-		"highway",
-		"man_made",
-		"railway",
-		"colour",
-		"building:colour",
-		"roof:shape",
-		"_skip",
-		"natural",
-		"width",
-		"type",
-		"footway",
-	};
-
-	std::map<std::string, long MapObject::*> tagLongPtrs{
-
-	};
-
-	std::map<std::string, std::string MapObject::*> tagPtrs{
-		{ "area:highway", &MapObject::area_highway },
-		{ "building", &MapObject::building },
-		{ "landuse", &MapObject::landuse },
-		{ "waterway", &MapObject::waterway },
-		{ "height", &MapObject::height },
-		{ "building:part", &MapObject::building_part },
-		{ "min_height", &MapObject::min_height },
-		{ "barrier", &MapObject::barrier },
-		{ "leisure", &MapObject::leisure },
-		{ "amenity", &MapObject::amenity },
-		{ "highway", &MapObject::highway },
-		{ "man_made", &MapObject::man_made },
-		{ "railway", &MapObject::railway },
-		{ "colour", &MapObject::colour },
-		{ "building:colour", &MapObject::colour },
-		{ "roof:shape", &MapObject::roof_shape },
-		{ "_skip", &MapObject::_skip },
-		{ "natural", &MapObject::natural },
-		{ "width", &MapObject::width },
-		{ "type", &MapObject::type },
-		{ "footway", &MapObject::footway },
-	};
-
-	std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector
-	{
-		{ &MapManager::isPasazGrunwaldzkiCheck, &MapManager::addObject<PasazGrunwaldzki> },
-		{ &MapManager::isGrunwaldzkiCenterCheck, &MapManager::addObject<GrunwaldzkiCenter> },
-		{ &MapManager::isPwrC13Check, &MapManager::addObject<PwrC13> },
-		{ &MapManager::isSedesowiecCheck, &MapManager::addObject<Sedesowiec> },
-		{ &MapManager::isBusShelterCheck, &MapManager::addObject<BusShelter> },
-		{ &MapManager::isCrossingCheck, &MapManager::addObject<Crossing> },
-		{ &MapManager::isHighlightedObjectCheck, &MapManager::addObject<HighlightedObject>},
-		{ &MapManager::isStreetCheck, &MapManager::addObject<Street>},
-		{ &MapManager::isBuildingCheck, &MapManager::addObject<Building>},
-		{ &MapManager::isRiverCheck, &MapManager::addObject<River> },
-		{ &MapManager::isBridgeCheck, &MapManager::addObject<Bridge>},
-		{ &MapManager::isGreenAreaCheck, &MapManager::addObject<GreenArea>},
-		{ &MapManager::isBarrierCheck, &MapManager::addObject<Barrier>},
-		{ &MapManager::isCommonCheck, &MapManager::addObject<Common>},
-		{ &MapManager::isParkingCheck, &MapManager::addObject<Parking>},
-		{ &MapManager::isRailwayCheck, &MapManager::addObject<Railway>},
-		{ &MapManager::isFootwayCheck, &MapManager::addObject<Footway>},
-		{ &MapManager::isWater, &MapManager::addObject<Water>},
-		{ &MapManager::isRiverbank, &MapManager::addObject<Riverbank>},
-	};
+	static std::unordered_set<std::string> skippedTags;
+	static std::unordered_set<std::string> temporarySkippedTags;
+	static std::unordered_set<std::string> acceptedTags;
+	static std::map<std::string, long MapObject::*> tagLongPtrs;
+	static std::map<std::string, std::string MapObject::*> tagPtrs;
+	static std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector;
 
 public:
 
-	std::map<long long, node> nodes;
-	std::vector<std::unique_ptr<MapObject>> mapObjects;
-	std::vector<std::unique_ptr<Object3D>> polygonsObjects;
+	static std::map<long long, node> nodes;
+	static std::vector<std::unique_ptr<MapObject>> mapObjects;
+	static std::vector<std::unique_ptr<Object3D>> polygonsObjects;
 
+private:
+	static MapManager* _instance;
 };
