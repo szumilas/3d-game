@@ -365,8 +365,9 @@ Point Spline::getSplineSubpoint(float t)
 
 		float tx = 0.5f * (points[p0].x * q1 + points[p1].x * q2 + points[p2].x * q3 + points[p3].x * q4);
 		float ty = 0.5f * (points[p0].y * q1 + points[p1].y * q2 + points[p2].y * q3 + points[p3].y * q4);
+		float tz = 0.5f * (points[p0].z * q1 + points[p1].z * q2 + points[p2].z * q3 + points[p3].z * q4);
 
-		return Point(tx, ty);
+		return Point(tx, ty, tz);
 	}
 	else
 		return Point();
@@ -439,4 +440,28 @@ float Spline::getNormalisedOffset(float p)
 
 	// The fractional is the offset 
 	return static_cast<int>(i) + (p / lengths[i + 1]);
+}
+
+std::vector<Point> Spline::generateSubpoints(float subpointsDistance, bool keepOriginalPoints)
+{
+	std::vector<Point> subsplinePath;
+
+	int previousIndex = 0;
+	for (float t = 0; t < length(); t += subpointsDistance)
+	{
+		auto normalisedOffset = getNormalisedOffset(t);
+
+		if (static_cast<int>(normalisedOffset) > previousIndex && keepOriginalPoints)
+		{
+			previousIndex = static_cast<int>(normalisedOffset);
+			subsplinePath.push_back( points[previousIndex + 1]);
+		}
+
+		Point p = getSplineSubpoint(normalisedOffset);
+		subsplinePath.push_back(p);
+	}
+	if (keepOriginalPoints)
+		subsplinePath.push_back( points[size() - 2]);
+
+	return subsplinePath;
 }

@@ -768,7 +768,17 @@ void MapContainer::RemoveCameraPoints(const Point& point)
 
 void MapContainer::ConvertCameraPointsToSpline(const Point& point)
 {
+	Spline spline;
+	spline.points = { {10, -10, 1}, {10, -30, 1}, { 30, -30, 10 },{ 30, -10, 1 }, {10, -10, 1} };
+	spline.calculateLengths();
 
+	auto splineSubpoints = spline.generateSubpoints(0.05);
+	std::vector<std::pair<Point, Point>> newSpecialCameraPath;
+
+	std::for_each(splineSubpoints.begin(), splineSubpoints.end(), [&](const Point& p) {newSpecialCameraPath.push_back({ p, {-20, 30, 0} }); });
+
+
+	CameraManager::Instance()->specialCameraPath = newSpecialCameraPath;
 }
 
 void MapContainer::PlayCameraSpline(const Point& point)
@@ -997,22 +1007,9 @@ std::vector<MapContainer::PathStruct> MapContainer::generateSubsplinePath(bool k
 	currentSpline.spline.calculateLengths();
 
 	std::vector<PathStruct> subsplinePath;
-	int previousIndex = 0;
-	for (float t = 0; t < currentSpline.spline.length(); t += currentSpline.subpointsDistance)
-	{
-		auto normalisedOffset = currentSpline.spline.getNormalisedOffset(t);
+	auto splineSubpoints = currentSpline.spline.generateSubpoints(currentSpline.subpointsDistance, keepOriginalPoints);
 
-		if (static_cast<int>(normalisedOffset) > previousIndex && keepOriginalPoints)
-		{
-			previousIndex = static_cast<int>(normalisedOffset);
-			subsplinePath.push_back({ currentSpline.spline.points[previousIndex + 1], splineSubointsColor, false });
-		}
-		
-		Point p = currentSpline.spline.getSplineSubpoint(normalisedOffset);
-		subsplinePath.push_back({ p, splineSubointsColor, false });
-	}
-	if(keepOriginalPoints)
-		subsplinePath.push_back({ currentSpline.spline.points[currentSpline.spline.size() - 2], splineSubointsColor, false });
+	std::for_each(splineSubpoints.begin(), splineSubpoints.end(), [&](const Point& p) {subsplinePath.push_back({p, splineSubointsColor, false }); });
 
 	return subsplinePath;
 }

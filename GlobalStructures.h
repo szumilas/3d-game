@@ -141,6 +141,7 @@ struct Spline
 	void calculateLengths();
 	float calculateSegmentLength(int index);
 	float getNormalisedOffset(float p);
+	std::vector<Point> generateSubpoints(float subpointsDistance, bool keepOriginalPoints = false);
 
 	std::vector<Point> basePoints;
 	std::vector<Point> points;
