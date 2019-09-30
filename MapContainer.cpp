@@ -254,9 +254,7 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 	}
 	
 	displayBackground();
-	displayAIPoints();
-	displayCurrentPath();
-	displayCurrentSpline();
+	displayMapEditorPoints();
 }
 
 void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
@@ -353,9 +351,7 @@ void MapContainer::displayAllWorld()
 	}
 
 	displayBackground();
-	displayAIPoints();
-	displayCurrentPath();
-	displayCurrentSpline();
+	displayMapEditorPoints();
 }
 
 void MapContainer::displaySector(const Point& point)
@@ -394,9 +390,7 @@ void MapContainer::displaySector(const Point& point)
 
 	displayLines();
 	displayBackground();
-	displayAIPoints();
-	displayCurrentPath();
-	displayCurrentSpline();
+	displayMapEditorPoints();
 }
 
 void MapContainer::displayBackground()
@@ -936,6 +930,14 @@ void MapContainer::displayCurrentPath()
 void MapContainer::displayAIPoints()
 {
 	displayPath(AIPoints, AIPointsColor);
+}
+
+void MapContainer::displayMapEditorPoints()
+{
+	//return;
+	displayAIPoints();
+	displayCurrentPath();
+	displayCurrentSpline();
 }
 
 void MapContainer::displayCurrentSpline()

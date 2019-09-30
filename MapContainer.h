@@ -118,6 +118,7 @@ public:
 private:
 
 	static void displayPath(const std::vector<PathStruct>& path, const Color& color);
+	static void displayMapEditorPoints();
 	static void displayAIPoints();
 	static void displayCurrentPath();
 	static void displayCurrentSpline();
