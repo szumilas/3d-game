@@ -40,6 +40,10 @@ public:
 		e_ConvertSplineToCurrentPath,
 		e_ConvertPathToRaceBarriers,
 		e_ConvertPathToMeta,
+		e_AddCameraPoint,
+		e_RemoveCameraPoints,
+		e_ConvertCameraPointsToSpline,
+		e_PlayCameraSpline,
 	};
 
 
@@ -91,6 +95,10 @@ public:
 	void ConvertSplineToCurrentPath(const Point& point = Point());
 	void ConvertPathToRaceBarriers(const Point& point = Point());
 	void ConvertPathToMeta(const Point& point = Point());
+	void AddCameraPoint(const Point& point = Point());
+	void RemoveCameraPoints(const Point& point = Point());
+	void ConvertCameraPointsToSpline(const Point& point = Point());
+	void PlayCameraSpline(const Point& point = Point());
 
 	void createRaceObjects();
 	static std::vector<PathStruct> generateSubsplinePath(bool keepOriginalPoints = false);

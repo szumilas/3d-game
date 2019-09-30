@@ -73,8 +73,13 @@ std::vector<std::vector<int>> MapContainer::createTools()
 	};
 	tools.push_back(AITools);
 
-
-	tools.push_back({});
+	std::vector<int> CameraTools{
+		MapContainer::e_AddCameraPoint,
+		MapContainer::e_RemoveCameraPoints,
+		MapContainer::e_ConvertCameraPointsToSpline,
+		MapContainer::e_PlayCameraSpline,
+	};
+	tools.push_back(CameraTools);
 
 	return tools;
 }
@@ -108,6 +113,10 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_ConvertSplineToCurrentPath, &MapContainer::ConvertSplineToCurrentPath },
 		{ e_ConvertPathToRaceBarriers, &MapContainer::ConvertPathToRaceBarriers },
 		{ e_ConvertPathToMeta, &MapContainer::ConvertPathToMeta },
+		{ e_AddCameraPoint, &MapContainer::AddCameraPoint },
+		{ e_RemoveCameraPoints, &MapContainer::RemoveCameraPoints },
+		{ e_ConvertCameraPointsToSpline, &MapContainer::ConvertCameraPointsToSpline },
+		{ e_PlayCameraSpline, &MapContainer::PlayCameraSpline },
 	
 	};
 
@@ -745,6 +754,26 @@ void MapContainer::ConvertPathToMeta(const Point& point)
 		meta.first = currentPath[0].center;
 		meta.second = currentPath[1].center;
 	}
+}
+
+void MapContainer::AddCameraPoint(const Point& point)
+{
+
+}
+
+void MapContainer::RemoveCameraPoints(const Point& point)
+{
+
+}
+
+void MapContainer::ConvertCameraPointsToSpline(const Point& point)
+{
+
+}
+
+void MapContainer::PlayCameraSpline(const Point& point)
+{
+	MapManager::Instance()->currentCameraView = -1;
 }
 
 void MapContainer::resetCarPositionsToPoint(int idPoint)

@@ -179,7 +179,7 @@ void display()
 		0, 0, 1); //up
 	SoundManager::Instance()->setCameraPosition(CameraManager::Instance()->center, CameraManager::Instance()->lookAt);
 
-	if (MapManager::Instance()->currentCameraView == 0)
+	if (MapManager::Instance()->currentCameraView <= 0)
 		MapContainer::displaySector(orbit.getFlatCursor());
 	else
 		MapContainer::displayWorld(CameraManager::Instance()->getCurrentCameraPoints());
@@ -460,6 +460,8 @@ void Update()
 	scrollUpMouse = false;
 	scrollDownMouse = false;
 	orbit.deactivateMovingXY();
+
+	CameraManager::Instance()->updateSpecialCameraPathPosition();
 	//glutPostRedisplay();
 }
 

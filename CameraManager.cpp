@@ -28,6 +28,24 @@ std::pair<Point, Point> CameraManager::getCurrentCameraPoints()
 
 void CameraManager::adjustCamera(int idCameraView)
 {
-	center = cameraViews[idCameraView]->getCameraCenter();
-	lookAt = cameraViews[idCameraView]->getCameraLookAt();
+	if (idCameraView >=0 && idCameraView < cameraViews.size())
+	{
+		center = cameraViews[idCameraView]->getCameraCenter();
+		lookAt = cameraViews[idCameraView]->getCameraLookAt();
+	}
+	else
+	{
+		center = specialCameraPath[static_cast<int>(idSpecialCameraPath)].first;
+		lookAt = specialCameraPath[static_cast<int>(idSpecialCameraPath)].second;
+	}
+}
+
+void CameraManager::updateSpecialCameraPathPosition()
+{
+	idSpecialCameraPath += 1.0 / FPS;
+
+	if (idSpecialCameraPath > specialCameraPath.size())
+	{
+		idSpecialCameraPath -= (specialCameraPath.size());
+	}
 }
