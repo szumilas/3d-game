@@ -1,5 +1,6 @@
 #include "MapContainer.h"
 
+#include "CameraManager.h"
 #include "MapManager.h"
 #include "MetaLine.h"
 #include <fstream>
@@ -962,17 +963,17 @@ void MapContainer::displayCurrentSpline()
 	}
 }
 
-std::vector<MapContainer::PathStruct> MapContainer::generateSubsplinePath()
+std::vector<MapContainer::PathStruct> MapContainer::generateSubsplinePath(bool keepOriginalPoints)
 {
 	currentSpline.spline.calculateLengths();
 
 	std::vector<PathStruct> subsplinePath;
-	int previousIndex = -1;
-	for (float t = currentSpline.subpointsDistance; t < currentSpline.spline.length(); t += currentSpline.subpointsDistance)
+	int previousIndex = 0;
+	for (float t = 0; t < currentSpline.spline.length(); t += currentSpline.subpointsDistance)
 	{
 		auto normalisedOffset = currentSpline.spline.getNormalisedOffset(t);
 
-		if (static_cast<int>(normalisedOffset) > previousIndex)
+		if (static_cast<int>(normalisedOffset) > previousIndex && keepOriginalPoints)
 		{
 			previousIndex = static_cast<int>(normalisedOffset);
 			subsplinePath.push_back({ currentSpline.spline.points[previousIndex + 1], splineSubointsColor, false });
@@ -981,7 +982,8 @@ std::vector<MapContainer::PathStruct> MapContainer::generateSubsplinePath()
 		Point p = currentSpline.spline.getSplineSubpoint(normalisedOffset);
 		subsplinePath.push_back({ p, splineSubointsColor, false });
 	}
-	subsplinePath.push_back({ currentSpline.spline.points[currentSpline.spline.size() - 2], splineSubointsColor, false });
+	if(keepOriginalPoints)
+		subsplinePath.push_back({ currentSpline.spline.points[currentSpline.spline.size() - 2], splineSubointsColor, false });
 
 	return subsplinePath;
 }
@@ -1074,6 +1076,22 @@ void MapContainer::LoadAIPoints(const Point& point)
 	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const PathStruct& data) {AIpointsPositions.push_back(data.center); });
 
 	raceTimer.setAIpointsPosition(AIpointsPositions);
+}
+
+void MapContainer::initCars()
+{
+	cars = {
+		Car(CarBrand::ToyotaHilux, 0, 0, true),
+		Car(CarBrand::SuzukiVitara, -5, -5),
+		Car(CarBrand::SubaruBRZ, -10, -10),
+		Car(CarBrand::RollsRoycePhantom, -15, -15),
+		Car(CarBrand::LamborghiniHuracan, -20, -20)
+	};
+
+	for (auto& car : cars)
+	{
+		CameraManager::Instance()->cameraViews.push_back(&car);
+	}
 }
 
 void MapContainer::initRaceTimer()

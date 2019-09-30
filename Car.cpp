@@ -2,15 +2,16 @@
 
 #include "Car.h"
 #include "MapContainer.h"
+#include "CameraManager.h"
 
 #include <algorithm>
 
-Car::Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt, bool humanCar) : carBrand(carBrand), engine(carBrand), gearBox(carBrand), humanCar(humanCar)
+Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar) : carBrand(carBrand), engine(carBrand), gearBox(carBrand), humanCar(humanCar)
 {
 	importFromObjFile();
 
-	Car::globalCameraCenter = globalCameraCenter;
-	Car::globalCameraLookAt = globalCameraLookAt;
+	Car::globalCameraCenter = &CameraManager::Instance()->center;
+	Car::globalCameraLookAt = &CameraManager::Instance()->lookAt;
 
 	carModelCircles.push_back(Circle{ { 0.0f, 0.0f, 0.53f }, width / 2 });
 	carModelCircles.push_back(Circle{ { length / 2 - width / 2, 0.0f, 0.53f }, width / 2 });
@@ -189,9 +190,7 @@ void Car::turnLeft()
 
 Point Car::getCameraCenter()
 {
-
 	return Point{ position.x + cameraCenter.x * cos(rz) - cameraCenter.y * sin(rz), position.y + cameraCenter.x * sin(rz) + cameraCenter.y * cos(rz), cameraCenter.z };
-
 }
 
 Point Car::getCameraLookAt()

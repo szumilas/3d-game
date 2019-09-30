@@ -2,8 +2,9 @@
 
 #include "Object3D.h"
 #include "GlobalStructures.h"
+#include "ObjectWithCamera.h"
 
-class Orbit : public Object3D
+class Orbit : public Object3D, public ObjectWithCamera
 {
 public:
 	Orbit();

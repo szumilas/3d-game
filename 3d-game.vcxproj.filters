@@ -156,6 +156,12 @@
     <ClCompile Include="MetaLine.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectWithCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -295,6 +301,12 @@
     </ClInclude>
     <ClInclude Include="MetaLine.h">
       <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectWithCamera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

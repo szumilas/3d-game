@@ -136,6 +136,7 @@
     <ClCompile Include="Bridge.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="BusShelter.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="CarGauge.cpp" />
     <ClCompile Include="CarParts.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="MetaLine.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjectWithCamera.cpp" />
     <ClCompile Include="Orbit.cpp" />
     <ClCompile Include="PacejkaModel.cpp" />
     <ClCompile Include="Parking.cpp" />
@@ -183,6 +185,7 @@
     <ClInclude Include="Bridge.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BusShelter.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="Car.h" />
     <ClInclude Include="carDB.h" />
     <ClInclude Include="CarGauge.h" />
@@ -203,6 +206,7 @@
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MetaLine.h" />
     <ClInclude Include="Object3D.h" />
+    <ClInclude Include="ObjectWithCamera.h" />
     <ClInclude Include="Orbit.h" />
     <ClInclude Include="PacejkaModel.h" />
     <ClInclude Include="Parking.h" />

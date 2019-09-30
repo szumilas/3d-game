@@ -93,7 +93,7 @@ public:
 	void ConvertPathToMeta(const Point& point = Point());
 
 	void createRaceObjects();
-	static std::vector<PathStruct> generateSubsplinePath();
+	static std::vector<PathStruct> generateSubsplinePath(bool keepOriginalPoints = false);
 	void resetCarPositionsToPoint(int idPoint);
 	void movePoint(const Point& point);
 	void removePoints(const Point& point = Point());
@@ -109,6 +109,7 @@ public:
 	static int GetNextPoint(const int& currentPoint) { return (currentPoint + 1) % AIPoints.size(); }
 	static float GetNextPointDistance(const int& currentPoint) { return AIPointsDistances[currentPoint]; }
 	int getSelectedPointIndex();
+	static void initCars();
 	static void initRaceTimer();
 	static void updateRaceTimer();
 	static void displayRaceTimer();

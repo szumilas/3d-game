@@ -9,10 +9,11 @@
 #include "TextureManager.h"
 #include "CarParts.h"
 #include "PacejkaModel.h"
+#include "ObjectWithCamera.h"
 
 #include "carDB.h"
 
-class Car : public Object3D
+class Car : public Object3D, public ObjectWithCamera
 {
 
 	friend class CarGauge;
@@ -36,7 +37,7 @@ public:
 
 
 
-	Car(CarBrand carBrand, float startX, float startY, Point* globalCameraCenter, Point* globalCameraLookAt, bool humanCar = false);
+	Car(CarBrand carBrand, float startX, float startY, bool humanCar = false);
 
 	void display();
 

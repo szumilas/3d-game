@@ -1,54 +1,3 @@
-//#include <iostream>
-//#include "TextureManager.h"
-//
-//#include <allegro5/allegro_acodec.h>
-//
-//namespace Game
-//{
-//	TextureManager textureManager;
-//}
-//
-//int main(int argc, char **argv) {
-//
-//	ALLEGRO_SAMPLE *sample = NULL;
-//
-//	if (!al_init()) {
-//		fprintf(stderr, "failed to initialize allegro!\n");
-//		return -1;
-//	}
-//
-//	if (!al_install_audio()) {
-//		fprintf(stderr, "failed to initialize audio!\n");
-//		return -1;
-//	}
-//
-//	if (!al_init_acodec_addon()) {
-//		fprintf(stderr, "failed to initialize audio codecs!\n");
-//		return -1;
-//	}
-//
-//	if (!al_reserve_samples(1)) {
-//		fprintf(stderr, "failed to reserve samples!\n");
-//		return -1;
-//	}
-//
-//	sample = al_load_sample("Data/Sounds/engine.wav");
-//
-//	if (!sample) {
-//		printf("Audio clip sample not loaded!\n");
-//		return -1; 
-//	}
-//
-//
-//	/* Loop the sample until the display closes. */
-//	al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
-//
-//	al_rest(1.0);
-//
-//	al_destroy_sample(sample);
-//	return 0;
-//}
-
 #define NOFULLSCREEN
 
 #include <IL/il.h>
@@ -69,6 +18,7 @@
 #include "MapManager.h"
 #include "TextureManager.h"
 #include "SoundManager.h"
+#include "CameraManager.h"
 #include "MapContainer.h"
 #include "CarGauge.h"
 #include "Screen2D.h"
@@ -88,26 +38,6 @@ int windowRealHeight;
 
 float angle = 55.0f;
 
-class Camera
-{
-public:
-	Camera() { center.x = 15; center.y = -30; center.z = 10;	 }
-	
-	void adjustCamera(Point icetner, Point ilookAt)
-	{
-		center = icetner;
-		lookAt = ilookAt;
-	}
-
-public:
-	
-	Point center;
-	Point lookAt;
-
-	std::vector<std::pair<Point, Point>> cameraViews;
-
-};
-
 Wheel wheel;
 Orbit orbit;
 CarGauge carGauge;
@@ -125,8 +55,6 @@ void SpecialKeysUp(int key, int x, int y);
 void Update();
 
 void Cube(float a, float b, float c, float d, float h);
-
-Camera camera;
 
 GLboolean upPressed = false;
 GLboolean downPressed = false;
@@ -180,6 +108,7 @@ int main(int argc, char**agrv)
 	SoundManager::Init();
 	TextureManager::Init();
 	MapContainer::Init(windowRealWidth, windowRealHeight);
+	CameraManager::Init(&orbit);
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -205,7 +134,7 @@ int main(int argc, char**agrv)
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
-		MapContainer::Instance()->cars = { Car(CarBrand::ToyotaHilux, 0, 0, &camera.center, &camera.lookAt, true), Car(CarBrand::SuzukiVitara, -5, -5, &camera.center, &camera.lookAt), Car(CarBrand::SubaruBRZ, -10, -10, &camera.center, &camera.lookAt), Car(CarBrand::RollsRoycePhantom, -15, -15, &camera.center, &camera.lookAt), Car(CarBrand::LamborghiniHuracan, -20, -20, &camera.center, &camera.lookAt) };
+		MapContainer::Instance()->initCars();
 		MapContainer::Instance()->initRaceTimer();
 
 		carGauge.load(&MapContainer::Instance()->cars[1]);
@@ -216,10 +145,6 @@ int main(int argc, char**agrv)
 		
 		MapContainer::loadWorldIntoSections(MapManager::Instance()->mapObjects);
 
-		camera.cameraViews.push_back({ orbit.getCameraCenter(), orbit.getCameraLookAt() });
-		camera.cameraViews.push_back({ MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() });
-		camera.cameraViews.push_back({ MapContainer::Instance()->cars[1].getCameraCenter(), MapContainer::Instance()->cars[1].getCameraLookAt() });
-		
 
 	#ifdef FULLSCREEN  
 		glutFullScreen();
@@ -246,27 +171,18 @@ void display()
 	
 	glLoadIdentity();
 
-	//camera.adjustCamera(obj.getCameraCenter(), obj.getCameraLookAt());
-	//camera.adjustCamera(orbit.getCameraCenter(), orbit.getCameraLookAt());
-
-	camera.cameraViews[0] = { orbit.getCameraCenter(), orbit.getCameraLookAt() };
-	camera.cameraViews[1] = { MapContainer::Instance()->cars[0].getCameraCenter(), MapContainer::Instance()->cars[0].getCameraLookAt() };
-	camera.cameraViews[2] = { MapContainer::Instance()->cars[1].getCameraCenter(), MapContainer::Instance()->cars[1].getCameraLookAt() };
-	
-
-
-	camera.adjustCamera(camera.cameraViews[MapManager::Instance()->currentCameraView].first, camera.cameraViews[MapManager::Instance()->currentCameraView].second);
+	CameraManager::Instance()->adjustCamera(MapManager::Instance()->currentCameraView);
 
 	glPushMatrix();
-	gluLookAt(camera.center.x, camera.center.y, camera.center.z, //eye
-		camera.lookAt.x, camera.lookAt.y, camera.lookAt.z, //center
+	gluLookAt(CameraManager::Instance()->center.x, CameraManager::Instance()->center.y, CameraManager::Instance()->center.z, //eye
+		CameraManager::Instance()->lookAt.x, CameraManager::Instance()->lookAt.y, CameraManager::Instance()->lookAt.z, //center
 		0, 0, 1); //up
-	SoundManager::Instance()->setCameraPosition(camera.center, camera.lookAt);
+	SoundManager::Instance()->setCameraPosition(CameraManager::Instance()->center, CameraManager::Instance()->lookAt);
 
 	if (MapManager::Instance()->currentCameraView == 0)
 		MapContainer::displaySector(orbit.getFlatCursor());
 	else
-		MapContainer::displayWorld(camera.cameraViews[MapManager::Instance()->currentCameraView]);
+		MapContainer::displayWorld(CameraManager::Instance()->getCurrentCameraPoints());
 	//mapContainer.displayAllWorld();
 
 	for (auto& car : MapContainer::Instance()->cars)

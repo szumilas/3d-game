@@ -3,6 +3,7 @@
 #include <string>
 #include "PointInsidePolygonDetector.h"
 
+#include "CameraManager.h"
 #include "MapManager.h"
 #include "Skybox.h"
 #include "RelationalMapObject.h"
@@ -833,8 +834,11 @@ void MapManager::applyMapEditorKeys(Orbit& orbit)
 	}
 	if (KeyboardManager::Instance()->checkKey('C'))
 	{
-		currentCameraView++;
-		currentCameraView %= 3;
+		if (CameraManager::Instance()->cameraViews.size() > 1)
+		{
+			currentCameraView++;
+			currentCameraView %= CameraManager::Instance()->cameraViews.size();
+		}
 	}
 	if (KeyboardManager::Instance()->checkKey('S'))
 	{
