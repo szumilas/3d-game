@@ -23,7 +23,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar) : carBran
 
 	mass = carDB.at(carBrand).mass;
 	vMax = carDB.at(carBrand).vMax / 3.6;
-	momentOfInertia = 1.0f / 12.0f * mass * (length * length + width * width);
+	momentOfInertia = 1.50f / 12.0f * mass * (length * length + width * width);
 
 	//position.x = startX -140;
 	//position.y = startY -347;

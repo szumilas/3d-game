@@ -101,6 +101,24 @@ Point Point::operator+(const Point& p2) const
 	return { x + p2.x, y + p2.y, z + p2.z };
 }
 
+Point& Point::operator+=(const Point& p2)
+{
+	x += p2.x;
+	y += p2.y;
+	z += p2.z;
+
+	return *this;
+}
+
+Point& Point::operator-=(const Point& p2)
+{
+	x -= p2.x;
+	y -= p2.y;
+	z -= p2.z;
+
+	return *this;
+}
+
 bool Circle::isColliding(const Circle& with)
 {
 	return center.distance2D(with.center) < r + with.r;

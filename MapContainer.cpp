@@ -79,6 +79,9 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_RemoveCameraPoints,
 		MapContainer::e_ConvertCameraPointsToSpline,
 		MapContainer::e_PlayCameraSpline,
+		MapContainer::e_ConvertCameraSplineToCarZero,
+		MapContainer::e_PlayCameraSplineAroundCarZero,
+		MapContainer::e_SaveCameraSpline,
 	};
 	tools.push_back(CameraTools);
 
@@ -118,7 +121,10 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_RemoveCameraPoints, &MapContainer::RemoveCameraPoints },
 		{ e_ConvertCameraPointsToSpline, &MapContainer::ConvertCameraPointsToSpline },
 		{ e_PlayCameraSpline, &MapContainer::PlayCameraSpline },
-	
+		{ e_ConvertCameraSplineToCarZero, &MapContainer::ConvertCameraSplineToCarZero },
+		{ e_PlayCameraSplineAroundCarZero, &MapContainer::PlayCameraSplineAroundCarZero },
+		{ e_SaveCameraSpline, &MapContainer::SaveCameraSpline },
+
 	};
 
 	return map;
@@ -803,7 +809,50 @@ void MapContainer::ConvertCameraPointsToSpline(const Point& point)
 
 void MapContainer::PlayCameraSpline(const Point& point)
 {
+	CameraManager::Instance()->setCarZero(nullptr);
 	MapManager::Instance()->currentCameraView = -1;
+}
+
+void MapContainer::ConvertCameraSplineToCarZero(const Point& point)
+{
+	if (!cars.empty())
+	{
+		CameraManager::Instance()->setCarZero(&cars[0]);
+		for (auto& cameraSet : CameraManager::Instance()->specialCameraPath)
+		{
+			cameraSet.first -= CameraManager::Instance()->getCarZero()->position;
+			cameraSet.second -= CameraManager::Instance()->getCarZero()->position;
+
+			Point::rotate(cameraSet.first, Point(), -CameraManager::Instance()->getCarZero()->rz);
+			Point::rotate(cameraSet.second, Point(), -CameraManager::Instance()->getCarZero()->rz);
+		}
+	}
+}
+
+void MapContainer::SaveCameraSpline(const Point& point)
+{
+	if (!CameraManager::Instance()->specialCameraPath.empty())
+	{
+		std::ofstream file;
+		file.open("Data/CameraPoints.txt", std::ios::out);
+
+		for (auto& cameraSet : CameraManager::Instance()->specialCameraPath)
+		{
+			file << cameraSet.first.x << " " << cameraSet.first.y << " " << cameraSet.first.z << " ";
+			file << cameraSet.second.x << " " << cameraSet.second.y << " " << cameraSet.second.z << "\n";
+		}
+
+		file.close();
+	}
+}
+
+void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)
+{
+	if (!cars.empty())
+	{
+		CameraManager::Instance()->setCarZero(&cars[0]);
+		MapManager::Instance()->currentCameraView = -1;
+	}
 }
 
 void MapContainer::resetCarPositionsToPoint(int idPoint)
@@ -859,10 +908,12 @@ void MapContainer::AIStopAndRestartToSelectedPoint(const Point& point)
 void MapContainer::startRace(const Point& point)
 {
 	LoadAIPoints();
+	LoadRaceStartCameraPoints();
+
+	MapManager::Instance()->currentCameraView = -1;
 	AIStop();
-	raceTimer.state = RaceTimer::State::Red4;
+	raceTimer.state = RaceTimer::State::Intro;
 	raceTimer.beforeRace = true;
-	raceTimer.startTimer();
 
 	createRaceObjects();
 }
@@ -1122,6 +1173,30 @@ void MapContainer::LoadAIPoints(const Point& point)
 	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const PathStruct& data) {AIpointsPositions.push_back(data.center); });
 
 	raceTimer.setAIpointsPosition(AIpointsPositions);
+}
+
+void MapContainer::LoadRaceStartCameraPoints()
+{
+	std::ifstream file;
+	file.open("Data/RaceStartCameraPoints.txt", std::ios::out);
+
+	if (file)
+	{
+		if (!cars.empty())
+			CameraManager::Instance()->setCarZero(&cars[0]);
+
+		CameraManager::Instance()->restartIdSpecialCameraPath();
+
+		CameraManager::Instance()->specialCameraPath.clear();
+
+		float x1, y1, z1, x2, y2, z2;
+		while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2)
+		{
+			CameraManager::Instance()->specialCameraPath.push_back({Point(x1, y1, z1), Point(x2, y2, z2)});
+		}
+	}
+
+	file.close();
 }
 
 void MapContainer::initCars()

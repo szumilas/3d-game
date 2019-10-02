@@ -44,6 +44,9 @@ public:
 		e_RemoveCameraPoints,
 		e_ConvertCameraPointsToSpline,
 		e_PlayCameraSpline,
+		e_ConvertCameraSplineToCarZero,
+		e_PlayCameraSplineAroundCarZero,
+		e_SaveCameraSpline,
 	};
 
 
@@ -99,6 +102,9 @@ public:
 	void RemoveCameraPoints(const Point& point = Point());
 	void ConvertCameraPointsToSpline(const Point& point = Point());
 	void PlayCameraSpline(const Point& point = Point());
+	void ConvertCameraSplineToCarZero(const Point& point = Point());
+	void PlayCameraSplineAroundCarZero(const Point& point = Point());
+	void SaveCameraSpline(const Point& point = Point());
 
 	void createRaceObjects();
 	static std::vector<PathStruct> generateSubsplinePath(bool keepOriginalPoints = false);
@@ -121,6 +127,8 @@ public:
 	static void initRaceTimer();
 	static void updateRaceTimer();
 	static void displayRaceTimer();
+	void LoadRaceStartCameraPoints();
+	void introFinished() { raceTimer.state = RaceTimer::State::Red4; }
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 

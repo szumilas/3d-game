@@ -9,6 +9,7 @@ public:
 
 	enum State
 	{
+		Intro = -2,
 		Inactive = -1,
 		Red4 = 0,
 		Red3 = 1,

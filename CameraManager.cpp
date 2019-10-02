@@ -35,17 +35,32 @@ void CameraManager::adjustCamera(int idCameraView)
 	}
 	else
 	{
-		center = specialCameraPath[static_cast<int>(idSpecialCameraPath)].first;
-		lookAt = specialCameraPath[static_cast<int>(idSpecialCameraPath)].second;
+		if (carZero == nullptr)
+		{
+			center = specialCameraPath[static_cast<int>(idSpecialCameraPath)].first;
+			lookAt = specialCameraPath[static_cast<int>(idSpecialCameraPath)].second;
+		}
+		else
+		{
+			center = specialCameraPath[static_cast<int>(idSpecialCameraPath)].first;
+			Point::rotate(center, Point(), carZero->rz);
+			center += carZero->position;
+
+			lookAt = specialCameraPath[static_cast<int>(idSpecialCameraPath)].second;
+			Point::rotate(lookAt, Point(), carZero->rz);
+			lookAt += carZero->position;
+		}
 	}
 }
 
-void CameraManager::updateSpecialCameraPathPosition()
+bool CameraManager::updateSpecialCameraPathPosition()
 {
-	idSpecialCameraPath += 30 / FPS;
+	idSpecialCameraPath += 100 / FPS;
 
 	if (idSpecialCameraPath >= specialCameraPath.size())
 	{
-		idSpecialCameraPath -= (specialCameraPath.size());
+		idSpecialCameraPath = 0;
+		return false;
 	}
+	return true;
 }

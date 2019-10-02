@@ -52,6 +52,8 @@ struct Point
 	bool operator!=(const Point& second) const;
 	bool operator<(const Point& second) const;
 	Point operator+(const Point& p2) const;
+	Point& operator+=(const Point& p2);
+	Point& operator-=(const Point& p2);
 };
 
 struct Circle

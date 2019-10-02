@@ -74,43 +74,51 @@ void RaceTimer::display()
 
 void RaceTimer::update()
 {
-	if (beforeRace && begin_time != 0)
+	if (state != State::Intro)
 	{
-		if (clock() - begin_time > 4400)
-			state = State::Green;
-		else if (clock() - begin_time > 3300)
-			state = State::Red1;
-		else if (clock() - begin_time > 2200)
-			state = State::Red2;
-		else if (clock() - begin_time > 1100)
-			state = State::Red3;
+		if (beforeRace && begin_time != 0)
+		{
+			if (clock() - begin_time > 4400)
+				state = State::Green;
+			else if (clock() - begin_time > 3300)
+				state = State::Red1;
+			else if (clock() - begin_time > 2200)
+				state = State::Red2;
+			else if (clock() - begin_time > 1100)
+				state = State::Red3;
+		}
+		else if (begin_time != 0)
+		{
+			if (clock() - begin_time > 2000)
+				state = State::Inactive;
+
+			for (auto& carData : carsData)
+			{
+				carData.nextAIPoint = carData.car->getAIcurrentPoint();
+				carData.AISegmentDone = getAISegmentDoneValue(carData.nextAIPoint, carData.car->position);
+			}
+
+			countLaps();
+
+			std::sort(carsData.begin(), carsData.end(), [](const RaceTimerData& d1, const RaceTimerData& d2) {return (d1.lapsDone < d2.lapsDone) || (d1.lapsDone == d2.lapsDone && d1.nextAIPoint < d2.nextAIPoint) || (d1.lapsDone == d2.lapsDone && d1.nextAIPoint == d2.nextAIPoint && d1.AISegmentDone < d2.AISegmentDone); });
+			setCarForStats();
+
+			setLeaderTime(carsData.back());
+
+			for (auto& carData : carsData)
+			{
+				carData.timeDelay = std::max(static_cast<int>(clock() - begin_time - getLeaderTime(carData)), 0);
+			}
+
+			carsData.back().timeDelay = 0;
+
+			checkCheckboxes();
+		}
 	}
-	else if (begin_time != 0)
+	else
 	{
-		if (clock() - begin_time > 2000)
-			state = State::Inactive;
-
-		for (auto& carData : carsData)
-		{
-			carData.nextAIPoint = carData.car->getAIcurrentPoint();
-			carData.AISegmentDone = getAISegmentDoneValue(carData.nextAIPoint, carData.car->position);
-		}
-
-		countLaps();
-
-		std::sort(carsData.begin(), carsData.end(), [](const RaceTimerData& d1, const RaceTimerData& d2) {return (d1.lapsDone < d2.lapsDone) || (d1.lapsDone == d2.lapsDone && d1.nextAIPoint < d2.nextAIPoint) || (d1.lapsDone == d2.lapsDone && d1.nextAIPoint == d2.nextAIPoint && d1.AISegmentDone < d2.AISegmentDone); });
-		setCarForStats();
-
-		setLeaderTime(carsData.back());
-
-		for (auto& carData : carsData)
-		{
-			carData.timeDelay = std::max(static_cast<int>(clock() - begin_time - getLeaderTime(carData)), 0);
-		}
-
-		carsData.back().timeDelay = 0;
-
-		checkCheckboxes();
+		resetTimer();
+		startTimer();
 	}
 }
 

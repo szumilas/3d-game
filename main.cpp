@@ -461,7 +461,11 @@ void Update()
 	scrollDownMouse = false;
 	orbit.deactivateMovingXY();
 
-	CameraManager::Instance()->updateSpecialCameraPathPosition();
+	if (MapManager::Instance()->currentCameraView == -1 && !CameraManager::Instance()->updateSpecialCameraPathPosition())
+	{
+		MapManager::Instance()->currentCameraView = 1;
+		MapContainer::Instance()->introFinished();
+	}
 	//glutPostRedisplay();
 }
 

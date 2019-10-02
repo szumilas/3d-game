@@ -4,6 +4,7 @@
 #include "GlobalStructures.h"
 #include "Orbit.h"
 #include "ObjectWithCamera.h"
+#include "Car.h"
 
 class CameraManager
 {
@@ -14,10 +15,12 @@ public:
 	static std::unique_ptr<CameraManager>& Instance();
 
 	std::pair<Point, Point> getCurrentCameraPoints();
-	void updateSpecialCameraPathPosition();
+	bool updateSpecialCameraPathPosition();
 
 	void adjustCamera(int idCameraView);
 	void restartIdSpecialCameraPath() { idSpecialCameraPath = 0; };
+	void setCarZero(Car* car) { carZero = car; }
+	Car* getCarZero() { return carZero; }
 
 private:
 
@@ -33,6 +36,7 @@ public:
 private:
 
 	float idSpecialCameraPath = 0;
+	Car* carZero = nullptr;
 
 	static std::unique_ptr<CameraManager> _instance;
 
