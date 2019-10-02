@@ -141,6 +141,7 @@ public:
 	static std::vector<std::pair<Point, Point>> raceBarriers;
 	static std::pair<Point, Point> meta;
 	static SplineStruct currentSpline;
+	static std::pair<Spline, Spline> cameraSpline;
 
 private:
 

@@ -22,6 +22,7 @@ std::vector<MapContainer::PathStruct> MapContainer::AIPoints;
 std::vector<std::pair<Point, Point>> MapContainer::raceBarriers;
 std::pair<Point, Point> MapContainer::meta;
 MapContainer::SplineStruct MapContainer::currentSpline;
+std::pair<Spline, Spline> MapContainer::cameraSpline;
 std::vector<float> MapContainer::AIPointsDistances;
 RaceTimer MapContainer::raceTimer;
 int MapContainer::w;
@@ -758,27 +759,46 @@ void MapContainer::ConvertPathToMeta(const Point& point)
 
 void MapContainer::AddCameraPoint(const Point& point)
 {
+	auto& currentCameraCenter = CameraManager::Instance()->getCurrentCameraPoints().first;
+	auto& currentCameraLookAt = CameraManager::Instance()->getCurrentCameraPoints().second;
 
+	if (cameraSpline.first.points.empty()
+		|| cameraSpline.first.points.back().distance2D(currentCameraCenter) > 0.1
+		|| cameraSpline.second.points.back().distance2D(currentCameraLookAt) > 0.1
+		)
+	{
+		cameraSpline.first.points.push_back(currentCameraCenter);
+		cameraSpline.second.points.push_back(currentCameraLookAt);
+	}
 }
 
 void MapContainer::RemoveCameraPoints(const Point& point)
 {
-
+	cameraSpline.first.points.clear();
+	cameraSpline.second.points.clear();
 }
 
 void MapContainer::ConvertCameraPointsToSpline(const Point& point)
 {
-	Spline spline;
-	spline.points = { {10, -10, 1}, {10, -30, 1}, { 30, -30, 10 },{ 30, -10, 1 }, {10, -10, 1} };
-	spline.calculateLengths();
+	if (cameraSpline.first.points.size() >= 4)
+	{
+		cameraSpline.first.calculateLengths();
+		cameraSpline.second.calculateLengths();
 
-	auto splineSubpoints = spline.generateSubpoints(0.05);
-	std::vector<std::pair<Point, Point>> newSpecialCameraPath;
+		auto splineSubpointsCenter = cameraSpline.first.generateSubpoints(cameraSpline.first.length() / 500);
+		auto splineSubpointsLookAt = cameraSpline.second.generateSubpoints(cameraSpline.second.length() / 500);
 
-	std::for_each(splineSubpoints.begin(), splineSubpoints.end(), [&](const Point& p) {newSpecialCameraPath.push_back({ p, {-20, 30, 0} }); });
+		std::vector<std::pair<Point, Point>> newSpecialCameraPath;
 
+		int limit = std::min(splineSubpointsCenter.size(), splineSubpointsLookAt.size());
+		for (int q = 0; q < limit; q++)
+		{
+			newSpecialCameraPath.push_back({ splineSubpointsCenter[q], splineSubpointsLookAt[q] });
+		}
 
-	CameraManager::Instance()->specialCameraPath = newSpecialCameraPath;
+		CameraManager::Instance()->specialCameraPath = newSpecialCameraPath;
+		CameraManager::Instance()->restartIdSpecialCameraPath();
+	}
 }
 
 void MapContainer::PlayCameraSpline(const Point& point)

@@ -44,7 +44,7 @@ void CameraManager::updateSpecialCameraPathPosition()
 {
 	idSpecialCameraPath += 30 / FPS;
 
-	if (idSpecialCameraPath > specialCameraPath.size())
+	if (idSpecialCameraPath >= specialCameraPath.size())
 	{
 		idSpecialCameraPath -= (specialCameraPath.size());
 	}
