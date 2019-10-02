@@ -151,6 +151,8 @@ public:
 	static SplineStruct currentSpline;
 	static std::pair<Spline, Spline> cameraSpline;
 
+	static RaceTimer raceTimer;
+
 private:
 
 	static int w;
@@ -168,8 +170,6 @@ private:
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapObjectSections;
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;
 	static std::unique_ptr<MapObject>* background;
-
-	static RaceTimer raceTimer;
 
 
 	std::vector<Object3D> myMap;

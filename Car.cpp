@@ -103,8 +103,11 @@ void Car::move()
 	//------------------------
 
 	engine.setRPM(Engine::calculateRMP(gearBox.getCurrentTransmission() * gearBox.getMainTransmission(), rd, v.length()));
-	
-	forces = pacejkaModel.calculateForces(drivingDir, tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, acceleration, angularVelocity, steeringWheelAngle, rz);
+
+	if (!MapContainer::Instance()->raceTimer.beforeRace)
+	{
+		forces = pacejkaModel.calculateForces(drivingDir, tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, acceleration, angularVelocity, steeringWheelAngle, rz);
+	}
 	
 	calculateCollisions();
 	calculateNetForces();
