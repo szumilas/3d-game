@@ -144,6 +144,7 @@
     <ClCompile Include="Crossing.cpp" />
     <ClCompile Include="Footway.cpp" />
     <ClCompile Include="freetype.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="GlobalStructures.cpp" />
     <ClCompile Include="GreenArea.cpp" />
     <ClCompile Include="GrunwaldzkiCenter.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="enum.h" />
     <ClInclude Include="Footway.h" />
     <ClInclude Include="freetype.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="GreenArea.h" />
