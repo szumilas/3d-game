@@ -29,8 +29,43 @@
 
 class Game
 {
+
 public:
 
 	Game(int argc, char**agrv);
 
+	void play();
+
+private:
+
+	void init();
+	static void display();
+	static void reshape(int width, int height);
+	static void timer(int);
+	static void keyboard(unsigned char key, int x, int y);
+	static void mouse(int button, int state, int x, int y);
+	static void SpecialKeys(int key, int x, int y);
+	static void look(int x, int y);
+	static void SpecialKeysUp(int key, int x, int y);
+	static void Update();
+
+public:
+
+
+private:
+
+	static int current_time;
+	static int previos_time;
+	static int noOfFrames;
+	 
+	static int windowWidth;
+	static int windowHeight;
+	 
+	static int windowRealWidth;
+	static int windowRealHeight;
+	 
+	static float angle;
+
+	static int mouseXPos;
+	static int mouseYPos;
 };

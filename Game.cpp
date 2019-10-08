@@ -1,34 +1,24 @@
 #include "Game.h"
 
-int current_time;
-int previos_time = time(NULL);
-int noOfFrames = 0;
+int Game::current_time;
+int Game::previos_time = time(NULL);
+int Game::noOfFrames = 0;
 
-int windowWidth = 1500;
-int windowHeight = 750;
+int Game::windowWidth = 1500;
+int Game::windowHeight = 750;
 
-int windowRealWidth;
-int windowRealHeight;
+int Game::windowRealWidth;
+int Game::windowRealHeight;
 
-float angle = 55.0f;
+float Game::angle = 55.0f;
 
-Wheel wheel;
+int Game::mouseXPos;
+int Game::mouseYPos;
+
+
 Orbit orbit;
 CarGauge carGauge;
 
-
-void display();
-void reshape(int, int);
-void keyboard(unsigned char key, int x, int y);
-void mouse(int button, int state, int x, int y);
-void look(int x, int y);
-void timer(int);
-
-void SpecialKeys(int key, int x, int y);
-void SpecialKeysUp(int key, int x, int y);
-void Update();
-
-void Cube(float a, float b, float c, float d, float h);
 
 GLboolean upPressed = false;
 GLboolean downPressed = false;
@@ -49,12 +39,9 @@ GLboolean scrollMouseButtonDown = false;
 GLboolean scrollUpMouse = false;
 GLboolean scrollDownMouse = false;
 
-int mouseXPos;
-int mouseYPos;
 
 
-
-void init()
+void Game::init()
 {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
@@ -62,8 +49,7 @@ void init()
 	glAlphaFunc(GL_GREATER, 0.1f);
 }
 
-
-void display()
+void Game::display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -126,7 +112,7 @@ void display()
 
 }
 
-void reshape(int width, int height)
+void Game::reshape(int width, int height)
 {
 	glViewport(0, 0, windowRealWidth, windowRealHeight);
 	glMatrixMode(GL_PROJECTION);
@@ -138,7 +124,7 @@ void reshape(int width, int height)
 	display();
 }
 
-void timer(int)
+void Game::timer(int)
 {
 	/*std::cout << mouseXPos << " " << mouseYPos << " "
 	<< (leftMouseButtonDown == true ? "x " : "  ")
@@ -168,7 +154,7 @@ void timer(int)
 }
 
 
-void keyboard(unsigned char key, int x, int y)
+void Game::keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
@@ -188,7 +174,7 @@ void keyboard(unsigned char key, int x, int y)
 	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
 
-void mouse(int button, int state, int x, int y)
+void Game::mouse(int button, int state, int x, int y)
 {
 	if (button == GLUT_LEFT_BUTTON)
 	{
@@ -213,13 +199,13 @@ void mouse(int button, int state, int x, int y)
 	}
 }
 
-void look(int x, int y)
+void Game::look(int x, int y)
 {
 	mouseXPos = x;
 	mouseYPos = y;
 }
 
-void SpecialKeys(int key, int x, int y)
+void Game::SpecialKeys(int key, int x, int y)
 {
 
 	if (GLUT_KEY_UP == key)
@@ -239,7 +225,7 @@ void SpecialKeys(int key, int x, int y)
 
 }
 
-void SpecialKeysUp(int key, int x, int y)
+void Game::SpecialKeysUp(int key, int x, int y)
 {
 	if (GLUT_KEY_UP == key)
 		upPressed = false;
@@ -267,7 +253,7 @@ void SpecialKeysUp(int key, int x, int y)
 
 }
 
-void Update()
+void Game::Update()
 {
 	if (!leftMouseButtonDown && leftMouseButtonDownPrevious)
 	{
@@ -367,67 +353,6 @@ void Update()
 	//glutPostRedisplay();
 }
 
-void Cube(float a, float b, float c, float d, float h)
-{
-	glColor3f(0, 0.5, 0);
-
-	glBegin(GL_QUADS);
-
-	glVertex3f(c, d, 0);
-	glVertex3f(a, d, 0);
-	glVertex3f(a, d, h);
-	glVertex3f(c, d, h);
-
-	glEnd();
-
-	glColor3f(0.5, 0, 0);
-
-	glBegin(GL_QUADS);
-
-	glVertex3f(a, b, 0);
-	glVertex3f(a, d, 0);
-	glVertex3f(a, d, h);
-	glVertex3f(a, b, h);
-
-	glEnd();
-
-	glColor3f(0.5, 0, 0.5);
-
-	glBegin(GL_QUADS);
-
-	glVertex3f(c, b, 0);
-	glVertex3f(c, d, 0);
-	glVertex3f(c, d, h);
-	glVertex3f(c, b, h);
-
-	glEnd();
-
-	glColor3f(0.5, 0.5, 0);
-
-	glBegin(GL_QUADS);
-
-	glVertex3f(a, b, 0);
-	glVertex3f(c, b, 0);
-	glVertex3f(c, b, h);
-	glVertex3f(a, b, h);
-
-	glEnd();
-
-	glColor3f(0, 0.6, 0.6);
-
-	glBegin(GL_QUADS);
-
-	glVertex3f(a, b, h);
-	glVertex3f(c, b, h);
-	glVertex3f(c, d, h);
-	glVertex3f(a, d, h);
-
-	glEnd();
-
-
-}
-
-
 Game::Game(int argc, char**agrv)
 {
 	glutInit(&argc, agrv);
@@ -467,12 +392,12 @@ Game::Game(int argc, char**agrv)
 	init();
 	ilInit();
 
+}
 
+void Game::play()
+{
 	try
 	{
-		//obj.loadModel();
-		wheel.loadModel();
-
 		TextureManager::Instance()->readTextures();
 		SoundManager::Instance()->readSounds();
 
