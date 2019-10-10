@@ -80,6 +80,7 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::counter, 1.0f, 1.0f, "counter.png" },
 	{ Textures::meta, 0.972f, 0.972f, "meta.png" },
 	{ Textures::race_barrier, 2.0f, 1.2f, "race_barrier.png" },
+	{ Textures::menu_background, -1.0f, -1.0f, "menu_background.png" },
 };
 
 void TextureManager::DeInit()

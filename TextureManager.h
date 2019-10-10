@@ -18,6 +18,7 @@ class TextureManager
 		float realWidth;
 		float realHeight;
 		std::string filePath;
+		bool doMipmapping = true;
 		unsigned int idTexture;
 	};
 

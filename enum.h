@@ -77,6 +77,7 @@ enum class Textures : long
 	counter,
 	meta,
 	race_barrier,
+	menu_background,
 };
 
 enum class Sounds : long

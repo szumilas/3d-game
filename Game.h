@@ -22,6 +22,7 @@
 #include "MapContainer.h"
 #include "CarGauge.h"
 #include "Screen2D.h"
+#include "Menu.h"
 
 #include "carDB.h"
 #include "KeyboardManager.h"
@@ -29,6 +30,13 @@
 
 class Game
 {
+public:
+
+	enum State
+	{
+		mainMenu,
+		race,
+	};
 
 public:
 
@@ -68,4 +76,7 @@ private:
 
 	static int mouseXPos;
 	static int mouseYPos;
+
+	static Menu menu;
+	static State gameState;
 };

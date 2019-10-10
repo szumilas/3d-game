@@ -153,6 +153,7 @@
     <ClCompile Include="MapContainer.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mesh.h" />
     <ClCompile Include="MetaLine.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="MapContainer.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="MetaLine.h" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="ObjectWithCamera.h" />

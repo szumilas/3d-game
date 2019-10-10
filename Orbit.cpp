@@ -112,3 +112,22 @@ void Orbit::calculateFlatCursorRealWorldPosition(int windowWidth, int windowHeig
 	flatCursorRealWorld.z = realYDistanceOnScreen * sin(atan(r / z));
 
 }
+
+void Orbit::displayFlatCursor()
+{
+	glBegin(GL_LINES);
+	glColor3f(1, 0, 0);
+	glVertex3f(getFlatCursorX() - 5, getFlatCursorY(), 0);
+	glVertex3f(getFlatCursorX() + 5, getFlatCursorY(), 0);
+	glVertex3f(getFlatCursorX(), getFlatCursorY() - 5, 0);
+	glVertex3f(getFlatCursorX(), getFlatCursorY() + 5, 0);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glColor3f(0, 0, 1);
+	glVertex3f(getLookAtX() - 1, getLookAtY(), 0);
+	glVertex3f(getLookAtX() + 1, getLookAtY(), 0);
+	glVertex3f(getLookAtX(), getLookAtY() - 1, 0);
+	glVertex3f(getLookAtX(), getLookAtY() + 1, 0);
+	glEnd();
+}

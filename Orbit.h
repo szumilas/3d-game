@@ -21,6 +21,7 @@ public:
 	Point getFlatCursor() { return flatCursor; }
 	float getLookAtX() { return lookAtX; }
 	float getLookAtY() { return lookAtY; }
+	void displayFlatCursor();
 
 	void calculateFlatCursorPosition(int windowWidth, int windowHeight, int mouseXpos, int mouseYpos, int angle);
 	void calculateFlatCursorRealWorldPosition(int windowWidth, int windowHeight, int mouseXpos, int mouseYpos, int angle);

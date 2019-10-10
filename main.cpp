@@ -1,5 +1,3 @@
-#define NOFULLSCREEN
-
 #include "Game.h"
 
 int main(int argc, char**agrv)
