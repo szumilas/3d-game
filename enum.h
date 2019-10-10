@@ -78,6 +78,7 @@ enum class Textures : long
 	meta,
 	race_barrier,
 	menu_background,
+	menu_arrow,
 };
 
 enum class Sounds : long
@@ -115,6 +116,7 @@ enum class ColorName : long
 	LIGHT_GRAY,
 	DARK_GRAY,
 	GRAY,
+	GRAY_MENU,
 	RED,
 	GREEN,
 	BLUE,

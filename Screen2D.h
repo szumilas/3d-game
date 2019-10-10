@@ -44,6 +44,7 @@ public:
 	freetype::font_data roboto_modo_regular;
 	freetype::font_data squada_one_regular;
 	freetype::font_data squada_one_regular_big;
+	freetype::font_data wallpoet_regular;
 
 
 private:

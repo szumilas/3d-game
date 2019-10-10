@@ -6,6 +6,7 @@ std::vector<Color::ColorData> Color::colors{
 	{ ColorName::LIGHT_GRAY, 0.8f, 0.8f, 0.8f },
 	{ ColorName::DARK_GRAY, 0.2f, 0.2f, 0.2f },
 	{ ColorName::GRAY, 0.5f, 0.5f, 0.5f },
+	{ ColorName::GRAY_MENU, 0.37f, 0.44f, 0.44f },
 	{ ColorName::RED, 1.0f, 0.0f, 0.0f },
 	{ ColorName::GREEN, 0.0f, 1.0f, 0.0f },
 	{ ColorName::BLUE, 0.0f, 0.0f, 1.0f },

@@ -139,7 +139,8 @@ void MapManager::Init()
 #ifdef _DEBUG
 	Instance()->readMap("trees2.osm");
 #else
-	Instance()->readMap("grunwaldWithRiver.osm");
+	Instance()->readMap("trees2.osm");
+	//Instance()->readMap("grunwaldWithRiver.osm");
 #endif
 	//mapManager.readMap("singlebuilding.osm");
 	//mapManager.readMap("walls.osm");

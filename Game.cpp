@@ -286,90 +286,114 @@ void Game::Update()
 
 	KeyboardManager::Instance()->getKeys();
 
-	if (upPressed)
-		MapContainer::Instance()->cars[0].accelerate();
-	if (downPressed)
-		MapContainer::Instance()->cars[0].slow();
-	if (leftPressed)
-		MapContainer::Instance()->cars[0].turnLeft();
-	if (rightPressed)
-		MapContainer::Instance()->cars[0].turnRight();
-	if (KeyboardManager::Instance()->checkKey(' '))
-		MapContainer::Instance()->cars[0].breakPressed();
-	if (F1Pressed && F1Released)
+	if (gameState == State::race)
 	{
-		MapContainer::Instance()->cars[0].gearUp();
-		F1Released = false;
-	}
-	if (F2Pressed && F2Released)
-	{
-		MapContainer::Instance()->cars[0].gearDown();
-		F2Released = false;
-	}
-	if (F3Pressed && F3Released)
-	{
-		F3Released = false;
-	}
+		if (upPressed)
+			MapContainer::Instance()->cars[0].accelerate();
+		if (downPressed)
+			MapContainer::Instance()->cars[0].slow();
+		if (leftPressed)
+			MapContainer::Instance()->cars[0].turnLeft();
+		if (rightPressed)
+			MapContainer::Instance()->cars[0].turnRight();
+		if (KeyboardManager::Instance()->checkKey(' '))
+			MapContainer::Instance()->cars[0].breakPressed();
+		if (F1Pressed && F1Released)
+		{
+			MapContainer::Instance()->cars[0].gearUp();
+			F1Released = false;
+		}
+		if (F2Pressed && F2Released)
+		{
+			MapContainer::Instance()->cars[0].gearDown();
+			F2Released = false;
+		}
+		if (F3Pressed && F3Released)
+		{
+			F3Released = false;
+		}
 
-	for (auto& car : MapContainer::Instance()->cars)
-		car.move();
+		for (auto& car : MapContainer::Instance()->cars)
+			car.move();
 
-	MapContainer::Instance()->updateRaceTimer();
+		MapContainer::Instance()->updateRaceTimer();
 
-	//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
+		//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 
-	if (leftMouseButtonDown && rightMouseButtonDown)
-	{
-		orbit.rotate(-1);
-	}
-	else if (scrollUpMouse)
-	{
-		orbit.zoomIn();
-	}
-	else if (scrollDownMouse)
-	{
-		orbit.zoomOut();
-	}
-	else if (rightMouseButtonDown)
-	{
-		orbit.changeAlpha();
-		if (F1Pressed)
-			MapContainer::Instance()->removePoints();
-	}
-	else if (scrollMouseButtonDown)
-	{
-		orbit.rotate();
-	}
-	if (F2Pressed && F3Pressed)
-	{
-		MapContainer::Instance()->AIStop();
-	}
+		if (leftMouseButtonDown && rightMouseButtonDown)
+		{
+			orbit.rotate(-1);
+		}
+		else if (scrollUpMouse)
+		{
+			orbit.zoomIn();
+		}
+		else if (scrollDownMouse)
+		{
+			orbit.zoomOut();
+		}
+		else if (rightMouseButtonDown)
+		{
+			orbit.changeAlpha();
+			if (F1Pressed)
+				MapContainer::Instance()->removePoints();
+		}
+		else if (scrollMouseButtonDown)
+		{
+			orbit.rotate();
+		}
+		if (F2Pressed && F3Pressed)
+		{
+			MapContainer::Instance()->AIStop();
+		}
 
-	else if (leftMouseButtonDown)
-	{
-		if (F1Pressed)
-			orbit.activateMovingXY();
-	}
+		else if (leftMouseButtonDown)
+		{
+			if (F1Pressed)
+				orbit.activateMovingXY();
+		}
 
-	if (!F1Pressed && leftMouseButtonClicked)
+		if (!F1Pressed && leftMouseButtonClicked)
+		{
+			if (1.0 - static_cast<float>(mouseYPos) / windowRealHeight > 0.9)
+				MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowRealWidth - 0.5) * windowRealWidth / windowRealHeight, 1.0 - static_cast<float>(mouseYPos) / windowRealHeight);
+			else
+				MapContainer::Instance()->useTool(orbit.getFlatCursor());
+		}
+
+		orbit.calculateFlatCursorPosition(windowRealWidth, windowRealHeight, mouseXPos, mouseYPos, angle);
+
+
+		scrollUpMouse = false;
+		scrollDownMouse = false;
+		orbit.deactivateMovingXY();
+
+		if (MapManager::Instance()->currentCameraView == -1 && !CameraManager::Instance()->updateSpecialCameraPathPosition())
+		{
+			MapManager::Instance()->currentCameraView = 1;
+			MapContainer::Instance()->introFinished();
+		}
+	}
+	else if (gameState == State::mainMenu)
 	{
-		if (1.0 - static_cast<float>(mouseYPos) / windowRealHeight > 0.9)
-			MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowRealWidth - 0.5) * windowRealWidth / windowRealHeight, 1.0 - static_cast<float>(mouseYPos) / windowRealHeight);
+		static clock_t menuSwitchDelay = clock();
+
+		if (leftPressed || rightPressed)
+		{
+			if (clock() - menuSwitchDelay > 300)
+			{
+				if (leftPressed)
+					menu.selectPrevious();
+				if (rightPressed)
+					menu.selectNext();
+
+				menuSwitchDelay = clock();
+			}
+		}
 		else
-			MapContainer::Instance()->useTool(orbit.getFlatCursor());
-	}
-
-	orbit.calculateFlatCursorPosition(windowRealWidth, windowRealHeight, mouseXPos, mouseYPos, angle);
-
-
-	scrollUpMouse = false;
-	scrollDownMouse = false;
-	orbit.deactivateMovingXY();
-
-	if (MapManager::Instance()->currentCameraView == -1 && !CameraManager::Instance()->updateSpecialCameraPathPosition())
-	{
-		MapManager::Instance()->currentCameraView = 1;
-		MapContainer::Instance()->introFinished();
+		{
+			menuSwitchDelay = 0;
+		}
 	}
 	//glutPostRedisplay();
 }
@@ -429,7 +453,7 @@ void Game::play()
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
 		MapManager::Init();
-		menu.Init();
+		menu.Init(windowRealWidth, windowRealHeight);
 
 
 		MapContainer::loadWorldIntoSections(MapManager::Instance()->mapObjects);

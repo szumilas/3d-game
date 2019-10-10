@@ -6,9 +6,13 @@
 
 #include "Screen2D.h"
 
-void Menu::Init()
+void Menu::Init(int w, int h)
 {
-	idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_background)].idTexture;
+	idTextureBackground = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_background)].idTexture;
+	idTextureArrow = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_arrow)].idTexture;
+	createMenu();
+	Menu::w = w;
+	Menu::h = h;
 }
 
 void Menu::displayBackground()
@@ -17,7 +21,7 @@ void Menu::displayBackground()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, idTexture);
+	glBindTexture(GL_TEXTURE_2D, idTextureBackground);
 	glBegin(GL_POLYGON);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -38,9 +42,146 @@ void Menu::displayBackground()
 
 void Menu::displayForeground()
 {
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -50, 20, "Quick Race", &(Screen2D::Instance()->squada_one_regular_big));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -20, 20, "Free Ride", &(Screen2D::Instance()->squada_one_regular_big));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 10, 20, "Highscores", &(Screen2D::Instance()->squada_one_regular_big));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 40, 20, "Credits", &(Screen2D::Instance()->squada_one_regular_big));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 70, 20, "Quit", &(Screen2D::Instance()->squada_one_regular_big));
+
+	glBindTexture(GL_TEXTURE_2D, idTextureArrow);
+	glBegin(GL_POLYGON);
+
+	if (currentMenuLevel->selected == 0)
+		setGLcolor(ColorName::GRAY_MENU);
+	else
+		setGLcolor(ColorName::YELLOW);
+	
+	glTexCoord2f(0, 0);
+	glVertex2f(0.5 * w - 0.50 * h, 0.18 * h);
+	glTexCoord2f(1, 0);
+	glVertex2f(0.5 * w - 0.42 * h, 0.18 * h);
+	glTexCoord2f(1, 1);
+	glVertex2f(0.5 * w - 0.42 * h, 0.25 * h);
+	glTexCoord2f(0, 1);
+	glVertex2f(0.5 * w - 0.50 * h, 0.25 * h);
+
+	glEnd();
+
+	//----------------------
+
+	glBindTexture(GL_TEXTURE_2D, idTextureArrow);
+	glBegin(GL_POLYGON);
+
+	if (currentMenuLevel->selected == currentMenuLevel->options.size() - 1)
+		setGLcolor(ColorName::GRAY_MENU);
+	else
+		setGLcolor(ColorName::YELLOW);
+
+	glTexCoord2f(0, 0);
+	glVertex2f(0.5 * w + 0.50 * h, 0.18 * h);
+	glTexCoord2f(1, 0);
+	glVertex2f(0.5 * w + 0.42 * h, 0.18 * h);
+	glTexCoord2f(1, 1);
+	glVertex2f(0.5 * w + 0.42 * h, 0.25 * h);
+	glTexCoord2f(0, 1);
+	glVertex2f(0.5 * w + 0.50 * h, 0.25 * h);
+
+	glEnd();
+
+	//----------------------
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_POLYGON);
+	glColor3f(0.2f, 0.23f, 0.23f);
+
+	glVertex2f(0.5 * w - 0.5 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.5 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.5 * h, 0.25 * h);
+	glVertex2f(0.5 * w - 0.5 * h, 0.25 * h);
+
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
+	//----------------------
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_POLYGON);
+	glColor3f(0.176f, 0.749f, 0.851f);
+
+	glVertex2f(0.5 * w - 0.5 * h, 0.25 * h);
+	glVertex2f(0.5 * w + 0.5 * h, 0.25 * h);
+	glVertex2f(0.5 * w + 0.5 * h, 0.255 * h);
+	glVertex2f(0.5 * w - 0.5 * h, 0.255 * h);
+
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
+	//----------------------
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_POLYGON);
+	glColor3f(0.176f, 0.749f, 0.851f);
+
+	glVertex2f(0.5 * w - 0.5 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.5 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.5 * h, 0.175 * h);
+	glVertex2f(0.5 * w - 0.5 * h, 0.175 * h);
+
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
+	//----------------------
+	
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -45, 27.5, currentMenuLevel->text, &(Screen2D::Instance()->wallpoet_regular));
+
+	int x = -25;
+
+	for (int i = currentMenuLevel->selected - 1; i <= currentMenuLevel->selected + 1; ++i)
+	{
+		ColorName colorName;
+		if (i == currentMenuLevel->selected)
+			colorName = ColorName::YELLOW;
+		else
+			colorName = ColorName::WHITE;
+
+		std::string textToPrint;
+		float xPos;
+
+		if (i >= 0 && i < currentMenuLevel->options.size())
+		{
+			textToPrint = currentMenuLevel->options[i]->text;
+		}
+		else
+		{
+			textToPrint = "___";
+			colorName = ColorName::GRAY_MENU;
+		}
+
+		xPos = centerFont(x, textToPrint.size(), Screen2D::Instance()->squada_one_regular_big.h);
+
+		Screen2D::Instance()->addTestValueToPrint(colorName, xPos, 20, textToPrint, &(Screen2D::Instance()->squada_one_regular_big));
+
+		x += 25;
+	}
+}
+
+void Menu::createMenu()
+{
+	mainMenu.options = {&quickRace, &freeRide, &highscores, &credits, &quitGame };
+
+	currentMenuLevel = &mainMenu;
+}
+
+void Menu::selectPrevious()
+{
+	currentMenuLevel->selected--;
+	if (currentMenuLevel->selected < 0)
+		currentMenuLevel->selected = 0;
+}
+
+void Menu::selectNext()
+{
+	currentMenuLevel->selected++;
+	if (currentMenuLevel->selected >= currentMenuLevel->options.size())
+		currentMenuLevel->selected = currentMenuLevel->options.size() - 1;
+}
+
+float Menu::centerFont(float originalXpercent, int textLength, float fontSize)
+{
+	return originalXpercent - 100.0 * textLength / 2 * fontSize / h / 2;
 }

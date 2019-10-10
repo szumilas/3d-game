@@ -83,6 +83,7 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::meta, 0.972f, 0.972f, "meta.png", false },
 	{ Textures::race_barrier, 2.0f, 1.2f, "race_barrier.png", false },
 	{ Textures::menu_background, -1.0f, -1.0f, "menu_background.png" },
+	{ Textures::menu_arrow, -1.0f, -1.0f, "menu_arrow.png", false },
 };
 
 void TextureManager::DeInit()
