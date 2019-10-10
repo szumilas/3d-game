@@ -1,3 +1,5 @@
+#define NOMIPMAPPING
+
 #include "TextureManager.h"
 #include <algorithm>
 
@@ -23,14 +25,14 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::rail, -1.0f, -1.0f, "tram_rail.png" },
 	{ Textures::bollard, 1.0f, 0.5f, "bollard.png" },
 	{ Textures::concrete_wall, 1.0f, 1.0f, "concrete_wall.jpg" },
-	{ Textures::fence, 1.83f, 1.1f, "fence_with_post.png" },
+	{ Textures::fence, 1.83f, 1.1f, "fence_with_post.png", false },
 	{ Textures::guard_rail, 1.5f, 0.3f, "guard_rail.png" },
 	{ Textures::hedge, 2.0f, 1.0f, "hedge.png" },
 	{ Textures::retaining_wall, 2.0f, 1.0f, "retaining_wall.jpg" },
 	{ Textures::water, 1.0f, 1.0f, "water.jpg" },
 	{ Textures::bus_shelter, 1.5f, 3.0f, "bus_shelter.png" },
 	{ Textures::bus_shelter_with_sign, 1.5f, 3.0f, "bus_shelter_with_sign.png" },
-	{ Textures::crossing, 5.0f, 1.0f, "crossing.png" },
+	{ Textures::crossing, 5.0f, 1.0f, "crossing.png", false },
 	{ Textures::pasaz_grunwaldzki, 45.0f, 20.0f, "pasaz_grunwaldzki.png" },
 	{ Textures::pasaz_grunwaldzki_tunnel, 45.0f, 20.0f, "pasaz_grunwaldzki_tunnel.png" },
 	{ Textures::pasaz_grunwaldzki_banner, 20.0f, 20.0f, "pasaz_grunwaldzki_banner.png" },
@@ -72,14 +74,14 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::rolls_royce_phantom, -1.0f, -1.0f, "rolls_royce_phantom.png" },
 	{ Textures::alfa_romeo_147, -1.0f, -1.0f, "alfa_romeo_147.png" },
 	{ Textures::audi_r8_v10_coupe, -1.0f, -1.0f, "audi_r8_v10_coupe.png" },
-	{ Textures::car_gauge, -1.0f, -1.0f, "car_gauge.png" },
-	{ Textures::car_gauge_330, -1.0f, -1.0f, "car_gauge_330.png" },
+	{ Textures::car_gauge, -1.0f, -1.0f, "car_gauge.png", false },
+	{ Textures::car_gauge_330, -1.0f, -1.0f, "car_gauge_330.png", false },
 	{ Textures::elm_tree, -1.0f, -1.0f, "elm_tree.png" },
 	{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
 	{ Textures::map_editor_panel, 1.0f, 1.0f, "map_editor_panel.png" },
-	{ Textures::counter, 1.0f, 1.0f, "counter.png" },
-	{ Textures::meta, 0.972f, 0.972f, "meta.png" },
-	{ Textures::race_barrier, 2.0f, 1.2f, "race_barrier.png" },
+	{ Textures::counter, 1.0f, 1.0f, "counter.png", false },
+	{ Textures::meta, 0.972f, 0.972f, "meta.png", false },
+	{ Textures::race_barrier, 2.0f, 1.2f, "race_barrier.png", false },
 	{ Textures::menu_background, -1.0f, -1.0f, "menu_background.png" },
 };
 
@@ -104,6 +106,11 @@ void TextureManager::readTextures()
 	ilEnable(IL_ORIGIN_SET);
 	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 
+	bool mipmappingAllowed = false;
+#ifdef MIPMAPPING
+	mipmappingAllowed = true;
+#endif
+
 	for (auto& texture : textures)
 	{
 		int image = LoadImageA(const_cast<char*>(("Data/Textures/" + texture.filePath).c_str()));
@@ -118,24 +125,23 @@ void TextureManager::readTextures()
 		glGenTextures(1, &textureIdCreated); /* Texture name generation */
 		glBindTexture(GL_TEXTURE_2D, textureIdCreated); /* Binding of texture name */
 		
-		if (2 || texture.textureName == Textures::meta || texture.textureName == Textures::race_barrier || texture.textureName == Textures::counter || texture.textureName == Textures::meta || texture.textureName == Textures::crossing || texture.textureName == Textures::fence || texture.textureName == Textures::car_gauge)
+		if (texture.doMipmapping && mipmappingAllowed)
 		{
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); /* We will use linear interpolation for magnification filter */
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); /* We will use linear interpolation for minifying filter */
-	
-			glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
-				0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); /* We will use linear interpolation for minifying filter */
+
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+			gluBuild2DMipmaps(GL_TEXTURE_2D, 4, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
 		}
 		else
 		{
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); /* We will use linear interpolation for magnification filter */
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); /* We will use linear interpolation for minifying filter */
-		
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	
-			gluBuild2DMipmaps(GL_TEXTURE_2D, 4, ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-		
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); /* We will use linear interpolation for minifying filter */
+
+			glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+				0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
 		}
 		
 		
