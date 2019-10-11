@@ -129,9 +129,9 @@ void Menu::displayForeground()
 	
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -45, 27.5, currentMenuLevel->text, &(Screen2D::Instance()->wallpoet_regular));
 
-	int x = -25;
+	int x = -50;
 
-	for (int i = currentMenuLevel->selected - 1; i <= currentMenuLevel->selected + 1; ++i)
+	for (int i = currentMenuLevel->selected - 2; i <= currentMenuLevel->selected + 2; ++i)
 	{
 		ColorName colorName;
 		if (i == currentMenuLevel->selected)
@@ -148,13 +148,17 @@ void Menu::displayForeground()
 		}
 		else
 		{
-			textToPrint = "___";
+			textToPrint = "===   ===";
 			colorName = ColorName::GRAY_MENU;
 		}
 
-		xPos = centerFont(x, textToPrint.size(), Screen2D::Instance()->squada_one_regular_big.h);
-
-		Screen2D::Instance()->addTestValueToPrint(colorName, xPos, 20, textToPrint, &(Screen2D::Instance()->squada_one_regular_big));
+		xPos = x + textMenuOffset * 25;
+		if (xPos > -35 && xPos < 35)
+		{
+			xPos = centerFont(x, textToPrint.size(), Screen2D::Instance()->squada_one_regular_big.h);
+			xPos += textMenuOffset * 25;
+			Screen2D::Instance()->addTestValueToPrint(colorName, xPos, 20, textToPrint, &(Screen2D::Instance()->squada_one_regular_big));
+		}
 
 		x += 25;
 	}
@@ -184,4 +188,27 @@ void Menu::selectNext()
 float Menu::centerFont(float originalXpercent, int textLength, float fontSize)
 {
 	return originalXpercent - 100.0 * textLength / 2 * fontSize / h / 2;
+}
+
+void Menu::update()
+{
+	static float floatingIndex = 0;
+	
+	float acceleration = pow(abs(static_cast<float>(currentMenuLevel->selected) - floatingIndex) + 0.1f, 2) / 3;
+
+	if (currentMenuLevel->selected > floatingIndex)
+	{
+		floatingIndex += acceleration;
+	}
+	else if (currentMenuLevel->selected < floatingIndex)
+	{
+		floatingIndex -= acceleration;
+	}
+
+	if (abs(static_cast<float>(currentMenuLevel->selected) - floatingIndex) < 0.006)
+	{
+		floatingIndex = static_cast<float>(currentMenuLevel->selected);
+	}
+
+	textMenuOffset = static_cast<float>(currentMenuLevel->selected) - floatingIndex;
 }

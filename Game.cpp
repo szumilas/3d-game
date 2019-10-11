@@ -394,6 +394,8 @@ void Game::Update()
 		{
 			menuSwitchDelay = 0;
 		}
+
+		menu.update();
 	}
 	//glutPostRedisplay();
 }

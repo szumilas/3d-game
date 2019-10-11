@@ -11,6 +11,8 @@ public:
 	void displayBackground();
 	void displayForeground();
 
+	void update();
+
 	void selectPrevious();
 	void selectNext();
 
@@ -35,6 +37,8 @@ private:
 
 	int w;
 	int h;
+
+	float textMenuOffset = 0;
 
 
 	struct MenuLevel
