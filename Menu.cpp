@@ -7,6 +7,40 @@
 #include "Screen2D.h"
 #include "carDB.h"
 
+void display2DRectangle(Point& bottomLeft, Point& topRight, ColorName colorName = ColorName::WHITE, float z = 0)
+{
+	glBegin(GL_POLYGON);
+
+	Menu::setGLcolor(colorName);
+
+	glTexCoord2f(0, 0);
+	glVertex3f(bottomLeft.x, bottomLeft.y, z);
+	glTexCoord2f(1, 0);
+	glVertex3f(topRight.x, bottomLeft.y, z);
+	glTexCoord2f(1, 1);
+	glVertex3f(topRight.x, topRight.y, z);
+	glTexCoord2f(0, 1);
+	glVertex3f(bottomLeft.x, topRight.y, z);
+
+	glEnd();
+}
+
+void display2DRectangleNoTexture(Point& bottomLeft, Point& topRight, ColorName colorName = ColorName::WHITE, float z = 0)
+{
+	glDisable(GL_TEXTURE_2D);
+
+	display2DRectangle(bottomLeft, topRight, colorName, z);
+
+	glEnable(GL_TEXTURE_2D);
+}
+
+void display2DRectangleTexture(Point& bottomLeft, Point& topRight, unsigned int idTexture, ColorName colorName = ColorName::WHITE, float z = 0)
+{
+	glBindTexture(GL_TEXTURE_2D, idTexture);
+
+	display2DRectangle(bottomLeft, topRight, colorName, z);
+}
+
 void Menu::Init(int w, int h)
 {
 	idTextureBackground = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_background)].idTexture;
@@ -20,10 +54,6 @@ void Menu::Init(int w, int h)
 
 void Menu::displayBackground()
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_TEXTURE_2D);
-
 	glBindTexture(GL_TEXTURE_2D, idTextureBackground);
 	glBegin(GL_POLYGON);
 
@@ -38,143 +68,24 @@ void Menu::displayBackground()
 	glVertex3f(-17.54, -30, 10.83);
 
 	glEnd();
-
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
 }
 
 void Menu::displayForegroundBeforeText()
 {
-	glBindTexture(GL_TEXTURE_2D, idTextureArrow);
-	glBegin(GL_POLYGON);
-
-	if (currentMenuLevel->selected == 0)
-		setGLcolor(ColorName::GRAY_MENU);
-	else
-		setGLcolor(ColorName::YELLOW);
-
-	glTexCoord2f(0, 0);
-	glVertex3f(0.5 * w - 0.50 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.5 * w - 0.42 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 1);
-	glVertex3f(0.5 * w - 0.42 * h, 0.25 * h, 1);
-	glTexCoord2f(0, 1);
-	glVertex3f(0.5 * w - 0.50 * h, 0.25 * h, 1);
-
-	glEnd();
-
-	//----------------------
-
-	glBindTexture(GL_TEXTURE_2D, idTextureArrow);
-	glBegin(GL_POLYGON);
-
-	if (currentMenuLevel->selected == currentMenuLevel->options.size() - 1)
-		setGLcolor(ColorName::GRAY_MENU);
-	else
-		setGLcolor(ColorName::YELLOW);
-
-	glTexCoord2f(0, 0);
-	glVertex3f(0.5 * w + 0.50 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.5 * w + 0.42 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 1);
-	glVertex3f(0.5 * w + 0.42 * h, 0.25 * h, 1);
-	glTexCoord2f(0, 1);
-	glVertex3f(0.5 * w + 0.50 * h, 0.25 * h, 1);
-
-	glEnd();
-
-	//----------------------
-
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_POLYGON);
-
-	glColor3f(0.15f, 0.17f, 0.18f);
-
-	glTexCoord2f(0, 0);
-	glVertex3f(0.5 * w - 0.55 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.5 * w - 0.37 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 1);
-	glVertex3f(0.5 * w - 0.37 * h, 0.25 * h, 1);
-	glTexCoord2f(0, 1);
-	glVertex3f(0.5 * w - 0.55 * h, 0.25 * h, 1);
-
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
-
-	//---------------------------------------
-
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_POLYGON);
-
-	glColor3f(0.15f, 0.17f, 0.18f);
-
-	glTexCoord2f(0, 0);
-	glVertex3f(0.5 * w + 0.55 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 0);
-	glVertex3f(0.5 * w + 0.37 * h, 0.18 * h, 1);
-	glTexCoord2f(1, 1);
-	glVertex3f(0.5 * w + 0.37 * h, 0.25 * h, 1);
-	glTexCoord2f(0, 1);
-	glVertex3f(0.5 * w + 0.55 * h, 0.25 * h, 1);
-
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
-
-	//---------------------------------------
+	display2DRectangleTexture(Point(0.5 * w - 0.50 * h, 0.18 * h), Point(0.5 * w - 0.42 * h, 0.25 * h), idTextureArrow, currentMenuLevel->selected == 0 ? ColorName::MENU_LIGHT_GRAY : ColorName::YELLOW, 1);
+	display2DRectangleTexture(Point(0.5 * w + 0.50 * h, 0.18 * h), Point(0.5 * w + 0.42 * h, 0.25 * h, 0.25 * h), idTextureArrow, currentMenuLevel->selected == currentMenuLevel->options.size() - 1 ? ColorName::MENU_LIGHT_GRAY : ColorName::YELLOW, 1);
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.18 * h), Point(0.5 * w - 0.37 * h, 0.25 * h), ColorName::MENU_DARK_GRAY, 1);
+	display2DRectangleNoTexture(Point(0.5 * w + 0.55 * h, 0.18 * h), Point(0.5 * w + 0.37 * h, 0.25 * h), ColorName::MENU_DARK_GRAY, 1);
 }
 
 void Menu::displayForeground()
 {
-
-
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_POLYGON);
-	glColor3f(0.2f, 0.23f, 0.23f);
-
-	glVertex2f(0.5 * w - 0.55 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.55 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.55 * h, 0.25 * h);
-	glVertex2f(0.5 * w - 0.55 * h, 0.25 * h);
-
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
-
-	//----------------------
-
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_POLYGON);
-	glColor3f(0.176f, 0.749f, 0.851f);
-
-	glVertex2f(0.5 * w - 0.55 * h, 0.25 * h);
-	glVertex2f(0.5 * w + 0.55 * h, 0.25 * h);
-	glVertex2f(0.5 * w + 0.55 * h, 0.255 * h);
-	glVertex2f(0.5 * w - 0.55 * h, 0.255 * h);
-
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
-
-	//----------------------
-
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_POLYGON);
-	glColor3f(0.176f, 0.749f, 0.851f);
-
-	glVertex2f(0.5 * w - 0.55 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.55 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.55 * h, 0.175 * h);
-	glVertex2f(0.5 * w - 0.55 * h, 0.175 * h);
-
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
-
-	//----------------------
-	
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.18 * h), Point(0.5 * w + 0.55 * h, 0.25 * h), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.25 * h), Point(0.5 * w + 0.55 * h, 0.255 * h), ColorName::MENU_BLUE);
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.18 * h), Point(0.5 * w + 0.55 * h, 0.175 * h), ColorName::MENU_BLUE);
+		
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -45, 27.5, currentMenuLevel->text, &(Screen2D::Instance()->wallpoet_regular));
-
-
+	
 	std::vector<std::tuple<ColorName, std::string, float>> textValuesToPrint;
 
 	for (int i = currentMenuLevel->selected - 2; i <= currentMenuLevel->selected + 2; ++i)
@@ -194,7 +105,7 @@ void Menu::displayForeground()
 		else
 		{
 			textToPrint = "===   ===";
-			colorName = ColorName::GRAY_MENU;
+			colorName = ColorName::MENU_LIGHT_GRAY;
 		}
 
 		textValuesToPrint.push_back({ colorName, textToPrint, 0 });
@@ -335,7 +246,25 @@ void Menu::display3DscreenForOption()
 
 void Menu::display2DscreenForOption()
 {
+	if (currentMenuLevel->options[currentMenuLevel->selected]->preview2D != nullptr)
+	{
+		(this->*currentMenuLevel->options[currentMenuLevel->selected]->preview2D)(currentMenuLevel->options[currentMenuLevel->selected]->idOption);
+	}
+}
 
+void Menu::preview2DCar(int id)
+{
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.35 * h), Point(0.5 * w - 0.25 * h, 0.75 * h), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.32 * h), Point(0.5 * w - 0.25 * h, 0.35 * h), ColorName::MENU_BLUE);
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 70, "Engine power: ", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 66, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).power * 1.36)) + " HP", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 61, "Mass: ", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 57, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).mass)) + " kg", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Top speed: ", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).vMax)) + " km/h", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Acceleration 0-100 km/h: ", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).acceleration_0_100)) + " s", &(Screen2D::Instance()->squada_one_regular_big));
 }
 
 void Menu::preview3DCar(int id)
@@ -350,7 +279,7 @@ void Menu::preview3DCar(int id)
 
 	static int idCar = 0;
 
-	exampleCar->setPosition(Point(), angle);
+	exampleCar->setPosition(Point(0, 1.5), angle);
 	exampleCar->display();
 	exampleCar->alreadyPrinted = false;
 }

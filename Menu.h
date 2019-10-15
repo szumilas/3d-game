@@ -23,21 +23,22 @@ public:
 	void selectNext();
 	void enter();
 
-private:
-
-	void createMenu();
 	static void setGLcolor(ColorName colorName)
 	{
 		Color color = Color(colorName);
 		glColor3f(color.red, color.green, color.blue);
 	}
 
+private:
+
+	void createMenu();
+
 	float centerFont(float originalXpercent, std::string text, float fontSize);
 	float textRealSize(std::string text, float fontSize); //[%]
 
 	void enterNextLevel();
 	void enterPreviousLevel();
-	void preview2DCar(int id) {}
+	void preview2DCar(int id);
 	void preview3DCar(int id);
 
 public:
