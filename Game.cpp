@@ -110,21 +110,12 @@ void Game::display()
 
 		menu.displayBackground();
 
-		static float angle = 0;
-		angle += PI / 6 / FPS;
-
-		static int idCar = 0;
-
-		idCar = static_cast<int>(MapContainer::Instance()->cars.size() * angle / (2 * PI)) % MapContainer::Instance()->cars.size();
-
-		MapContainer::Instance()->cars[idCar].setPosition(Point(), angle);
-		MapContainer::Instance()->cars[idCar].display();
-		MapContainer::Instance()->cars[idCar].alreadyPrinted = false;
-		MapContainer::Instance()->cars[idCar].setPosition(Point(idCar * 1000, 0), angle);
+		menu.display3DscreenForOption();
 
 		glPopMatrix();
 
 		Screen2D::pushScreenCoordinateMatrix();
+		menu.display2DscreenForOption();
 		menu.displayForeground();
 		Screen2D::Instance()->display();
 		menu.displayForegroundBeforeText();

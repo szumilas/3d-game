@@ -14,6 +14,8 @@ void Menu::Init(int w, int h)
 	createMenu();
 	Menu::w = w;
 	Menu::h = h;
+
+	exampleCar = std::make_unique<Car>(Car(CarBrand::SubaruBRZ, 0, 0));
 }
 
 void Menu::displayBackground()
@@ -237,8 +239,10 @@ void Menu::createMenu()
 
 	for (auto& car : carDB)
 	{
-		carOptions.push_back({ car.second.name, &Menu::enterPreviousLevel });
+		carOptions.push_back({ car.second.name, &Menu::enterPreviousLevel, &Menu::preview2DCar, &Menu::preview3DCar, static_cast<int>(car.first) });
 	}
+
+	carOptions.push_back({ "Cancel", &Menu::enterPreviousLevel });
 	
 	for (auto& carOption : carOptions)
 	{
@@ -266,21 +270,10 @@ void Menu::selectNext()
 
 void Menu::enter()
 {
-	if (currentMenuLevel->options[currentMenuLevel->selected]->function != nullptr)
+	if (currentMenuLevel->options[currentMenuLevel->selected]->execute != nullptr)
 	{
-		(this->*currentMenuLevel->options[currentMenuLevel->selected]->function)();
+		(this->*currentMenuLevel->options[currentMenuLevel->selected]->execute)();
 	}
-	//if (currentMenuLevel->options[currentMenuLevel->selected]->text == "Back")
-	//{
-	//	enterPreviousLevel();
-	//}
-	//else
-	//{
-	//	if (!currentMenuLevel->options[currentMenuLevel->selected]->options.empty())
-	//	{
-	//		enterNextLevel();
-	//	}
-	//}
 }
 
 float Menu::centerFont(float originalXpercent, std::string text, float fontSize)
@@ -330,4 +323,34 @@ void Menu::enterPreviousLevel()
 {
 	currentMenuLevel = currentMenuLevel->previousLevel;
 	currentMenuLevel->selected = 0;
+}
+
+void Menu::display3DscreenForOption()
+{
+	if (currentMenuLevel->options[currentMenuLevel->selected]->preview3D != nullptr)
+	{
+		(this->*currentMenuLevel->options[currentMenuLevel->selected]->preview3D)(currentMenuLevel->options[currentMenuLevel->selected]->idOption);
+	}
+}
+
+void Menu::display2DscreenForOption()
+{
+
+}
+
+void Menu::preview3DCar(int id)
+{
+	static float angle = 0;
+	angle += PI / 6 / FPS;
+
+	if (id != static_cast<int>(exampleCar->getCarBrand()))
+	{
+		exampleCar = std::make_unique<Car>(Car(static_cast<CarBrand>(id), 0, 0));
+	}
+
+	static int idCar = 0;
+
+	exampleCar->setPosition(Point(), angle);
+	exampleCar->display();
+	exampleCar->alreadyPrinted = false;
 }

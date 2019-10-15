@@ -2,6 +2,9 @@
 
 #include "TextureManager.h"
 #include "GlobalStructures.h"
+#include "MapContainer.h"
+#include "carDB.h"
+#include "Car.h"
 
 class Menu
 {
@@ -11,15 +14,14 @@ public:
 	void displayBackground();
 	void displayForeground();
 	void displayForegroundBeforeText();
+	void display3DscreenForOption();
+	void display2DscreenForOption();
 
 	void update();
 
 	void selectPrevious();
 	void selectNext();
 	void enter();
-
-	void enterNextLevel();
-	void enterPreviousLevel();
 
 private:
 
@@ -32,6 +34,11 @@ private:
 
 	float centerFont(float originalXpercent, std::string text, float fontSize);
 	float textRealSize(std::string text, float fontSize); //[%]
+
+	void enterNextLevel();
+	void enterPreviousLevel();
+	void preview2DCar(int id) {}
+	void preview3DCar(int id);
 
 public:
 
@@ -46,11 +53,16 @@ private:
 
 	float textMenuOffset = 0;
 
+	std::unique_ptr<Car> exampleCar;
+
 
 	struct MenuLevel
 	{
 		std::string text;
-		void(Menu::*function)() = nullptr;
+		void(Menu::*execute)() = nullptr;
+		void(Menu::*preview2D)(int) = nullptr;
+		void(Menu::*preview3D)(int) = nullptr;
+		int idOption = 0;
 		std::vector<MenuLevel*> options;
 		int selected = 0;
 		MenuLevel* previousLevel = nullptr;
