@@ -127,6 +127,7 @@ void Game::display()
 		Screen2D::pushScreenCoordinateMatrix();
 		menu.displayForeground();
 		Screen2D::Instance()->display();
+		menu.displayForegroundBeforeText();
 		Screen2D::pop_projection_matrix();
 	}
 
@@ -276,6 +277,8 @@ void Game::SpecialKeysUp(int key, int x, int y)
 
 void Game::Update()
 {
+	KeyboardManager::Instance()->getKeys();
+
 	if (!leftMouseButtonDown && leftMouseButtonDownPrevious)
 	{
 		leftMouseButtonDownPrevious = false;
@@ -378,14 +381,16 @@ void Game::Update()
 	{
 		static clock_t menuSwitchDelay = clock();
 
-		if (leftPressed || rightPressed)
+		if (leftPressed || rightPressed || checkKey(ENTER))
 		{
 			if (clock() - menuSwitchDelay > 300)
 			{
 				if (leftPressed)
 					menu.selectPrevious();
-				if (rightPressed)
+				else if (rightPressed)
 					menu.selectNext();
+				else if (checkKey(ENTER))
+					menu.enter();
 
 				menuSwitchDelay = clock();
 			}
@@ -475,4 +480,9 @@ void Game::play()
 	{
 
 	}
+}
+
+bool Game::checkKey(Key key)
+{
+	return KeyboardManager::Instance()->checkKey(key);
 }

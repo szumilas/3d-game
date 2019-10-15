@@ -5,6 +5,7 @@
 #include <GL/glu.h>
 
 #include "Screen2D.h"
+#include "carDB.h"
 
 void Menu::Init(int w, int h)
 {
@@ -40,9 +41,8 @@ void Menu::displayBackground()
 	glDisable(GL_TEXTURE_2D);
 }
 
-void Menu::displayForeground()
+void Menu::displayForegroundBeforeText()
 {
-
 	glBindTexture(GL_TEXTURE_2D, idTextureArrow);
 	glBegin(GL_POLYGON);
 
@@ -50,15 +50,15 @@ void Menu::displayForeground()
 		setGLcolor(ColorName::GRAY_MENU);
 	else
 		setGLcolor(ColorName::YELLOW);
-	
+
 	glTexCoord2f(0, 0);
-	glVertex2f(0.5 * w - 0.50 * h, 0.18 * h);
+	glVertex3f(0.5 * w - 0.50 * h, 0.18 * h, 1);
 	glTexCoord2f(1, 0);
-	glVertex2f(0.5 * w - 0.42 * h, 0.18 * h);
+	glVertex3f(0.5 * w - 0.42 * h, 0.18 * h, 1);
 	glTexCoord2f(1, 1);
-	glVertex2f(0.5 * w - 0.42 * h, 0.25 * h);
+	glVertex3f(0.5 * w - 0.42 * h, 0.25 * h, 1);
 	glTexCoord2f(0, 1);
-	glVertex2f(0.5 * w - 0.50 * h, 0.25 * h);
+	glVertex3f(0.5 * w - 0.50 * h, 0.25 * h, 1);
 
 	glEnd();
 
@@ -73,26 +73,69 @@ void Menu::displayForeground()
 		setGLcolor(ColorName::YELLOW);
 
 	glTexCoord2f(0, 0);
-	glVertex2f(0.5 * w + 0.50 * h, 0.18 * h);
+	glVertex3f(0.5 * w + 0.50 * h, 0.18 * h, 1);
 	glTexCoord2f(1, 0);
-	glVertex2f(0.5 * w + 0.42 * h, 0.18 * h);
+	glVertex3f(0.5 * w + 0.42 * h, 0.18 * h, 1);
 	glTexCoord2f(1, 1);
-	glVertex2f(0.5 * w + 0.42 * h, 0.25 * h);
+	glVertex3f(0.5 * w + 0.42 * h, 0.25 * h, 1);
 	glTexCoord2f(0, 1);
-	glVertex2f(0.5 * w + 0.50 * h, 0.25 * h);
+	glVertex3f(0.5 * w + 0.50 * h, 0.25 * h, 1);
 
 	glEnd();
 
 	//----------------------
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_POLYGON);
+
+	glColor3f(0.15f, 0.17f, 0.18f);
+
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5 * w - 0.55 * h, 0.18 * h, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.5 * w - 0.37 * h, 0.18 * h, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.5 * w - 0.37 * h, 0.25 * h, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.5 * w - 0.55 * h, 0.25 * h, 1);
+
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
+	//---------------------------------------
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_POLYGON);
+
+	glColor3f(0.15f, 0.17f, 0.18f);
+
+	glTexCoord2f(0, 0);
+	glVertex3f(0.5 * w + 0.55 * h, 0.18 * h, 1);
+	glTexCoord2f(1, 0);
+	glVertex3f(0.5 * w + 0.37 * h, 0.18 * h, 1);
+	glTexCoord2f(1, 1);
+	glVertex3f(0.5 * w + 0.37 * h, 0.25 * h, 1);
+	glTexCoord2f(0, 1);
+	glVertex3f(0.5 * w + 0.55 * h, 0.25 * h, 1);
+
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
+	//---------------------------------------
+}
+
+void Menu::displayForeground()
+{
+
 
 	glDisable(GL_TEXTURE_2D);
 	glBegin(GL_POLYGON);
 	glColor3f(0.2f, 0.23f, 0.23f);
 
-	glVertex2f(0.5 * w - 0.5 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.5 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.5 * h, 0.25 * h);
-	glVertex2f(0.5 * w - 0.5 * h, 0.25 * h);
+	glVertex2f(0.5 * w - 0.55 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.55 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.55 * h, 0.25 * h);
+	glVertex2f(0.5 * w - 0.55 * h, 0.25 * h);
 
 	glEnd();
 	glEnable(GL_TEXTURE_2D);
@@ -103,10 +146,10 @@ void Menu::displayForeground()
 	glBegin(GL_POLYGON);
 	glColor3f(0.176f, 0.749f, 0.851f);
 
-	glVertex2f(0.5 * w - 0.5 * h, 0.25 * h);
-	glVertex2f(0.5 * w + 0.5 * h, 0.25 * h);
-	glVertex2f(0.5 * w + 0.5 * h, 0.255 * h);
-	glVertex2f(0.5 * w - 0.5 * h, 0.255 * h);
+	glVertex2f(0.5 * w - 0.55 * h, 0.25 * h);
+	glVertex2f(0.5 * w + 0.55 * h, 0.25 * h);
+	glVertex2f(0.5 * w + 0.55 * h, 0.255 * h);
+	glVertex2f(0.5 * w - 0.55 * h, 0.255 * h);
 
 	glEnd();
 	glEnable(GL_TEXTURE_2D);
@@ -117,10 +160,10 @@ void Menu::displayForeground()
 	glBegin(GL_POLYGON);
 	glColor3f(0.176f, 0.749f, 0.851f);
 
-	glVertex2f(0.5 * w - 0.5 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.5 * h, 0.18 * h);
-	glVertex2f(0.5 * w + 0.5 * h, 0.175 * h);
-	glVertex2f(0.5 * w - 0.5 * h, 0.175 * h);
+	glVertex2f(0.5 * w - 0.55 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.55 * h, 0.18 * h);
+	glVertex2f(0.5 * w + 0.55 * h, 0.175 * h);
+	glVertex2f(0.5 * w - 0.55 * h, 0.175 * h);
 
 	glEnd();
 	glEnable(GL_TEXTURE_2D);
@@ -129,7 +172,8 @@ void Menu::displayForeground()
 	
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -45, 27.5, currentMenuLevel->text, &(Screen2D::Instance()->wallpoet_regular));
 
-	int x = -50;
+
+	std::vector<std::tuple<ColorName, std::string, float>> textValuesToPrint;
 
 	for (int i = currentMenuLevel->selected - 2; i <= currentMenuLevel->selected + 2; ++i)
 	{
@@ -140,7 +184,6 @@ void Menu::displayForeground()
 			colorName = ColorName::WHITE;
 
 		std::string textToPrint;
-		float xPos;
 
 		if (i >= 0 && i < currentMenuLevel->options.size())
 		{
@@ -152,21 +195,57 @@ void Menu::displayForeground()
 			colorName = ColorName::GRAY_MENU;
 		}
 
-		xPos = x + textMenuOffset * 25;
-		if (xPos > -35 && xPos < 35)
-		{
-			xPos = centerFont(x, textToPrint.size(), Screen2D::Instance()->squada_one_regular_big.h);
-			xPos += textMenuOffset * 25;
-			Screen2D::Instance()->addTestValueToPrint(colorName, xPos, 20, textToPrint, &(Screen2D::Instance()->squada_one_regular_big));
-		}
+		textValuesToPrint.push_back({ colorName, textToPrint, 0 });
+	}
 
-		x += 25;
+	static float gap = 7;
+
+	std::get<2>(textValuesToPrint[0]) = 0 - textRealSize(std::get<1>(textValuesToPrint[0]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		- textRealSize(std::get<1>(textValuesToPrint[1]), Screen2D::Instance()->squada_one_regular_big.h)
+		- textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2 - 2 * gap;
+	std::get<2>(textValuesToPrint[1]) = 0 - textRealSize(std::get<1>(textValuesToPrint[1]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		- textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2 - gap;
+	std::get<2>(textValuesToPrint[2]) = 0;
+	std::get<2>(textValuesToPrint[3]) = 0 + textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		+ textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 + gap;
+	std::get<2>(textValuesToPrint[4]) = 0 + textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		+ textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h)
+		+ textRealSize(std::get<1>(textValuesToPrint[4]), Screen2D::Instance()->squada_one_regular_big.h) / 2 + 2 * gap;
+
+
+	for (auto& textValueToPrint : textValuesToPrint)
+	{
+		float x = std::get<2>(textValueToPrint);
+		float xPos = x;
+		if (xPos - textRealSize(std::get<1>(textValueToPrint), Screen2D::Instance()->squada_one_regular_big.h) / 2 + textMenuOffset * 25 > -52
+			&& xPos + textRealSize(std::get<1>(textValueToPrint), Screen2D::Instance()->squada_one_regular_big.h) / 2 + textMenuOffset * 25 < 52)
+		{
+			xPos = centerFont(x, std::get<1>(textValueToPrint), Screen2D::Instance()->squada_one_regular_big.h);
+			xPos += textMenuOffset * 25;
+			Screen2D::Instance()->addTestValueToPrint(std::get<0>(textValueToPrint), xPos, 20, std::get<1>(textValueToPrint), &(Screen2D::Instance()->squada_one_regular_big));
+		}
 	}
 }
 
 void Menu::createMenu()
 {
 	mainMenu.options = {&quickRace, &freeRide, &highscores, &credits, &quitGame };
+	quickRace.options = { &quickRaceStart, &quickRaceSelectCar, &quickRaceSelectTrack, &quickRaceBack };
+	freeRide.options = { &freeRideStart, &freeRideSelectCar, &freeRideBack };
+	highscores.options = { &highscoresRideBack };
+	credits.options = { &creditsRideBack };
+
+	for (auto& car : carDB)
+	{
+		carOptions.push_back({ car.second.name, &Menu::enterPreviousLevel });
+	}
+	
+	for (auto& carOption : carOptions)
+	{
+		quickRaceSelectCar.options.push_back(&carOption);
+	}
+
+
 
 	currentMenuLevel = &mainMenu;
 }
@@ -185,9 +264,33 @@ void Menu::selectNext()
 		currentMenuLevel->selected = currentMenuLevel->options.size() - 1;
 }
 
-float Menu::centerFont(float originalXpercent, int textLength, float fontSize)
+void Menu::enter()
 {
-	return originalXpercent - 100.0 * textLength / 2 * fontSize / h / 2;
+	if (currentMenuLevel->options[currentMenuLevel->selected]->function != nullptr)
+	{
+		(this->*currentMenuLevel->options[currentMenuLevel->selected]->function)();
+	}
+	//if (currentMenuLevel->options[currentMenuLevel->selected]->text == "Back")
+	//{
+	//	enterPreviousLevel();
+	//}
+	//else
+	//{
+	//	if (!currentMenuLevel->options[currentMenuLevel->selected]->options.empty())
+	//	{
+	//		enterNextLevel();
+	//	}
+	//}
+}
+
+float Menu::centerFont(float originalXpercent, std::string text, float fontSize)
+{
+	return originalXpercent - textRealSize(text, fontSize) / 2;
+}
+
+float Menu::textRealSize(std::string text, float fontSize)
+{
+	return 100.0 * text.size() / 2 * fontSize / h;
 }
 
 void Menu::update()
@@ -211,4 +314,20 @@ void Menu::update()
 	}
 
 	textMenuOffset = static_cast<float>(currentMenuLevel->selected) - floatingIndex;
+}
+
+void Menu::enterNextLevel()
+{
+	int selectedOption = currentMenuLevel->selected;
+	MenuLevel* preiousLevel = currentMenuLevel;
+	currentMenuLevel->selected = 0;
+	currentMenuLevel = currentMenuLevel->options[selectedOption];
+	currentMenuLevel->previousLevel = preiousLevel;
+	currentMenuLevel->selected = 0;
+}
+
+void Menu::enterPreviousLevel()
+{
+	currentMenuLevel = currentMenuLevel->previousLevel;
+	currentMenuLevel->selected = 0;
 }

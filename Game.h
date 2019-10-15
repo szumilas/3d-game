@@ -38,6 +38,11 @@ public:
 		race,
 	};
 
+	enum Key
+	{
+		ENTER = 13,
+	};
+
 public:
 
 	Game(int argc, char**agrv);
@@ -56,6 +61,7 @@ private:
 	static void look(int x, int y);
 	static void SpecialKeysUp(int key, int x, int y);
 	static void Update();
+	static bool checkKey(Key key);
 
 public:
 
