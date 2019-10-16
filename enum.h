@@ -79,6 +79,7 @@ enum class Textures : long
 	race_barrier,
 	menu_background,
 	menu_arrow,
+	wroclaw_map,
 };
 
 enum class Sounds : long

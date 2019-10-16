@@ -40,6 +40,10 @@ private:
 	void enterPreviousLevel();
 	void preview2DCar(int id);
 	void preview3DCar(int id);
+	void quickRace2Dpreview(int id = 0);
+	void quickRace3Dpreview(int id = 0);
+
+	Point screenPoint(float xp, float yp) { return Point(0.5 * w + xp / 100 * h, yp / 100 * h); }
 
 public:
 
@@ -48,6 +52,7 @@ private:
 	
 	unsigned int idTextureBackground;
 	unsigned int idTextureArrow;
+	unsigned int idTextureWroclawMap;
 
 	int w;
 	int h;
@@ -79,10 +84,10 @@ private:
 	MenuLevel credits{ "Credits", &Menu::enterNextLevel };
 	MenuLevel quitGame{ "Quit Game" };
 
-	MenuLevel quickRaceStart{ "Start" };
-	MenuLevel quickRaceSelectCar{ "Select Car", &Menu::enterNextLevel };
-	MenuLevel quickRaceSelectTrack{ "Select Track", &Menu::enterNextLevel };
-	MenuLevel quickRaceBack{ "Back", &Menu::enterPreviousLevel };
+	MenuLevel quickRaceStart{ "Start", nullptr, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceSelectTrack{ "Select Track", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceBack{ "Back", &Menu::enterPreviousLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 
 	MenuLevel freeRideStart{ "Start" };
 	MenuLevel freeRideSelectCar{ "Select Car", &Menu::enterNextLevel };

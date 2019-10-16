@@ -45,11 +45,13 @@ void Menu::Init(int w, int h)
 {
 	idTextureBackground = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_background)].idTexture;
 	idTextureArrow = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_arrow)].idTexture;
+	idTextureWroclawMap = TextureManager::Instance()->textures[static_cast<int>(Textures::wroclaw_map)].idTexture;
 	createMenu();
 	Menu::w = w;
 	Menu::h = h;
 
 	exampleCar = std::make_unique<Car>(Car(CarBrand::SubaruBRZ, 0, 0));
+	currentMenuLevel = &quickRace;
 }
 
 void Menu::displayBackground()
@@ -282,4 +284,39 @@ void Menu::preview3DCar(int id)
 	exampleCar->setPosition(Point(0, 1.5), angle);
 	exampleCar->display();
 	exampleCar->alreadyPrinted = false;
+}
+
+void Menu::quickRace2Dpreview(int id)
+{
+	display2DRectangleNoTexture(screenPoint(5, 38), screenPoint(55, 65), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(screenPoint(5, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 60, "Car:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 12, 60, carDB.at(exampleCar->getCarBrand()).name, &(Screen2D::Instance()->squada_one_regular_big));
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 55, "Track:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 14.5, 55, "University of Technology", &(Screen2D::Instance()->squada_one_regular_big));
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 50, "No. of laps:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 19, 50, "4", &(Screen2D::Instance()->squada_one_regular_big));
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 45, "Total length:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 20.5, 45, "15.78 km", &(Screen2D::Instance()->squada_one_regular_big));
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 40, "No. of oponents:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 24, 40, "6", &(Screen2D::Instance()->squada_one_regular_big));
+
+	display2DRectangleTexture(screenPoint(-55, 40), screenPoint(0, 78.5), idTextureWroclawMap);
+
+}
+
+void Menu::quickRace3Dpreview(int id)
+{
+	static float angle = 0;
+	angle += PI / 6 / FPS;
+
+	exampleCar->setPosition(Point(-10, 6, 1), angle);
+	exampleCar->display();
+	exampleCar->alreadyPrinted = false;
+
 }
