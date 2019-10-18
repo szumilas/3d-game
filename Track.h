@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <map>
+#include <string>
 
 #include "GlobalStructures.h"
 #include "Footway.h"
@@ -13,10 +14,16 @@ enum TrackName
 
 };
 
-static std::map<TrackName, std::string> trackDB
+struct TrackDetails
 {
-	{ TrackName::SmallLoop, "Small Loop" },
-	{ TrackName::BigLoop, "Big Loop" },
+	std::string name;
+	std::string difficulty;
+};
+
+static std::map<TrackName, TrackDetails> trackDB
+{
+	{ TrackName::SmallLoop, {"Small Loop", "Easy" } },
+	{ TrackName::BigLoop, {"Big Loop", "Medium" } },
 
 };
 
@@ -29,10 +36,12 @@ public:
 	void display();
 
 	TrackName getTrackName() { return trackName; }
+	float getLength() { return length; }
 
 private:
 
 	void calculateCoordinates();
+	void calculateLength();
 
 public:
 
@@ -47,4 +56,5 @@ private:
 	float gauge = 2.0f;
 
 	TrackName trackName;
+	float length;
 };

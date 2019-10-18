@@ -51,6 +51,7 @@ Track::Track(TrackName trackName) : trackName(trackName)
 		}
 
 		calculateCoordinates();
+		calculateLength();
 	}
 
 	file.close();
@@ -70,11 +71,7 @@ void Track::calculateCoordinates()
 		AIPointsCoordinates.push_back(convertCoordinates(AIPoint));
 	}
 
-	gauge = 0.1;
-
 	auto AIPointsScaled = AIPoints;
-
-	std::for_each(AIPointsScaled.begin(), AIPointsScaled.end(), [](Point& p) { p.x *= 0.005; p.y *= 0.005; });
 	auto maxX = std::max_element(AIPointsScaled.begin(), AIPointsScaled.end(), [](Point& p1, Point& p2) {return p1.x < p2.x; })->x;
 	auto maxY = std::max_element(AIPointsScaled.begin(), AIPointsScaled.end(), [](Point& p1, Point& p2) {return p1.y < p2.y; })->y;
 	auto minX = std::min_element(AIPointsScaled.begin(), AIPointsScaled.end(), [](Point& p1, Point& p2) {return p1.x < p2.x; })->x;
@@ -85,6 +82,13 @@ void Track::calculateCoordinates()
 
 	std::for_each(AIPointsScaled.begin(), AIPointsScaled.end(), [&](Point& p) { p.x += -deltaX; p.y += -deltaY; });
 
+	auto scaleRatio = std::max(abs(maxX - minX), abs(maxY - minY));
+
+	std::for_each(AIPointsScaled.begin(), AIPointsScaled.end(), [&](Point& p) { p.x *= 5.0 / scaleRatio; p.y *= 5.0 / scaleRatio; });
+
+	gauge = 50.0 / scaleRatio;
+	gauge = std::max(gauge, 0.1f);
+
 	createBothRailsForSymmetryAxis(AIPointsScaled, finalLeftRail, finalRightRail, gauge);
 
 	calculateFinalGeometry();
@@ -94,7 +98,7 @@ void Track::display()
 {
 	static float highlightCounter = 0;
 	highlightCounter += 1.0 / 100.0 * polygons.size();
-	if(highlightCounter >= 2 * polygons.size())
+	if(highlightCounter >= 1.5 * polygons.size())
 		highlightCounter -= 2 * polygons.size();
 
 
@@ -139,5 +143,18 @@ void Track::display()
 
 			++id;
 		}
+	}
+}
+
+void Track::calculateLength()
+{
+	length = 0;
+
+	for (int q = 0; q < AIPoints.size(); q++)
+	{
+		Point& p1 = AIPoints[q];
+		Point& p2 = AIPoints[(q + 1) % AIPoints.size()];
+
+		length += p1.distance2D(p2);
 	}
 }

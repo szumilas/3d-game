@@ -63,6 +63,8 @@ private:
 	int h;
 
 	float textMenuOffset = 0;
+	float floatingIndex = 0;
+
 
 	std::unique_ptr<Car> exampleCar;
 	std::unique_ptr<Track> exampleTrack;

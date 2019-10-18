@@ -183,7 +183,7 @@ void Menu::createMenu()
 
 	for (auto& track : trackDB)
 	{
-		trackOptions.push_back({ track.second, &Menu::enterPreviousLevel, &Menu::preview2DTrack, &Menu::preview3DTrack, static_cast<int>(track.first) });
+		trackOptions.push_back({ track.second.name, &Menu::enterPreviousLevel, &Menu::preview2DTrack, &Menu::preview3DTrack, static_cast<int>(track.first) });
 	}
 
 	trackOptions.push_back({ "Cancel", &Menu::enterPreviousLevel });
@@ -231,8 +231,6 @@ float Menu::textRealSize(std::string text, float fontSize)
 
 void Menu::update()
 {
-	static float floatingIndex = 0;
-	
 	float acceleration = pow(abs(static_cast<float>(currentMenuLevel->selected) - floatingIndex) + 0.1f, 2) / 3;
 
 	if (currentMenuLevel->selected > floatingIndex)
@@ -256,16 +254,18 @@ void Menu::enterNextLevel()
 {
 	int selectedOption = currentMenuLevel->selected;
 	MenuLevel* preiousLevel = currentMenuLevel;
-	currentMenuLevel->selected = 0;
+	//currentMenuLevel->selected = 0;
 	currentMenuLevel = currentMenuLevel->options[selectedOption];
 	currentMenuLevel->previousLevel = preiousLevel;
-	currentMenuLevel->selected = 0;
+	//currentMenuLevel->selected = 0;
+	floatingIndex = currentMenuLevel->selected;
 }
 
 void Menu::enterPreviousLevel()
 {
 	currentMenuLevel = currentMenuLevel->previousLevel;
-	currentMenuLevel->selected = 0;
+	//currentMenuLevel->selected = 0;
+	floatingIndex = currentMenuLevel->selected;
 }
 
 void Menu::display3DscreenForOption()
@@ -296,7 +296,7 @@ void Menu::preview2DCar(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Top speed: ", &(Screen2D::Instance()->squada_one_regular));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).vMax)) + " km/h", &(Screen2D::Instance()->squada_one_regular_big));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Acceleration 0-100 km/h: ", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).acceleration_0_100)) + " s", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).acceleration_0_100)) + "." + std::to_string(static_cast<int>(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).acceleration_0_100 * 10) % 10)) + " s", &(Screen2D::Instance()->squada_one_regular_big));
 }
 
 void Menu::preview3DCar(int id)
@@ -316,17 +316,17 @@ void Menu::preview3DCar(int id)
 
 void Menu::preview2DTrack(int id)
 {
-	//display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.35 * h), Point(0.5 * w - 0.25 * h, 0.75 * h), ColorName::MENU_GRAY);
-	//display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.32 * h), Point(0.5 * w - 0.25 * h, 0.35 * h), ColorName::MENU_BLUE);
-	//
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 70, "Engine power: ", &(Screen2D::Instance()->squada_one_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 66, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).power * 1.36)) + " HP", &(Screen2D::Instance()->squada_one_regular_big));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 61, "Mass: ", &(Screen2D::Instance()->squada_one_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 57, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).mass)) + " kg", &(Screen2D::Instance()->squada_one_regular_big));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Top speed: ", &(Screen2D::Instance()->squada_one_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).vMax)) + " km/h", &(Screen2D::Instance()->squada_one_regular_big));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Acceleration 0-100 km/h: ", &(Screen2D::Instance()->squada_one_regular));
-	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).acceleration_0_100)) + " s", &(Screen2D::Instance()->squada_one_regular_big));
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.35 * h), Point(0.5 * w - 0.25 * h, 0.75 * h), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.32 * h), Point(0.5 * w - 0.25 * h, 0.35 * h), ColorName::MENU_BLUE);
+	
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 70, "Track: ", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 66, trackDB.at(static_cast<TrackName>(id)).name, &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 61, "Length: ", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 57, std::to_string(static_cast<int>(exampleTrack->getLength())) + " m", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Difficulty: ", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, trackDB.at(static_cast<TrackName>(id)).difficulty, &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Lap record:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, "--:--.-- s", &(Screen2D::Instance()->squada_one_regular_big));
 }
 
 void Menu::preview3DTrack(int id)
@@ -400,8 +400,8 @@ void Menu::printMap()
 		p2.x /= 42.128;
 		p2.y /= 42.128;
 
-		p2.x *= 10.9;
-		p2.y *= 10.9;
+		p2.x *= 7.6;
+		p2.y *= 7.6;
 		p2 += centerMap;
 
 		return p2;
