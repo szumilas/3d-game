@@ -33,12 +33,14 @@ public:
 private:
 
 	void createMenu();
+	void createCommonOptions();
 
 	float centerFont(float originalXpercent, std::string text, float fontSize);
 	float textRealSize(std::string text, float fontSize); //[%]
 
 	void enterNextLevel();
 	void enterPreviousLevel();
+	void preview2DNumber(int id);
 	void preview2DCar(int id);
 	void preview3DCar(int id);
 	void quickRace2Dpreview(int id = 0);
@@ -96,6 +98,8 @@ private:
 	MenuLevel quickRaceStart{ "Start", nullptr, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceSelectTrack{ "Select Track", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceNoOfLaps{ "No. of laps", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceNoOfOponents{ "No. of oponents", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceBack{ "Back", &Menu::enterPreviousLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 
 	MenuLevel freeRideStart{ "Start" };
@@ -108,5 +112,6 @@ private:
 
 	std::vector<MenuLevel> carOptions;
 	std::vector<MenuLevel> trackOptions;
+	std::vector<MenuLevel> numbers;
 
 };

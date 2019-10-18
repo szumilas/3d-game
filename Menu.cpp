@@ -108,7 +108,7 @@ void Menu::displayForeground()
 	
 	std::vector<std::tuple<ColorName, std::string, float>> textValuesToPrint;
 
-	for (int i = currentMenuLevel->selected - 2; i <= currentMenuLevel->selected + 2; ++i)
+	for (int i = currentMenuLevel->selected - 3; i <= currentMenuLevel->selected + 3; ++i)
 	{
 		ColorName colorName;
 		if (i == currentMenuLevel->selected)
@@ -124,26 +124,40 @@ void Menu::displayForeground()
 		}
 		else
 		{
-			textToPrint = "===   ===";
+			textToPrint = "===  ===";
 			colorName = ColorName::MENU_LIGHT_GRAY;
 		}
 
 		textValuesToPrint.push_back({ colorName, textToPrint, 0 });
 	}
 
-	static float gap = 7;
+	static float gap = 8;
 
 	std::get<2>(textValuesToPrint[0]) = 0 - textRealSize(std::get<1>(textValuesToPrint[0]), Screen2D::Instance()->squada_one_regular_big.h) / 2
 		- textRealSize(std::get<1>(textValuesToPrint[1]), Screen2D::Instance()->squada_one_regular_big.h)
-		- textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2 - 2 * gap;
+		- textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h)
+		- textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 - 3 * gap;
+
 	std::get<2>(textValuesToPrint[1]) = 0 - textRealSize(std::get<1>(textValuesToPrint[1]), Screen2D::Instance()->squada_one_regular_big.h) / 2
-		- textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2 - gap;
-	std::get<2>(textValuesToPrint[2]) = 0;
-	std::get<2>(textValuesToPrint[3]) = 0 + textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2
-		+ textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 + gap;
-	std::get<2>(textValuesToPrint[4]) = 0 + textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2
-		+ textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h)
-		+ textRealSize(std::get<1>(textValuesToPrint[4]), Screen2D::Instance()->squada_one_regular_big.h) / 2 + 2 * gap;
+		- textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h)
+		- textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 - 2 * gap;
+
+	std::get<2>(textValuesToPrint[2]) = 0 - textRealSize(std::get<1>(textValuesToPrint[2]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		- textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 - 1 * gap;
+
+	std::get<2>(textValuesToPrint[3]) = 0;
+
+	std::get<2>(textValuesToPrint[4]) = 0 + textRealSize(std::get<1>(textValuesToPrint[4]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		+ textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 + 1 * gap;
+
+	std::get<2>(textValuesToPrint[5]) = 0 + textRealSize(std::get<1>(textValuesToPrint[5]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		+ textRealSize(std::get<1>(textValuesToPrint[4]), Screen2D::Instance()->squada_one_regular_big.h)
+		+ textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 + 2 * gap;
+
+	std::get<2>(textValuesToPrint[6]) = 0 + textRealSize(std::get<1>(textValuesToPrint[6]), Screen2D::Instance()->squada_one_regular_big.h) / 2
+		+ textRealSize(std::get<1>(textValuesToPrint[4]), Screen2D::Instance()->squada_one_regular_big.h)
+		+ textRealSize(std::get<1>(textValuesToPrint[5]), Screen2D::Instance()->squada_one_regular_big.h)
+		+ textRealSize(std::get<1>(textValuesToPrint[3]), Screen2D::Instance()->squada_one_regular_big.h) / 2 + 3 * gap;
 
 
 	for (auto& textValueToPrint : textValuesToPrint)
@@ -160,27 +174,37 @@ void Menu::displayForeground()
 	}
 }
 
-void Menu::createMenu()
+void Menu::createCommonOptions()
 {
-	mainMenu.options = {&quickRace, &freeRide, &highscores, &credits, &quitGame };
-	quickRace.options = { &quickRaceStart, &quickRaceSelectCar, &quickRaceSelectTrack, &quickRaceBack };
-	freeRide.options = { &freeRideStart, &freeRideSelectCar, &freeRideBack };
-	highscores.options = { &highscoresRideBack };
-	credits.options = { &creditsRideBack };
+	//numbers
+	static std::string numberNames[9] = { "null", "one", "two", "three", "four", "five", "six", "seven", "eight" };
+	for (int q = 1; q <= 8; q++)
+	{
+		numbers.push_back({ numberNames[q], &Menu::enterPreviousLevel, &Menu::preview2DNumber, nullptr, q });
+	}
 
+	numbers.push_back({ "Cancel", &Menu::enterPreviousLevel });
+
+	for (auto& number : numbers)
+	{
+		quickRaceNoOfLaps.options.push_back(&number);
+		quickRaceNoOfOponents.options.push_back(&number);
+	}
+
+	//cars
 	for (auto& car : carDB)
 	{
 		carOptions.push_back({ car.second.name, &Menu::enterPreviousLevel, &Menu::preview2DCar, &Menu::preview3DCar, static_cast<int>(car.first) });
 	}
 
 	carOptions.push_back({ "Cancel", &Menu::enterPreviousLevel });
-	
+
 	for (auto& carOption : carOptions)
 	{
 		quickRaceSelectCar.options.push_back(&carOption);
 	}
 
-
+	//tracks
 	for (auto& track : trackDB)
 	{
 		trackOptions.push_back({ track.second.name, &Menu::enterPreviousLevel, &Menu::preview2DTrack, &Menu::preview3DTrack, static_cast<int>(track.first) });
@@ -192,6 +216,19 @@ void Menu::createMenu()
 	{
 		quickRaceSelectTrack.options.push_back(&trackOption);
 	}
+}
+
+void Menu::createMenu()
+{
+	createCommonOptions();
+
+	mainMenu.options = {&quickRace, &freeRide, &highscores, &credits, &quitGame };
+	quickRace.options = { &quickRaceStart, &quickRaceSelectCar, &quickRaceSelectTrack, &quickRaceNoOfLaps, &quickRaceNoOfOponents, &quickRaceBack };
+	freeRide.options = { &freeRideStart, &freeRideSelectCar, &freeRideBack };
+	highscores.options = { &highscoresRideBack };
+	credits.options = { &creditsRideBack };
+
+	
 
 
 	currentMenuLevel = &mainMenu;
@@ -282,6 +319,14 @@ void Menu::display2DscreenForOption()
 	{
 		(this->*currentMenuLevel->options[currentMenuLevel->selected]->preview2D)(currentMenuLevel->options[currentMenuLevel->selected]->idOption);
 	}
+}
+
+void Menu::preview2DNumber(int id)
+{
+	float x = -8;
+	if (id == 1)
+		x = -4;
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, x, 43, std::to_string(id), &(Screen2D::Instance()->squada_one_regular_giant));
 }
 
 void Menu::preview2DCar(int id)
@@ -387,6 +432,11 @@ void Menu::printMap()
 	static Point centerMap = { (leftBottomMapPoint.x + rightTopMapPoint.x) / 2, (leftBottomMapPoint.y + rightTopMapPoint.y) / 2 };
 	static Point centerMapCoordinates = { 17.056488, 51.112627 };
 
+	static float highlightCounter = 0;
+	highlightCounter += 1.0 / 100.0 * exampleTrack->AIPointsCoordinates.size();
+	if (highlightCounter >= 1.5 * exampleTrack->AIPointsCoordinates.size())
+		highlightCounter -= 2 * exampleTrack->AIPointsCoordinates.size();
+
 	display2DRectangleTexture(leftBottomMapPoint, rightTopMapPoint, idTextureWroclawMap);
 
 
@@ -407,13 +457,22 @@ void Menu::printMap()
 		return p2;
 	};
 
-
+	ColorName colorName;
 	for (int q = 0; q < exampleTrack->AIPointsCoordinates.size(); q++)
 	{
 		Point& p1 = exampleTrack->AIPointsCoordinates[q];
 		Point& p2 = exampleTrack->AIPointsCoordinates[(q + 1) % exampleTrack->AIPointsCoordinates.size()];
 
-		display2DLine(calculateScreenPointOnMap(p1), calculateScreenPointOnMap(p2), ColorName::MENU_BLUE, 3, 1);
+		if (abs(highlightCounter - q) <= 10)
+		{
+			colorName = ColorName::YELLOW;
+		}
+		else
+		{
+			colorName = ColorName::MENU_BLUE;
+		}
+
+		display2DLine(calculateScreenPointOnMap(p1), calculateScreenPointOnMap(p2), colorName, 3, 1);
 	}
 
 }
