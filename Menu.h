@@ -5,6 +5,7 @@
 #include "MapContainer.h"
 #include "carDB.h"
 #include "Car.h"
+#include "Track.h"
 
 class Menu
 {
@@ -42,6 +43,10 @@ private:
 	void preview3DCar(int id);
 	void quickRace2Dpreview(int id = 0);
 	void quickRace3Dpreview(int id = 0);
+	void preview2DTrack(int id);
+	void preview3DTrack(int id);
+
+	void printMap();
 
 	Point screenPoint(float xp, float yp) { return Point(0.5 * w + xp / 100 * h, yp / 100 * h); }
 
@@ -60,6 +65,8 @@ private:
 	float textMenuOffset = 0;
 
 	std::unique_ptr<Car> exampleCar;
+	std::unique_ptr<Track> exampleTrack;
+	TrackName selectedTrack = SmallLoop;
 
 
 	struct MenuLevel
@@ -98,5 +105,6 @@ private:
 	MenuLevel creditsRideBack{ "Back", &Menu::enterPreviousLevel };
 
 	std::vector<MenuLevel> carOptions;
+	std::vector<MenuLevel> trackOptions;
 
 };

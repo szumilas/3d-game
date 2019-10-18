@@ -48,7 +48,6 @@ public:
 	void stop() { a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; pacejkaModel.stop(); }
 	void setAIcurrentPoint(int newAIcurrentPoint) { AIcurrentPoint = newAIcurrentPoint; }
 	int getAIcurrentPoint() { return AIcurrentPoint; }
-	void setPosition(const Point& newPosition, float newRz) { position = newPosition, rz = newRz; }
 	void turnRight();
 	void turnLeft();
 	void gearUp() { gearBox.gearUp(); engine.changeRPM(gearBox.getCurrentTransmission(), gearBox.getNextTransmission()); };

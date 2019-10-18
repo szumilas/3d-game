@@ -6,6 +6,7 @@
 
 #include "Screen2D.h"
 #include "carDB.h"
+#include "MapManager.h"
 
 void display2DRectangle(Point& bottomLeft, Point& topRight, ColorName colorName = ColorName::WHITE, float z = 0)
 {
@@ -23,6 +24,22 @@ void display2DRectangle(Point& bottomLeft, Point& topRight, ColorName colorName 
 	glVertex3f(bottomLeft.x, topRight.y, z);
 
 	glEnd();
+}
+
+void display2DLine(Point& p1, Point& p2, ColorName colorName = ColorName::WHITE, float size = 1, float z = 0)
+{
+	glLineWidth(size);
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_LINES);
+
+	Menu::setGLcolor(colorName);
+
+	glVertex3f(p1.x, p1.y, z);
+	glVertex3f(p2.x, p2.y, z);
+
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
 }
 
 void display2DRectangleNoTexture(Point& bottomLeft, Point& topRight, ColorName colorName = ColorName::WHITE, float z = 0)
@@ -51,7 +68,8 @@ void Menu::Init(int w, int h)
 	Menu::h = h;
 
 	exampleCar = std::make_unique<Car>(Car(CarBrand::SubaruBRZ, 0, 0));
-	currentMenuLevel = &quickRace;
+	exampleTrack = std::make_unique<Track>(Track(BigLoop));
+	//currentMenuLevel = &quickRace;
 }
 
 void Menu::displayBackground()
@@ -162,6 +180,18 @@ void Menu::createMenu()
 		quickRaceSelectCar.options.push_back(&carOption);
 	}
 
+
+	for (auto& track : trackDB)
+	{
+		trackOptions.push_back({ track.second, &Menu::enterPreviousLevel, &Menu::preview2DTrack, &Menu::preview3DTrack, static_cast<int>(track.first) });
+	}
+
+	trackOptions.push_back({ "Cancel", &Menu::enterPreviousLevel });
+
+	for (auto& trackOption : trackOptions)
+	{
+		quickRaceSelectTrack.options.push_back(&trackOption);
+	}
 
 
 	currentMenuLevel = &mainMenu;
@@ -279,11 +309,39 @@ void Menu::preview3DCar(int id)
 		exampleCar = std::make_unique<Car>(Car(static_cast<CarBrand>(id), 0, 0));
 	}
 
-	static int idCar = 0;
-
 	exampleCar->setPosition(Point(0, 1.5), angle);
 	exampleCar->display();
 	exampleCar->alreadyPrinted = false;
+}
+
+void Menu::preview2DTrack(int id)
+{
+	//display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.35 * h), Point(0.5 * w - 0.25 * h, 0.75 * h), ColorName::MENU_GRAY);
+	//display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.32 * h), Point(0.5 * w - 0.25 * h, 0.35 * h), ColorName::MENU_BLUE);
+	//
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 70, "Engine power: ", &(Screen2D::Instance()->squada_one_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 66, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).power * 1.36)) + " HP", &(Screen2D::Instance()->squada_one_regular_big));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 61, "Mass: ", &(Screen2D::Instance()->squada_one_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 57, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).mass)) + " kg", &(Screen2D::Instance()->squada_one_regular_big));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Top speed: ", &(Screen2D::Instance()->squada_one_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).vMax)) + " km/h", &(Screen2D::Instance()->squada_one_regular_big));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Acceleration 0-100 km/h: ", &(Screen2D::Instance()->squada_one_regular));
+	//Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, std::to_string(static_cast<int>(carDB.at(static_cast<CarBrand>(id)).acceleration_0_100)) + " s", &(Screen2D::Instance()->squada_one_regular_big));
+}
+
+void Menu::preview3DTrack(int id)
+{
+	static float angle = 0;
+	angle += PI / 12 / FPS;
+
+	if (id != static_cast<int>(exampleTrack->getTrackName()))
+	{
+		exampleTrack = std::make_unique<Track>(Track(static_cast<TrackName>(id)));
+	}
+
+	exampleTrack->setPosition(Point(0, 1.5), angle);
+	exampleTrack->display();
+	exampleTrack->alreadyPrinted = false;
 }
 
 void Menu::quickRace2Dpreview(int id)
@@ -306,7 +364,8 @@ void Menu::quickRace2Dpreview(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 40, "No. of oponents:", &(Screen2D::Instance()->squada_one_regular));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 24, 40, "6", &(Screen2D::Instance()->squada_one_regular_big));
 
-	display2DRectangleTexture(screenPoint(-55, 40), screenPoint(0, 78.5), idTextureWroclawMap);
+
+	printMap();
 
 }
 
@@ -318,5 +377,43 @@ void Menu::quickRace3Dpreview(int id)
 	exampleCar->setPosition(Point(-10, 6, 1), angle);
 	exampleCar->display();
 	exampleCar->alreadyPrinted = false;
+
+}
+
+void Menu::printMap()
+{
+	static Point leftBottomMapPoint = screenPoint(-55, 40);
+	static Point rightTopMapPoint = screenPoint(0, 78.5);
+	static Point centerMap = { (leftBottomMapPoint.x + rightTopMapPoint.x) / 2, (leftBottomMapPoint.y + rightTopMapPoint.y) / 2 };
+	static Point centerMapCoordinates = { 17.056488, 51.112627 };
+
+	display2DRectangleTexture(leftBottomMapPoint, rightTopMapPoint, idTextureWroclawMap);
+
+
+	Menu::setGLcolor(ColorName::ORANGE);
+
+	auto calculateScreenPointOnMap = [](Point& p1)
+	{
+		Point p2(p1.x - centerMapCoordinates.x, p1.y - centerMapCoordinates.y);
+		p2.x *= MapManager::longituteRatio;
+		p2.y *= MapManager::latitudeRatio;
+		p2.x /= 42.128;
+		p2.y /= 42.128;
+
+		p2.x *= 10.9;
+		p2.y *= 10.9;
+		p2 += centerMap;
+
+		return p2;
+	};
+
+
+	for (int q = 0; q < exampleTrack->AIPointsCoordinates.size(); q++)
+	{
+		Point& p1 = exampleTrack->AIPointsCoordinates[q];
+		Point& p2 = exampleTrack->AIPointsCoordinates[(q + 1) % exampleTrack->AIPointsCoordinates.size()];
+
+		display2DLine(calculateScreenPointOnMap(p1), calculateScreenPointOnMap(p2), ColorName::MENU_BLUE, 3, 1);
+	}
 
 }

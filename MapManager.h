@@ -110,15 +110,17 @@ public:
 	bool loadedFromPolygonsFile = false;
 	int currentCameraView = 0;
 
+	static const double longituteRatio;
+	static const double latitudeRatio;
+	static const double minLat;
+	static const double minLon;
+
 private:
 
 	static float maxX;
 	static float minX;
 	static float maxY;
 	static float minY;
-
-	static double longituteRatio;
-	static double latitudeRatio;
 
 	static rapidxml::xml_document <> document;
 	static rapidxml::xml_document <> overlays;

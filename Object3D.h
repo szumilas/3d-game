@@ -22,6 +22,7 @@ public:
 	void cretateGlobalVertex(const Point& localPoint);
 	vector2D getGlobalVector(const vector2D& vLocal);
 	vector2D getLocalVector(const vector2D& vGlobal);
+	void setPosition(const Point& newPosition, float newRz) { position = newPosition, rz = newRz; }
 
 protected:
 

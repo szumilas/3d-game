@@ -23,8 +23,10 @@ float MapManager::maxX = -10000000.0f;
 float MapManager::minX = 10000000.0f;
 float MapManager::maxY = -10000000.0f;
 float MapManager::minY = 10000000.0f;
-double MapManager::longituteRatio = 69797.5460045862;
-double MapManager::latitudeRatio = 111220.165038003;
+const double MapManager::longituteRatio = 69797.5460045862;
+const double MapManager::latitudeRatio = 111220.165038003;
+const double MapManager::minLat = 51.112663;
+const double MapManager::minLon = 17.056106;
 
 std::map<long long, node> MapManager::nodes;
 std::vector<std::unique_ptr<MapObject>> MapManager::mapObjects;
@@ -561,9 +563,6 @@ void MapManager::applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a)
 
 void MapManager::calculateNodesPositions()
 {
-	double minLat = 51.112663;
-	double minLon = 17.056106;
-
 	for (auto it = nodes.begin(); it != nodes.end(); ++it)
 	{
 		it->second.posX = static_cast<float>((it->second.lon - minLon) * longituteRatio);

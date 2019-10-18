@@ -178,6 +178,7 @@
     <ClCompile Include="Street.cpp" />
     <ClCompile Include="StreetLamp.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Track.cpp" />
     <ClCompile Include="Tree.cpp" />
     <ClCompile Include="Water.cpp" />
     <ClCompile Include="Wheel.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Street.h" />
     <ClInclude Include="StreetLamp.h" />
     <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Track.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="Water.h" />
     <ClInclude Include="Wheel.h" />
