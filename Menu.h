@@ -39,6 +39,10 @@ private:
 	float textRealSize(std::string text, float fontSize); //[%]
 
 	void enterNextLevel();
+	void selectThisCar();
+	void selectThisTrack();
+	void selectThisNoOfOponents();
+	void selectThisNoOfLaps();
 	void enterPreviousLevel();
 	void preview2DNumber(int id);
 	void preview2DCar(int id);
@@ -49,6 +53,7 @@ private:
 	void preview3DTrack(int id);
 
 	void printMap();
+	void reloadQuickRaceData();
 
 	Point screenPoint(float xp, float yp) { return Point(0.5 * w + xp / 100 * h, yp / 100 * h); }
 
@@ -68,10 +73,14 @@ private:
 	float floatingIndex = 0;
 
 
-	std::unique_ptr<Car> exampleCar;
-	std::unique_ptr<Track> exampleTrack;
-	TrackName selectedTrack = SmallLoop;
+	std::unique_ptr<Car> previewCar;
+	std::unique_ptr<Track> previewTrack;
+	int previewNumber;
 
+	CarBrand selectedCar = CarBrand::SubaruBRZ;
+	TrackName selectedTrack = SmallLoop;
+	int selectedNoOfOonents = 5;
+	int selectedNoOfLaps = 2;
 
 	struct MenuLevel
 	{
@@ -112,6 +121,7 @@ private:
 
 	std::vector<MenuLevel> carOptions;
 	std::vector<MenuLevel> trackOptions;
-	std::vector<MenuLevel> numbers;
+	std::vector<MenuLevel> numberOfLaps;
+	std::vector<MenuLevel> numberOfOponents;
 
 };

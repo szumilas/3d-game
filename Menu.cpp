@@ -67,8 +67,7 @@ void Menu::Init(int w, int h)
 	Menu::w = w;
 	Menu::h = h;
 
-	exampleCar = std::make_unique<Car>(Car(CarBrand::SubaruBRZ, 0, 0));
-	exampleTrack = std::make_unique<Track>(Track(BigLoop));
+	reloadQuickRaceData();
 	//currentMenuLevel = &quickRace;
 }
 
@@ -176,25 +175,37 @@ void Menu::displayForeground()
 
 void Menu::createCommonOptions()
 {
-	//numbers
+	//number of laps
 	static std::string numberNames[9] = { "null", "one", "two", "three", "four", "five", "six", "seven", "eight" };
 	for (int q = 1; q <= 8; q++)
 	{
-		numbers.push_back({ numberNames[q], &Menu::enterPreviousLevel, &Menu::preview2DNumber, nullptr, q });
+		numberOfLaps.push_back({ numberNames[q], &Menu::selectThisNoOfLaps, &Menu::preview2DNumber, nullptr, q });
 	}
 
-	numbers.push_back({ "Cancel", &Menu::enterPreviousLevel });
+	numberOfLaps.push_back({ "Cancel", &Menu::enterPreviousLevel });
 
-	for (auto& number : numbers)
+	for (auto& numberOfLap : numberOfLaps)
 	{
-		quickRaceNoOfLaps.options.push_back(&number);
-		quickRaceNoOfOponents.options.push_back(&number);
+		quickRaceNoOfLaps.options.push_back(&numberOfLap);
+	}
+
+	//number of oponents
+	for (int q = 1; q <= 6; q++)
+	{
+		numberOfOponents.push_back({ numberNames[q], &Menu::selectThisNoOfOponents, &Menu::preview2DNumber, nullptr, q });
+	}
+
+	numberOfOponents.push_back({ "Cancel", &Menu::enterPreviousLevel });
+
+	for (auto& numberOfOponent : numberOfOponents)
+	{
+		quickRaceNoOfOponents.options.push_back(&numberOfOponent);
 	}
 
 	//cars
 	for (auto& car : carDB)
 	{
-		carOptions.push_back({ car.second.name, &Menu::enterPreviousLevel, &Menu::preview2DCar, &Menu::preview3DCar, static_cast<int>(car.first) });
+		carOptions.push_back({ car.second.name, &Menu::selectThisCar, &Menu::preview2DCar, &Menu::preview3DCar, static_cast<int>(car.first) });
 	}
 
 	carOptions.push_back({ "Cancel", &Menu::enterPreviousLevel });
@@ -207,7 +218,7 @@ void Menu::createCommonOptions()
 	//tracks
 	for (auto& track : trackDB)
 	{
-		trackOptions.push_back({ track.second.name, &Menu::enterPreviousLevel, &Menu::preview2DTrack, &Menu::preview3DTrack, static_cast<int>(track.first) });
+		trackOptions.push_back({ track.second.name, &Menu::selectThisTrack, &Menu::preview2DTrack, &Menu::preview3DTrack, static_cast<int>(track.first) });
 	}
 
 	trackOptions.push_back({ "Cancel", &Menu::enterPreviousLevel });
@@ -287,6 +298,30 @@ void Menu::update()
 	textMenuOffset = static_cast<float>(currentMenuLevel->selected) - floatingIndex;
 }
 
+void Menu::selectThisCar()
+{
+	selectedCar = previewCar->getCarBrand();
+	enterPreviousLevel();
+}
+
+void Menu::selectThisTrack()
+{
+	selectedTrack = previewTrack->getTrackName();
+	enterPreviousLevel();
+}
+
+void Menu::selectThisNoOfOponents()
+{
+	selectedNoOfOonents = previewNumber;
+	enterPreviousLevel();
+}
+
+void Menu::selectThisNoOfLaps()
+{
+	selectedNoOfLaps = previewNumber;
+	enterPreviousLevel();
+}
+
 void Menu::enterNextLevel()
 {
 	int selectedOption = currentMenuLevel->selected;
@@ -323,6 +358,8 @@ void Menu::display2DscreenForOption()
 
 void Menu::preview2DNumber(int id)
 {
+	previewNumber = id;
+
 	float x = -8;
 	if (id == 1)
 		x = -4;
@@ -349,14 +386,14 @@ void Menu::preview3DCar(int id)
 	static float angle = 0;
 	angle += PI / 6 / FPS;
 
-	if (id != static_cast<int>(exampleCar->getCarBrand()))
+	if (id != static_cast<int>(previewCar->getCarBrand()))
 	{
-		exampleCar = std::make_unique<Car>(Car(static_cast<CarBrand>(id), 0, 0));
+		previewCar = std::make_unique<Car>(Car(static_cast<CarBrand>(id), 0, 0));
 	}
 
-	exampleCar->setPosition(Point(0, 1.5), angle);
-	exampleCar->display();
-	exampleCar->alreadyPrinted = false;
+	previewCar->setPosition(Point(0, 1.5), angle);
+	previewCar->display();
+	previewCar->alreadyPrinted = false;
 }
 
 void Menu::preview2DTrack(int id)
@@ -367,7 +404,7 @@ void Menu::preview2DTrack(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 70, "Track: ", &(Screen2D::Instance()->squada_one_regular));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 66, trackDB.at(static_cast<TrackName>(id)).name, &(Screen2D::Instance()->squada_one_regular_big));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 61, "Length: ", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 57, std::to_string(static_cast<int>(exampleTrack->getLength())) + " m", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 57, std::to_string(static_cast<int>(previewTrack->getLength())) + " m", &(Screen2D::Instance()->squada_one_regular_big));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Difficulty: ", &(Screen2D::Instance()->squada_one_regular));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, trackDB.at(static_cast<TrackName>(id)).difficulty, &(Screen2D::Instance()->squada_one_regular_big));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Lap record:", &(Screen2D::Instance()->squada_one_regular));
@@ -379,14 +416,14 @@ void Menu::preview3DTrack(int id)
 	static float angle = 0;
 	angle += PI / 12 / FPS;
 
-	if (id != static_cast<int>(exampleTrack->getTrackName()))
+	if (id != static_cast<int>(previewTrack->getTrackName()))
 	{
-		exampleTrack = std::make_unique<Track>(Track(static_cast<TrackName>(id)));
+		previewTrack = std::make_unique<Track>(Track(static_cast<TrackName>(id)));
 	}
 
-	exampleTrack->setPosition(Point(0, 1.5), angle);
-	exampleTrack->display();
-	exampleTrack->alreadyPrinted = false;
+	previewTrack->setPosition(Point(0, 1.5), angle);
+	previewTrack->display();
+	previewTrack->alreadyPrinted = false;
 }
 
 void Menu::quickRace2Dpreview(int id)
@@ -395,19 +432,21 @@ void Menu::quickRace2Dpreview(int id)
 	display2DRectangleNoTexture(screenPoint(5, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 60, "Car:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 12, 60, carDB.at(exampleCar->getCarBrand()).name, &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 12, 60, carDB.at(previewCar->getCarBrand()).name, &(Screen2D::Instance()->squada_one_regular_big));
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 55, "Track:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 14.5, 55, "University of Technology", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 14.5, 55, trackDB.at(previewTrack->getTrackName()).name, &(Screen2D::Instance()->squada_one_regular_big));
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 50, "No. of laps:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 19, 50, "4", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 19, 50, std::to_string(selectedNoOfLaps), &(Screen2D::Instance()->squada_one_regular_big));
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 45, "Total length:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 20.5, 45, "15.78 km", &(Screen2D::Instance()->squada_one_regular_big));
+	float totalLength = previewTrack->getLength() * selectedNoOfLaps;
+	auto totalLengthString = std::to_string(static_cast<int>(totalLength) / 1000) + "." + std::to_string((static_cast<int>(totalLength) / 10) % 100) + " km";
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 20.5, 45, totalLengthString, &(Screen2D::Instance()->squada_one_regular_big));
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 40, "No. of oponents:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 24, 40, "6", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 24, 40, std::to_string(selectedNoOfOonents), &(Screen2D::Instance()->squada_one_regular_big));
 
 
 	printMap();
@@ -416,12 +455,14 @@ void Menu::quickRace2Dpreview(int id)
 
 void Menu::quickRace3Dpreview(int id)
 {
+	reloadQuickRaceData();
+
 	static float angle = 0;
 	angle += PI / 6 / FPS;
 
-	exampleCar->setPosition(Point(-10, 6, 1), angle);
-	exampleCar->display();
-	exampleCar->alreadyPrinted = false;
+	previewCar->setPosition(Point(-10, 6, 1), angle);
+	previewCar->display();
+	previewCar->alreadyPrinted = false;
 
 }
 
@@ -433,9 +474,9 @@ void Menu::printMap()
 	static Point centerMapCoordinates = { 17.056488, 51.112627 };
 
 	static float highlightCounter = 0;
-	highlightCounter += 1.0 / 100.0 * exampleTrack->AIPointsCoordinates.size();
-	if (highlightCounter >= 1.5 * exampleTrack->AIPointsCoordinates.size())
-		highlightCounter -= 2 * exampleTrack->AIPointsCoordinates.size();
+	highlightCounter += 1.0 / 100.0 * previewTrack->AIPointsCoordinates.size();
+	if (highlightCounter >= 1.5 * previewTrack->AIPointsCoordinates.size())
+		highlightCounter -= 2 * previewTrack->AIPointsCoordinates.size();
 
 	display2DRectangleTexture(leftBottomMapPoint, rightTopMapPoint, idTextureWroclawMap);
 
@@ -458,10 +499,10 @@ void Menu::printMap()
 	};
 
 	ColorName colorName;
-	for (int q = 0; q < exampleTrack->AIPointsCoordinates.size(); q++)
+	for (int q = 0; q < previewTrack->AIPointsCoordinates.size(); q++)
 	{
-		Point& p1 = exampleTrack->AIPointsCoordinates[q];
-		Point& p2 = exampleTrack->AIPointsCoordinates[(q + 1) % exampleTrack->AIPointsCoordinates.size()];
+		Point& p1 = previewTrack->AIPointsCoordinates[q];
+		Point& p2 = previewTrack->AIPointsCoordinates[(q + 1) % previewTrack->AIPointsCoordinates.size()];
 
 		if (abs(highlightCounter - q) <= 10)
 		{
@@ -475,4 +516,12 @@ void Menu::printMap()
 		display2DLine(calculateScreenPointOnMap(p1), calculateScreenPointOnMap(p2), colorName, 3, 1);
 	}
 
+}
+
+void Menu::reloadQuickRaceData()
+{
+	if(previewCar == nullptr || previewCar->getCarBrand() != selectedCar)
+		previewCar = std::make_unique<Car>(Car(selectedCar, 0, 0));
+	if (previewTrack == nullptr || previewTrack->getTrackName() != selectedTrack)
+		previewTrack = std::make_unique<Track>(Track(selectedTrack));
 }
