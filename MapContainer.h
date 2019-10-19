@@ -134,7 +134,7 @@ public:
 	static void displayRaceTimer();
 	void LoadRaceStartCameraPoints();
 	void introFinished() { raceTimer.state = RaceTimer::State::Red4; }
-	bool raceActive() { return raceTimer.state == RaceTimer::State::Inactive; }
+	bool raceActive() { return raceTimer.state != RaceTimer::State::Intro; }
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 

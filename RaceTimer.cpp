@@ -5,12 +5,16 @@
 
 void RaceTimer::init(std::vector<Car>* cars)
 {
+	carsData.clear();
+
 	for (auto& car : *cars)
 	{
 		carsData.push_back({ &car });
 		if (car.humanCar)
 			carsData.back().useForStats = true;
 	}
+
+	std:reverse(carsData.begin(), carsData.end());
 
 	setCarForStats();
 }

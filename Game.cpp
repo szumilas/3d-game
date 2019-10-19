@@ -96,9 +96,13 @@ void Game::display()
 		glPopMatrix();
 
 		Screen2D::pushScreenCoordinateMatrix();
-		carGauge.display();
 		MapContainer::displayMapEditorPanel();
-		MapContainer::displayCounter();
+		if (MapContainer::Instance()->raceActive())
+		{
+			carGauge.display();
+			MapContainer::displayCounter();
+			Screen2D::Instance()->display();
+		}
 		Screen2D::pop_projection_matrix();
 	}
 	else if (gameState == Game::State::mainMenu)
@@ -462,11 +466,7 @@ void Game::play()
 
 		std::cout << "init cars...\n";
 		MapContainer::Instance()->initCars();
-		std::cout << "init race timer...\n";
-		MapContainer::Instance()->initRaceTimer();
 
-		std::cout << "carGauge load...\n";
-		carGauge.load(&MapContainer::Instance()->cars[1]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
 		std::cout << "init mapmanager...\n";
@@ -505,5 +505,8 @@ void Game::handleMenuResponse()
 
 		auto& r = menu.menuResponse;
 		MapContainer::Instance()->setRaceDetails(r.selectedCar, r.selectedTrack, r.noOfLaps, r.noOfOponents);
+		std::cout << "carGauge load...\n";
+		carGauge.load(&MapContainer::Instance()->cars[0]);
+		MapContainer::Instance()->initRaceTimer();
 	}
 }

@@ -16,13 +16,11 @@ void CarGauge::setScreenResolution(int w, int h)
 	velocityClock.clockTipStartPosition = { 0.5 * w + 0.4996 * h, 0.105 * h };
 	velocityClock.clockTipLenght = 0.08f * h;
 	velocityClock.clockTipWidth = 0.004f * h;
-	velocityClock.currentValue = &car->velocity;
 	velocityClock.ratio = 3.6f;
 
 	RPMClock.clockTipStartPosition = { 0.5 * w + 0.2996 * h, 0.105 * h };
 	RPMClock.clockTipLenght = 0.08f * h;
 	RPMClock.clockTipWidth = 0.004f * h;
-	RPMClock.currentValue = &car->engine.RPM;
 }
 
 void CarGauge::load(Car* car)
@@ -38,6 +36,8 @@ void CarGauge::load(Car* car)
 		velocityClock.maxValue = 220;
 	}
 	CarGauge::car = car;
+	velocityClock.currentValue = &car->velocity;
+	RPMClock.currentValue = &car->engine.RPM;
 }
 
 void CarGauge::display()
