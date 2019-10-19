@@ -182,7 +182,7 @@ void Game::keyboard(unsigned char key, int x, int y)
 			TextureManager::DeInit();
 			exit(0);
 		}
-		else if(gameState == State::race)
+		else if(gameState == State::race && MapContainer::Instance()->raceActive())
 		{
 			menu.menuResponse.menuState = Menu::OK;
 			gameState = State::mainMenu;
@@ -468,9 +468,6 @@ void Game::play()
 		menu.Init(windowRealWidth, windowRealHeight);
 
 
-		MapContainer::loadWorldIntoSections(MapManager::Instance()->mapObjects);
-
-
 #ifdef FULLSCREEN  
 		glutFullScreen();
 #endif
@@ -500,6 +497,5 @@ void Game::handleMenuResponse()
 
 		auto& r = menu.menuResponse;
 		MapContainer::Instance()->setRaceDetails(r.selectedCar, r.selectedTrack, r.noOfLaps, r.noOfOponents);
-		MapContainer::Instance()->startRace();
 	}
 }

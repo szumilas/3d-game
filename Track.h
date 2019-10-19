@@ -37,6 +37,9 @@ public:
 
 	TrackName getTrackName() { return trackName; }
 	float getLength() { return length; }
+	std::pair<Point, Point> getMeta() { return meta; };
+	std::vector<Point> getAIPoints() { return AIPoints; }
+	std::vector<std::pair<Point, Point>> getbarrierPoints() { return barrierPoints; }
 
 private:
 

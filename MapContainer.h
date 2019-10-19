@@ -121,6 +121,7 @@ public:
 	static void ClearFuturePoints();
 	void SaveAIPoints(const Point& point = Point());
 	void LoadAIPoints(const Point& point = Point());
+	void LoadAIPointsFromTrackName(TrackName selectedTrack);
 	static std::vector<std::vector<int>> createTools();
 	static std::map<int, void (MapContainer::*)(const Point&)> createToolsMap();
 	static int GetNextPoint(const int& currentPoint) { return (currentPoint + 1) % AIPoints.size(); }
@@ -133,6 +134,7 @@ public:
 	static void displayRaceTimer();
 	void LoadRaceStartCameraPoints();
 	void introFinished() { raceTimer.state = RaceTimer::State::Red4; }
+	bool raceActive() { return raceTimer.state == RaceTimer::State::Inactive; }
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 

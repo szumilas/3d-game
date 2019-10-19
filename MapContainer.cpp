@@ -908,7 +908,17 @@ void MapContainer::AIStopAndRestartToSelectedPoint(const Point& point)
 void MapContainer::setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents)
 {
 	initCars(selectedCar, noOfOponents);
-	startRace();
+
+	LoadAIPointsFromTrackName(selectedTrack);
+	LoadRaceStartCameraPoints();
+
+	MapManager::Instance()->currentCameraView = -1;
+	AIStop();
+	raceTimer.state = RaceTimer::State::Intro;
+	raceTimer.beforeRace = true;
+
+	loadWorldIntoSections(MapManager::Instance()->mapObjects);
+	createRaceObjects();
 }
 
 void MapContainer::startRace(const Point& point)
@@ -1128,6 +1138,29 @@ void MapContainer::SaveAIPoints(const Point& point)
 	file << "m " << meta.first.x << " " << meta.first.y << " " << meta.first.z << " " << meta.second.x << " " << meta.second.y << " " << meta.second.z << "\n";
 
 	file.close();
+}
+
+void MapContainer::LoadAIPointsFromTrackName(TrackName selectedTrack)
+{
+	Track newTrack(selectedTrack);
+
+	AIPoints.clear();
+	raceBarriers.clear();
+	
+	auto newTrackAIPoints = newTrack.getAIPoints();
+	for (auto& newTrackAIPoint : newTrackAIPoints)
+	{
+		AIPoints.push_back({ newTrackAIPoint, AIPointsColor, false });
+	}
+	raceBarriers = newTrack.getbarrierPoints();	
+	meta = newTrack.getMeta();
+
+	recalculateAIPointsDistances();
+
+	std::vector<Point> AIpointsPositions;
+	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const PathStruct& data) {AIpointsPositions.push_back(data.center); });
+
+	raceTimer.setAIpointsPosition(AIpointsPositions);
 }
 
 void MapContainer::LoadAIPoints(const Point& point)
