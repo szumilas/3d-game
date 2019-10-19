@@ -297,7 +297,7 @@ bool Menu::update()
 
 	textMenuOffset = static_cast<float>(currentMenuLevel->selected) - floatingIndex;
 
-	return continueMenuPreview;
+	return menuResponse.menuState == MenuState::OK;
 }
 
 void Menu::selectThisCar()
@@ -535,5 +535,4 @@ void Menu::startQuickRace()
 	menuResponse.selectedTrack = selectedTrack;
 	menuResponse.noOfLaps = selectedNoOfLaps;
 	menuResponse.noOfOponents = selectedNoOfOponents;
-	continueMenuPreview = false;
 }

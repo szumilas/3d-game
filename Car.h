@@ -38,6 +38,7 @@ public:
 
 
 	Car(CarBrand carBrand, float startX, float startY, bool humanCar = false);
+	~Car();
 
 	void display();
 

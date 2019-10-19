@@ -13,7 +13,7 @@ public:
 
 	enum MenuState
 	{
-		OK = 0,
+		OK = 1,
 		StartQuickRace,
 	};
 
@@ -89,8 +89,6 @@ private:
 	int w;
 	int h;
 
-	bool continueMenuPreview = true;
-
 	float textMenuOffset = 0;
 	float floatingIndex = 0;
 
@@ -101,7 +99,7 @@ private:
 
 	CarBrand selectedCar = CarBrand::SubaruBRZ;
 	TrackName selectedTrack = SmallLoop;
-	int selectedNoOfOponents = 5;
+	int selectedNoOfOponents = 4;
 	int selectedNoOfLaps = 2;
 
 	struct MenuLevel

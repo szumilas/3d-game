@@ -59,6 +59,12 @@ Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar) : carBran
 
 }
 
+Car::~Car()
+{
+	SoundManager::Instance()->playSound(engineSound, 0);
+	SoundManager::Instance()->playSound(driftSound, 0);
+}
+
 void Car::findAproximateAIPathPosition()
 {
 	if (MapContainer::Instance()->AIPoints.size() > 1)

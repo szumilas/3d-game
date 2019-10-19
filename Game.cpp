@@ -172,13 +172,22 @@ void Game::keyboard(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case 27: // Escape key
-		orbit.savePosition();
-		if (!MapManager::Instance()->loadedFromPolygonsFile)
-			MapManager::Instance()->saveOverlays();
+		if (gameState == State::mainMenu)
+		{
+			orbit.savePosition();
+			if (!MapManager::Instance()->loadedFromPolygonsFile)
+				MapManager::Instance()->saveOverlays();
 
-		SoundManager::DeInit();
-		TextureManager::DeInit();
-		exit(0);
+			SoundManager::DeInit();
+			TextureManager::DeInit();
+			exit(0);
+		}
+		else if(gameState == State::race)
+		{
+			menu.menuResponse.menuState = Menu::OK;
+			gameState = State::mainMenu;
+			MapContainer::Instance()->cars.clear();
+		}
 		break;
 	}
 
