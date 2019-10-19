@@ -455,16 +455,23 @@ void Game::play()
 {
 	try
 	{
+		std::cout << "reading textures...\n";
 		TextureManager::Instance()->readTextures();
+		std::cout << "reading sounds...\n";
 		SoundManager::Instance()->readSounds();
 
+		std::cout << "init cars...\n";
 		MapContainer::Instance()->initCars();
+		std::cout << "init race timer...\n";
 		MapContainer::Instance()->initRaceTimer();
 
+		std::cout << "carGauge load...\n";
 		carGauge.load(&MapContainer::Instance()->cars[1]);
 		carGauge.setScreenResolution(windowRealWidth, windowRealHeight);
 
+		std::cout << "init mapmanager...\n";
 		MapManager::Init();
+		std::cout << "init menu...\n";
 		menu.Init(windowRealWidth, windowRealHeight);
 
 
@@ -472,6 +479,7 @@ void Game::play()
 		glutFullScreen();
 #endif
 
+		std::cout << "main loop...\n";
 		glutMainLoop();
 	}
 	catch (Exceptions exc)

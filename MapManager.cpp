@@ -138,12 +138,14 @@ void MapManager::Init()
 	//mapManager.readMap("grunwald.osm");
 	//mapManager.readMap("parkCheck.osm");
 
+	std::cout << "reading map...";
 #ifdef _DEBUG
 	Instance()->readMap("trees2.osm");
 #else
-	Instance()->readMap("trees2.osm");
-	//Instance()->readMap("grunwaldWithRiver.osm");
+	//Instance()->readMap("trees2.osm");
+	Instance()->readMap("grunwaldWithRiver.osm");
 #endif
+	std::cout << "...finished\n";
 	//mapManager.readMap("singlebuilding.osm");
 	//mapManager.readMap("walls.osm");
 
@@ -203,6 +205,9 @@ void MapManager::readMap(const char * fileName)
 	catch (const rapidxml::parse_error & e)
 	{
 		//TODO: errors
+		std::cout << "ERROR while parsing document\n";
+		std::cout << '\a';
+		Sleep(2000);
 	}
 	
 	overlayContent = fileToCharReader("worldOverlays.xml");
@@ -214,6 +219,9 @@ void MapManager::readMap(const char * fileName)
 	catch (const rapidxml::parse_error & e)
 	{
 		//TODO: errors
+		std::cout << "ERROR while parsing overlays\n";
+		std::cout << '\a';
+		Sleep(2000);
 	}
 
 	
