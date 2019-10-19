@@ -6,7 +6,10 @@ class Footway : public MapObject
 {
 public:
 
-	Footway() {};
+	Footway()
+	{
+		_min_height = 0.0f;
+	}
 	Footway(MapObject& mapObject) : MapObject(mapObject)
 	{
 		_min_height = -0.05f;
