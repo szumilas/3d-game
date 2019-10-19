@@ -391,7 +391,10 @@ void Game::Update()
 			menuSwitchDelay = 0;
 		}
 
-		menu.update();
+		if (!menu.update())
+		{
+			handleMenuResponse();
+		}
 	}
 	//glutPostRedisplay();
 }
@@ -476,4 +479,16 @@ void Game::play()
 bool Game::checkKey(Key key)
 {
 	return KeyboardManager::Instance()->checkKey(key);
+}
+
+void Game::handleMenuResponse()
+{
+	if (menu.menuResponse.menuState == Menu::StartQuickRace)
+	{
+		gameState = State::race;
+
+		auto& r = menu.menuResponse;
+		MapContainer::Instance()->setRaceDetails(r.selectedCar, r.selectedTrack, r.noOfLaps, r.noOfOponents);
+		MapContainer::Instance()->startRace();
+	}
 }

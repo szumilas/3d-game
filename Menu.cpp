@@ -277,7 +277,7 @@ float Menu::textRealSize(std::string text, float fontSize)
 	return 100.0 * text.size() / 2 * fontSize / h;
 }
 
-void Menu::update()
+bool Menu::update()
 {
 	float acceleration = pow(abs(static_cast<float>(currentMenuLevel->selected) - floatingIndex) + 0.1f, 2) / 3;
 
@@ -296,6 +296,8 @@ void Menu::update()
 	}
 
 	textMenuOffset = static_cast<float>(currentMenuLevel->selected) - floatingIndex;
+
+	return continueMenuPreview;
 }
 
 void Menu::selectThisCar()
@@ -312,7 +314,7 @@ void Menu::selectThisTrack()
 
 void Menu::selectThisNoOfOponents()
 {
-	selectedNoOfOonents = previewNumber;
+	selectedNoOfOponents = previewNumber;
 	enterPreviousLevel();
 }
 
@@ -446,7 +448,7 @@ void Menu::quickRace2Dpreview(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 20.5, 45, totalLengthString, &(Screen2D::Instance()->squada_one_regular_big));
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 40, "No. of oponents:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 24, 40, std::to_string(selectedNoOfOonents), &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 24, 40, std::to_string(selectedNoOfOponents), &(Screen2D::Instance()->squada_one_regular_big));
 
 
 	printMap();
@@ -524,4 +526,14 @@ void Menu::reloadQuickRaceData()
 		previewCar = std::make_unique<Car>(Car(selectedCar, 0, 0));
 	if (previewTrack == nullptr || previewTrack->getTrackName() != selectedTrack)
 		previewTrack = std::make_unique<Track>(Track(selectedTrack));
+}
+
+void Menu::startQuickRace()
+{
+	menuResponse.menuState = StartQuickRace;
+	menuResponse.selectedCar = selectedCar;
+	menuResponse.selectedTrack = selectedTrack;
+	menuResponse.noOfLaps = selectedNoOfLaps;
+	menuResponse.noOfOponents = selectedNoOfOponents;
+	continueMenuPreview = false;
 }

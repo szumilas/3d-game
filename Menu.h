@@ -11,6 +11,23 @@ class Menu
 {
 public:
 
+	enum MenuState
+	{
+		OK = 0,
+		StartQuickRace,
+	};
+
+	struct MenuResponse
+	{
+		MenuState menuState = OK;
+		CarBrand selectedCar;
+		TrackName selectedTrack;
+		int noOfLaps;
+		int noOfOponents;
+	};
+
+public:
+
 	void Init(int w, int h);
 	void displayBackground();
 	void displayForeground();
@@ -18,7 +35,7 @@ public:
 	void display3DscreenForOption();
 	void display2DscreenForOption();
 
-	void update();
+	bool update();
 
 	void selectPrevious();
 	void selectNext();
@@ -44,6 +61,8 @@ private:
 	void selectThisNoOfOponents();
 	void selectThisNoOfLaps();
 	void enterPreviousLevel();
+	void startQuickRace();
+
 	void preview2DNumber(int id);
 	void preview2DCar(int id);
 	void preview3DCar(int id);
@@ -59,6 +78,7 @@ private:
 
 public:
 
+	MenuResponse menuResponse;
 
 private:
 	
@@ -68,6 +88,8 @@ private:
 
 	int w;
 	int h;
+
+	bool continueMenuPreview = true;
 
 	float textMenuOffset = 0;
 	float floatingIndex = 0;
@@ -79,7 +101,7 @@ private:
 
 	CarBrand selectedCar = CarBrand::SubaruBRZ;
 	TrackName selectedTrack = SmallLoop;
-	int selectedNoOfOonents = 5;
+	int selectedNoOfOponents = 5;
 	int selectedNoOfLaps = 2;
 
 	struct MenuLevel
@@ -104,7 +126,7 @@ private:
 	MenuLevel credits{ "Credits", &Menu::enterNextLevel };
 	MenuLevel quitGame{ "Quit Game" };
 
-	MenuLevel quickRaceStart{ "Start", nullptr, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceStart{ "Start", &Menu::startQuickRace, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceSelectTrack{ "Select Track", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceNoOfLaps{ "No. of laps", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };

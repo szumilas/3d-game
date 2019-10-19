@@ -63,6 +63,8 @@ private:
 	static void Update();
 	static bool checkKey(Key key);
 
+	static void handleMenuResponse();
+
 public:
 
 

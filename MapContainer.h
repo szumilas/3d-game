@@ -8,6 +8,7 @@
 #include "PointInsidePolygonDetector.h"
 #include "Car.h"
 #include "RaceTimer.h"
+#include "Track.h"
 
 class MapContainer
 {
@@ -106,6 +107,8 @@ public:
 	void PlayCameraSplineAroundCarZero(const Point& point = Point());
 	void SaveCameraSpline(const Point& point = Point());
 
+	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);
+
 	void createRaceObjects();
 	static std::vector<PathStruct> generateSubsplinePath(bool keepOriginalPoints = false);
 	void resetCarPositionsToPoint(int idPoint);
@@ -124,6 +127,7 @@ public:
 	static float GetNextPointDistance(const int& currentPoint) { return AIPointsDistances[currentPoint]; }
 	int getSelectedPointIndex();
 	static void initCars();
+	static void initCars(CarBrand selectedCar, int noOfOponents);
 	static void initRaceTimer();
 	static void updateRaceTimer();
 	static void displayRaceTimer();

@@ -905,6 +905,12 @@ void MapContainer::AIStopAndRestartToSelectedPoint(const Point& point)
 	raceTimer.resetTimer();
 }
 
+void MapContainer::setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents)
+{
+	initCars(selectedCar, noOfOponents);
+	startRace();
+}
+
 void MapContainer::startRace(const Point& point)
 {
 	LoadAIPoints();
@@ -1213,6 +1219,13 @@ void MapContainer::initCars()
 	{
 		CameraManager::Instance()->cameraViews.push_back(&car);
 	}
+}
+
+void MapContainer::initCars(CarBrand selectedCar, int noOfOponents)
+{
+	cars.clear();
+	cars.push_back(Car(selectedCar, 0, 0, true));
+	cars.push_back(Car(static_cast<CarBrand>((static_cast<int>(selectedCar) + 1) % carDB.size()), 5, 0));
 }
 
 void MapContainer::initRaceTimer()
