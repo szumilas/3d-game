@@ -401,6 +401,8 @@ void Game::Update()
 
 Game::Game(int argc, char**agrv)
 {
+	srand(time(NULL));
+
 	glutInit(&argc, agrv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_ALPHA | GLUT_DOUBLE | GLUT_DEPTH);
 

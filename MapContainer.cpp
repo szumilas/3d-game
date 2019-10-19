@@ -1225,7 +1225,19 @@ void MapContainer::initCars(CarBrand selectedCar, int noOfOponents)
 {
 	cars.clear();
 	cars.push_back(Car(selectedCar, 0, 0, true));
-	cars.push_back(Car(static_cast<CarBrand>((static_cast<int>(selectedCar) + 1) % carDB.size()), 5, 0));
+
+	int randomCar;
+	static auto checkUnique = [](const CarBrand& carbrand) { return std::any_of(cars.begin(), cars.end(), [&](const Car& car) { return car.getCarBrand() == carbrand; }); };
+
+	for (int q = 0; q < noOfOponents; ++q)
+	{
+		do
+		{
+			randomCar = rand() % carDB.size();
+		} while (checkUnique(static_cast<CarBrand>(randomCar)));
+	
+		cars.push_back(Car(static_cast<CarBrand>(randomCar), 0, 0));
+	}
 }
 
 void MapContainer::initRaceTimer()

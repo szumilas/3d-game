@@ -58,7 +58,7 @@ public:
 
 	float getVelocity() { return v.length(); } //[m/s]
 	float getRPM() { return engine.getRPM(); } //[m/s]
-	CarBrand getCarBrand() { return carBrand; }
+	CarBrand getCarBrand() const { return carBrand; }
 	char getCurrentGearTxt() { return gearBox.getCurrentGearTxt(); } //[-]
 	void importFromObjFile();
 
