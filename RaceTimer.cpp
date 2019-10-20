@@ -115,6 +115,8 @@ void RaceTimer::update()
 			{
 				carData.nextAIPoint = carData.car->getAIcurrentPoint();
 				carData.AISegmentDone = getAISegmentDoneValue(carData.nextAIPoint, carData.car->position);
+				if (carData.car->v.length() > carData.vMax)
+					carData.vMax = carData.car->v.length();
 			}
 
 			countLaps();
@@ -260,20 +262,67 @@ void RaceTimer::checkRaceFinished()
 				carData.car->humanCar = 2;
 				carData.car->setFrontRightCamera();
 				state = State::Outro;
-
-
-				std::cout << "============================\n";
-				for (auto& carData : carsData)
-				{
-					std::cout << carDB.at(carData.car->getCarBrand()).name << "\n";
-					for (auto& x : carData.lapTimes)
-					{
-						std::cout << "LAP: " << x << std::endl;
-					}
-					std::cout << carData.timeDelay << std::endl;
-				}
-				std::cout << "============================\n";
+				prepareFinalStats();
 			}
 		}
+	}
+}
+
+void RaceTimer::prepareFinalStats()
+{
+	raceResults.clear();
+	humanLaps.clear();
+
+	int humanDelay = 0;
+	int humanTime = 0;
+	for (auto& carData : carsData)
+	{
+		if (carData.car->humanCar)
+		{
+			humanDelay = carData.timeDelay;
+			humanTime = carData.lapTimes.back() - carData.lapTimes[0];
+			humanCarBrand = carData.car->getCarBrand();
+
+			for (int q = 1; q < carData.lapTimes.size(); ++q)
+			{
+				humanLaps.push_back(carData.lapTimes[q] - carData.lapTimes[q - 1]);
+			}
+			break;
+		}
+	}
+	auto maxPosition = maxNoOfLaps * AIpointsPositions.size() * 10;
+
+	for (auto& carData : carsData)
+	{
+		int totalTime = 0;
+
+		//std::cout << "[" << carDB.at(carData.car->getCarBrand()).name << "]\n";
+
+		for (auto& x : carData.lapTimes)
+		{
+			//std::cout << "LAP: " << x << std::endl;
+		}
+
+		auto currentPosition = calculateCurrentPositionId(carData);
+		//std::cout << "timeDelay: " << carData.timeDelay << std::endl;
+		//std::cout << "current position: " << currentPosition << "\n";
+		//std::cout << "maxPosition: " << maxPosition << "\n";
+
+		if (carData.raceDone)
+		{
+			totalTime = carData.lapTimes.back() - carData.lapTimes[0];
+		}
+		else
+		{
+			auto delayToHuman = carData.timeDelay - humanDelay;
+			//std::cout << "delayToHuman: " << delayToHuman << "\n";
+			auto futureDelay = static_cast<float>(maxPosition) / currentPosition * delayToHuman;
+			//std::cout << "futureDelay: " << futureDelay << "\n\n";
+			totalTime = futureDelay + humanTime;
+		}
+
+		raceResults.push_back({ carDB.at(carData.car->getCarBrand()).name, totalTime, carData.vMax });
+		std::sort(raceResults.begin(), raceResults.end(), [](auto& a, auto& b) { return std::get<1>(a) < std::get<1>(b); });
+		//std::cout << "     TOTAL TIME: " << totalTime << "\n\n";
 	}
 }

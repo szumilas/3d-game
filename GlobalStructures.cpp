@@ -1,5 +1,7 @@
 #include "GlobalStructures.h"
 
+#include <string>
+
 std::vector<Color::ColorData> Color::colors{
 	{ ColorName::WHITE, 1.0f, 1.0f, 1.0f },
 	{ ColorName::BLACK, 0.0f, 0.0f, 0.0f },
@@ -486,4 +488,21 @@ std::vector<Point> Spline::generateSubpoints(float subpointsDistance, bool keepO
 		subsplinePath.push_back( points[size() - 2]);
 
 	return subsplinePath;
+}
+
+std::string Timer::getString(int miliseconds)
+{
+	std::string result;
+
+	int minutes = miliseconds / 1000 / 60;
+	int second = (miliseconds / 1000) % 60;
+	int __seconds = (miliseconds / 10) % 100;
+
+	result = std::to_string(minutes);
+	result += ":";
+	result += std::to_string(second + 100).substr(1, 2);
+	result += ".";
+	result += std::to_string(__seconds + 100).substr(1, 2);
+
+	return result;
 }

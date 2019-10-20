@@ -258,7 +258,9 @@ void Menu::createCommonOptions()
 	}
 
 	//race finished options
-	quickRaceAfterRaceScreen.options = { &quickRaceAfterRaceScreenBack, &quickRaceResults };
+	quickRaceAfterRaceScreen.options = { &quickRaceAfterRaceScreenBack, &quickRaceResults, &quickRaceLaps };
+	quickRaceResults.options = { &quickRaceResultsBack };
+	quickRaceLaps.options = { &quickRaceLapsBack };
 }
 
 void Menu::createMenu()
@@ -648,9 +650,9 @@ void Menu::preview2DQuickRaceStats(int id)
 
 	int position = 1;
 	ColorName colorName = ColorName::WHITE;
-	for (auto& carData : MapContainer::Instance()->raceTimer.carsData)
+	for (auto& raceResultRow : MapContainer::Instance()->raceTimer.raceResults)
 	{
-		if (carData.car->isHumanCar() != 0)
+		if (std::get<0>(raceResultRow) == carDB.at(MapContainer::Instance()->raceTimer.humanCarBrand).name)
 		{
 			colorName = ColorName::YELLOW;
 		}
@@ -659,7 +661,69 @@ void Menu::preview2DQuickRaceStats(int id)
 			colorName = ColorName::WHITE;
 		}
 		Screen2D::Instance()->addTestValueToPrint(colorName, 7, 75 - position * 5, std::to_string(position) + ".", &(Screen2D::Instance()->squada_one_regular_big));
-		Screen2D::Instance()->addTestValueToPrint(colorName, 12, 75 - position * 5, carDB.at(carData.car->getCarBrand()).name, &(Screen2D::Instance()->squada_one_regular_big));
+		Screen2D::Instance()->addTestValueToPrint(colorName, 12, 75 - position * 5, std::get<0>(raceResultRow), &(Screen2D::Instance()->squada_one_regular_big));
+		position++;
+	}
+}
+
+void Menu::preview2DQuickRaceResults(int id)
+{
+	display2DRectangleNoTexture(screenPoint(-55, 38), screenPoint(55, 80), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(screenPoint(-55, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
+
+	ColorName colorName = ColorName::WHITE;
+
+	Screen2D::Instance()->addTestValueToPrint(colorName, -45, 75, "Car", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(colorName, 0, 75, "Time", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(colorName, 20, 75, "Max speed", &(Screen2D::Instance()->squada_one_regular));
+
+
+	int position = 1;
+	for (auto& raceResultRow : MapContainer::Instance()->raceTimer.raceResults)
+	{
+		if (std::get<0>(raceResultRow) == carDB.at(MapContainer::Instance()->raceTimer.humanCarBrand).name)
+		{
+			colorName = ColorName::YELLOW;
+		}
+		else
+		{
+			colorName = ColorName::WHITE;
+		}
+		Screen2D::Instance()->addTestValueToPrint(colorName, -50, 75 - position * 5, std::to_string(position) + ".", &(Screen2D::Instance()->squada_one_regular_big));
+		Screen2D::Instance()->addTestValueToPrint(colorName, -45, 75 - position * 5, std::get<0>(raceResultRow), &(Screen2D::Instance()->squada_one_regular_big));
+		Screen2D::Instance()->addTestValueToPrint(colorName, 0, 75 - position * 5, Timer::getString(std::get<1>(raceResultRow)), &(Screen2D::Instance()->squada_one_regular_big));
+		Screen2D::Instance()->addTestValueToPrint(colorName, 20, 75 - position * 5, std::to_string(static_cast<int>(std::get<2>(raceResultRow) * 3.6)) + " km/h", &(Screen2D::Instance()->squada_one_regular_big));
+		position++;
+	}
+}
+
+void Menu::preview2DQuickRaceLaps(int id)
+{
+	printMap(MapDetails::Track);
+
+	display2DRectangleNoTexture(screenPoint(5, 38), screenPoint(55, 80), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(screenPoint(5, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
+	
+	ColorName colorName = ColorName::WHITE;
+
+	Screen2D::Instance()->addTestValueToPrint(colorName, 12, 75, "Lap time", &(Screen2D::Instance()->squada_one_regular));
+
+	int bestLap = *std::min_element(MapContainer::Instance()->raceTimer.humanLaps.begin(), MapContainer::Instance()->raceTimer.humanLaps.end());
+
+	int position = 1;
+	for (auto& raceResultRow : MapContainer::Instance()->raceTimer.humanLaps)
+	{
+		if (raceResultRow == bestLap)
+		{
+			colorName = ColorName::YELLOW;
+		}
+		else
+		{
+			colorName = ColorName::WHITE;
+		}
+
+		Screen2D::Instance()->addTestValueToPrint(colorName, 7, 75 - position * 4, std::to_string(position) + ".", &(Screen2D::Instance()->squada_one_regular_big));
+		Screen2D::Instance()->addTestValueToPrint(colorName, 12, 75 - position * 4, Timer::getString(raceResultRow), &(Screen2D::Instance()->squada_one_regular_big));
 		position++;
 	}
 }

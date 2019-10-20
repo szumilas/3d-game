@@ -149,3 +149,8 @@ struct Spline
 	std::vector<Point> points;
 	std::vector<float> lengths;
 };
+
+struct Timer
+{
+	static std::string getString(int miliseconds);
+};

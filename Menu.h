@@ -84,6 +84,8 @@ private:
 	void preview2DTrack(int id);
 	void preview3DTrack(int id);
 	void preview2DQuickRaceStats(int id);
+	void preview2DQuickRaceResults(int id);
+	void preview2DQuickRaceLaps(int id);
 
 	void printMap(MapDetails details);
 	void reloadQuickRaceData();
@@ -147,7 +149,10 @@ private:
 	MenuLevel quickRaceBack{ "Back", &Menu::enterPreviousLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceAfterRaceScreen{ "Race Finished" };
 	MenuLevel quickRaceAfterRaceScreenBack{ "Continue", &Menu::enterQuickRaceLevel, &Menu::preview2DQuickRaceStats };
-	MenuLevel quickRaceResults{ "Results", nullptr, &Menu::preview2DQuickRaceStats };
+	MenuLevel quickRaceResults{ "Results", &Menu::enterNextLevel, &Menu::preview2DQuickRaceStats };
+	MenuLevel quickRaceResultsBack{ "Back", &Menu::enterPreviousLevel, &Menu::preview2DQuickRaceResults };
+	MenuLevel quickRaceLaps{ "Laps", &Menu::enterNextLevel, &Menu::preview2DQuickRaceStats };
+	MenuLevel quickRaceLapsBack{ "Back", &Menu::enterPreviousLevel, &Menu::preview2DQuickRaceLaps };
 
 	MenuLevel freeRideStart{ "Start", &Menu::startFreeRide, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
 	MenuLevel freeRideSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };

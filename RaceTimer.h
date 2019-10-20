@@ -34,6 +34,7 @@ public:
 		bool useForStats = false;
 		std::vector<int> lapTimes;
 		bool raceDone = false;
+		float vMax = 0;
 	};
 
 	void init(std::vector<Car>* cars);
@@ -55,6 +56,7 @@ private:
 	void countLaps();
 	void setCarForStats();
 	void checkRaceFinished();
+	void prepareFinalStats();
 
 public:
 
@@ -77,5 +79,9 @@ private:
 
 	int maxNoOfLaps;
 	bool raceFinished = false;
+
+	std::vector<std::tuple<std::string, int, float>> raceResults; //name, time [ms], Max [m/s]
+	std::vector<int> humanLaps;
+	CarBrand humanCarBrand;
 
 };

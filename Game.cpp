@@ -328,6 +328,7 @@ void Game::Update()
 		{
 			menu.menuResponse.menuState = Menu::OK;
 			gameState = State::mainMenu;
+			MapContainer::Instance()->cars.clear();
 			menu.loadAfterRaceScreen();
 			return;
 		}
