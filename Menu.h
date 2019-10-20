@@ -47,6 +47,7 @@ public:
 	void selectNext();
 	void enter();
 	void loadAfterRaceScreen();
+	void setPause();
 
 	static void setGLcolor(ColorName colorName)
 	{
@@ -86,6 +87,7 @@ private:
 	void preview2DQuickRaceStats(int id);
 	void preview2DQuickRaceResults(int id);
 	void preview2DQuickRaceLaps(int id);
+	void pause2Dpreview(int id);
 
 	void printMap(MapDetails details);
 	void reloadQuickRaceData();
@@ -162,6 +164,10 @@ private:
 	MenuLevel highscoresRideBack{ "Back", &Menu::enterPreviousLevel };
 
 	MenuLevel creditsRideBack{ "Back", &Menu::enterPreviousLevel };
+
+	MenuLevel pause{ "Pause" };
+	MenuLevel pauseResume{ "Resume", nullptr, &Menu::pause2Dpreview };
+	MenuLevel pauseExit{ "Exit", nullptr, &Menu::pause2Dpreview };
 
 	std::vector<MenuLevel> carOptions;
 	std::vector<MenuLevel> trackOptions;

@@ -261,6 +261,9 @@ void Menu::createCommonOptions()
 	quickRaceAfterRaceScreen.options = { &quickRaceAfterRaceScreenBack, &quickRaceResults, &quickRaceLaps };
 	quickRaceResults.options = { &quickRaceResultsBack };
 	quickRaceLaps.options = { &quickRaceLapsBack };
+
+	//pause
+	pause.options = { &pauseResume, &pauseExit };
 }
 
 void Menu::createMenu()
@@ -726,4 +729,17 @@ void Menu::preview2DQuickRaceLaps(int id)
 		Screen2D::Instance()->addTestValueToPrint(colorName, 12, 75 - position * 4, Timer::getString(raceResultRow), &(Screen2D::Instance()->squada_one_regular_big));
 		position++;
 	}
+}
+
+void Menu::setPause()
+{
+	currentMenuLevel = &pause;
+}
+
+void Menu::pause2Dpreview(int id)
+{
+	display2DRectangleNoTexture(screenPoint(-8, 35), screenPoint(-3, 55), ColorName::WHITE);
+	display2DRectangleNoTexture(screenPoint(3, 35), screenPoint(8, 55), ColorName::WHITE);
+
+	display2DRectangleNoTexture(screenPoint(-55, 25.5), screenPoint(55, 65), ColorName::MENU_LIGHT_GRAY);
 }

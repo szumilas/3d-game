@@ -61,7 +61,7 @@ void Game::display()
 	//glLoadIdentity();
 
 
-	if (gameState == Game::State::race)
+	if (gameState == Game::State::race || gameState == Game::State::pause)
 	{
 		CameraManager::Instance()->adjustCamera(MapManager::Instance()->currentCameraView);
 
@@ -97,7 +97,7 @@ void Game::display()
 
 		Screen2D::pushScreenCoordinateMatrix();
 		MapContainer::displayMapEditorPanel();
-		if (MapContainer::Instance()->raceActive())
+		if (MapContainer::Instance()->timerActive())
 		{
 			carGauge.display();
 			MapContainer::displayCounter();
@@ -118,6 +118,16 @@ void Game::display()
 
 		glPopMatrix();
 
+		Screen2D::pushScreenCoordinateMatrix();
+		menu.display2DscreenForOption();
+		menu.displayForeground();
+		Screen2D::Instance()->display();
+		menu.displayForegroundBeforeText();
+		Screen2D::pop_projection_matrix();
+	}
+
+	if (gameState == Game::State::pause)
+	{
 		Screen2D::pushScreenCoordinateMatrix();
 		menu.display2DscreenForOption();
 		menu.displayForeground();
@@ -187,6 +197,12 @@ void Game::keyboard(unsigned char key, int x, int y)
 			exit(0);
 		}
 		else if(gameState == State::race && MapContainer::Instance()->raceActive())
+		{
+			menu.menuResponse.menuState = Menu::OK;
+			menu.setPause();
+			gameState = State::pause;
+		}
+		else if (gameState == State::pause && MapContainer::Instance()->raceActive())
 		{
 			menu.menuResponse.menuState = Menu::OK;
 			gameState = State::mainMenu;
@@ -389,7 +405,7 @@ void Game::Update()
 			MapContainer::Instance()->introFinished();
 		}
 	}
-	else if (gameState == State::mainMenu)
+	else if (gameState == State::mainMenu || gameState == State::pause)
 	{
 		static clock_t menuSwitchDelay = clock();
 
