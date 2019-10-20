@@ -213,6 +213,7 @@ void Menu::createCommonOptions()
 	for (auto& carOption : carOptions)
 	{
 		quickRaceSelectCar.options.push_back(&carOption);
+		freeRideSelectCar.options.push_back(&carOption);
 	}
 
 	//tracks
@@ -227,6 +228,19 @@ void Menu::createCommonOptions()
 	{
 		quickRaceSelectTrack.options.push_back(&trackOption);
 	}
+
+	//free ride positions
+	for (auto& freeRideStartPosition : freeRideStartPositions)
+	{
+		freeRidePositions.push_back({ freeRideStartPosition.second.first, nullptr, nullptr, nullptr, freeRideStartPosition.first });
+	}
+
+	freeRidePositions.push_back({ "Cancel", &Menu::enterPreviousLevel });
+
+	for (auto& freeRidePosition : freeRidePositions)
+	{
+		freeRideSelectPosition.options.push_back(&freeRidePosition);
+	}
 }
 
 void Menu::createMenu()
@@ -235,7 +249,7 @@ void Menu::createMenu()
 
 	mainMenu.options = {&quickRace, &freeRide, &highscores, &credits, &quitGame };
 	quickRace.options = { &quickRaceStart, &quickRaceSelectCar, &quickRaceSelectTrack, &quickRaceNoOfLaps, &quickRaceNoOfOponents, &quickRaceBack };
-	freeRide.options = { &freeRideStart, &freeRideSelectCar, &freeRideBack };
+	freeRide.options = { &freeRideStart, &freeRideSelectCar, &freeRideSelectPosition, &freeRideBack };
 	highscores.options = { &highscoresRideBack };
 	credits.options = { &creditsRideBack };
 
@@ -451,7 +465,7 @@ void Menu::quickRace2Dpreview(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 24, 40, std::to_string(selectedNoOfOponents), &(Screen2D::Instance()->squada_one_regular_big));
 
 
-	printMap();
+	printMap(MapDetails::Track);
 
 }
 
@@ -465,25 +479,46 @@ void Menu::quickRace3Dpreview(int id)
 	previewCar->setPosition(Point(-10, 6, 1), angle);
 	previewCar->display();
 	previewCar->alreadyPrinted = false;
+}
+
+void Menu::freeRide2Dpreview(int id)
+{
+	display2DRectangleNoTexture(screenPoint(5, 38), screenPoint(55, 65), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(screenPoint(5, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 60, "Car:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 12, 60, carDB.at(previewCar->getCarBrand()).name, &(Screen2D::Instance()->squada_one_regular_big));
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 55, "Start position:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 22.5, 55, "Grunwaldzki Bridge", &(Screen2D::Instance()->squada_one_regular_big));
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 50, "Area to discover:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 25, 50, "2.58 km2", &(Screen2D::Instance()->squada_one_regular_big));
+
+	printMap(MapDetails::Position);
 
 }
 
-void Menu::printMap()
+void Menu::freeRide3Dpreview(int id)
+{
+	reloadQuickRaceData();
+
+	static float angle = 0;
+	angle += PI / 6 / FPS;
+
+	previewCar->setPosition(Point(-10, 6, 1), angle);
+	previewCar->display();
+	previewCar->alreadyPrinted = false;
+}
+
+void Menu::printMap(MapDetails details)
 {
 	static Point leftBottomMapPoint = screenPoint(-55, 40);
 	static Point rightTopMapPoint = screenPoint(0, 78.5);
 	static Point centerMap = { (leftBottomMapPoint.x + rightTopMapPoint.x) / 2, (leftBottomMapPoint.y + rightTopMapPoint.y) / 2 };
 	static Point centerMapCoordinates = { 17.056488, 51.112627 };
 
-	static float highlightCounter = 0;
-	highlightCounter += 1.0 / 100.0 * previewTrack->AIPointsCoordinates.size();
-	if (highlightCounter >= 1.5 * previewTrack->AIPointsCoordinates.size())
-		highlightCounter -= 2 * previewTrack->AIPointsCoordinates.size();
-
 	display2DRectangleTexture(leftBottomMapPoint, rightTopMapPoint, idTextureWroclawMap);
-
-
-	Menu::setGLcolor(ColorName::ORANGE);
 
 	auto calculateScreenPointOnMap = [&](Point& p1)
 	{
@@ -500,24 +535,38 @@ void Menu::printMap()
 		return p2;
 	};
 
-	ColorName colorName;
-	for (int q = 0; q < previewTrack->AIPointsCoordinates.size(); q++)
+	if (details == MapDetails::Track)
 	{
-		Point& p1 = previewTrack->AIPointsCoordinates[q];
-		Point& p2 = previewTrack->AIPointsCoordinates[(q + 1) % previewTrack->AIPointsCoordinates.size()];
 
-		if (abs(highlightCounter - q) <= 10)
-		{
-			colorName = ColorName::YELLOW;
-		}
-		else
-		{
-			colorName = ColorName::MENU_BLUE;
-		}
+		static float highlightCounter = 0;
+		highlightCounter += 1.0 / 100.0 * previewTrack->AIPointsCoordinates.size();
+		if (highlightCounter >= 1.5 * previewTrack->AIPointsCoordinates.size())
+			highlightCounter -= 2 * previewTrack->AIPointsCoordinates.size();
 
-		display2DLine(calculateScreenPointOnMap(p1), calculateScreenPointOnMap(p2), colorName, 3, 1);
+		Menu::setGLcolor(ColorName::ORANGE);
+
+		ColorName colorName;
+		for (int q = 0; q < previewTrack->AIPointsCoordinates.size(); q++)
+		{
+			Point& p1 = previewTrack->AIPointsCoordinates[q];
+			Point& p2 = previewTrack->AIPointsCoordinates[(q + 1) % previewTrack->AIPointsCoordinates.size()];
+
+			if (abs(highlightCounter - q) <= 10)
+			{
+				colorName = ColorName::YELLOW;
+			}
+			else
+			{
+				colorName = ColorName::MENU_BLUE;
+			}
+
+			display2DLine(calculateScreenPointOnMap(p1), calculateScreenPointOnMap(p2), colorName, 3, 1);
+		}
 	}
+	else if (details == MapDetails::Position)
+	{
 
+	}
 }
 
 void Menu::reloadQuickRaceData()
@@ -535,4 +584,13 @@ void Menu::startQuickRace()
 	menuResponse.selectedTrack = selectedTrack;
 	menuResponse.noOfLaps = selectedNoOfLaps;
 	menuResponse.noOfOponents = selectedNoOfOponents;
+}
+
+void Menu::startFreeRide()
+{
+	//menuResponse.menuState = StartQuickRace;
+	//menuResponse.selectedCar = selectedCar;
+	//menuResponse.selectedTrack = selectedTrack;
+	//menuResponse.noOfLaps = selectedNoOfLaps;
+	//menuResponse.noOfOponents = selectedNoOfOponents;
 }

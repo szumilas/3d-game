@@ -17,6 +17,12 @@ public:
 		StartQuickRace,
 	};
 
+	enum class MapDetails
+	{
+		Track,
+		Position,
+	};
+
 	struct MenuResponse
 	{
 		MenuState menuState = OK;
@@ -62,16 +68,19 @@ private:
 	void selectThisNoOfLaps();
 	void enterPreviousLevel();
 	void startQuickRace();
+	void startFreeRide();
 
 	void preview2DNumber(int id);
 	void preview2DCar(int id);
 	void preview3DCar(int id);
 	void quickRace2Dpreview(int id = 0);
 	void quickRace3Dpreview(int id = 0);
+	void freeRide2Dpreview(int id = 0);
+	void freeRide3Dpreview(int id = 0);
 	void preview2DTrack(int id);
 	void preview3DTrack(int id);
 
-	void printMap();
+	void printMap(MapDetails details);
 	void reloadQuickRaceData();
 
 	Point screenPoint(float xp, float yp) { return Point(0.5 * w + xp / 100 * h, yp / 100 * h); }
@@ -127,13 +136,14 @@ private:
 	MenuLevel quickRaceStart{ "Start", &Menu::startQuickRace, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceSelectTrack{ "Select Track", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
-	MenuLevel quickRaceNoOfLaps{ "No. of laps", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
-	MenuLevel quickRaceNoOfOponents{ "No. of oponents", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceNoOfLaps{ "No. Of Laps", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceNoOfOponents{ "No. Of Oponents", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceBack{ "Back", &Menu::enterPreviousLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 
-	MenuLevel freeRideStart{ "Start" };
-	MenuLevel freeRideSelectCar{ "Select Car", &Menu::enterNextLevel };
-	MenuLevel freeRideBack{ "Back", &Menu::enterPreviousLevel };
+	MenuLevel freeRideStart{ "Start", &Menu::startFreeRide, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
+	MenuLevel freeRideSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
+	MenuLevel freeRideSelectPosition{ "Select Position", &Menu::enterNextLevel, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
+	MenuLevel freeRideBack{ "Back", &Menu::enterPreviousLevel, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
 
 	MenuLevel highscoresRideBack{ "Back", &Menu::enterPreviousLevel };
 
@@ -144,4 +154,11 @@ private:
 	std::vector<MenuLevel> numberOfLaps;
 	std::vector<MenuLevel> numberOfOponents;
 
+	std::vector<MenuLevel> freeRidePositions;
+
+	std::map<int, std::pair<std::string, Point>> freeRideStartPositions =
+	{
+		{ 1, { "Grunwald Square", Point(17.061105, 51.111835) } },
+		{ 2, { "Botanical Garden", Point(17.051355, 51.116598) } },
+	};
 };
