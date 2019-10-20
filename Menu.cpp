@@ -485,7 +485,7 @@ void Menu::printMap()
 
 	Menu::setGLcolor(ColorName::ORANGE);
 
-	auto calculateScreenPointOnMap = [](Point& p1)
+	auto calculateScreenPointOnMap = [&](Point& p1)
 	{
 		Point p2(p1.x - centerMapCoordinates.x, p1.y - centerMapCoordinates.y);
 		p2.x *= MapManager::longituteRatio;
@@ -493,8 +493,8 @@ void Menu::printMap()
 		p2.x /= 42.128;
 		p2.y /= 42.128;
 
-		p2.x *= 7.6;
-		p2.y *= 7.6;
+		p2.x *= 1.0 / 100 * h;
+		p2.y *= 1.0 / 100 * h;
 		p2 += centerMap;
 
 		return p2;
