@@ -512,6 +512,7 @@ void Game::handleMenuResponse()
 		gameState = State::race;
 
 		auto& r = menu.menuResponse;
+		MapContainer::Instance()->raceTimer = RaceTimer();
 		MapContainer::Instance()->setRaceDetails(r.selectedCar, r.selectedTrack, r.noOfLaps, r.noOfOponents);
 		std::cout << "carGauge load...\n";
 		carGauge.load(&MapContainer::Instance()->cars[0]);
