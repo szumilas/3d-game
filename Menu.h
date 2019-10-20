@@ -163,5 +163,9 @@ private:
 	{
 		{ 1, { "Grunwald Square", Point(17.061105, 51.111835) } },
 		{ 2, { "Botanical Garden", Point(17.051355, 51.116598) } },
+		{ 3, { "Green Day", Point(17.051100, 51.113702) } },
+		{ 4, { "University", Point(17.061078, 51.107167) } },
+		{ 5, { "Sienkiewicza St.", Point(17.058047, 51.116090) } },
+		{ 6, { "Reja St.", Point(17.056846, 51.113148) } },
 	};
 };
