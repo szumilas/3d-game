@@ -324,6 +324,13 @@ void Game::Update()
 			car.move();
 
 		MapContainer::Instance()->updateRaceTimer();
+		if (MapContainer::Instance()->raceTimer.state == RaceTimer::State::RaceFinished)
+		{
+			menu.menuResponse.menuState = Menu::OK;
+			gameState = State::mainMenu;
+			menu.loadAfterRaceScreen();
+			return;
+		}
 
 		//reshape(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 

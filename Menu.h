@@ -46,6 +46,7 @@ public:
 	void selectPrevious();
 	void selectNext();
 	void enter();
+	void loadAfterRaceScreen();
 
 	static void setGLcolor(ColorName colorName)
 	{
@@ -68,6 +69,7 @@ private:
 	void selectThisNoOfLaps();
 	void selectThisFreeRidePosition();
 	void enterPreviousLevel();
+	void enterQuickRaceLevel();
 	void startQuickRace();
 	void startFreeRide();
 
@@ -81,6 +83,7 @@ private:
 	void freeRide3Dpreview(int id = 0);
 	void preview2DTrack(int id);
 	void preview3DTrack(int id);
+	void preview2DQuickRaceStats(int id);
 
 	void printMap(MapDetails details);
 	void reloadQuickRaceData();
@@ -142,6 +145,9 @@ private:
 	MenuLevel quickRaceNoOfLaps{ "No. Of Laps", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceNoOfOponents{ "No. Of Oponents", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceBack{ "Back", &Menu::enterPreviousLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
+	MenuLevel quickRaceAfterRaceScreen{ "Race Finished" };
+	MenuLevel quickRaceAfterRaceScreenBack{ "Continue", &Menu::enterQuickRaceLevel, &Menu::preview2DQuickRaceStats };
+	MenuLevel quickRaceResults{ "Results", nullptr, &Menu::preview2DQuickRaceStats };
 
 	MenuLevel freeRideStart{ "Start", &Menu::startFreeRide, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
 	MenuLevel freeRideSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };

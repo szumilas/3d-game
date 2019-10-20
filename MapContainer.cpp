@@ -907,6 +907,7 @@ void MapContainer::AIStopAndRestartToSelectedPoint(const Point& point)
 
 void MapContainer::setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents)
 {
+	raceTimer.setMaxNoOfLaps(noOfLaps);
 	initCars(selectedCar, noOfOponents);
 
 	LoadAIPointsFromTrackName(selectedTrack);

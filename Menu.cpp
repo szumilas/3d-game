@@ -256,6 +256,9 @@ void Menu::createCommonOptions()
 	{
 		freeRideSelectPosition.options.push_back(&freeRidePosition);
 	}
+
+	//race finished options
+	quickRaceAfterRaceScreen.options = { &quickRaceAfterRaceScreenBack, &quickRaceResults };
 }
 
 void Menu::createMenu()
@@ -373,6 +376,13 @@ void Menu::enterNextLevel()
 void Menu::enterPreviousLevel()
 {
 	currentMenuLevel = currentMenuLevel->previousLevel;
+	//currentMenuLevel->selected = 0;
+	floatingIndex = currentMenuLevel->selected;
+}
+
+void Menu::enterQuickRaceLevel()
+{
+	currentMenuLevel = &quickRace;
 	//currentMenuLevel->selected = 0;
 	floatingIndex = currentMenuLevel->selected;
 }
@@ -622,4 +632,34 @@ void Menu::startFreeRide()
 	//menuResponse.selectedTrack = selectedTrack;
 	//menuResponse.noOfLaps = selectedNoOfLaps;
 	//menuResponse.noOfOponents = selectedNoOfOponents;
+}
+
+void Menu::loadAfterRaceScreen()
+{
+	currentMenuLevel = &quickRaceAfterRaceScreen;
+}
+
+void Menu::preview2DQuickRaceStats(int id)
+{
+	printMap(MapDetails::Track);
+
+	display2DRectangleNoTexture(screenPoint(5, 38), screenPoint(55, 75), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(screenPoint(5, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
+
+	int position = 1;
+	ColorName colorName = ColorName::WHITE;
+	for (auto& carData : MapContainer::Instance()->raceTimer.carsData)
+	{
+		if (carData.car->isHumanCar() != 0)
+		{
+			colorName = ColorName::YELLOW;
+		}
+		else
+		{
+			colorName = ColorName::WHITE;
+		}
+		Screen2D::Instance()->addTestValueToPrint(colorName, 7, 75 - position * 5, std::to_string(position) + ".", &(Screen2D::Instance()->squada_one_regular_big));
+		Screen2D::Instance()->addTestValueToPrint(colorName, 12, 75 - position * 5, carDB.at(carData.car->getCarBrand()).name, &(Screen2D::Instance()->squada_one_regular_big));
+		position++;
+	}
 }

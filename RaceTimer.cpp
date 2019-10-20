@@ -39,7 +39,7 @@ void RaceTimer::setCarForStats()
 
 void RaceTimer::display()
 {
-	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 95, "Lap " + std::to_string(carForStats->lapsDone + 1) + "/8", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 95, "Lap " + std::to_string(carForStats->lapsDone + 1) + "/" + std::to_string(maxNoOfLaps), &(Screen2D::Instance()->squada_one_regular_big));
 
 	long currentLapTime = 0;
 	if(!carForStats->lapTimes.empty())
@@ -66,7 +66,7 @@ void RaceTimer::display()
 			curentColor = AIcolor;
 
 		std::string time = std::to_string(carData.timeDelay / 1000 / 60) + ":" + std::to_string(100 + (carData.timeDelay / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (carData.timeDelay / 10) % 100).substr(1, 2);
-		if (carData.timeDelay < 10)
+		if (carData.timeDelay < 10 || carData.raceDone)
 			time = "-:--.--";
 
 		Screen2D::Instance()->addTestValueToPrint(curentColor, -80, 5 + possition * 3, time, &(Screen2D::Instance()->squada_one_regular));
@@ -78,7 +78,22 @@ void RaceTimer::display()
 
 void RaceTimer::update()
 {
-	if (state != State::Intro)
+	if (state == State::Outro)
+	{
+		if (clock() - begin_time > 10000)
+		{
+			begin_time = clock();
+		}
+		else if (clock() - begin_time < 3000)
+		{
+
+		}
+		else if (clock() - begin_time > 3000)
+		{
+			state = State::RaceFinished;
+		}
+	}
+	else if (state != State::Intro)
 	{
 		if (beforeRace && begin_time != 0)
 		{
@@ -140,11 +155,12 @@ void RaceTimer::countLaps()
 	auto currentTime = clock();
 	for (auto& carData : carsData)
 	{
-		if (carData.checkboxVisited && carData.nextAIPoint == 0)
+		if (carData.checkboxVisited && carData.nextAIPoint == 0 && !carData.raceDone)
 		{
 			carData.checkboxVisited = false;
 			carData.lapsDone++;
 			carData.lapTimes.push_back(currentTime);
+			checkRaceFinished();
 		}
 	}
 }
@@ -229,4 +245,35 @@ void RaceTimer::startTimer()
 void RaceTimer::resetTimer()
 {
 	begin_time = 0;
+}
+
+void RaceTimer::checkRaceFinished()
+{
+	for (auto& carData : carsData)
+	{
+		if (carData.lapsDone >= maxNoOfLaps)
+		{
+			carData.raceDone = true;
+			if (carData.car->humanCar)
+			{
+				raceFinished = true;
+				carData.car->humanCar = 2;
+				carData.car->setFrontRightCamera();
+				state = State::Outro;
+
+
+				std::cout << "============================\n";
+				for (auto& carData : carsData)
+				{
+					std::cout << carDB.at(carData.car->getCarBrand()).name << "\n";
+					for (auto& x : carData.lapTimes)
+					{
+						std::cout << "LAP: " << x << std::endl;
+					}
+					std::cout << carData.timeDelay << std::endl;
+				}
+				std::cout << "============================\n";
+			}
+		}
+	}
 }

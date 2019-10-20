@@ -62,6 +62,9 @@ public:
 	CarBrand getCarBrand() const { return carBrand; }
 	char getCurrentGearTxt() { return gearBox.getCurrentGearTxt(); } //[-]
 	void importFromObjFile();
+	void setBackCamera() { cameraCenter = Point{ -8, 0, 5 }; cameraLookAt = Point{ 0, 0, 3 }; }
+	void setFrontRightCamera() { cameraCenter = Point{ 5, 2, 2 }; cameraLookAt = Point{0, 0, 1}; }
+	bool isHumanCar() { return humanCar; }
 
 private:
 
@@ -151,6 +154,6 @@ private:
 	ALLEGRO_SAMPLE_INSTANCE* driftSound;
 
 	PacejkaModel pacejkaModel;
-	bool humanCar = false;
+	int humanCar = 0;
 	int AIcurrentPoint = 0;
 };

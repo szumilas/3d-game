@@ -42,11 +42,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar) : carBran
 		wheel.loadModel();
 	}
 
-	cameraCenter = Point{-8, 0, 5};
-	//cameraCenter = Point{-8, -5, 5};
-	//cameraCenter = Point{ -0.001, 0, 15 };
-	//cameraCenter = Point{ -0.001, 0, 50 };
-	cameraLookAt = Point{0, 0, 3};
+	setBackCamera();
 
 	setLastWheelPosition();
 
@@ -81,7 +77,7 @@ void Car::findAproximateAIPathPosition()
 
 void Car::move()
 {
-	if (humanCar)
+	if (humanCar == 1)
 		findAproximateAIPathPosition();
 	else
 		AImove();

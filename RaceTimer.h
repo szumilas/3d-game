@@ -5,6 +5,8 @@
 
 class RaceTimer
 {
+	friend class Menu;
+
 public:
 
 	enum State
@@ -17,6 +19,8 @@ public:
 		Red1 = 3,
 		Green = 4,
 		WaitingToDisappear = 9,
+		Outro = 10,
+		RaceFinished = 11,
 	};
 
 	struct RaceTimerData
@@ -29,6 +33,7 @@ public:
 		int lapsDone = 0;
 		bool useForStats = false;
 		std::vector<int> lapTimes;
+		bool raceDone = false;
 	};
 
 	void init(std::vector<Car>* cars);
@@ -38,6 +43,7 @@ public:
 
 	void display();
 	void update();
+	void setMaxNoOfLaps(int laps) { maxNoOfLaps = laps; }
 
 private:
 
@@ -48,6 +54,7 @@ private:
 	void checkCheckboxes();
 	void countLaps();
 	void setCarForStats();
+	void checkRaceFinished();
 
 public:
 
@@ -67,5 +74,8 @@ private:
 	ColorName HumanColor = ColorName::RED;
 
 	std::vector<int> leaderTime{0};
+
+	int maxNoOfLaps;
+	bool raceFinished = false;
 
 };
