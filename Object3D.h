@@ -18,7 +18,8 @@ public:
 	Object3D();
 	void loadModel();
 	virtual void display();
-	void importFromObjFile(const char* filePath, Textures textureName, float scaleRatio = 1.0f);
+	void importFromObjFile(const char* filePath, Textures textureName, float scaleRatio = 1.0f, std::map<std::string, Color>* materials = nullptr);
+	std::map<std::string, Color> importMaterials(const char* filePath);
 	void cretateGlobalVertex(const Point& localPoint);
 	vector2D getGlobalVector(const vector2D& vLocal);
 	vector2D getLocalVector(const vector2D& vGlobal);

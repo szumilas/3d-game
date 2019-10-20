@@ -360,7 +360,9 @@ void Car::display()
 
 void Car::importFromObjFile()
 {
-	Object3D::importFromObjFile((carDB.at(carBrand).objFilePath + "body.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
+	auto materials = Object3D::importMaterials((carDB.at(carBrand).objFilePath + "materials.mtl").c_str());
+
+	Object3D::importFromObjFile((carDB.at(carBrand).objFilePath + "body.obj").c_str(), carDB.at(carBrand).textureName, 0.165, &materials);
 	backWheels.importFromObjFile((carDB.at(carBrand).objFilePath + "back_wheels.obj").c_str(), carDB.at(carBrand).textureName, 0.165);
 	backWheels.calculateGeometry(carDB.at(carBrand).backWheelsXoffset);
 	leftWheel.importFromObjFile((carDB.at(carBrand).objFilePath + "left_wheel.obj").c_str(), carDB.at(carBrand).textureName, 0.165);

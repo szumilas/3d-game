@@ -43,13 +43,71 @@ void Object3D::display()
 	}
 }
 
-void Object3D::importFromObjFile(const char* filePath, Textures textureName, float scaleRatio)
+std::map<std::string, Color> Object3D::importMaterials(const char* filePath)
+{
+	std::map<std::string, Color> materials;
+
+	std::ifstream file;
+	file.open(filePath);
+
+	if (!file)
+	{
+		std::cout << "ERROR: missing file: " << filePath << "\a";
+		Sleep(2000);
+		throw;
+	}
+
+	std::string line;
+	std::string svalue;
+	std::string materalName;
+
+	do
+	{
+		getline(file, line);
+		std::stringstream ssline(line);
+
+		ssline >> svalue;
+
+		if (svalue == "newmtl")
+		{
+			ssline >> materalName;
+
+			float r = 1, g = 1, b = 1;
+
+			getline(file, line);
+			std::stringstream ssfulldata(line);
+			getline(ssfulldata, svalue, ' ');
+
+			getline(ssfulldata, svalue, ' ');
+			r = stof(svalue);
+
+			getline(ssfulldata, svalue, ' ');
+			g = stof(svalue);
+
+			getline(ssfulldata, svalue);
+			b = stof(svalue);
+
+			materials.insert({ materalName, Color(r, g, b)});
+
+		}
+	} while (line != "#EOF" && line != "# End of File");
+
+	file.close();
+
+	return materials;
+}
+
+void Object3D::importFromObjFile(const char* filePath, Textures textureName, float scaleRatio, std::map<std::string, Color>* materials)
 {
 	std::ifstream file;
 	file.open(filePath);
 
 	if (!file)
+	{
+		std::cout << "ERROR: missing file: " << filePath << "\a";
+		Sleep(2000);
 		throw;
+	}
 
 	std::vector<Point> vertices(1);
 	std::vector<Point> textureVertices(1);
@@ -58,6 +116,9 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 
 	std::string line;
 	std::string svalue;
+
+	Color currentColor = Color(ColorName::WHITE);
+	bool texture = true;
 
 	do
 	{
@@ -112,14 +173,42 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 			}
 
 			newPolygon.noOfPoints = newPolygon.points.size();
-			newPolygon.color = Color(ColorName::WHITE);
+			newPolygon.color = currentColor;
 			newPolygon.additionalColor = Color(ColorName::WHITE);
-			newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(textureName)].idTexture;
+
+			if(texture)
+				newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(textureName)].idTexture;
+			else
+				newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::no_texture)].idTexture;
+
 			polygons.push_back(newPolygon);
 
 		}
 		else if (svalue == "usemtl")
 		{
+			if (materials)
+			{
+				std::string materialName;
+				ssline >> materialName;
+
+				auto it = materials->find(materialName);
+				if (it != materials->end() && materialName.find("Color") != std::string::npos)
+				{
+					currentColor = it->second;
+					texture = false;
+				}
+				else
+				{
+					currentColor = Color(ColorName::WHITE);
+					texture = true;
+				}
+			}
+			else
+			{
+				currentColor = Color(ColorName::WHITE);
+				texture = true;
+			}
+
 			//vertices.resize(1);
 			//textureVertices.resize(1);
 		}
