@@ -2,6 +2,8 @@
 
 #include "Game.h"
 
+#include "GameClock.h"
+
 int Game::current_time;
 int Game::previos_time = time(NULL);
 int Game::noOfFrames = 0;
@@ -407,11 +409,11 @@ void Game::Update()
 	}
 	else if (gameState == State::mainMenu || gameState == State::pause)
 	{
-		static clock_t menuSwitchDelay = clock();
+		static clock_t menuSwitchDelay = GameClock::Instance()->getClock();
 
 		if (leftPressed || rightPressed || checkKey(ENTER))
 		{
-			if (clock() - menuSwitchDelay > 300)
+			if (GameClock::Instance()->getClock() - menuSwitchDelay > 300)
 			{
 				if (leftPressed)
 					menu.selectPrevious();
@@ -420,7 +422,7 @@ void Game::Update()
 				else if (checkKey(ENTER))
 					menu.enter();
 
-				menuSwitchDelay = clock();
+				menuSwitchDelay = GameClock::Instance()->getClock();
 			}
 		}
 		else
@@ -461,6 +463,7 @@ Game::Game(int argc, char**agrv)
 	TextureManager::Init();
 	MapContainer::Init(windowRealWidth, windowRealHeight);
 	CameraManager::Init(&orbit);
+	GameClock::Init();
 
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
@@ -533,5 +536,9 @@ void Game::handleMenuResponse()
 		std::cout << "carGauge load...\n";
 		carGauge.load(&MapContainer::Instance()->cars[0]);
 		MapContainer::Instance()->initRaceTimer();
+	}
+	else if (menu.menuResponse.menuState == Menu::Resume)
+	{
+		gameState = State::race;
 	}
 }

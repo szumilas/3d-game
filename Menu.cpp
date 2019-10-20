@@ -7,6 +7,7 @@
 #include "Screen2D.h"
 #include "carDB.h"
 #include "MapManager.h"
+#include "GameClock.h"
 
 void display2DRectangle(Point& bottomLeft, Point& topRight, ColorName colorName = ColorName::WHITE, float z = 0)
 {
@@ -392,6 +393,19 @@ void Menu::enterQuickRaceLevel()
 	floatingIndex = currentMenuLevel->selected;
 }
 
+void Menu::enterMainMenuLevel()
+{
+	currentMenuLevel = &mainMenu;
+	//currentMenuLevel->selected = 0;
+	floatingIndex = currentMenuLevel->selected;
+}
+
+void Menu::resumeGame()
+{
+	GameClock::Instance()->resume();
+	menuResponse.menuState = MenuState::Resume;
+}
+
 void Menu::display3DscreenForOption()
 {
 	if (currentMenuLevel->options[currentMenuLevel->selected]->preview3D != nullptr)
@@ -733,6 +747,7 @@ void Menu::preview2DQuickRaceLaps(int id)
 
 void Menu::setPause()
 {
+	GameClock::Instance()->pause();
 	currentMenuLevel = &pause;
 }
 

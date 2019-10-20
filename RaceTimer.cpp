@@ -1,6 +1,7 @@
 #define NOMINMAX
 
 #include "RaceTimer.h"
+#include "GameClock.h"
 
 
 void RaceTimer::init(std::vector<Car>* cars)
@@ -43,9 +44,9 @@ void RaceTimer::display()
 
 	long currentLapTime = 0;
 	if(!carForStats->lapTimes.empty())
-		currentLapTime = clock() - carForStats->lapTimes[carForStats->lapsDone];
+		currentLapTime = GameClock::Instance()->getClock() - carForStats->lapTimes[carForStats->lapsDone];
 	std::string s_currentLapTime = std::to_string(currentLapTime / 1000 / 60) + ":" + std::to_string(100 + (currentLapTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (currentLapTime / 10) % 100).substr(1, 2);
-	auto raceTime = clock() - begin_time;
+	auto raceTime = GameClock::Instance()->getClock() - begin_time;
 	std::string s_raceTime = std::to_string(raceTime / 1000 / 60) + ":" + std::to_string(100 + (raceTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (raceTime / 10) % 100).substr(1, 2);
 	if (begin_time == 0 || beforeRace)
 	{
@@ -80,15 +81,15 @@ void RaceTimer::update()
 {
 	if (state == State::Outro)
 	{
-		if (clock() - begin_time > 10000)
+		if (GameClock::Instance()->getClock() - begin_time > 10000)
 		{
-			begin_time = clock();
+			begin_time = GameClock::Instance()->getClock();
 		}
-		else if (clock() - begin_time < 3000)
+		else if (GameClock::Instance()->getClock() - begin_time < 3000)
 		{
 
 		}
-		else if (clock() - begin_time > 3000)
+		else if (GameClock::Instance()->getClock() - begin_time > 3000)
 		{
 			state = State::RaceFinished;
 		}
@@ -97,18 +98,18 @@ void RaceTimer::update()
 	{
 		if (beforeRace && begin_time != 0)
 		{
-			if (clock() - begin_time > 4400)
+			if (GameClock::Instance()->getClock() - begin_time > 4400)
 				state = State::Green;
-			else if (clock() - begin_time > 3300)
+			else if (GameClock::Instance()->getClock() - begin_time > 3300)
 				state = State::Red1;
-			else if (clock() - begin_time > 2200)
+			else if (GameClock::Instance()->getClock() - begin_time > 2200)
 				state = State::Red2;
-			else if (clock() - begin_time > 1100)
+			else if (GameClock::Instance()->getClock() - begin_time > 1100)
 				state = State::Red3;
 		}
 		else if (begin_time != 0)
 		{
-			if (clock() - begin_time > 2000)
+			if (GameClock::Instance()->getClock() - begin_time > 2000)
 				state = State::Inactive;
 
 			for (auto& carData : carsData)
@@ -128,7 +129,7 @@ void RaceTimer::update()
 
 			for (auto& carData : carsData)
 			{
-				carData.timeDelay = std::max(static_cast<int>(clock() - begin_time - getLeaderTime(carData)), 0);
+				carData.timeDelay = std::max(static_cast<int>(GameClock::Instance()->getClock() - begin_time - getLeaderTime(carData)), 0);
 			}
 
 			carsData.back().timeDelay = 0;
@@ -154,7 +155,7 @@ void RaceTimer::checkCheckboxes()
 
 void RaceTimer::countLaps()
 {
-	auto currentTime = clock();
+	auto currentTime = GameClock::Instance()->getClock();
 	for (auto& carData : carsData)
 	{
 		if (carData.checkboxVisited && carData.nextAIPoint == 0 && !carData.raceDone)
@@ -182,7 +183,7 @@ int RaceTimer::calculateCurrentPositionId(const RaceTimerData& leader)
 
 void RaceTimer::setLeaderTime(const RaceTimerData& leader)
 {
-	int time = clock() - begin_time;
+	int time = GameClock::Instance()->getClock() - begin_time;
 
 	int currentPositionId = calculateCurrentPositionId(leader);
 
@@ -202,7 +203,7 @@ int RaceTimer::getLeaderTime(const RaceTimerData& car)
 	}
 	else if (currentPositionId >= leaderTime.size())
 	{
-		return clock() - begin_time;
+		return GameClock::Instance()->getClock() - begin_time;
 	}
 	else
 	{
@@ -235,7 +236,7 @@ void RaceTimer::startTimer()
 {
 	if (begin_time == 0)
 	{
-		begin_time = clock();
+		begin_time = GameClock::Instance()->getClock();
 		for (auto& carData : carsData)
 		{
 			carData.lapTimes.clear();

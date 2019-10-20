@@ -171,6 +171,9 @@
     <ClCompile Include="Track.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GameClock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="Track.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClock.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -145,6 +145,7 @@
     <ClCompile Include="Footway.cpp" />
     <ClCompile Include="freetype.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameClock.cpp" />
     <ClCompile Include="GlobalStructures.cpp" />
     <ClCompile Include="GreenArea.cpp" />
     <ClCompile Include="GrunwaldzkiCenter.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Footway.h" />
     <ClInclude Include="freetype.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameClock.h" />
     <ClInclude Include="GlobalStructures.h" />
     <ClInclude Include="GlobalVariables.h" />
     <ClInclude Include="GreenArea.h" />

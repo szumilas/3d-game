@@ -15,6 +15,7 @@ public:
 	{
 		OK = 1,
 		StartQuickRace,
+		Resume,
 	};
 
 	enum class MapDetails
@@ -71,6 +72,8 @@ private:
 	void selectThisFreeRidePosition();
 	void enterPreviousLevel();
 	void enterQuickRaceLevel();
+	void enterMainMenuLevel();
+	void resumeGame();
 	void startQuickRace();
 	void startFreeRide();
 
@@ -166,8 +169,8 @@ private:
 	MenuLevel creditsRideBack{ "Back", &Menu::enterPreviousLevel };
 
 	MenuLevel pause{ "Pause" };
-	MenuLevel pauseResume{ "Resume", nullptr, &Menu::pause2Dpreview };
-	MenuLevel pauseExit{ "Exit", nullptr, &Menu::pause2Dpreview };
+	MenuLevel pauseResume{ "Resume", &Menu::resumeGame, &Menu::pause2Dpreview };
+	MenuLevel pauseExit{ "Exit", &Menu::enterMainMenuLevel, &Menu::pause2Dpreview };
 
 	std::vector<MenuLevel> carOptions;
 	std::vector<MenuLevel> trackOptions;
