@@ -66,11 +66,13 @@ private:
 	void selectThisTrack();
 	void selectThisNoOfOponents();
 	void selectThisNoOfLaps();
+	void selectThisFreeRidePosition();
 	void enterPreviousLevel();
 	void startQuickRace();
 	void startFreeRide();
 
 	void preview2DNumber(int id);
+	void preview2DFreeRidePositions(int id);
 	void preview2DCar(int id);
 	void preview3DCar(int id);
 	void quickRace2Dpreview(int id = 0);
@@ -110,6 +112,7 @@ private:
 	TrackName selectedTrack = SmallLoop;
 	int selectedNoOfOponents = 4;
 	int selectedNoOfLaps = 2;
+	int selectedFreeRidePosition = 1;
 
 	struct MenuLevel
 	{

@@ -26,6 +26,21 @@ void display2DRectangle(Point& bottomLeft, Point& topRight, ColorName colorName 
 	glEnd();
 }
 
+void display2DPoint(Point& p1, ColorName colorName = ColorName::WHITE, float size = 1, float z = 0)
+{
+	glPointSize(size);
+
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_POINTS);
+
+	Menu::setGLcolor(colorName);
+
+	glVertex3f(p1.x, p1.y, z);
+
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+}
+
 void display2DLine(Point& p1, Point& p2, ColorName colorName = ColorName::WHITE, float size = 1, float z = 0)
 {
 	glLineWidth(size);
@@ -232,7 +247,7 @@ void Menu::createCommonOptions()
 	//free ride positions
 	for (auto& freeRideStartPosition : freeRideStartPositions)
 	{
-		freeRidePositions.push_back({ freeRideStartPosition.second.first, nullptr, nullptr, nullptr, freeRideStartPosition.first });
+		freeRidePositions.push_back({ freeRideStartPosition.second.first, &Menu::selectThisFreeRidePosition, &Menu::preview2DFreeRidePositions, nullptr, freeRideStartPosition.first });
 	}
 
 	freeRidePositions.push_back({ "Cancel", &Menu::enterPreviousLevel });
@@ -338,6 +353,12 @@ void Menu::selectThisNoOfLaps()
 	enterPreviousLevel();
 }
 
+void Menu::selectThisFreeRidePosition()
+{
+	selectedFreeRidePosition = previewNumber;
+	enterPreviousLevel();
+}
+
 void Menu::enterNextLevel()
 {
 	int selectedOption = currentMenuLevel->selected;
@@ -370,6 +391,11 @@ void Menu::display2DscreenForOption()
 	{
 		(this->*currentMenuLevel->options[currentMenuLevel->selected]->preview2D)(currentMenuLevel->options[currentMenuLevel->selected]->idOption);
 	}
+}
+
+void Menu::preview2DFreeRidePositions(int id)
+{
+	previewNumber = id;
 }
 
 void Menu::preview2DNumber(int id)
@@ -490,7 +516,7 @@ void Menu::freeRide2Dpreview(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 12, 60, carDB.at(previewCar->getCarBrand()).name, &(Screen2D::Instance()->squada_one_regular_big));
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 55, "Start position:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 22.5, 55, "Grunwaldzki Bridge", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 22.5, 55, freeRideStartPositions.at(selectedFreeRidePosition).first, &(Screen2D::Instance()->squada_one_regular_big));
 
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 7, 50, "Area to discover:", &(Screen2D::Instance()->squada_one_regular));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, 25, 50, "2.58 km2", &(Screen2D::Instance()->squada_one_regular_big));
@@ -537,7 +563,6 @@ void Menu::printMap(MapDetails details)
 
 	if (details == MapDetails::Track)
 	{
-
 		static float highlightCounter = 0;
 		highlightCounter += 1.0 / 100.0 * previewTrack->AIPointsCoordinates.size();
 		if (highlightCounter >= 1.5 * previewTrack->AIPointsCoordinates.size())
@@ -565,7 +590,11 @@ void Menu::printMap(MapDetails details)
 	}
 	else if (details == MapDetails::Position)
 	{
+		static float zoomCounter = 0;
+		zoomCounter += 0.2;
 
+		display2DPoint(calculateScreenPointOnMap(freeRideStartPositions.at(selectedFreeRidePosition).second), ColorName::RED, 1 + static_cast<int>(sin(zoomCounter) * 2 + 4) * 2, 1);
+		display2DPoint(calculateScreenPointOnMap(freeRideStartPositions.at(selectedFreeRidePosition).second), ColorName::BLACK, 3 + static_cast<int>(sin(zoomCounter) * 2 + 4) * 2, 1);
 	}
 }
 
