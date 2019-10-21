@@ -80,6 +80,8 @@ enum class Textures : long
 	menu_background,
 	menu_arrow,
 	wroclaw_map,
+	suzuki_baleno,
+	honda_jazz,
 };
 
 enum class Sounds : long

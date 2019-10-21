@@ -97,7 +97,7 @@ std::map<std::string, Color> Object3D::importMaterials(const char* filePath)
 	return materials;
 }
 
-void Object3D::importFromObjFile(const char* filePath, Textures textureName, float scaleRatio, std::map<std::string, Color>* materials)
+void Object3D::importFromObjFile(const char* filePath, Textures textureName, float& scaleRatio, float realLength, std::map<std::string, Color>* materials)
 {
 	std::ifstream file;
 	file.open(filePath);
@@ -245,6 +245,11 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 
 	auto deltaX = maxX - minX;
 	auto deltaY = maxY - minY;
+
+	if (realLength != 0)
+	{
+		scaleRatio = abs(realLength / deltaX);
+	}
 
 	for (auto& polygon : polygons)
 	{

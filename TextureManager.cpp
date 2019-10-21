@@ -85,6 +85,8 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::menu_background, -1.0f, -1.0f, "menu_background.png" },
 	{ Textures::menu_arrow, -1.0f, -1.0f, "menu_arrow.png", false },
 	{ Textures::wroclaw_map, -1.0f, -1.0f, "wroclaw_map.png", false },
+	{ Textures::suzuki_baleno, -1.0f, -1.0f, "suzuki_baleno.png" },
+	{ Textures::honda_jazz, -1.0f, -1.0f, "honda_jazz.png" },
 };
 
 void TextureManager::DeInit()

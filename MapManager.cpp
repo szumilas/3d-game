@@ -142,8 +142,8 @@ void MapManager::Init()
 #ifdef _DEBUG
 	Instance()->readMap("trees2.osm");
 #else
-	//Instance()->readMap("trees2.osm");
-	Instance()->readMap("grunwaldWithRiver.osm");
+	Instance()->readMap("trees2.osm");
+	//Instance()->readMap("grunwaldWithRiver.osm");
 #endif
 	std::cout << "...finished\n";
 	//mapManager.readMap("singlebuilding.osm");
