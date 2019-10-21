@@ -155,6 +155,7 @@ public:
 	static std::vector<PathStruct> AIPoints;
 	static std::vector<std::pair<Point, Point>> raceBarriers;
 	static std::pair<Point, Point> meta;
+	static int lapRecord;
 	static SplineStruct currentSpline;
 	static std::pair<Spline, Spline> cameraSpline;
 

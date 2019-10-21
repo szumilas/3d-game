@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "Car.h"
+#include "Track.h"
 
 class RaceTimer
 {
@@ -39,6 +40,8 @@ public:
 
 	void init(std::vector<Car>* cars);
 	void setAIpointsPosition(std::vector<Point> AIpointsPositions);
+	void setLapRecord(int lapRecordTime) { lapRecord = lapRecordTime; }
+	void setTrackName(TrackName newTrackName) { trackName = newTrackName; }
 	void startTimer();
 	void resetTimer();
 
@@ -79,6 +82,8 @@ private:
 
 	int maxNoOfLaps;
 	bool raceFinished = false;
+	int lapRecord;
+	TrackName trackName;
 
 	std::vector<std::tuple<std::string, int, float>> raceResults; //name, time [ms], Max [m/s]
 	std::vector<int> humanLaps;

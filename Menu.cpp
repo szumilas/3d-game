@@ -479,7 +479,7 @@ void Menu::preview2DTrack(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Difficulty: ", &(Screen2D::Instance()->squada_one_regular));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, trackDB.at(static_cast<TrackName>(id)).difficulty, &(Screen2D::Instance()->squada_one_regular_big));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Lap record:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, "--:--.-- s", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, Timer::getString(previewTrack->getLapRecord()) + " s", &(Screen2D::Instance()->squada_one_regular_big));
 }
 
 void Menu::preview3DTrack(int id)
@@ -656,6 +656,7 @@ void Menu::startFreeRide()
 void Menu::loadAfterRaceScreen()
 {
 	currentMenuLevel = &quickRaceAfterRaceScreen;
+	previewTrack = std::make_unique<Track>(previewTrack->getTrackName());
 }
 
 void Menu::preview2DQuickRaceStats(int id)

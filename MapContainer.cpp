@@ -21,6 +21,7 @@ std::vector<MapContainer::PathStruct> MapContainer::currentPath;
 std::vector<MapContainer::PathStruct> MapContainer::AIPoints;
 std::vector<std::pair<Point, Point>> MapContainer::raceBarriers;
 std::pair<Point, Point> MapContainer::meta;
+int MapContainer::lapRecord;
 MapContainer::SplineStruct MapContainer::currentSpline;
 std::pair<Spline, Spline> MapContainer::cameraSpline;
 std::vector<float> MapContainer::AIPointsDistances;
@@ -1153,8 +1154,9 @@ void MapContainer::LoadAIPointsFromTrackName(TrackName selectedTrack)
 	{
 		AIPoints.push_back({ newTrackAIPoint, AIPointsColor, false });
 	}
-	raceBarriers = newTrack.getbarrierPoints();	
+	raceBarriers = newTrack.getBarrierPoints();	
 	meta = newTrack.getMeta();
+	lapRecord = newTrack.getLapRecord();
 
 	recalculateAIPointsDistances();
 
@@ -1162,6 +1164,8 @@ void MapContainer::LoadAIPointsFromTrackName(TrackName selectedTrack)
 	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const PathStruct& data) {AIpointsPositions.push_back(data.center); });
 
 	raceTimer.setAIpointsPosition(AIpointsPositions);
+	raceTimer.setLapRecord(lapRecord);
+	raceTimer.setTrackName(selectedTrack);
 }
 
 void MapContainer::LoadAIPoints(const Point& point)

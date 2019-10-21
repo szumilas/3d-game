@@ -492,6 +492,9 @@ std::vector<Point> Spline::generateSubpoints(float subpointsDistance, bool keepO
 
 std::string Timer::getString(int miliseconds)
 {
+	if (miliseconds < 0)
+		return "--:--.--";
+
 	std::string result;
 
 	int minutes = miliseconds / 1000 / 60;

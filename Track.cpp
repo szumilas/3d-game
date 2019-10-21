@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <sstream>
 
 Track::Track(TrackName trackName) : trackName(trackName)
 {
@@ -47,6 +48,12 @@ Track::Track(TrackName trackName) : trackName(trackName)
 				Point newPoint1(x1, y1, z1);
 				Point newPoint2(x2, y2, z2);
 				meta = { newPoint1, newPoint2 };
+			}
+			else if (type == 'r')
+			{
+				int time;
+				file >> time;
+				lapRecord = time;
 			}
 		}
 
@@ -157,4 +164,49 @@ void Track::calculateLength()
 
 		length += p1.distance2D(p2);
 	}
+}
+
+void Track::updateLapRecordInTxtFile(TrackName trackName, int newRecord)
+{
+	auto fileName = "Track_" + (std::to_string(100 + static_cast<int>(trackName))).substr(1, 2) + ".txt";
+
+	std::fstream file;
+	file.open("Data/" + fileName);
+
+	std::string line;
+
+	if (file)
+	{
+		bool recordFound = false;
+		char type;
+
+		std::vector<std::string> lines;
+
+		while (getline(file, line))
+		{
+			std::stringstream ssfulldata(line);
+			ssfulldata >> type;
+
+			if (type == 'r')
+			{
+				line = "r " + std::to_string(newRecord);
+				recordFound = true;
+			}
+
+			lines.push_back(line);
+		}
+
+		if(!recordFound)
+			lines.push_back("r " + std::to_string(newRecord));
+
+		file.clear();
+		file.seekg(0, std::ios::beg);
+		
+		for (auto& updateLine : lines)
+		{
+			file << updateLine << "\n";
+		}
+	}
+
+	file.close();
 }

@@ -39,7 +39,9 @@ public:
 	float getLength() { return length; }
 	std::pair<Point, Point> getMeta() { return meta; };
 	std::vector<Point> getAIPoints() { return AIPoints; }
-	std::vector<std::pair<Point, Point>> getbarrierPoints() { return barrierPoints; }
+	std::vector<std::pair<Point, Point>> getBarrierPoints() { return barrierPoints; }
+	int getLapRecord() { return lapRecord; }
+	static void updateLapRecordInTxtFile(TrackName trackName, int newRecord);
 
 private:
 
@@ -55,6 +57,7 @@ private:
 	std::vector<Point> AIPoints;
 	std::vector<std::pair<Point, Point>> barrierPoints;
 	std::pair<Point, Point> meta;
+	int lapRecord = -1;
 
 	float gauge = 2.0f;
 

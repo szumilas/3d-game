@@ -91,6 +91,7 @@ enum class Sounds : long
 	crash_02,
 	crash_03,
 	race_timer,
+	new_record,
 };
 
 enum class Exceptions : long

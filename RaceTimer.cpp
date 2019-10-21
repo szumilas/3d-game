@@ -3,7 +3,6 @@
 #include "RaceTimer.h"
 #include "GameClock.h"
 
-
 void RaceTimer::init(std::vector<Car>* cars)
 {
 	carsData.clear();
@@ -160,6 +159,14 @@ void RaceTimer::countLaps()
 	{
 		if (carData.checkboxVisited && carData.nextAIPoint == 0 && !carData.raceDone)
 		{
+			if (carData.car->isHumanCar())
+			{
+				int lapTime = currentTime - carData.lapTimes.back();
+				if (lapTime < lapRecord || lapRecord < 0)
+				{
+					lapRecord = lapTime;
+					SoundManager::Instance()->playSample(Sounds::new_record);}
+			}
 			carData.checkboxVisited = false;
 			carData.lapsDone++;
 			carData.lapTimes.push_back(currentTime);
@@ -263,6 +270,7 @@ void RaceTimer::checkRaceFinished()
 				carData.car->humanCar = 2;
 				carData.car->setFrontRightCamera();
 				state = State::Outro;
+				Track::updateLapRecordInTxtFile(trackName, lapRecord);
 				prepareFinalStats();
 			}
 		}
