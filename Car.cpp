@@ -359,17 +359,19 @@ void Car::importFromObjFile()
 	auto materials = Object3D::importMaterials((carDB.at(carBrand).objFilePath + "materials.mtl").c_str());
 
 	float scaleRatio = 1.0;
-	Object3D::importFromObjFile((carDB.at(carBrand).objFilePath + "body.obj").c_str(), carDB.at(carBrand).textureName, scaleRatio, carDB.at(carBrand).totalLength, &materials);
-	backWheels.importFromObjFile((carDB.at(carBrand).objFilePath + "back_wheels.obj").c_str(), carDB.at(carBrand).textureName, scaleRatio);
-	backWheels.calculateGeometry(carDB.at(carBrand).backWheelsXoffset);
+	auto originalCarBoundaries = Object3D::importFromObjFile((carDB.at(carBrand).objFilePath + "body.obj").c_str(), carDB.at(carBrand).textureName, scaleRatio, carDB.at(carBrand).totalLength, &materials);
+	auto originalBackWheelBoundaries = backWheels.importFromObjFile((carDB.at(carBrand).objFilePath + "back_wheels.obj").c_str(), carDB.at(carBrand).textureName, scaleRatio);
 	leftWheel.importFromObjFile((carDB.at(carBrand).objFilePath + "left_wheel.obj").c_str(), carDB.at(carBrand).textureName, scaleRatio);
-	leftWheel.calculateGeometry(carDB.at(carBrand).frontWheelsXoffset, carDB.at(carBrand).frontWheelsYoffset);
-	rightWheel.importFromObjFile((carDB.at(carBrand).objFilePath + "right_wheel.obj").c_str(), carDB.at(carBrand).textureName, scaleRatio);
-	rightWheel.calculateGeometry(carDB.at(carBrand).frontWheelsXoffset, -carDB.at(carBrand).frontWheelsYoffset);
+	auto originalFrontWheelBoundaries = rightWheel.importFromObjFile((carDB.at(carBrand).objFilePath + "right_wheel.obj").c_str(), carDB.at(carBrand).textureName, scaleRatio);
+	
+	frontWheelsXoffset = scaleRatio * ((originalCarBoundaries.second.x + originalCarBoundaries.first.x) / 2 - (originalFrontWheelBoundaries.second.x + originalFrontWheelBoundaries.first.x) / 2);
+	frontWheelsYoffset = scaleRatio * ((originalCarBoundaries.second.y + originalCarBoundaries.first.y) / 2 - (originalFrontWheelBoundaries.second.y + originalFrontWheelBoundaries.first.y) / 2);
+	backWheelsXoffset = scaleRatio * ((originalCarBoundaries.second.x + originalCarBoundaries.first.x) / 2 - (originalBackWheelBoundaries.second.x + originalBackWheelBoundaries.first.x) / 2);
+	
+	backWheels.calculateGeometry(backWheelsXoffset);
+	leftWheel.calculateGeometry(frontWheelsXoffset, frontWheelsYoffset);
+	rightWheel.calculateGeometry(frontWheelsXoffset, -frontWheelsYoffset);
 
-	frontWheelsYoffset = carDB.at(carBrand).frontWheelsYoffset;
-	frontWheelsXoffset = carDB.at(carBrand).frontWheelsXoffset;
-	backWheelsXoffset = carDB.at(carBrand).backWheelsXoffset;
 
 	float maxX = -1000.0f;
 	float maxY = -1000.0f;

@@ -97,8 +97,10 @@ std::map<std::string, Color> Object3D::importMaterials(const char* filePath)
 	return materials;
 }
 
-void Object3D::importFromObjFile(const char* filePath, Textures textureName, float& scaleRatio, float realLength, std::map<std::string, Color>* materials)
+std::pair<Point, Point> Object3D::importFromObjFile(const char* filePath, Textures textureName, float& scaleRatio, float realLength, std::map<std::string, Color>* materials)
 {
+	std::pair<Point, Point> originalBoundaries;
+
 	std::ifstream file;
 	file.open(filePath);
 
@@ -246,6 +248,9 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 	auto deltaX = maxX - minX;
 	auto deltaY = maxY - minY;
 
+	originalBoundaries.first = { minX, minY };
+	originalBoundaries.second = { maxX, maxY };
+
 	if (realLength != 0)
 	{
 		scaleRatio = abs(realLength / deltaX);
@@ -265,6 +270,8 @@ void Object3D::importFromObjFile(const char* filePath, Textures textureName, flo
 	}
 
 	file.close();
+
+	return originalBoundaries;
 }
 
 void Object3D::cretateGlobalVertex(const Point& localPoint)
