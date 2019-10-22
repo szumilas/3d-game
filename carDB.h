@@ -24,6 +24,7 @@ struct CarDetails
 
 enum class CarBrand : long
 {
+	BMW3,
 	OpelCorsa,
 	CitroenC3,
 	Peugeot208,
@@ -38,6 +39,8 @@ enum class CarBrand : long
 
 static std::map<CarBrand, CarDetails> carDB
 {
+	{ CarBrand::BMW3,{ "BMW 3", "Data/Cars/bmw_3/", Textures::bmw_3, Sounds::engine, 4.53f, 1345.00f, 228.00f, 125.00f, 8.20f, 3.38f, std::vector<float>{4.32f, 2.46f, 1.66f, 1.23f, 1.00f, 0.85f}, 3.94f } }, // https://www.cars-data.com/en/bmw-325d-high-executive-specs/5927
+
 	{ CarBrand::OpelCorsa,{ "Opel Corsa", "Data/Cars/opel_corsa/", Textures::opel_corsa, Sounds::engine, 4.04f, 1178.00f, 225.00f, 141.00f, 7.20f, 4.18f, std::vector<float>{3.82f, 2.16f, 1.48f, 1.07f, 0.88f, 0.74f}, 3.55f } }, // https://www.cars-data.com/en/opel-corsa-opc-specs/30535
 
 	{ CarBrand::CitroenC3,{ "Citroen C3", "Data/Cars/citroen_c3/", Textures::citroen_c3, Sounds::engine, 3.97f, 1025.00f, 188.00f, 81.00f, 10.40f, 3.94f, std::vector<float>{3.55f, 1.90f, 1.23f, 0.86f, 0.69f}, 3.25f } }, // https://www.cars-data.com/en/citroen-c3-puretech-110-feel-specs/75421
