@@ -88,6 +88,7 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::suzuki_baleno, -1.0f, -1.0f, "suzuki_baleno.png" },
 	{ Textures::honda_jazz, -1.0f, -1.0f, "honda_jazz.png" },
 	{ Textures::peugeot_208, -1.0f, -1.0f, "peugeot_208.png" },
+	{ Textures::citroen_c3, -1.0f, -1.0f, "citroen_c3.png" },
 };
 
 void TextureManager::DeInit()

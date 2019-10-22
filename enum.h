@@ -83,6 +83,7 @@ enum class Textures : long
 	suzuki_baleno,
 	honda_jazz,
 	peugeot_208,
+	citroen_c3,
 };
 
 enum class Sounds : long
