@@ -24,6 +24,7 @@ struct CarDetails
 
 enum class CarBrand : long
 {
+	Peugeot208,
 	SuzukiBaleno,
 	SuzukiVitara,
 	HondaJazz,
@@ -35,8 +36,9 @@ enum class CarBrand : long
 
 static std::map<CarBrand, CarDetails> carDB
 {
-	{ CarBrand::SuzukiBaleno,{ "Suzuki Baleno", "Data/Cars/suzuki_baleno/", Textures::suzuki_baleno, Sounds::engine, 3.99f, 880.00f, 200.00f, 82.00f, 11.40f, 3.94f, std::vector<float>{3.55f, 1.90f, 1.23f, 0.86f, 0.69f}, 3.25, } }, // https://www.cars-data.com/en/suzuki-baleno-1.0-boosterjet-high-executive-specs/79037
-	{ CarBrand::HondaJazz,{ "Honda Jazz", "Data/Cars/honda_jazz/", Textures::honda_jazz, Sounds::engine, 3.90f, 1051.00f, 175.00f, 73.00f, 12.60f, 3.94f, std::vector<float>{3.55f, 1.90f, 1.23f, 0.86f, 0.69f}, 3.25, } }, // https://www.cars-data.com/en/honda-jazz-1.4-lifestyle-specs/64705
+	{ CarBrand::Peugeot208,{ "Peugeot 208", "Data/Cars/peugeot_208/", Textures::peugeot_208, Sounds::engine, 3.96f, 1050.00f, 190.00f, 85.00f, 9.70f, 3.41f, std::vector<float>{3.52f, 1.91f, 1.27f, 0.90f, 0.67f, 0.56f}, 3.58f } }, // https://www.cars-data.com/en/peugeot-208-active-1.6-e-hdi-115hp-specs/58889/tech
+	{ CarBrand::SuzukiBaleno,{ "Suzuki Baleno", "Data/Cars/suzuki_baleno/", Textures::suzuki_baleno, Sounds::engine, 3.99f, 880.00f, 200.00f, 82.00f, 11.40f, 3.94f, std::vector<float>{3.55f, 1.90f, 1.23f, 0.86f, 0.69f}, 3.25f } }, // https://www.cars-data.com/en/suzuki-baleno-1.0-boosterjet-high-executive-specs/79037
+	{ CarBrand::HondaJazz,{ "Honda Jazz", "Data/Cars/honda_jazz/", Textures::honda_jazz, Sounds::engine, 3.90f, 1051.00f, 175.00f, 73.00f, 12.60f, 3.94f, std::vector<float>{3.55f, 1.90f, 1.23f, 0.86f, 0.69f}, 3.25f } }, // https://www.cars-data.com/en/honda-jazz-1.4-lifestyle-specs/64705
 
 
 	

@@ -82,6 +82,7 @@ enum class Textures : long
 	wroclaw_map,
 	suzuki_baleno,
 	honda_jazz,
+	peugeot_208,
 };
 
 enum class Sounds : long
