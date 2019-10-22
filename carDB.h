@@ -24,6 +24,7 @@ struct CarDetails
 
 enum class CarBrand : long
 {
+	OpelCorsa,
 	CitroenC3,
 	Peugeot208,
 	SuzukiBaleno,
@@ -37,6 +38,8 @@ enum class CarBrand : long
 
 static std::map<CarBrand, CarDetails> carDB
 {
+	{ CarBrand::OpelCorsa,{ "Opel Corsa", "Data/Cars/opel_corsa/", Textures::opel_corsa, Sounds::engine, 4.04f, 1178.00f, 225.00f, 141.00f, 7.20f, 4.18f, std::vector<float>{3.82f, 2.16f, 1.48f, 1.07f, 0.88f, 0.74f}, 3.55f } }, // https://www.cars-data.com/en/opel-corsa-opc-specs/30535
+
 	{ CarBrand::CitroenC3,{ "Citroen C3", "Data/Cars/citroen_c3/", Textures::citroen_c3, Sounds::engine, 3.97f, 1025.00f, 188.00f, 81.00f, 10.40f, 3.94f, std::vector<float>{3.55f, 1.90f, 1.23f, 0.86f, 0.69f}, 3.25f } }, // https://www.cars-data.com/en/citroen-c3-puretech-110-feel-specs/75421
 
 	{ CarBrand::Peugeot208,{ "Peugeot 208", "Data/Cars/peugeot_208/", Textures::peugeot_208, Sounds::engine, 3.96f, 1050.00f, 190.00f, 85.00f, 9.70f, 3.41f, std::vector<float>{3.52f, 1.91f, 1.27f, 0.90f, 0.67f, 0.56f}, 3.58f } }, // https://www.cars-data.com/en/peugeot-208-active-1.6-e-hdi-115hp-specs/58889/tech
