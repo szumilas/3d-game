@@ -1257,6 +1257,8 @@ void MapContainer::initCars()
 	{
 		CameraManager::Instance()->cameraViews.push_back(&car);
 	}
+
+	resetCameraViews();
 }
 
 void MapContainer::initCars(CarBrand selectedCar, int noOfOponents)
@@ -1275,6 +1277,17 @@ void MapContainer::initCars(CarBrand selectedCar, int noOfOponents)
 		} while (checkUnique(static_cast<CarBrand>(randomCar)));
 	
 		cars.push_back(Car(static_cast<CarBrand>(randomCar), 0, 0));
+	}
+
+	resetCameraViews();
+}
+
+void MapContainer::resetCameraViews()
+{
+	CameraManager::Instance()->cameraViews.resize(1);
+	for (auto& car : cars)
+	{
+		CameraManager::Instance()->cameraViews.push_back(&car);
 	}
 }
 

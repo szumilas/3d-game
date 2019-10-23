@@ -129,6 +129,7 @@ public:
 	int getSelectedPointIndex();
 	static void initCars();
 	static void initCars(CarBrand selectedCar, int noOfOponents);
+	static void resetCameraViews();
 	static void initRaceTimer();
 	static void updateRaceTimer();
 	static void displayRaceTimer();
