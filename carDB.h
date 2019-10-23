@@ -24,6 +24,8 @@ struct CarDetails
 
 enum class CarBrand : long
 {
+	SkodaOctavia,
+	VolkswagenGolf,
 	BMW3,
 	OpelCorsa,
 	CitroenC3,
@@ -39,6 +41,10 @@ enum class CarBrand : long
 
 static std::map<CarBrand, CarDetails> carDB
 {
+	{ CarBrand::SkodaOctavia,{ "Skoda Octavia", "Data/Cars/skoda_octavia/", Textures::skoda_octavia, Sounds::engine, 4.66f, 1155.00f, 215.00f, 103.00f, 8.40f, 3.65f, std::vector<float>{3.78f, 2.12f, 1.36f, 1.03f, 0.86f, 0.73f}, 3.60f } }, // https://www.cars-data.com/en/skoda-octavia-1.4-tsi-140hp-greentech-elegance-specs/63421
+
+	{ CarBrand::VolkswagenGolf,{ "Volkswagen Golf", "Data/Cars/volkswagen_golf/", Textures::volkswagen_golf, Sounds::engine, 4.27f, 1277.00f, 230.00f, 135.00f, 7.50f, 2.76f, std::vector<float>{3.77f, 1.96f, 1.26f, 0.87f, 0.86f, 0.72f}, 4.55f } }, // https://www.cars-data.com/en/volkswagen-golf-2.0-tdi-184hp-gtd-specs/79273
+
 	{ CarBrand::BMW3,{ "BMW 3", "Data/Cars/bmw_3/", Textures::bmw_3, Sounds::engine, 4.53f, 1345.00f, 228.00f, 125.00f, 8.20f, 3.38f, std::vector<float>{4.32f, 2.46f, 1.66f, 1.23f, 1.00f, 0.85f}, 3.94f } }, // https://www.cars-data.com/en/bmw-325d-high-executive-specs/5927
 
 	{ CarBrand::OpelCorsa,{ "Opel Corsa", "Data/Cars/opel_corsa/", Textures::opel_corsa, Sounds::engine, 4.04f, 1178.00f, 225.00f, 141.00f, 7.20f, 4.18f, std::vector<float>{3.82f, 2.16f, 1.48f, 1.07f, 0.88f, 0.74f}, 3.55f } }, // https://www.cars-data.com/en/opel-corsa-opc-specs/30535

@@ -91,6 +91,7 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::citroen_c3, -1.0f, -1.0f, "citroen_c3.png" },
 	{ Textures::opel_corsa, -1.0f, -1.0f, "opel_corsa.png" },
 	{ Textures::bmw_3, -1.0f, -1.0f, "bmw_3.png" },
+	{ Textures::volkswagen_golf, -1.0f, -1.0f, "volkswagen_golf.png" },
 };
 
 void TextureManager::DeInit()
