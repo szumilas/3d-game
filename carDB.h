@@ -24,6 +24,9 @@ struct CarDetails
 
 enum class CarBrand : long
 {
+	Mazda6,
+	MitsubishiPajero,
+	MercedesE200,
 	SkodaOctavia,
 	VolkswagenGolf,
 	BMW3,
@@ -41,6 +44,12 @@ enum class CarBrand : long
 
 static std::map<CarBrand, CarDetails> carDB
 {
+	{ CarBrand::Mazda6,{ "Mazda 6", "Data/Cars/mazda_6/", Textures::mazda_6, Sounds::engine, 4.87f, 1275.00f, 208.00f, 107.00f, 9.50f, 3.85f, std::vector<float>{3.70f, 1.95f, 1.30f, 1.03f, 0.84f, 0.68f}, 3.72f } }, // https://www.cars-data.com/en/mazda-6-skyactiv-g-2.0-145hp-ts-specs/59351
+
+	{ CarBrand::MitsubishiPajero,{ "Mitsubishi Pajero", "Data/Cars/mitsubishi_pajero/", Textures::mitsubishi_pajero, Sounds::engine, 4.70f, 2086.00f, 150.00f, 92.00f, 17.30f, 3.95f, std::vector<float>{3.95f, 2.40f, 1.40f, 1.00f, 0.76f}, 4.90f } }, // https://www.cars-data.com/en/mitsubishi-pajero-long-body-2.8-td-gls-specs/26778
+
+	{ CarBrand::MercedesE200,{ "Mercedes E 200", "Data/Cars/mercedes_e_200/", Textures::mercedes_e_200, Sounds::engine, 4.88f, 1515.00f, 233.00f, 135.00f, 8.20f, 3.07f, std::vector<float>{4.99f, 2.82f, 1.78f, 1.25f, 1.00f, 0.82f}, 4.54f } }, // https://www.cars-data.com/en/mercedes-e-200-specs/76886
+
 	{ CarBrand::SkodaOctavia,{ "Skoda Octavia", "Data/Cars/skoda_octavia/", Textures::skoda_octavia, Sounds::engine, 4.66f, 1155.00f, 215.00f, 103.00f, 8.40f, 3.65f, std::vector<float>{3.78f, 2.12f, 1.36f, 1.03f, 0.86f, 0.73f}, 3.60f } }, // https://www.cars-data.com/en/skoda-octavia-1.4-tsi-140hp-greentech-elegance-specs/63421
 
 	{ CarBrand::VolkswagenGolf,{ "Volkswagen Golf", "Data/Cars/volkswagen_golf/", Textures::volkswagen_golf, Sounds::engine, 4.27f, 1277.00f, 230.00f, 135.00f, 7.50f, 2.76f, std::vector<float>{3.77f, 1.96f, 1.26f, 0.87f, 0.86f, 0.72f}, 4.55f } }, // https://www.cars-data.com/en/volkswagen-golf-2.0-tdi-184hp-gtd-specs/79273

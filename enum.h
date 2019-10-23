@@ -87,6 +87,9 @@ enum class Textures : long
 	opel_corsa,
 	bmw_3,
 	volkswagen_golf,
+	mercedes_e_200,
+	mitsubishi_pajero,
+	mazda_6,
 };
 
 enum class Sounds : long
