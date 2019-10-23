@@ -24,6 +24,11 @@ struct CarDetails
 
 enum class CarBrand : long
 {
+	HondaCRZ,
+	AudiA4,
+	JaguarSType,
+	SmartForTwo,
+	MiniCooper,
 	Mazda6,
 	MitsubishiPajero,
 	MercedesE200,
@@ -44,6 +49,16 @@ enum class CarBrand : long
 
 static std::map<CarBrand, CarDetails> carDB
 {
+	{ CarBrand::HondaCRZ,{ "Honda CR-Z", "Data/Cars/honda_cr_z/", Textures::honda_cr_z, Sounds::engine, 4.08f, 1119.00f, 200.00f, 91.00f, 9.90f, 4.13f, std::vector<float>{3.70f, 2.12f, 1.43f, 1.03f, 0.79f, 0.70f}, 3.44f } }, // https://www.cars-data.com/en/honda-cr-z-1.5-s-specs/17013
+
+	{ CarBrand::AudiA4,{ "Audi A4", "Data/Cars/audi_a4/", Textures::audi_a4, Sounds::engine, 4.55f, 1285.00f, 212.00f, 96.00f, 9.90f, 4.13f, std::vector<float>{3.50f, 2.12f, 1.43f, 1.03f, 0.79f}, 3.44f } }, // https://www.cars-data.com/en/audi-a4-2.0-5v-specs/2500
+
+	{ CarBrand::JaguarSType,{ "Jaguar S-Type", "Data/Cars/jaguar_s_type/", Textures::jaguar_s_type, Sounds::engine, 4.92f, 1620.00f, 228.00f, 150.00f, 8.60f, 3.07f, std::vector<float>{4.23f, 2.52f, 1.67f, 1.22f, 1.00f}, 4.14f } }, // https://www.cars-data.com/en/jaguar-s-type-2.5-v6-specs/18198
+
+	{ CarBrand::SmartForTwo,{ "Smart ForTwo", "Data/Cars/smart_fortwo/", Textures::smart_fortwo, Sounds::engine, 2.70f, 815.00f, 155.00f, 66.00f, 10.40f, 4.07f, std::vector<float>{3.36f, 1.86f, 1.32f, 0.97f, 0.74f}, 1.58f } }, // https://www.cars-data.com/en/smart-fortwo-66kw-prime-specs/67979
+
+	{ CarBrand::MiniCooper,{ "Mini Cooper", "Data/Cars/mini_cooper/", Textures::mini_cooper, Sounds::engine, 3.63f, 1025.00f, 200.00f, 85.00f, 9.20f, 3.94f, std::vector<float>{3.42f, 1.95f, 1.33f, 1.05f, 0.85f}, 3.58f } }, // https://www.cars-data.com/en/mini-cooper-pepper-specs/25947
+
 	{ CarBrand::Mazda6,{ "Mazda 6", "Data/Cars/mazda_6/", Textures::mazda_6, Sounds::engine, 4.87f, 1275.00f, 208.00f, 107.00f, 9.50f, 3.85f, std::vector<float>{3.70f, 1.95f, 1.30f, 1.03f, 0.84f, 0.68f}, 3.72f } }, // https://www.cars-data.com/en/mazda-6-skyactiv-g-2.0-145hp-ts-specs/59351
 
 	{ CarBrand::MitsubishiPajero,{ "Mitsubishi Pajero", "Data/Cars/mitsubishi_pajero/", Textures::mitsubishi_pajero, Sounds::engine, 4.70f, 2086.00f, 150.00f, 92.00f, 17.30f, 3.95f, std::vector<float>{3.95f, 2.40f, 1.40f, 1.00f, 0.76f}, 4.90f } }, // https://www.cars-data.com/en/mitsubishi-pajero-long-body-2.8-td-gls-specs/26778

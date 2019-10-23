@@ -90,6 +90,11 @@ enum class Textures : long
 	mercedes_e_200,
 	mitsubishi_pajero,
 	mazda_6,
+	mini_cooper,
+	smart_fortwo,
+	jaguar_s_type,
+	audi_a4,
+	honda_cr_z,
 };
 
 enum class Sounds : long
