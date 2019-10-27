@@ -398,6 +398,7 @@ void Menu::enterMainMenuLevel()
 	currentMenuLevel = &mainMenu;
 	//currentMenuLevel->selected = 0;
 	floatingIndex = currentMenuLevel->selected;
+	menuResponse.menuState = MenuState::ExitToMainMenu;
 }
 
 void Menu::resumeGame()
@@ -646,11 +647,9 @@ void Menu::startQuickRace()
 
 void Menu::startFreeRide()
 {
-	//menuResponse.menuState = StartQuickRace;
-	//menuResponse.selectedCar = selectedCar;
-	//menuResponse.selectedTrack = selectedTrack;
-	//menuResponse.noOfLaps = selectedNoOfLaps;
-	//menuResponse.noOfOponents = selectedNoOfOponents;
+	menuResponse.menuState = StartFreeRide;
+	menuResponse.selectedCar = selectedCar;
+	menuResponse.startPosition = freeRideStartPositions.at(selectedFreeRidePosition).second;
 }
 
 void Menu::loadAfterRaceScreen()

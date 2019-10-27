@@ -63,7 +63,7 @@ void Game::display()
 	//glLoadIdentity();
 
 
-	if (gameState == Game::State::race || gameState == Game::State::pause)
+	if (gameState == Game::State::race || gameState == Game::State::freeRide || gameState == Game::State::pause)
 	{
 		CameraManager::Instance()->adjustCamera(MapManager::Instance()->currentCameraView);
 
@@ -198,7 +198,7 @@ void Game::keyboard(unsigned char key, int x, int y)
 			TextureManager::DeInit();
 			exit(0);
 		}
-		else if(gameState == State::race && MapContainer::Instance()->raceActive())
+		else if((gameState == State::race || gameState == State::freeRide) && MapContainer::Instance()->raceActive())
 		{
 			menu.menuResponse.menuState = Menu::OK;
 			menu.setPause();
@@ -311,7 +311,7 @@ void Game::Update()
 
 	KeyboardManager::Instance()->getKeys();
 
-	if (gameState == State::race)
+	if (gameState == State::race || gameState == State::freeRide)
 	{
 		if (upPressed)
 			MapContainer::Instance()->cars[0].accelerate();
@@ -535,10 +535,30 @@ void Game::handleMenuResponse()
 		MapContainer::Instance()->setRaceDetails(r.selectedCar, r.selectedTrack, r.noOfLaps, r.noOfOponents);
 		std::cout << "carGauge load...\n";
 		carGauge.load(&MapContainer::Instance()->cars[0]);
+		MapContainer::Instance()->activateRaceTimer();
+		MapContainer::Instance()->initRaceTimer();
+	}
+	else if (menu.menuResponse.menuState == Menu::StartFreeRide)
+	{
+		gameState = State::freeRide;
+
+		auto& r = menu.menuResponse;
+		MapContainer::Instance()->raceTimer = RaceTimer();
+		MapContainer::Instance()->setFreeRide(r.selectedCar, MapManager::Instance()->ConvertCoordinatesToLocalWorld(r.startPosition));
+		std::cout << "carGauge load...\n";
+		carGauge.load(&MapContainer::Instance()->cars[0]);
+		MapContainer::Instance()->deactivateRaceTimer();
 		MapContainer::Instance()->initRaceTimer();
 	}
 	else if (menu.menuResponse.menuState == Menu::Resume)
 	{
 		gameState = State::race;
+	}
+	else if (menu.menuResponse.menuState == Menu::ExitToMainMenu)
+	{
+		menu.menuResponse.menuState = Menu::OK;
+		gameState = State::mainMenu;
+		MapContainer::Instance()->cars.clear();
+		MapContainer::Instance()->raceTimer.setRaceFinished(true);
 	}
 }

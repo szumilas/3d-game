@@ -36,3 +36,10 @@ void GameClock::resume()
 	paused = false;
 	sumOfPauseTime += clock() - pausedAt;
 }
+
+void GameClock::clear()
+{
+	paused = false;
+	sumOfPauseTime = 0;
+	pausedAt = 0;
+}

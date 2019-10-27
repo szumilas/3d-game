@@ -15,7 +15,9 @@ public:
 	{
 		OK = 1,
 		StartQuickRace,
+		StartFreeRide,
 		Resume,
+		ExitToMainMenu,
 	};
 
 	enum class MapDetails
@@ -31,6 +33,7 @@ public:
 		TrackName selectedTrack;
 		int noOfLaps;
 		int noOfOponents;
+		Point startPosition;
 	};
 
 public:

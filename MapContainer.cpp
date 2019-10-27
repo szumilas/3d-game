@@ -906,6 +906,19 @@ void MapContainer::AIStopAndRestartToSelectedPoint(const Point& point)
 	raceTimer.resetTimer();
 }
 
+void MapContainer::setFreeRide(CarBrand selectedCar, Point position)
+{
+	initCars(selectedCar, 0);
+	cars.back().setPosition(position, 0);
+	LoadRaceStartCameraPoints();
+	MapManager::Instance()->currentCameraView = -1;
+	AIStop();
+	raceTimer.state = RaceTimer::State::Intro;
+	raceTimer.beforeRace = true;
+
+	loadWorldIntoSections(MapManager::Instance()->mapObjects);
+}
+
 void MapContainer::setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents)
 {
 	raceTimer.setMaxNoOfLaps(noOfLaps);

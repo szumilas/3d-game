@@ -140,7 +140,8 @@ void MapManager::Init()
 
 	std::cout << "reading map...";
 #ifdef _DEBUG
-	Instance()->readMap("trees2.osm");
+	//Instance()->readMap("trees2.osm");
+	Instance()->readMap("grunwaldWithRiver.osm");
 #else
 	//Instance()->readMap("trees2.osm");
 	Instance()->readMap("grunwaldWithRiver.osm");
@@ -568,6 +569,13 @@ void MapManager::applyObjectTag(MapObject& mapObject, rapidxml::xml_node <>* a)
 		}
 	}
 }*/
+
+Point MapManager::ConvertCoordinatesToLocalWorld(Point p)
+{
+	p.x = static_cast<float>((p.x - minLon) * longituteRatio);
+	p.y = static_cast<float>((p.y - minLat) * latitudeRatio);
+	return p;
+}
 
 void MapManager::calculateNodesPositions()
 {

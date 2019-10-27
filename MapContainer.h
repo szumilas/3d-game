@@ -108,6 +108,7 @@ public:
 	void SaveCameraSpline(const Point& point = Point());
 
 	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);
+	void setFreeRide(CarBrand selectedCar, Point position);
 
 	void createRaceObjects();
 	static std::vector<PathStruct> generateSubsplinePath(bool keepOriginalPoints = false);
@@ -131,6 +132,8 @@ public:
 	static void initCars(CarBrand selectedCar, int noOfOponents);
 	static void resetCameraViews();
 	static void initRaceTimer();
+	static void deactivateRaceTimer() { raceTimer.active = false; }
+	static void activateRaceTimer() { raceTimer.active = true; }
 	static void updateRaceTimer();
 	static void displayRaceTimer();
 	void LoadRaceStartCameraPoints();

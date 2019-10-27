@@ -59,6 +59,7 @@ public:
 	void addOverlayAttribute(const char* attribute, const char* value);
 	void generatePolygonsFile();
 	void loadPolygonsFromFile();
+	Point ConvertCoordinatesToLocalWorld(Point p);
 
 private:
 	static std::unique_ptr<char[]> fileToCharReader(const char * fileName);

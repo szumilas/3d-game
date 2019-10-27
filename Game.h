@@ -36,6 +36,7 @@ public:
 	{
 		mainMenu,
 		race,
+		freeRide,
 		pause,
 	};
 

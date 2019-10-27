@@ -10,6 +10,7 @@ public:
 	static std::unique_ptr<GameClock>& Instance();
 	static void pause();
 	static void resume();
+	static void clear();
 
 	static int getClock();
 

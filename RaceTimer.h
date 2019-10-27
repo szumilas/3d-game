@@ -38,6 +38,7 @@ public:
 		float vMax = 0;
 	};
 
+	RaceTimer();
 	void init(std::vector<Car>* cars);
 	void setAIpointsPosition(std::vector<Point> AIpointsPositions);
 	void setLapRecord(int lapRecordTime) { lapRecord = lapRecordTime; }
@@ -48,6 +49,7 @@ public:
 	void display();
 	void update();
 	void setMaxNoOfLaps(int laps) { maxNoOfLaps = laps; }
+	void setRaceFinished(bool raceFinished) { RaceTimer::raceFinished = raceFinished; }
 
 private:
 
@@ -65,6 +67,8 @@ public:
 
 	State state = State ::Inactive;
 	bool beforeRace = true;
+
+	bool active;
 
 
 private:

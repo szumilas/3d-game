@@ -3,6 +3,11 @@
 #include "RaceTimer.h"
 #include "GameClock.h"
 
+RaceTimer::RaceTimer()
+{
+	GameClock::Instance()->clear();
+}
+
 void RaceTimer::init(std::vector<Car>* cars)
 {
 	carsData.clear();
@@ -39,40 +44,43 @@ void RaceTimer::setCarForStats()
 
 void RaceTimer::display()
 {
-	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 95, "Lap " + std::to_string(carForStats->lapsDone + 1) + "/" + std::to_string(maxNoOfLaps), &(Screen2D::Instance()->squada_one_regular_big));
-
-	long currentLapTime = 0;
-	if(!carForStats->lapTimes.empty())
-		currentLapTime = GameClock::Instance()->getClock() - carForStats->lapTimes[carForStats->lapsDone];
-	std::string s_currentLapTime = std::to_string(currentLapTime / 1000 / 60) + ":" + std::to_string(100 + (currentLapTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (currentLapTime / 10) % 100).substr(1, 2);
-	auto raceTime = GameClock::Instance()->getClock() - begin_time;
-	std::string s_raceTime = std::to_string(raceTime / 1000 / 60) + ":" + std::to_string(100 + (raceTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (raceTime / 10) % 100).substr(1, 2);
-	if (begin_time == 0 || beforeRace)
+	if (active)
 	{
-		s_currentLapTime = "0:00.00";
-		s_raceTime = "0:00.00";
-	}
-	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 92, s_currentLapTime, &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, 62, 95, s_raceTime, &(Screen2D::Instance()->squada_one_regular_big));
+		Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 95, "Lap " + std::to_string(carForStats->lapsDone + 1) + "/" + std::to_string(maxNoOfLaps), &(Screen2D::Instance()->squada_one_regular_big));
 
-	auto possition = 0;
-	for (auto& carData : carsData)
-	{
-		ColorName curentColor;
+		long currentLapTime = 0;
+		if (!carForStats->lapTimes.empty())
+			currentLapTime = GameClock::Instance()->getClock() - carForStats->lapTimes[carForStats->lapsDone];
+		std::string s_currentLapTime = std::to_string(currentLapTime / 1000 / 60) + ":" + std::to_string(100 + (currentLapTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (currentLapTime / 10) % 100).substr(1, 2);
+		auto raceTime = GameClock::Instance()->getClock() - begin_time;
+		std::string s_raceTime = std::to_string(raceTime / 1000 / 60) + ":" + std::to_string(100 + (raceTime / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (raceTime / 10) % 100).substr(1, 2);
+		if (begin_time == 0 || beforeRace)
+		{
+			s_currentLapTime = "0:00.00";
+			s_raceTime = "0:00.00";
+		}
+		Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, -72, 92, s_currentLapTime, &(Screen2D::Instance()->squada_one_regular));
+		Screen2D::Instance()->addTestValueToPrint(ColorName::DARK_GRAY, 62, 95, s_raceTime, &(Screen2D::Instance()->squada_one_regular_big));
 
-		if (carData.car->humanCar)
-			curentColor = HumanColor;
-		else
-			curentColor = AIcolor;
+		auto possition = 0;
+		for (auto& carData : carsData)
+		{
+			ColorName curentColor;
 
-		std::string time = std::to_string(carData.timeDelay / 1000 / 60) + ":" + std::to_string(100 + (carData.timeDelay / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (carData.timeDelay / 10) % 100).substr(1, 2);
-		if (carData.timeDelay < 10 || carData.raceDone)
-			time = "-:--.--";
+			if (carData.car->humanCar)
+				curentColor = HumanColor;
+			else
+				curentColor = AIcolor;
 
-		Screen2D::Instance()->addTestValueToPrint(curentColor, -80, 5 + possition * 3, time, &(Screen2D::Instance()->squada_one_regular));
-		Screen2D::Instance()->addTestValueToPrint(curentColor, -72, 5 + possition * 3, carDB.at(carData.car->carBrand).name, &(Screen2D::Instance()->squada_one_regular));
-		
-		possition++;
+			std::string time = std::to_string(carData.timeDelay / 1000 / 60) + ":" + std::to_string(100 + (carData.timeDelay / 1000) % 60).substr(1, 2) + "." + std::to_string(100 + (carData.timeDelay / 10) % 100).substr(1, 2);
+			if (carData.timeDelay < 10 || carData.raceDone)
+				time = "-:--.--";
+
+			Screen2D::Instance()->addTestValueToPrint(curentColor, -80, 5 + possition * 3, time, &(Screen2D::Instance()->squada_one_regular));
+			Screen2D::Instance()->addTestValueToPrint(curentColor, -72, 5 + possition * 3, carDB.at(carData.car->carBrand).name, &(Screen2D::Instance()->squada_one_regular));
+
+			possition++;
+		}
 	}
 }
 
