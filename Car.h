@@ -65,6 +65,7 @@ public:
 	void setBackCamera() { cameraCenter = Point{ -8, 0, 5 }; cameraLookAt = Point{ 0, 0, 3 }; }
 	void setFrontRightCamera() { cameraCenter = Point{ 5, 2, 2 }; cameraLookAt = Point{0, 0, 1}; }
 	bool isHumanCar() { return humanCar; }
+	void mute();
 
 private:
 

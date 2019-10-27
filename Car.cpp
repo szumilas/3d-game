@@ -879,3 +879,9 @@ void Car::AImove()
 		accelerate();
 	}
 }
+
+void Car::mute()
+{
+	SoundManager::Instance()->playSound(driftSound, 0);
+	SoundManager::Instance()->playSound(engineSound, 0);
+}

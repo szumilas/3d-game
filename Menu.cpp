@@ -747,6 +747,10 @@ void Menu::preview2DQuickRaceLaps(int id)
 
 void Menu::setPause()
 {
+	for (auto& car : MapContainer::Instance()->cars)
+	{
+		car.mute();
+	}
 	GameClock::Instance()->pause();
 	currentMenuLevel = &pause;
 }
