@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar) : carBrand(carBrand), engine(carBrand), gearBox(carBrand), humanCar(humanCar)
+Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar, bool previewOnly) : carBrand(carBrand), engine(carBrand), gearBox(carBrand), humanCar(humanCar), previewOnly(previewOnly)
 {
 	importFromObjFile();
 
@@ -47,20 +47,25 @@ Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar) : carBran
 
 	setLastWheelPosition();
 
-
-	engineSound = SoundManager::Instance()->registerSoundInstance(carDB.at(carBrand).engineSound);
-	driftSound = SoundManager::Instance()->registerSoundInstance(Sounds::drift);
-
 	pacejkaModel.setHumanCar(humanCar);
 	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd, 100.0f / 3.6f / carDB.at(carBrand).acceleration_0_100, carDB.at(carBrand).vMax / 3.6);
 
 	AIcurrentPoint = 0;
+
+	if (!previewOnly)
+	{
+		engineSound = SoundManager::Instance()->registerSoundInstance(carDB.at(carBrand).engineSound);
+		driftSound = SoundManager::Instance()->registerSoundInstance(Sounds::drift);
+	}
 }
 
 Car::~Car()
 {
-	SoundManager::Instance()->playSound(engineSound, 0);
-	SoundManager::Instance()->playSound(driftSound, 0);
+	if (!previewOnly)
+	{
+		SoundManager::Instance()->playSound(engineSound, 0);
+		SoundManager::Instance()->playSound(driftSound, 0);
+	}
 }
 
 void Car::findAproximateAIPathPosition()

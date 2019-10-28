@@ -631,7 +631,7 @@ void Menu::printMap(MapDetails details)
 void Menu::reloadQuickRaceData()
 {
 	if(previewCar == nullptr || previewCar->getCarBrand() != selectedCar)
-		previewCar = std::make_unique<Car>(Car(selectedCar, 0, 0));
+		previewCar = std::make_unique<Car>(Car(selectedCar, 0, 0, false, true));
 	if (previewTrack == nullptr || previewTrack->getTrackName() != selectedTrack)
 		previewTrack = std::make_unique<Track>(Track(selectedTrack));
 }

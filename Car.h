@@ -37,7 +37,7 @@ public:
 
 
 
-	Car(CarBrand carBrand, float startX, float startY, bool humanCar = false);
+	Car(CarBrand carBrand, float startX, float startY, bool humanCar = false, bool previewOnly = false);
 	~Car();
 
 	void display();
@@ -160,6 +160,7 @@ private:
 
 	PacejkaModel pacejkaModel;
 	int humanCar = 0;
+	bool previewOnly;
 	int AIcurrentPoint = 0;
 
 	int AIcurrentPointTimer = 999999999;
