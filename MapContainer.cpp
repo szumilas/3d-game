@@ -279,6 +279,7 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 {
 	mapObjectSections.clear();
 	mapObjectSections.resize(100);
+	mapCollidableObjectSections.clear();
 	mapCollidableObjectSections.resize(100);
 
 	for (auto& row : mapObjectSections)
