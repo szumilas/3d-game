@@ -3,6 +3,7 @@
 #include "Car.h"
 #include "MapContainer.h"
 #include "CameraManager.h"
+#include "GameClock.h"
 
 #include <algorithm>
 
@@ -53,6 +54,7 @@ Car::Car(CarBrand carBrand, float startX, float startY, bool humanCar) : carBran
 	pacejkaModel.setHumanCar(humanCar);
 	pacejkaModel.setCarGeometry(mass, frontWheelsXoffset, frontWheelsYoffset, backWheelsXoffset, rd, 100.0f / 3.6f / carDB.at(carBrand).acceleration_0_100, carDB.at(carBrand).vMax / 3.6);
 
+	AIcurrentPoint = 0;
 }
 
 Car::~Car()
@@ -73,6 +75,12 @@ void Car::findAproximateAIPathPosition()
 		if (u > 0)
 			AIcurrentPoint = (AIcurrentPoint + 1) % MapContainer::Instance()->AIPoints.size();
 	}
+}
+
+void Car::update()
+{
+	move();
+	updateGhostCarAbility();
 }
 
 void Car::move()
@@ -205,6 +213,9 @@ Point Car::getCameraLookAt()
 
 void Car::display()
 {
+	static int ghostCarCounter = 0;
+	ghostCarCounter++;
+
 	if (!alreadyPrinted)
 	{
 		alreadyPrinted = true;
@@ -219,40 +230,43 @@ void Car::display()
 		bool prin3DtModel = true;
 		if(prin3DtModel)
 		{
-			for (auto& polygon : polygons)
+			if (!ghostCar || (ghostCarCounter / 20) % 2 == 0)
 			{
-				glBindTexture(GL_TEXTURE_2D, polygon.idTexture);
-
-				glBegin(GL_POLYGON);
-				glColor3f(polygon.color.red, polygon.color.green, polygon.color.blue);
-
-				for (unsigned int i = 0; i < polygon.noOfPoints; i++)
+				for (auto& polygon : polygons)
 				{
-					glTexCoord2f(polygon.texturePoints[i].x, polygon.texturePoints[i].y);
-					Point toPrint;
-					toPrint.x = position.x + polygon.points[i].x * cos_rz - polygon.points[i].y * sin_rz;
-					toPrint.y = position.y + polygon.points[i].x * sin_rz + polygon.points[i].y * cos_rz;
-					toPrint.z = position.z + polygon.points[i].z;
-					glVertex3f(toPrint.x, toPrint.y, toPrint.z);
+					glBindTexture(GL_TEXTURE_2D, polygon.idTexture);
+
+					glBegin(GL_POLYGON);
+					glColor3f(polygon.color.red, polygon.color.green, polygon.color.blue);
+
+					for (unsigned int i = 0; i < polygon.noOfPoints; i++)
+					{
+						glTexCoord2f(polygon.texturePoints[i].x, polygon.texturePoints[i].y);
+						Point toPrint;
+						toPrint.x = position.x + polygon.points[i].x * cos_rz - polygon.points[i].y * sin_rz;
+						toPrint.y = position.y + polygon.points[i].x * sin_rz + polygon.points[i].y * cos_rz;
+						toPrint.z = position.z + polygon.points[i].z;
+						glVertex3f(toPrint.x, toPrint.y, toPrint.z);
+					}
+					glEnd();
 				}
-				glEnd();
-			}
 
-			leftWheel.rz = steeringWheelAngle;
-			rightWheel.rz = steeringWheelAngle;
+				leftWheel.rz = steeringWheelAngle;
+				rightWheel.rz = steeringWheelAngle;
 
-			for (auto currentWheel :
-				std::vector<std::pair<Wheel*, float>>
-			{ {&backWheels, pacejkaModel.allWheels[rearLeftWheel].angularVelocity },
-			  {&leftWheel,  pacejkaModel.allWheels[frontLeftWheel].angularVelocity },
-			  {&rightWheel,  pacejkaModel.allWheels[frontRightWheel].angularVelocity } }
-				)
-			{
-				currentWheel.first->setCarPosition(position.x, position.y, position.z);
-				currentWheel.first->setCarAngle(rz);
-			
-				currentWheel.first->rotate(currentWheel.second);
-				currentWheel.first->display();
+				for (auto currentWheel :
+					std::vector<std::pair<Wheel*, float>>
+				{ {&backWheels, pacejkaModel.allWheels[rearLeftWheel].angularVelocity },
+				  {&leftWheel,  pacejkaModel.allWheels[frontLeftWheel].angularVelocity },
+				  {&rightWheel,  pacejkaModel.allWheels[frontRightWheel].angularVelocity } }
+					)
+				{
+					currentWheel.first->setCarPosition(position.x, position.y, position.z);
+					currentWheel.first->setCarAngle(rz);
+
+					currentWheel.first->rotate(currentWheel.second);
+					currentWheel.first->display();
+				}
 			}
 		}
 		else
@@ -586,7 +600,7 @@ void Car::calculateCollisions()
 
 	for (auto& enemyCar : MapContainer::Instance()->cars)
 	{
-		if (enemyCar.carBrand != carBrand)
+		if (enemyCar.carBrand != carBrand && !enemyCar.ghostCar && !ghostCar)
 		{
 			for (auto& enemyCarModelCircle : enemyCar.carModelCircles)
 			{
@@ -884,4 +898,32 @@ void Car::mute()
 {
 	SoundManager::Instance()->playSound(driftSound, 0);
 	SoundManager::Instance()->playSound(engineSound, 0);
+}
+
+void Car::resetPositionToAIPath()
+{
+	if (!MapContainer::Instance()->AIPoints.empty() && !ghostCar)
+	{
+		stop();
+		Point& p1 = MapContainer::Instance()->AIPoints[AIcurrentPoint].center;
+		Point& p2 = MapContainer::Instance()->AIPoints[(AIcurrentPoint + 1) % MapContainer::Instance()->AIPoints.size()].center;
+
+		position = p1;
+		rz = vector2D::directedAngle(vector2D({0, 0}, {1, 0}), vector2D(p1, p2));
+
+		ghostCar = true;
+		ghostCarTimer = GameClock::Instance()->getClock();
+	}
+}
+
+void Car::updateGhostCarAbility()
+{
+	if (ghostCar)
+	{
+		if (GameClock::Instance()->getClock() - ghostCarTimer > 3000)
+		{
+			ghostCar = false;
+			ghostCarTimer = 0;
+		}
+	}
 }

@@ -42,7 +42,9 @@ public:
 
 	void display();
 
+	void update();
 	void move();
+	void updateGhostCarAbility();
 	void accelerate();
 	void slow();
 	void breakPressed();
@@ -53,6 +55,7 @@ public:
 	void turnLeft();
 	void gearUp() { gearBox.gearUp(); engine.changeRPM(gearBox.getCurrentTransmission(), gearBox.getNextTransmission()); };
 	void gearDown() { gearBox.gearDown(); };
+	void resetPositionToAIPath();
 
 	Point getCameraCenter();
 	Point getCameraLookAt();
@@ -157,4 +160,7 @@ private:
 	PacejkaModel pacejkaModel;
 	int humanCar = 0;
 	int AIcurrentPoint = 0;
+
+	bool ghostCar = false;
+	int ghostCarTimer = 0;
 };

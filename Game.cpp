@@ -323,6 +323,8 @@ void Game::Update()
 			MapContainer::Instance()->cars[0].turnRight();
 		if (KeyboardManager::Instance()->checkKey(' '))
 			MapContainer::Instance()->cars[0].breakPressed();
+		if (KeyboardManager::Instance()->checkKey('R') && MapContainer::Instance()->raceActive())
+			MapContainer::Instance()->cars[0].resetPositionToAIPath();
 		if (F1Pressed && F1Released)
 		{
 			MapContainer::Instance()->cars[0].gearUp();
@@ -339,7 +341,7 @@ void Game::Update()
 		}
 
 		for (auto& car : MapContainer::Instance()->cars)
-			car.move();
+			car.update();
 
 		MapContainer::Instance()->updateRaceTimer();
 		if (MapContainer::Instance()->raceTimer.state == RaceTimer::State::RaceFinished)
