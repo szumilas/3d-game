@@ -106,7 +106,13 @@ void RaceTimer::update()
 		if (beforeRace && begin_time != 0)
 		{
 			if (GameClock::Instance()->getClock() - begin_time > 4400)
+			{
 				state = State::Green;
+				for (auto& carData : carsData)
+				{
+					carData.car->AIPathResetCounter();
+				}
+			}
 			else if (GameClock::Instance()->getClock() - begin_time > 3300)
 				state = State::Red1;
 			else if (GameClock::Instance()->getClock() - begin_time > 2200)

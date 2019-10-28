@@ -56,6 +56,7 @@ public:
 	void gearUp() { gearBox.gearUp(); engine.changeRPM(gearBox.getCurrentTransmission(), gearBox.getNextTransmission()); };
 	void gearDown() { gearBox.gearDown(); };
 	void resetPositionToAIPath();
+	void AIPathResetCounter();
 
 	Point getCameraCenter();
 	Point getCameraLookAt();
@@ -160,6 +161,8 @@ private:
 	PacejkaModel pacejkaModel;
 	int humanCar = 0;
 	int AIcurrentPoint = 0;
+
+	int AIcurrentPointTimer = 999999999;
 
 	bool ghostCar = false;
 	int ghostCarTimer = 0;

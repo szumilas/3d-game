@@ -784,6 +784,8 @@ void Car::AImove()
 	if (MapContainer::Instance()->AIPoints.size() < 3 || MapContainer::Instance()->getAIPathActive() == false)
 		return;
 
+	int previousAIPoint = AIcurrentPoint;
+
 	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].center.distance2D(position) < 5.0)
 		AIcurrentPoint = MapContainer::Instance()->GetNextPoint(AIcurrentPoint);
 
@@ -791,6 +793,11 @@ void Car::AImove()
 	if (MapContainer::Instance()->AIPoints[AIcurrentPoint].center.distance2D(position) > MapContainer::Instance()->AIPoints[possibleCloserPoint].center.distance2D(position))
 	{
 		AIcurrentPoint = possibleCloserPoint;
+	}
+
+	if (previousAIPoint != AIcurrentPoint)
+	{
+		AIPathResetCounter();
 	}
 
 	Point& AIdirection = MapContainer::Instance()->AIPoints[AIcurrentPoint].center;
@@ -926,4 +933,20 @@ void Car::updateGhostCarAbility()
 			ghostCarTimer = 0;
 		}
 	}
+	else
+	{
+		if (!humanCar)
+		{
+			if (GameClock::Instance()->getClock() - AIcurrentPointTimer > 6000)
+			{
+				AIcurrentPointTimer = GameClock::Instance()->getClock();
+				resetPositionToAIPath();
+			}
+		}
+	}
+}
+
+void Car::AIPathResetCounter()
+{
+	AIcurrentPointTimer = GameClock::Instance()->getClock();
 }
