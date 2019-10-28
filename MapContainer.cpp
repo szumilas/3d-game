@@ -911,6 +911,9 @@ void MapContainer::setFreeRide(CarBrand selectedCar, Point position)
 {
 	initCars(selectedCar, 0);
 	cars.back().setPosition(position, 0);
+
+	AIPoints.clear();
+	raceBarriers.clear();
 	LoadRaceStartCameraPoints();
 	MapManager::Instance()->currentCameraView = -1;
 	AIStop();
