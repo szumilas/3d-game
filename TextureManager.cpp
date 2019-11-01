@@ -100,6 +100,7 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::jaguar_s_type, -1.0f, -1.0f, "jaguar_s_type.png" },
 	{ Textures::audi_a4, -1.0f, -1.0f, "audi_a4.png" },
 	{ Textures::honda_cr_z, -1.0f, -1.0f, "honda_cr_z.png" },
+	{ Textures::logo, -1.0f, -1.0f, "logo.png", false },
 };
 
 void TextureManager::DeInit()

@@ -79,6 +79,7 @@ void Menu::Init(int w, int h)
 	idTextureBackground = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_background)].idTexture;
 	idTextureArrow = TextureManager::Instance()->textures[static_cast<int>(Textures::menu_arrow)].idTexture;
 	idTextureWroclawMap = TextureManager::Instance()->textures[static_cast<int>(Textures::wroclaw_map)].idTexture;
+	idTextureLogo = TextureManager::Instance()->textures[static_cast<int>(Textures::logo)].idTexture;
 	createMenu();
 	Menu::w = w;
 	Menu::h = h;
@@ -111,6 +112,8 @@ void Menu::displayForegroundBeforeText()
 	display2DRectangleTexture(Point(0.5 * w + 0.50 * h, 0.18 * h), Point(0.5 * w + 0.42 * h, 0.25 * h, 0.25 * h), idTextureArrow, currentMenuLevel->selected == currentMenuLevel->options.size() - 1 ? ColorName::MENU_LIGHT_GRAY : ColorName::YELLOW, 1);
 	display2DRectangleNoTexture(Point(0.5 * w - 0.55 * h, 0.18 * h), Point(0.5 * w - 0.37 * h, 0.25 * h), ColorName::MENU_DARK_GRAY, 1);
 	display2DRectangleNoTexture(Point(0.5 * w + 0.55 * h, 0.18 * h), Point(0.5 * w + 0.37 * h, 0.25 * h), ColorName::MENU_DARK_GRAY, 1);
+
+	display2DRectangleTexture(screenPoint(-25, 5), screenPoint(25, 15), idTextureLogo, ColorName::WHITE);
 }
 
 void Menu::displayForeground()

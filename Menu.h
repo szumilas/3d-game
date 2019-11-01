@@ -109,6 +109,7 @@ private:
 	unsigned int idTextureBackground;
 	unsigned int idTextureArrow;
 	unsigned int idTextureWroclawMap;
+	unsigned int idTextureLogo;
 
 	int w;
 	int h;

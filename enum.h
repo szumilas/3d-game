@@ -95,6 +95,7 @@ enum class Textures : long
 	jaguar_s_type,
 	audi_a4,
 	honda_cr_z,
+	logo,
 };
 
 enum class Sounds : long
