@@ -7,6 +7,7 @@ std::unique_ptr<PlayList> PlayList::_instance;
 std::vector<PlayList::PlayListData> PlayList::playlist;
 int PlayList::currentSong;
 int PlayList::songStartedAt;
+bool PlayList::muted = false;
 
 void PlayList::Init()
 {
@@ -27,17 +28,19 @@ void PlayList::start()
 {
 	currentSong = 0;
 	songStartedAt = clock();
-	SoundManager::Instance()->playSound(playlist[currentSong].song, 0.5f);
+	SoundManager::Instance()->playSound(playlist[currentSong].song, 0.4f);
 }
 
 void PlayList::mute()
 {
 	SoundManager::Instance()->playSound(playlist[currentSong].song, 0.0f);
+	muted = true;
 }
 
 void PlayList::unmute()
 {
-	SoundManager::Instance()->playSound(playlist[currentSong].song, 0.5f);
+	SoundManager::Instance()->playSound(playlist[currentSong].song, 0.4f);
+	muted = false;
 }
 
 void PlayList::update()
@@ -49,7 +52,7 @@ void PlayList::update()
 		currentSong = (currentSong + 1) % playlist.size();
 
 		al_set_sample_instance_position(playlist[currentSong].song, 0);
-		SoundManager::Instance()->playSound(playlist[currentSong].song, 0.5f);
+		SoundManager::Instance()->playSound(playlist[currentSong].song, 0.4f * !muted);
 
 		songStartedAt = clock();
 	}

@@ -33,6 +33,7 @@ private:
 
 	static int currentSong;
 	static int songStartedAt;
+	static bool muted;
 
 	static std::vector<PlayListData> playlist;
 
