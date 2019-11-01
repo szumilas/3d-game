@@ -55,6 +55,7 @@ private:
 
 	void init();
 	static void display();
+	static void displayWorld();
 	static void reshape(int width, int height);
 	static void timer(int);
 	static void keyboard(unsigned char key, int x, int y);

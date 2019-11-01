@@ -56,6 +56,39 @@ void Game::init()
 	glAlphaFunc(GL_GREATER, 0.1f);
 }
 
+void Game::displayWorld()
+{
+	CameraManager::Instance()->adjustCamera(MapManager::Instance()->currentCameraView);
+
+	glPushMatrix();
+	gluLookAt(CameraManager::Instance()->center.x, CameraManager::Instance()->center.y, CameraManager::Instance()->center.z, //eye
+		CameraManager::Instance()->lookAt.x, CameraManager::Instance()->lookAt.y, CameraManager::Instance()->lookAt.z, //center
+		0, 0, 1); //up
+	SoundManager::Instance()->setCameraPosition(CameraManager::Instance()->center, CameraManager::Instance()->lookAt);
+
+	if (MapManager::Instance()->currentCameraView <= 0)
+		MapContainer::displaySector(orbit.getFlatCursor());
+	else
+		MapContainer::displayWorld(CameraManager::Instance()->getCurrentCameraPoints());
+	//mapContainer.displayAllWorld();
+
+	for (auto& car : MapContainer::Instance()->cars)
+	{
+		car.display();
+		car.alreadyPrinted = false;
+		//if (F1Pressed)
+		//car.setObstacle(orbit.getFlatCursorX(), orbit.getFlatCursorY());
+		if (F2Pressed)
+			car.setObstacleVelocity(orbit.getFlatCursorX(), orbit.getFlatCursorY());
+		if (F3Pressed)
+			car.stop();
+	}
+
+	orbit.displayFlatCursor();
+
+	glPopMatrix();
+}
+
 void Game::display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -63,39 +96,11 @@ void Game::display()
 	//glLoadIdentity();
 
 
-	if (gameState == Game::State::race || gameState == Game::State::freeRide || gameState == Game::State::pause)
+	if (gameState == Game::State::race || gameState == Game::State::freeRide)
 	{
-		CameraManager::Instance()->adjustCamera(MapManager::Instance()->currentCameraView);
-
-		glPushMatrix();
-		gluLookAt(CameraManager::Instance()->center.x, CameraManager::Instance()->center.y, CameraManager::Instance()->center.z, //eye
-			CameraManager::Instance()->lookAt.x, CameraManager::Instance()->lookAt.y, CameraManager::Instance()->lookAt.z, //center
-			0, 0, 1); //up
-		SoundManager::Instance()->setCameraPosition(CameraManager::Instance()->center, CameraManager::Instance()->lookAt);
-
-		if (MapManager::Instance()->currentCameraView <= 0)
-			MapContainer::displaySector(orbit.getFlatCursor());
-		else
-			MapContainer::displayWorld(CameraManager::Instance()->getCurrentCameraPoints());
-		//mapContainer.displayAllWorld();
-
-		for (auto& car : MapContainer::Instance()->cars)
-		{
-			car.display();
-			car.alreadyPrinted = false;
-			//if (F1Pressed)
-			//car.setObstacle(orbit.getFlatCursorX(), orbit.getFlatCursorY());
-			if (F2Pressed)
-				car.setObstacleVelocity(orbit.getFlatCursorX(), orbit.getFlatCursorY());
-			if (F3Pressed)
-				car.stop();
-		}
+		displayWorld();
 
 		MapContainer::Instance()->displayRaceTimer();
-
-		orbit.displayFlatCursor();
-
-		glPopMatrix();
 
 		Screen2D::pushScreenCoordinateMatrix();
 		MapContainer::displayMapEditorPanel();
@@ -127,9 +132,10 @@ void Game::display()
 		menu.displayForegroundBeforeText();
 		Screen2D::pop_projection_matrix();
 	}
-
-	if (gameState == Game::State::pause)
+	else if (gameState == Game::State::pause)
 	{
+		displayWorld();
+
 		Screen2D::pushScreenCoordinateMatrix();
 		menu.display2DscreenForOption();
 		menu.displayForeground();
@@ -203,12 +209,6 @@ void Game::keyboard(unsigned char key, int x, int y)
 			menu.menuResponse.menuState = Menu::OK;
 			menu.setPause();
 			gameState = State::pause;
-		}
-		else if (gameState == State::pause && MapContainer::Instance()->raceActive())
-		{
-			menu.menuResponse.menuState = Menu::OK;
-			gameState = State::mainMenu;
-			MapContainer::Instance()->cars.clear();
 		}
 		break;
 	}
