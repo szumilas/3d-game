@@ -57,11 +57,13 @@ public:
 	inline float getPreviousTransmission() { if (currentGear == 0) return gears[currentGear]; return gears[currentGear - 1]; }
 	inline float getTopTransmission() { return gears.back(); }
 	inline float getMainTransmission() { return mainTransmission; }
-	inline void gearUp() { if (currentGear < gears.size() - 1) currentGear++; }
-	inline void gearDown() { if (currentGear > 0) currentGear--; }
+	void gearUp();
+	void gearDown();
+	inline void setGear(int newGear) { currentGear = newGear; }
 	inline void setReverseGear() { currentGear = 0; reverse = true; }
 	inline unsigned int getCurrentGear() { return currentGear; };
-	inline char getCurrentGearTxt() { return reverse ? 'R' : static_cast<char>(currentGear + '0'); };
+	inline bool getRevrse() { return reverse; }
+	inline char getCurrentGearTxt() { return reverse ? 'R' : static_cast<char>(currentGear + '1'); };
 
 private:
 
@@ -76,5 +78,8 @@ private:
 	float mainTransmission;
 	float reverseGear;
 	bool reverse = false;
+
+	int lastTimeGearChanged = 0;
+	int minimumChangeGearTimeDelay = 2000;
 
 };

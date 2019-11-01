@@ -1,4 +1,5 @@
 #include "CarParts.h"
+#include "GameClock.h"
 
 Engine::Engine(CarBrand carBrand) : Engine(carDB.at(carBrand).power, 850, 7450, 2000, 5000, 6000)
 {
@@ -61,13 +62,16 @@ void Engine::setRPM(float newRPM)
 
 bool Engine::nextGearDrivingForceBigger(float mainTransmission, float currentTransmission, float nextTransmission, float rd, float v)
 {
+	if (currentTransmission == nextTransmission)
+		return false;
+
 	float currentRMP = calculateRMP(mainTransmission * currentTransmission, rd, v);
 	float nextRMP = calculateRMP(mainTransmission * nextTransmission, rd, v);
 
 	float currentTorgue = getTorque(currentRMP);
 	float nextTorgue = getTorque(nextRMP);
 
-	if (nextTransmission * nextTorgue > currentTransmission * currentTorgue)
+	if (nextTransmission * nextTorgue * 1.1 > currentTransmission * currentTorgue)
 		return true;
 	else
 		return false;
@@ -75,13 +79,16 @@ bool Engine::nextGearDrivingForceBigger(float mainTransmission, float currentTra
 
 bool Engine::previousGearDrivingForceBigger(float mainTransmission, float currentTransmission, float previousTransmission, float rd, float v)
 {
+	if (currentTransmission == previousTransmission)
+		return false;
+
 	float currentRMP = calculateRMP(mainTransmission * currentTransmission, rd, v);
 	float previousRMP = calculateRMP(mainTransmission * previousTransmission, rd, v);
 
 	float currentTorgue = getTorque(currentRMP);
 	float previousTorgue = getTorque(previousRMP);
 
-	if (previousTransmission * previousTorgue > currentTransmission * currentTorgue)
+	if (previousTransmission * previousTorgue > currentTransmission * currentTorgue * 1.1)
 		return true;
 	else
 		return false;
@@ -92,4 +99,30 @@ GearBox::GearBox(CarBrand carBrand)
 	gears = carDB.at(carBrand).gears;
 	mainTransmission = carDB.at(carBrand).mainTransmission;
 	reverseGear = carDB.at(carBrand).reverseGear;
+}
+
+void GearBox::gearUp()
+{
+	int currentTime = GameClock::Instance()->getClock();
+	if (currentTime - lastTimeGearChanged > minimumChangeGearTimeDelay)
+	{
+		if (currentGear < gears.size() - 1)
+		{
+			currentGear++;
+			lastTimeGearChanged = currentTime;
+		}
+	}
+}
+
+void GearBox::gearDown()
+{
+	int currentTime = GameClock::Instance()->getClock();
+	if (currentTime - lastTimeGearChanged > minimumChangeGearTimeDelay)
+	{
+		if (currentGear > 0)
+		{
+			currentGear--;
+			lastTimeGearChanged = currentTime;
+		}
+	}
 }
