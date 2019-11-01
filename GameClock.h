@@ -13,6 +13,7 @@ public:
 	static void clear();
 
 	static int getClock();
+	static bool isPause() { return paused; }
 
 private:
 

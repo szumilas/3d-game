@@ -96,7 +96,8 @@ void Car::move()
 		AImove();
 
 	drivingDir = drivingDirection();
-	//cameraCenter.y = sin(steeringWheelAngle) * 1.0;
+	if (humanCar != 2)
+		cameraCenter.y = sin(steeringWheelAngle) * 1.0 * v.length() / 60;
 
 	//Automatic Transmission
 	//------------------------
@@ -269,7 +270,7 @@ void Car::display()
 					currentWheel.first->setCarPosition(position.x, position.y, position.z);
 					currentWheel.first->setCarAngle(rz);
 
-					currentWheel.first->rotate(currentWheel.second);
+					currentWheel.first->rotate(currentWheel.second * !GameClock::Instance()->isPause());
 					currentWheel.first->display();
 				}
 			}
