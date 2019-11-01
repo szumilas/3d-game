@@ -109,6 +109,8 @@ enum class Sounds : long
 	new_record,
 	menu_click,
 	menu_accept,
+	playlist_01,
+	playlist_02,
 };
 
 enum class Exceptions : long

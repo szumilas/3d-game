@@ -15,6 +15,8 @@ std::vector<SoundManager::SoundData> SoundManager::sounds
 	{ Sounds::new_record, "new_record.wav" },
 	{ Sounds::menu_click, "menu_click.wav" },
 	{ Sounds::menu_accept, "menu_accept.wav" },
+	{ Sounds::playlist_01, "playlist_01.ogg" },
+	{ Sounds::playlist_02, "playlist_02.ogg" },
 };
 
 ALLEGRO_VOICE *SoundManager::voice;

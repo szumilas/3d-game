@@ -3,6 +3,7 @@
 #include "Game.h"
 
 #include "GameClock.h"
+#include "PlayList.h"
 
 int Game::current_time;
 int Game::previos_time = time(NULL);
@@ -213,6 +214,8 @@ void Game::keyboard(unsigned char key, int x, int y)
 			menu.menuResponse.menuState = Menu::OK;
 			menu.setPause();
 			gameState = State::pause;
+
+			PlayList::Instance()->unmute();
 		}
 		break;
 	}
@@ -354,6 +357,8 @@ void Game::Update()
 			gameState = State::mainMenu;
 			MapContainer::Instance()->cars.clear();
 			menu.loadAfterRaceScreen();
+
+			PlayList::Instance()->unmute();
 			return;
 		}
 
@@ -447,6 +452,7 @@ void Game::Update()
 		}
 	}
 	//glutPostRedisplay();
+	PlayList::Instance()->update();
 }
 
 Game::Game(int argc, char**agrv)
@@ -501,6 +507,7 @@ void Game::play()
 		TextureManager::Instance()->readTextures();
 		std::cout << "reading sounds...\n";
 		SoundManager::Instance()->readSounds();
+		PlayList::Init();
 
 		std::cout << "init cars...\n";
 		MapContainer::Instance()->initCars();
@@ -518,6 +525,7 @@ void Game::play()
 #endif
 
 		std::cout << "main loop...\n";
+		PlayList::Instance()->start();
 		glutMainLoop();
 	}
 	catch (Exceptions exc)
@@ -548,6 +556,8 @@ void Game::handleMenuResponse()
 		carGauge.load(&MapContainer::Instance()->cars[0]);
 		MapContainer::Instance()->activateRaceTimer();
 		MapContainer::Instance()->initRaceTimer();
+
+		PlayList::Instance()->mute();
 	}
 	else if (menu.menuResponse.menuState == Menu::StartFreeRide)
 	{
@@ -560,10 +570,14 @@ void Game::handleMenuResponse()
 		carGauge.load(&MapContainer::Instance()->cars[0]);
 		MapContainer::Instance()->deactivateRaceTimer();
 		MapContainer::Instance()->initRaceTimer();
+
+		PlayList::Instance()->mute();
 	}
 	else if (menu.menuResponse.menuState == Menu::Resume)
 	{
 		gameState = State::race;
+
+		PlayList::Instance()->mute();
 	}
 	else if (menu.menuResponse.menuState == Menu::ExitToMainMenu)
 	{
@@ -571,5 +585,7 @@ void Game::handleMenuResponse()
 		gameState = State::mainMenu;
 		MapContainer::Instance()->cars.clear();
 		MapContainer::Instance()->raceTimer.setRaceFinished(true);
+
+		PlayList::Instance()->unmute();
 	}
 }

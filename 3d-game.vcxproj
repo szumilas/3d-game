@@ -165,6 +165,7 @@
     <ClCompile Include="PacejkaModel.cpp" />
     <ClCompile Include="Parking.cpp" />
     <ClCompile Include="PasazGrunwaldzki.cpp" />
+    <ClCompile Include="PlayList.cpp" />
     <ClCompile Include="PwrC13.cpp" />
     <ClCompile Include="RaceTimer.cpp" />
     <ClCompile Include="Railway.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="PacejkaModel.h" />
     <ClInclude Include="Parking.h" />
     <ClInclude Include="PasazGrunwaldzki.h" />
+    <ClInclude Include="PlayList.h" />
     <ClInclude Include="PointInsidePolygonDetector.h" />
     <ClInclude Include="PwrC13.h" />
     <ClInclude Include="RaceTimer.h" />
