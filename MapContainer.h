@@ -183,6 +183,7 @@ private:
 
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapObjectSections;
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;
+	static std::vector<std::unique_ptr<MapObject>*> highBuildingSection;
 	static std::unique_ptr<MapObject>* background;
 
 

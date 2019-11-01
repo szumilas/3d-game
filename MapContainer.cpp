@@ -8,6 +8,7 @@
 
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapObjectSections;
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapCollidableObjectSections;
+std::vector<std::unique_ptr<MapObject>*> MapContainer::highBuildingSection;
 std::unique_ptr<MapObject>* MapContainer::background;
 float MapContainer::deltaX;
 float MapContainer::deltaY;
@@ -349,7 +350,14 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 			object->get()->alreadyPrinted = false;
 		}
 	}
-	
+
+	for (auto& object : highBuildingSection)
+	{
+		if (!object->get()->isHidden)
+			object->get()->display();
+		object->get()->alreadyPrinted = false;
+	}
+
 	displayBackground();
 	displayMapEditorPoints();
 }
@@ -360,6 +368,7 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 	mapObjectSections.resize(100);
 	mapCollidableObjectSections.clear();
 	mapCollidableObjectSections.resize(100);
+	highBuildingSection.clear();
 
 	for (auto& row : mapObjectSections)
 	{
@@ -410,6 +419,7 @@ void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>&
 {
 	for (auto& mapObject : mapObjects)
 	{
+		bool highBuilding = false;
 		std::vector<std::pair<int, int>> sectionsXY;
 
 		for (auto& polygon : mapObject->polygons)
@@ -417,8 +427,16 @@ void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>&
 			for (auto& point : polygon.points)
 			{
 				sectionsXY.push_back({ (point.x - minX) * 100 / deltaX, (point.y - minY) * 100 / deltaY });
+
+				if (point.z > 25)
+				{
+					highBuilding = true;
+				}
 			}
 		}
+
+		if(highBuilding)
+			highBuildingSection.push_back(&mapObject);
 
 		sort(sectionsXY.begin(), sectionsXY.end());
 		sectionsXY.erase(unique(sectionsXY.begin(), sectionsXY.end()), sectionsXY.end());
