@@ -877,22 +877,22 @@ void Car::AImove()
 	else if (maxFutureSpeedAngleToFollow > PI * 0.3 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.3 && v.length() > 0.5 * safeVelocity)
 	{
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 3", &(Screen2D::Instance()->roboto_modo_regular));
-		breakPressed();
+		slow();
 	}
 	else if (maxFutureSpeedAngleToFollow > PI * 0.2 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.2 && v.length() > 0.7 * safeVelocity)
 	{
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 4", &(Screen2D::Instance()->roboto_modo_regular));
-		breakPressed();
+		slow();
 	}
 	else if (maxFutureSpeedAngleToFollow > PI * 0.1 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.1 && v.length() > 0.8 * safeVelocity)
 	{
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 5", &(Screen2D::Instance()->roboto_modo_regular));
-		breakPressed();
+		slow();
 	}
 	else if (maxFutureSpeedAngleToFollow > PI * 0.05 && maxFutureSpeedAngleToFollow < 2 * PI - PI * 0.05 && v.length() > 1.0 * safeVelocity)
 	{
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "break 6", &(Screen2D::Instance()->roboto_modo_regular));
-		breakPressed();
+		slow();
 	}
 	else if(pacejkaModel.carDrifting)
 	{

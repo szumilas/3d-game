@@ -66,8 +66,12 @@ void Game::displayWorld()
 		0, 0, 1); //up
 	SoundManager::Instance()->setCameraPosition(CameraManager::Instance()->center, CameraManager::Instance()->lookAt);
 
-	if (MapManager::Instance()->currentCameraView <= 0)
+	if (MapManager::Instance()->currentCameraView == 0)
+	{
 		MapContainer::displaySector(orbit.getFlatCursor());
+		//std::pair<Point, Point> firstCarCamera = { CameraManager::Instance()->cameraViews[1]->getCameraCenter(), CameraManager::Instance()->cameraViews[1]->getCameraLookAt() };
+		//MapContainer::displayWorld(firstCarCamera);
+	}
 	else
 		MapContainer::displayWorld(CameraManager::Instance()->getCurrentCameraPoints());
 	//mapContainer.displayAllWorld();
