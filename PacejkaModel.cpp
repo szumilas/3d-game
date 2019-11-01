@@ -36,7 +36,7 @@ std::vector<Force> PacejkaModel::calculateForces(int drivingDir, bool tryAcceler
 	allWheels[frontLeftWheel].steeringWheelAngle = steeringWheelAngle;
 	allWheels[frontRightWheel].steeringWheelAngle = steeringWheelAngle;
 
-	if (tryAccelerate)
+	if (tryAccelerate && vCarGlobal.length() < vMax)
 	{
 		for (auto& wheel : allWheels)
 		{

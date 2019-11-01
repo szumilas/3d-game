@@ -97,7 +97,7 @@ void Car::move()
 
 	drivingDir = drivingDirection();
 	if (humanCar != 2)
-		cameraCenter.y = sin(steeringWheelAngle) * 1.0 * v.length() / 60;
+		cameraCenter.y = sin(steeringWheelAngle) * 0.5 * std::min(v.length(), 30.0) / 60;
 
 	//Automatic Transmission
 	//------------------------
