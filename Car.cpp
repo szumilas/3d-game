@@ -104,8 +104,11 @@ void Car::move()
 
 	if (drivingDir == 1 || v.length() < 0.2)
 	{
-		if (tryAccelerate && gearBox.getRevrse())
-			gearBox.gearUp();
+		if (tryAccelerate && gearBox.getReverse())
+		{
+			gearBox.undoReverseGear();
+			gearBox.setGear(0);
+		}
 		else if (engine.nextGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getNextTransmission(), rd, v.length()))
 			gearBox.gearUp();
 		else if (engine.previousGearDrivingForceBigger(gearBox.getMainTransmission(), gearBox.getCurrentTransmission(), gearBox.getPreviousTransmission(), rd, v.length()))

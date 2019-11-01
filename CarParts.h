@@ -61,8 +61,9 @@ public:
 	void gearDown();
 	inline void setGear(int newGear) { currentGear = newGear; }
 	inline void setReverseGear() { currentGear = 0; reverse = true; }
+	inline void undoReverseGear() { reverse = false; }
 	inline unsigned int getCurrentGear() { return currentGear; };
-	inline bool getRevrse() { return reverse; }
+	inline bool getReverse() { return reverse; }
 	inline char getCurrentGearTxt() { return reverse ? 'R' : static_cast<char>(currentGear + '1'); };
 
 private:
