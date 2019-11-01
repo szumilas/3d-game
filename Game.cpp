@@ -421,6 +421,11 @@ void Game::Update()
 		{
 			if (GameClock::Instance()->getClock() - menuSwitchDelay > 300)
 			{
+				if (leftPressed || rightPressed)
+					SoundManager::Instance()->playSample(Sounds::menu_click);
+				else
+					SoundManager::Instance()->playSample(Sounds::menu_accept);
+
 				if (leftPressed)
 					menu.selectPrevious();
 				else if (rightPressed)

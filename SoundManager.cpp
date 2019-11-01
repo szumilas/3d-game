@@ -13,6 +13,8 @@ std::vector<SoundManager::SoundData> SoundManager::sounds
 	{ Sounds::crash_03, "crash03.wav" },
 	{ Sounds::race_timer, "race_timer.wav" },
 	{ Sounds::new_record, "new_record.wav" },
+	{ Sounds::menu_click, "menu_click.wav" },
+	{ Sounds::menu_accept, "menu_accept.wav" },
 };
 
 ALLEGRO_VOICE *SoundManager::voice;
