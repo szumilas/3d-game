@@ -372,3 +372,29 @@ void MapObject::createBothRailsForSymmetryAxis(const std::vector<Point>& axisPoi
 	finalRightRail.push_back(rightRail[rightRail.size() - 1]);
 
 }
+
+Color MapObject::getUniqueColorBasedOnId()
+{
+	if (uniqueColorBasedOnId.red == -1)
+	{
+		Color newColor;
+		int a = id % 10;
+		int b = (id / 10) % 10;
+		int c = (id / 100) % 10;
+
+		float color1 = 0.01f * ((a * 10 + b + c) % 100);
+		float color2 = 0.01f * ((b * 10 + a + c) % 100);
+		float color3 = 0.01f * (((a * 100 + 10 * b) / 10) % 100);
+
+		if (a % 3 == 0)
+			newColor = Color(color1, color2, color3);
+		else if(a % 3 == 1)
+			newColor = Color(color3, color1, color2);
+		else
+			newColor = Color(color2, color3, color1);
+
+		uniqueColorBasedOnId = newColor;
+	}
+
+	return uniqueColorBasedOnId;
+}

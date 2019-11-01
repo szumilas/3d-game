@@ -178,6 +178,72 @@ std::vector<std::vector<std::unique_ptr<MapObject>*>*> MapContainer::getCollidab
 	return result;
 }
 
+long long MapContainer::shootRay(std::vector<std::pair<int, int>>& sectionsToDisplay, Point& center, vector2D& currentRay)
+{
+	long long collisionId = -1;
+
+	int distanceUnit = 5;
+	bool rayFinished = false;
+	
+	Color colorOfTheRay(ColorName::BLACK);
+	
+	for(; distanceUnit < 1500; distanceUnit += 5)
+	{
+		Point currenPoint(center.x + currentRay.x * distanceUnit, center.y + currentRay.y * distanceUnit);
+		int sectionX = static_cast<int>(100 * (currenPoint.x - minX) / deltaX);
+		int sectionY = static_cast<int>(100 * (currenPoint.y - minY) / deltaY);
+	
+		if (sectionX >= 100 || sectionY >= 100 ||
+			sectionX < 0 || sectionY < 0)
+		{
+			break;
+		}
+		else
+		{
+			sectionsToDisplay.push_back({ sectionX, sectionY });
+		}
+		
+		for (auto& object : mapObjectSections[sectionsToDisplay.back().first][sectionsToDisplay.back().second])
+		{
+			if (!object->get()->building.empty() && object->get()->_min_height == 0 && object->get()->_height >= 10)
+			{
+				if (PointInsidePolygonDetector::isInside(object->get()->points, currenPoint))
+				{
+					rayFinished = true;
+					colorOfTheRay = object->get()->getUniqueColorBasedOnId();
+					collisionId = object->get()->getId();
+					break;
+				}
+			}
+		}
+	
+		if (rayFinished)
+			break;
+	}
+	
+	//glBegin(GL_LINES);
+	//glColor3f(colorOfTheRay.red, colorOfTheRay.green, colorOfTheRay.blue);
+	//glVertex3f(center.x, center.y, 2.0f);
+	//glVertex3f(center.x + currentRay.x * distanceUnit, center.y + currentRay.y * distanceUnit, 2.0f);
+	//glEnd();
+
+	return collisionId;
+}
+
+void MapContainer::checkMiddleRay(vector2D& firstRay, long long firstRayCollisionId, vector2D& lastRay, long long lastRayCollisionId, std::vector<std::pair<int, int>>& sectionsToDisplay, Point& center)
+{
+	if (firstRayCollisionId > 0 && firstRayCollisionId == lastRayCollisionId || vector2D::angle(firstRay, lastRay) < PI / 720 || firstRayCollisionId < 0 && firstRayCollisionId == lastRayCollisionId && vector2D::angle(firstRay, lastRay) < PI / 18)
+		return;
+
+	auto middleRay = firstRay;
+
+	middleRay.rotate(-vector2D::angle(firstRay, lastRay) / 2);
+
+	auto middleRayCollisionId = shootRay(sectionsToDisplay, center, middleRay);
+	checkMiddleRay(firstRay, firstRayCollisionId, middleRay, middleRayCollisionId, sectionsToDisplay, center);
+	checkMiddleRay(middleRay, middleRayCollisionId, lastRay, lastRayCollisionId, sectionsToDisplay, center);
+}
+
 void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 {
 	//Point& center = cars[0].getCameraCenter();
@@ -199,55 +265,68 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 
 	sectionsToDisplay.push_back({ xToDraw, yToDraw });
 
-	vector2D frontRay(center, lookAt);
-	frontRay.convertIntoUnitVector();
-	frontRay.rotate(PI / 3);
+	vector2D firstRay(center, lookAt);
+	firstRay.convertIntoUnitVector();
+	firstRay.rotate(PI / 3);
 
-	for (int i = 0; i <= 48; i++)
-	{
-		int distanceUnit = 5;
-		bool rayFinished = false;
+	vector2D lastRay = firstRay;
+	lastRay.rotate(- 2 * PI / 3);
 
-		for(; distanceUnit < 1500; distanceUnit += 5)
-		{
-			Point currenPoint(center.x + frontRay.x * distanceUnit, center.y + frontRay.y * distanceUnit);
-			int sectionX = static_cast<int>(100 * (currenPoint.x - minX) / deltaX);
-			int sectionY = static_cast<int>(100 * (currenPoint.y - minY) / deltaY);
+	auto firstRayCollisionId = shootRay(sectionsToDisplay, center, firstRay);
+	auto lastRayCollisionId = shootRay(sectionsToDisplay, center, lastRay);
+	checkMiddleRay(firstRay, firstRayCollisionId, lastRay, lastRayCollisionId, sectionsToDisplay, center);
 
-			if (sectionX >= 100 || sectionY >= 100 ||
-				sectionX < 0 || sectionY < 0)
-			{
-				break;
-			}
-			else
-			{
-				sectionsToDisplay.push_back({ sectionX, sectionY });
-			}
-			
-			for (auto& object : mapObjectSections[sectionsToDisplay.back().first][sectionsToDisplay.back().second])
-			{
-				if (!object->get()->building.empty() && object->get()->_min_height == 0 && object->get()->_height >= 10)
-				{
-					if (PointInsidePolygonDetector::isInside(object->get()->points, currenPoint))
-					{
-						rayFinished = true;
-						break;
-					}
-				}
-			}
 
-			if (rayFinished)
-				break;
-		}
-
-		/*glBegin(GL_LINES);
-		glColor3f(0.8f, 0.2f, 0.8f);
-		glVertex3f(center.x, center.y, 2.0f);
-		glVertex3f(center.x + frontRay.x * distanceUnit, center.y + frontRay.y * distanceUnit, 2.0f);
-		glEnd();*/
-
-		frontRay.rotate(- PI / 72);
-	}
+	//auto firstRay = frontRay;
+	//
+	//while (vector2D::angle(firstRay, frontRay) < 2 * PI / 3)
+	//{
+	//	int distanceUnit = 5;
+	//	bool rayFinished = false;
+	//
+	//	Color colorOfTheRay(ColorName::BLACK);
+	//
+	//	for(; distanceUnit < 1500; distanceUnit += 5)
+	//	{
+	//		Point currenPoint(center.x + frontRay.x * distanceUnit, center.y + frontRay.y * distanceUnit);
+	//		int sectionX = static_cast<int>(100 * (currenPoint.x - minX) / deltaX);
+	//		int sectionY = static_cast<int>(100 * (currenPoint.y - minY) / deltaY);
+	//
+	//		if (sectionX >= 100 || sectionY >= 100 ||
+	//			sectionX < 0 || sectionY < 0)
+	//		{
+	//			break;
+	//		}
+	//		else
+	//		{
+	//			sectionsToDisplay.push_back({ sectionX, sectionY });
+	//		}
+	//		
+	//		for (auto& object : mapObjectSections[sectionsToDisplay.back().first][sectionsToDisplay.back().second])
+	//		{
+	//			if (!object->get()->building.empty() && object->get()->_min_height == 0 && object->get()->_height >= 10)
+	//			{
+	//				if (PointInsidePolygonDetector::isInside(object->get()->points, currenPoint))
+	//				{
+	//					rayFinished = true;
+	//					colorOfTheRay = object->get()->getUniqueColorBasedOnId();
+	//					break;
+	//				}
+	//			}
+	//		}
+	//
+	//		if (rayFinished)
+	//			break;
+	//	}
+	//
+	//	glBegin(GL_LINES);
+	//	glColor3f(colorOfTheRay.red, colorOfTheRay.green, colorOfTheRay.blue);
+	//	glVertex3f(center.x, center.y, 2.0f);
+	//	glVertex3f(center.x + frontRay.x * distanceUnit, center.y + frontRay.y * distanceUnit, 2.0f);
+	//	glEnd();
+	//
+	//	frontRay.rotate(- std::max(atan(1.0 / distanceUnit), PI / 180));
+	//}
 
 	sort(sectionsToDisplay.begin(), sectionsToDisplay.end());
 	sectionsToDisplay.erase(unique(sectionsToDisplay.begin(), sectionsToDisplay.end()), sectionsToDisplay.end());

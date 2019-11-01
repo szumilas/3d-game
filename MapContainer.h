@@ -70,6 +70,8 @@ public:
 
 	static void loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
 	static void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>& mapObjects);
+	static long long shootRay(std::vector<std::pair<int, int>>& sectionsToDisplay, Point& center, vector2D& currentRay);
+	static void checkMiddleRay(vector2D& firstRay, long long firstRayCollisionId, vector2D& lastRay, long long lastRayCollisionId, std::vector<std::pair<int, int>>& sectionsToDisplay, Point& center);
 	static void displayWorld(std::pair<Point, Point>& camera);
 	static void displayAllWorld();
 	static void displaySector(const Point& point);

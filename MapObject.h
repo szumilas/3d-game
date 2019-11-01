@@ -22,12 +22,14 @@ public:
 	void applyKnownValues();
 
 	long long getId() { return id; }
+	Color getUniqueColorBasedOnId();
 	void setId(long long newId) { id = newId; }
 	void select();
 	void deselect();
 
 private:
 
+	Color uniqueColorBasedOnId{-1, -1, -1};
 
 protected:
 
