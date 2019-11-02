@@ -72,6 +72,7 @@ enum class Textures : long
 	car_gauge,
 	car_gauge_330,
 	elm_tree,
+	tree,
 	no_texture,
 	map_editor_panel,
 	counter,

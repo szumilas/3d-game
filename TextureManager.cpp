@@ -77,6 +77,7 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::car_gauge, -1.0f, -1.0f, "car_gauge.png", false },
 	{ Textures::car_gauge_330, -1.0f, -1.0f, "car_gauge_330.png", false },
 	{ Textures::elm_tree, -1.0f, -1.0f, "elm_tree.png" },
+	{ Textures::tree, -1.0f, -1.0f, "tree.png" },
 	{ Textures::no_texture, 1.0f, 1.0f, "no_texture.png" },
 	{ Textures::map_editor_panel, 1.0f, 1.0f, "map_editor_panel.png" },
 	{ Textures::counter, 1.0f, 1.0f, "counter.png", false },

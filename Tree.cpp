@@ -18,6 +18,7 @@ void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 	auto random1 = static_cast<float>(static_cast<int>((abs(newPoint.x) * 100) + static_cast<int>(abs(newPoint.y) * 100)) % 100) / 100;
 	auto random2 = static_cast<float>(static_cast<int>((abs(newPoint.x) * 1000) + static_cast<int>(abs(newPoint.y) * 1000)) % 100) / 100;
 	auto random3 = static_cast<float>(static_cast<int>((abs(newPoint.x) * 10) + static_cast<int>(abs(newPoint.y) * 10)) % 100) / 100;
+	auto random4 = static_cast<int>(static_cast<int>((abs(newPoint.x) * 10) + static_cast<int>(abs(newPoint.y) * 100)) % 100);
 
 	if (_height == 0)
 	{
@@ -47,7 +48,10 @@ void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 		polygon.noOfPoints = polygon.points.size();
 		polygon.color = _color;
 
-		polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(Textures::elm_tree)].idTexture;
+		if(random4 % 2 == 0)
+			polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(Textures::elm_tree)].idTexture;
+		else
+			polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(Textures::tree)].idTexture;
 
 		polygons.push_back(polygon);
 	}
