@@ -18,6 +18,7 @@ public:
 		StartFreeRide,
 		Resume,
 		ExitToMainMenu,
+		StartMapEditor,
 	};
 
 	enum class MapDetails
@@ -79,6 +80,7 @@ private:
 	void resumeGame();
 	void startQuickRace();
 	void startFreeRide();
+	void startMapEditor();
 
 	void preview2DNumber(int id);
 	void preview2DFreeRidePositions(int id);
@@ -144,6 +146,7 @@ private:
 	std::vector<MenuLevel> allMenuOptions;
 
 	MenuLevel mainMenu{ "Main Menu" };
+	MenuLevel mapEditor{ "Map Editor", &Menu::startMapEditor };
 	MenuLevel quickRace{ "Quick Race", &Menu::enterNextLevel };
 	MenuLevel freeRide{ "Free Ride", &Menu::enterNextLevel };
 	MenuLevel highscores{ "Highscores", &Menu::enterNextLevel };

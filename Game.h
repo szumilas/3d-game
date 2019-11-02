@@ -38,6 +38,7 @@ public:
 		race,
 		freeRide,
 		pause,
+		mapEditor,
 	};
 
 	enum Key
@@ -90,4 +91,5 @@ private:
 
 	static Menu menu;
 	static State gameState;
+	static State previousGameState;
 };

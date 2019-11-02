@@ -274,7 +274,7 @@ void Menu::createMenu()
 {
 	createCommonOptions();
 
-	mainMenu.options = {&quickRace, &freeRide, &highscores, &credits, &quitGame };
+	mainMenu.options = { &mapEditor, &quickRace, &freeRide, &highscores, &credits, &quitGame };
 	quickRace.options = { &quickRaceStart, &quickRaceSelectCar, &quickRaceSelectTrack, &quickRaceNoOfLaps, &quickRaceNoOfOponents, &quickRaceBack };
 	freeRide.options = { &freeRideStart, &freeRideSelectCar, &freeRideSelectPosition, &freeRideBack };
 	highscores.options = { &highscoresRideBack };
@@ -653,6 +653,11 @@ void Menu::startFreeRide()
 	menuResponse.menuState = StartFreeRide;
 	menuResponse.selectedCar = selectedCar;
 	menuResponse.startPosition = freeRideStartPositions.at(selectedFreeRidePosition).second;
+}
+
+void Menu::startMapEditor()
+{
+	menuResponse.menuState = StartMapEditor;
 }
 
 void Menu::loadAfterRaceScreen()

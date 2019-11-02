@@ -22,6 +22,7 @@ int Game::mouseYPos;
 
 Menu Game::menu;
 Game::State Game::gameState = Game::State::mainMenu;
+Game::State Game::previousGameState = Game::State::mainMenu;
 
 
 Orbit orbit;
@@ -108,7 +109,7 @@ void Game::display()
 		MapContainer::Instance()->displayRaceTimer();
 
 		Screen2D::pushScreenCoordinateMatrix();
-		MapContainer::displayMapEditorPanel();
+		//MapContainer::displayMapEditorPanel();
 		if (MapContainer::Instance()->timerActive())
 		{
 			carGauge.display();
@@ -146,6 +147,14 @@ void Game::display()
 		menu.displayForeground();
 		Screen2D::Instance()->display();
 		menu.displayForegroundBeforeText();
+		Screen2D::pop_projection_matrix();
+	}
+	else if (gameState == Game::State::mapEditor)
+	{
+		displayWorld();
+
+		Screen2D::pushScreenCoordinateMatrix();
+		MapContainer::displayMapEditorPanel();
 		Screen2D::pop_projection_matrix();
 	}
 
@@ -209,10 +218,11 @@ void Game::keyboard(unsigned char key, int x, int y)
 			TextureManager::DeInit();
 			exit(0);
 		}
-		else if((gameState == State::race || gameState == State::freeRide) && MapContainer::Instance()->raceActive())
+		else if((gameState == State::race || gameState == State::freeRide) && MapContainer::Instance()->raceActive() || gameState == State::mapEditor)
 		{
 			menu.menuResponse.menuState = Menu::OK;
 			menu.setPause();
+			previousGameState = gameState;
 			gameState = State::pause;
 
 			PlayList::Instance()->unmute();
@@ -451,6 +461,64 @@ void Game::Update()
 			handleMenuResponse();
 		}
 	}
+	else if (gameState == State::mapEditor)
+	{
+		if (leftMouseButtonDown && rightMouseButtonDown)
+		{
+			orbit.rotate(-1);
+		}
+		else if (scrollUpMouse)
+		{
+			orbit.zoomIn();
+		}
+		else if (scrollDownMouse)
+		{
+			orbit.zoomOut();
+		}
+		else if (rightMouseButtonDown)
+		{
+			orbit.changeAlpha();
+			if (F1Pressed)
+				MapContainer::Instance()->removePoints();
+		}
+		else if (scrollMouseButtonDown)
+		{
+			orbit.rotate();
+		}
+		if (F2Pressed && F3Pressed)
+		{
+			MapContainer::Instance()->AIStop();
+		}
+
+		else if (leftMouseButtonDown)
+		{
+			if (F1Pressed)
+				orbit.activateMovingXY();
+		}
+
+		if (!F1Pressed && leftMouseButtonClicked)
+		{
+			if (1.0 - static_cast<float>(mouseYPos) / windowRealHeight > 0.9)
+				MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowRealWidth - 0.5) * windowRealWidth / windowRealHeight, 1.0 - static_cast<float>(mouseYPos) / windowRealHeight);
+			else
+				MapContainer::Instance()->useTool(orbit.getFlatCursor());
+		}
+
+		orbit.calculateFlatCursorPosition(windowRealWidth, windowRealHeight, mouseXPos, mouseYPos, angle);
+
+
+		scrollUpMouse = false;
+		scrollDownMouse = false;
+		orbit.deactivateMovingXY();
+
+		if (MapManager::Instance()->currentCameraView == -1 && !CameraManager::Instance()->updateSpecialCameraPathPosition())
+		{
+			MapManager::Instance()->currentCameraView = 1;
+			MapContainer::Instance()->introFinished();
+		}
+	}
+
+
 	//glutPostRedisplay();
 	PlayList::Instance()->update();
 }
@@ -575,7 +643,7 @@ void Game::handleMenuResponse()
 	}
 	else if (menu.menuResponse.menuState == Menu::Resume)
 	{
-		gameState = State::race;
+		gameState = previousGameState;
 
 		PlayList::Instance()->mute();
 	}
@@ -587,5 +655,11 @@ void Game::handleMenuResponse()
 		MapContainer::Instance()->raceTimer.setRaceFinished(true);
 
 		PlayList::Instance()->unmute();
+	}
+	else if (menu.menuResponse.menuState == Menu::StartMapEditor)
+	{
+		gameState = State::mapEditor;
+		MapContainer::Instance()->loadWorldIntoSections(MapManager::Instance()->mapObjects);
+		PlayList::Instance()->mute();
 	}
 }
