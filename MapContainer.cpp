@@ -233,7 +233,7 @@ long long MapContainer::shootRay(std::vector<std::pair<int, int>>& sectionsToDis
 
 void MapContainer::checkMiddleRay(vector2D& firstRay, long long firstRayCollisionId, vector2D& lastRay, long long lastRayCollisionId, std::vector<std::pair<int, int>>& sectionsToDisplay, Point& center)
 {
-	if (firstRayCollisionId > 0 && firstRayCollisionId == lastRayCollisionId || vector2D::angle(firstRay, lastRay) < PI / 720 || firstRayCollisionId < 0 && firstRayCollisionId == lastRayCollisionId && vector2D::angle(firstRay, lastRay) < PI / 18)
+	if (firstRayCollisionId > 0 && firstRayCollisionId == lastRayCollisionId || vector2D::angle(firstRay, lastRay) < PI / 72 || firstRayCollisionId < 0 && firstRayCollisionId == lastRayCollisionId && vector2D::angle(firstRay, lastRay) < PI / 18)
 		return;
 
 	auto middleRay = firstRay;
@@ -332,6 +332,26 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 	sort(sectionsToDisplay.begin(), sectionsToDisplay.end());
 	sectionsToDisplay.erase(unique(sectionsToDisplay.begin(), sectionsToDisplay.end()), sectionsToDisplay.end());
 
+	for (int q = sectionsToDisplay.size() - 1; q >= 0; --q)
+	{
+		int x = sectionsToDisplay[q].first;
+		int y = sectionsToDisplay[q].second;
+
+		sectionsToDisplay.push_back({ x + 1, y + 1 });
+		sectionsToDisplay.push_back({ x + 1, y + 0 });
+		sectionsToDisplay.push_back({ x + 1, y - 1 });
+		sectionsToDisplay.push_back({ x + 0, y + 1 });
+		sectionsToDisplay.push_back({ x + 0, y - 1 });
+		sectionsToDisplay.push_back({ x - 1, y + 1 });
+		sectionsToDisplay.push_back({ x - 1, y + 0 });
+		sectionsToDisplay.push_back({ x - 1, y - 1 });
+	}
+	
+	sort(sectionsToDisplay.begin(), sectionsToDisplay.end());
+	sectionsToDisplay.erase(unique(sectionsToDisplay.begin(), sectionsToDisplay.end()), sectionsToDisplay.end());
+
+	//std::cout << "section to display: " << sectionsToDisplay.size() << "                 \r";
+
 	for (auto& sectionToDisplay : sectionsToDisplay)
 	{
 		if(sectionToDisplay.first < 100 && sectionToDisplay.second < 100 &&
@@ -419,6 +439,8 @@ void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>&
 {
 	for (auto& mapObject : mapObjects)
 	{
+		bool broken = false;
+
 		bool highBuilding = false;
 		std::vector<std::pair<int, int>> sectionsXY;
 
@@ -426,7 +448,13 @@ void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>&
 		{
 			for (auto& point : polygon.points)
 			{
-				sectionsXY.push_back({ (point.x - minX) * 100 / deltaX, (point.y - minY) * 100 / deltaY });
+				int sectionX = (point.x - minX) * 100 / deltaX;
+				int sectionY = (point.y - minY) * 100 / deltaY;
+
+				if (sectionX >= 100 || sectionX < 0 || sectionY >= 100 || sectionY < 0)
+					broken = true;
+
+				sectionsXY.push_back({ sectionX, sectionY });
 
 				if (point.z > 25)
 				{
@@ -434,6 +462,9 @@ void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>&
 				}
 			}
 		}
+
+		if (broken)
+			continue;
 
 		if(highBuilding)
 			highBuildingSection.push_back(&mapObject);

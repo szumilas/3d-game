@@ -867,6 +867,13 @@ void Roof::generateRoof(float roofStartLevel, float roofAngle)
 		|| getId() == 101207269 || getId() == 284166260
 		|| getId() == 343661977 || getId() == 421145612
 		|| getId() == 432328667 || getId() == 432937763
+		|| getId() == 101195210 || getId() == 101202265
+		|| getId() == 94489280512 || getId() == 101202653
+		|| getId() == 101204132 || getId() == 483710219
+		|| getId() == 1442961 || getId() == 101125119
+		|| getId() == 101142254 || getId() == 101213315
+		|| getId() == 101191144 || getId() == 101215948
+		|| getId() == 101217387 || getId() == 707341509
 		)
 	{
 		generateFlatRoof();
