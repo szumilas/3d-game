@@ -1,6 +1,7 @@
 #include "GlobalStructures.h"
 
 #include <string>
+#include <sstream>
 
 std::vector<Color::ColorData> Color::colors{
 	{ ColorName::WHITE, 1.0f, 1.0f, 1.0f },
@@ -45,6 +46,23 @@ Color::Color(float red, float green, float blue) :
 Color Color::mixColor(Color& second)
 {
 	return Color((red + second.red) / 2, (green + second.green) / 2, (blue + second.blue) / 2);
+}
+
+std::string Color::getColorHex()
+{
+	std::string hexColor = "#";
+	std::stringstream ssr, ssg, ssb;
+
+	ssr << std::hex << static_cast<int>(red * 255 + 256);
+	hexColor += ssr.str().substr(1, 2);
+
+	ssg << std::hex << static_cast<int>(green * 255 + 256);
+	hexColor += ssg.str().substr(1, 2);
+
+	ssb << std::hex << static_cast<int>(blue * 255 + 256);
+	hexColor += ssb.str().substr(1, 2);
+
+	return hexColor;
 }
 
 Point::Point()

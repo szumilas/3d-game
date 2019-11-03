@@ -1052,6 +1052,7 @@ void MapContainer::AddBuilding(const Point& point)
 		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
 		newObject.refs.push_back(newNode.id);
 	}
+	newObject.refs.push_back(newObject.refs[0]);
 
 	extraObjects.push_back(std::make_unique<Building>(Building(newObject)));
 	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);

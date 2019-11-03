@@ -174,70 +174,70 @@ void Building::generateWalls()
 		}
 		else if (typeid(*this) == typeid(Building))
 		{
-			if (getId() % 10 == 0)
+			if (abs(getId()) % 10 == 0)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_00_empty;
 				smallWallTextureName = Textures::building_00_small;
 				bigWallTextureName = Textures::building_00_big;
 			}
-			else if (getId() % 10 == 1)
+			else if (abs(getId()) % 10 == 1)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_01_empty;
 				smallWallTextureName = Textures::building_01_small;
 				bigWallTextureName = Textures::building_01_big;
 			}
-			else if (getId() % 10 == 2)
+			else if (abs(getId()) % 10 == 2)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_02_empty;
 				smallWallTextureName = Textures::building_02_small;
 				bigWallTextureName = Textures::building_02_big;
 			}
-			else if (getId() % 10 == 3)
+			else if (abs(getId()) % 10 == 3)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_03_empty;
 				smallWallTextureName = Textures::building_03_small;
 				bigWallTextureName = Textures::building_03_big;
 			}
-			else if (getId() % 10 == 4)
+			else if (abs(getId()) % 10 == 4)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_04_empty;
 				smallWallTextureName = Textures::building_04_small;
 				bigWallTextureName = Textures::building_04_big;
 			}
-			else if (getId() % 10 == 5)
+			else if (abs(getId()) % 10 == 5)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_05_empty;
 				smallWallTextureName = Textures::building_05_small;
 				bigWallTextureName = Textures::building_05_big;
 			}
-			else if (getId() % 10 == 6)
+			else if (abs(getId()) % 10 == 6)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_06_empty;
 				smallWallTextureName = Textures::building_06_small;
 				bigWallTextureName = Textures::building_06_big;
 			}
-			else if (getId() % 10 == 7)
+			else if (abs(getId()) % 10 == 7)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_07_empty;
 				smallWallTextureName = Textures::building_07_small;
 				bigWallTextureName = Textures::building_07_big;
 			}
-			else if (getId() % 10 == 8)
+			else if (abs(getId()) % 10 == 8)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_05_empty;
 				smallWallTextureName = Textures::building_05_small;
 				bigWallTextureName = Textures::building_05_big;
 			}
-			else if (getId() % 10 == 9)
+			else if (abs(getId()) % 10 == 9)
 			{
 				genericWallTexture = true;
 				emptyWallTextureName = Textures::building_04_empty;
@@ -302,6 +302,16 @@ std::vector<std::pair<char*, char*>> Building::getObjectXMLTags()
 	};
 
 	return XMLTags;
+}
+std::vector<std::vector<std::pair<char*, std::string>>> Building::getObjectXMLExtraTags()
+{
+	std::vector<std::vector<std::pair<char*, std::string>>>XMLExtraTags = {
+		{ { "k", "building:colour" },{ "v", _color.getColorHex() } },
+		{ { "k", "height" },{ "v", std::to_string(_height) } },
+		{ { "k", "min_height" },{ "v", std::to_string(_min_height) } },
+	};
+
+	return XMLExtraTags;
 }
 
 void Building::recalculateFinalGeometry()

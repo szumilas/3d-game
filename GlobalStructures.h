@@ -23,6 +23,7 @@ public:
 	Color();
 	Color(ColorName colorName);
 	Color(float red, float green, float blue);
+	std::string getColorHex();
 
 	Color mixColor(Color& second);
 	

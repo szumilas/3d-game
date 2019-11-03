@@ -1309,6 +1309,7 @@ void MapManager::saveExtraObjects()
 			newWay->append_node(subnode);
 		}
 
+		//main tag
 		{
 			rapidxml::xml_node<>* subnode = extraObjects.allocate_node(rapidxml::node_type::node_element, "tag");
 			for (auto& attribute : extraObject->getObjectXMLTags())
@@ -1316,6 +1317,20 @@ void MapManager::saveExtraObjects()
 				subnode->append_attribute(extraObjects.allocate_attribute(attribute.first, attribute.second));
 			}
 			newWay->append_node(subnode);
+		}
+
+		//addtional tags
+		{
+			for (auto& tag : extraObject->getObjectXMLExtraTags())
+			{
+				rapidxml::xml_node<>* subnode = extraObjects.allocate_node(rapidxml::node_type::node_element, "tag");
+				for (auto& attribute : tag)
+				{
+					char* value = extraObjects.allocate_string(attribute.second.c_str());
+					subnode->append_attribute(extraObjects.allocate_attribute(attribute.first, value));
+				}
+				newWay->append_node(subnode);
+			}
 		}
 
 		extraObjects.first_node()->append_node(newWay);

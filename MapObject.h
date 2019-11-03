@@ -19,6 +19,7 @@ public:
 	virtual void calculateFinalGeometry();
 	void calculateBoundingCoordinates();
 	virtual std::vector<std::pair<char*, char*>> getObjectXMLTags() { return {}; };
+	virtual std::vector<std::vector<std::pair<char*, std::string>>> getObjectXMLExtraTags() { return {}; }
 	virtual void recalculateFinalGeometry() {}
 
 	void applyKnownValues();
