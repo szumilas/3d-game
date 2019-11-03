@@ -17,7 +17,9 @@ MapManager* MapManager::_instance;
 
 rapidxml::xml_document <> MapManager::document;
 rapidxml::xml_document <> MapManager::overlays;
+rapidxml::xml_document <> MapManager::extraObjects;
 std::unique_ptr<char[]> MapManager::overlayContent;
+std::unique_ptr<char[]> MapManager::extraOjectsContent;
 
 float MapManager::maxX = -10000000.0f;
 float MapManager::minX = 10000000.0f;
@@ -27,8 +29,11 @@ const double MapManager::longituteRatio = 69797.5460045862;
 const double MapManager::latitudeRatio = 111220.165038003;
 const double MapManager::minLat = 51.112663;
 const double MapManager::minLon = 17.056106;
+std::string MapManager::mapPath;
+long long MapManager::lastExtraObjectId;
 
 std::map<long long, node> MapManager::nodes;
+std::map<long long, node> MapManager::extraNodes;
 std::vector<std::unique_ptr<MapObject>> MapManager::mapObjects;
 std::vector<std::unique_ptr<MapObject>> MapManager::raceObjects;
 std::vector<std::unique_ptr<Object3D>> MapManager::polygonsObjects;
@@ -140,13 +145,13 @@ void MapManager::Init()
 
 	std::cout << "reading map...";
 #ifdef _DEBUG
-	//Instance()->readMap("trees2.osm");
+	Instance()->readMap("trees2.osm");
 	//Instance()->readMap("grunwaldWithRiver.osm");
-	Instance()->readMap("huge.osm");
+	//Instance()->readMap("huge.osm");
 #else
-	//Instance()->readMap("trees2.osm");
+	Instance()->readMap("trees2.osm");
 	//Instance()->readMap("grunwaldWithRiver.osm");
-	Instance()->readMap("huge.osm");
+	//Instance()->readMap("huge.osm");
 #endif
 	std::cout << "...finished\n";
 	//mapManager.readMap("singlebuilding.osm");
@@ -197,8 +202,26 @@ std::unique_ptr<char[]> MapManager::fileToCharReader(const char * fileName)
 	return fileContext;
 }
 
+void MapManager::rereadMap()
+{
+	readMap(mapPath.c_str());
+	MapContainer::Instance()->loadWorldIntoSections(MapManager::Instance()->mapObjects);
+}
+
 void MapManager::readMap(const char * fileName)
 {
+	mapPath = fileName;
+
+	mapObjects.clear();
+	document.clear();
+	overlays.clear();
+	extraObjects.clear();
+	nodes.clear();
+	maxX = -10000000.0f;
+	minX = 10000000.0f;
+	maxY = -10000000.0f;
+	minY = 10000000.0f;
+
 	auto fileContent = fileToCharReader(fileName);
 
 	try
@@ -223,6 +246,20 @@ void MapManager::readMap(const char * fileName)
 	{
 		//TODO: errors
 		std::cout << "ERROR while parsing overlays\n";
+		std::cout << '\a';
+		Sleep(2000);
+	}
+
+	extraOjectsContent = fileToCharReader("extraObjects.xml");
+
+	try
+	{
+		extraObjects.parse < 0 >(extraOjectsContent.get()); // (2)
+	}
+	catch (const rapidxml::parse_error & e)
+	{
+		//TODO: errors
+		std::cout << "ERROR while parsing extraObjects\n";
 		std::cout << '\a';
 		Sleep(2000);
 	}
@@ -252,114 +289,127 @@ void MapManager::saveOverlays()
 
 void MapManager::createNodesMap()
 {
-	rapidxml::xml_node <>* nodeCeo = document.first_node();
-	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+	std::vector<rapidxml::xml_node <>*> documents{ document.first_node(), extraObjects.first_node() };
+
+	long long lastExtraObjectId = 0;
+
+	for (auto& nodeCeo : documents)
 	{
-		if (!strcmp(manager->name(), "node"))
+		for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
 		{
-			node newNode;
-
-			for (rapidxml::xml_attribute <>* a = manager->first_attribute(); a; a = a->next_attribute())
+			if (!strcmp(manager->name(), "node"))
 			{
-				if (!strcmp(a->name(), "id"))
-				{
-					newNode.id = std::stoll(a->value());
-				}
-				else if (!strcmp(a->name(), "lat"))
-				{
-					newNode.lat = std::stod(a->value());
-				}
-				else if (!strcmp(a->name(), "lon"))
-				{
-					newNode.lon = std::stod(a->value());
-				}
-			}
+				node newNode;
 
-			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
-			{
-				std::string currentTag;
-				std::string currentTagValue;
-
-				if (!strcmp(a->name(), "tag"))
+				for (rapidxml::xml_attribute <>* a = manager->first_attribute(); a; a = a->next_attribute())
 				{
-					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					if (!strcmp(a->name(), "id"))
 					{
-						if (!strcmp(b->name(), "k")) //attribute name
-						{
-							if (acceptedTags.count(b->value()))
-							{
-								currentTag = b->value();
-							}
-						}
-						else if (!strcmp(b->name(), "v")) //attribute value
-						{
-							currentTagValue = b->value();
-						}
-						else
-						{
-							break;
-						}
+						newNode.id = std::stoll(a->value());
+						if (newNode.id < 0 && newNode.id < lastExtraObjectId)
+							lastExtraObjectId = newNode.id;
+					}
+					else if (!strcmp(a->name(), "lat"))
+					{
+						newNode.lat = std::stod(a->value());
+					}
+					else if (!strcmp(a->name(), "lon"))
+					{
+						newNode.lon = std::stod(a->value());
 					}
 				}
 
-				if (currentTag == "highway" && currentTagValue == "street_lamp")
+				for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
 				{
-					mapObjects.push_back(std::make_unique<StreetLamp>(newNode.id));
-				}
-				else if (currentTag == "natural" && currentTagValue == "tree")
-				{
-					mapObjects.push_back(std::make_unique<Tree>(newNode.id));
-				}
-			}
+					std::string currentTag;
+					std::string currentTagValue;
 
-			if (newNode.id && newNode.lat && newNode.lon)
-			{
-				nodes[newNode.id] = newNode;
+					if (!strcmp(a->name(), "tag"))
+					{
+						for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+						{
+							if (!strcmp(b->name(), "k")) //attribute name
+							{
+								if (acceptedTags.count(b->value()))
+								{
+									currentTag = b->value();
+								}
+							}
+							else if (!strcmp(b->name(), "v")) //attribute value
+							{
+								currentTagValue = b->value();
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+
+					if (currentTag == "highway" && currentTagValue == "street_lamp")
+					{
+						mapObjects.push_back(std::make_unique<StreetLamp>(newNode.id));
+					}
+					else if (currentTag == "natural" && currentTagValue == "tree")
+					{
+						mapObjects.push_back(std::make_unique<Tree>(newNode.id));
+					}
+				}
+
+				if (newNode.id && newNode.lat && newNode.lon)
+				{
+					nodes[newNode.id] = newNode;
+				}
+				//std::cout << std::endl;
 			}
-			//std::cout << std::endl;
 		}
 	}
 
+	MapManager::lastExtraObjectId = lastExtraObjectId - 1;
 }
 
 void MapManager::createMapObjectsArray()
 {
-	rapidxml::xml_node <>* nodeCeo = document.first_node();
-	for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
-	{
-		if (!strcmp(manager->name(), "way"))
-		{
-			MapObject mapObject(std::stoll(manager->first_attribute()->value()));
+	std::vector<rapidxml::xml_node <>*> documents{ document.first_node(), extraObjects.first_node() };
 
-			for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
+	for (auto& nodeCeo : documents)
+	{
+		for (rapidxml::xml_node <>* manager = nodeCeo->first_node(); manager; manager = manager->next_sibling()) // (3)
+		{
+			if (!strcmp(manager->name(), "way"))
 			{
-				if (!strcmp(a->name(), "nd"))
+				MapObject mapObject(std::stoll(manager->first_attribute()->value()));
+
+				for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
 				{
-					for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
+					if (!strcmp(a->name(), "nd"))
 					{
-						if (!strcmp(b->name(), "ref"))
+						for (rapidxml::xml_attribute <>* b = a->first_attribute(); b; b = b->next_attribute())
 						{
-							mapObject.refs.push_back(std::stoll(b->value()));
-							break;
+							if (!strcmp(b->name(), "ref"))
+							{
+								mapObject.refs.push_back(std::stoll(b->value()));
+								break;
+							}
 						}
 					}
+					else if (!strcmp(a->name(), "tag"))
+					{
+						applyObjectTag(mapObject, a);
+					}
 				}
-				else if (!strcmp(a->name(), "tag"))
+
+				applyOverlays(mapObject);
+
+				mapObject.applyKnownValues();
+
+				for (auto& check : objectDetector)
 				{
-					applyObjectTag(mapObject, a);
-				}
-			}
-
-			applyOverlays(mapObject);
-
-			mapObject.applyKnownValues();
-
-			for (auto& check : objectDetector)
-			{
-				if ((Instance()->*check.first)(mapObject))
-				{
-					(Instance()->*check.second)(mapObject);
-					break;
+					if ((Instance()->*check.first)(mapObject))
+					{
+						(Instance()->*check.second)(mapObject);
+						break;
+					}
 				}
 			}
 		}
@@ -600,6 +650,21 @@ void MapManager::calculateNodesPositions()
 
 		q++;
 	}
+}
+
+long long MapManager::addNewExtraNode(Point& p)
+{
+	node newExtraNode;
+	newExtraNode.id = lastExtraObjectId;
+	newExtraNode.posX = p.x;
+	newExtraNode.posY = p.y;
+	newExtraNode.lon = p.x / longituteRatio + minLon;
+	newExtraNode.lat = p.y / latitudeRatio + minLat;
+
+	extraNodes.insert({ newExtraNode.id, newExtraNode });
+
+	lastExtraObjectId--;
+	return newExtraNode.id;
 }
 
 void MapManager::removeSkippedObjects()
@@ -1173,4 +1238,54 @@ void MapManager::loadPolygonsFromFile()
 	} while (file >> objectPolygon.idTexture);
 
 	file.close();
+}
+
+void MapManager::saveExtraObjects()
+{
+	for (auto& extraNode : extraNodes)
+	{
+		MapObject* nodeObject = nullptr;
+
+		for (auto& extraObject : MapContainer::Instance()->extraObjects)
+		{
+			if (extraNode.first == extraObject->getId())
+			{
+				nodeObject = extraObject.get();
+				break;
+			}
+		}
+
+		auto newNode = extraObjects.allocate_node(rapidxml::node_type::node_element, "node");
+		char* id = extraObjects.allocate_string(std::to_string(extraNode.first).c_str());
+		newNode->append_attribute(extraObjects.allocate_attribute("id", id));
+		char* lat = extraObjects.allocate_string(std::to_string(extraNode.second.lat).c_str());
+		newNode->append_attribute(extraObjects.allocate_attribute("lat", lat));
+		char* lon = extraObjects.allocate_string(std::to_string(extraNode.second.lon).c_str());
+		newNode->append_attribute(extraObjects.allocate_attribute("lon", lon));
+
+		if (nodeObject != nullptr)
+		{
+			rapidxml::xml_node<>* subnode = extraObjects.allocate_node(rapidxml::node_type::node_element, "tag");
+			subnode->append_attribute(extraObjects.allocate_attribute("k", "natural"));
+			subnode->append_attribute(extraObjects.allocate_attribute("v", "tree"));
+
+			newNode->append_node(subnode);
+		}
+
+		extraObjects.first_node()->append_node(newNode);
+
+	}
+
+	std::filebuf fb;
+	fb.open("extraObjects.xml", std::ios::out);
+	std::ostream os(&fb);
+	rapidxml::print(os, extraObjects);
+	fb.close();
+
+	extraNodes.clear();
+	MapContainer::Instance()->extraObjects.clear();
+
+
+
+	rereadMap();
 }

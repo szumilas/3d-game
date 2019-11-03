@@ -12,6 +12,8 @@
 
 class MapContainer
 {
+	friend class MapManager;
+
 public:
 
 	enum Tools
@@ -48,6 +50,9 @@ public:
 		e_ConvertCameraSplineToCarZero,
 		e_PlayCameraSplineAroundCarZero,
 		e_SaveCameraSpline,
+		e_SaveNewObject,
+		e_AddTree,
+		e_AddStreetLamp,
 	};
 
 
@@ -108,6 +113,10 @@ public:
 	void ConvertCameraSplineToCarZero(const Point& point = Point());
 	void PlayCameraSplineAroundCarZero(const Point& point = Point());
 	void SaveCameraSpline(const Point& point = Point());
+	void SaveNewObject(const Point& point = Point());
+	void AddTree(const Point& point = Point());
+	void AddStreetLamp(const Point& point = Point());
+
 
 	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);
 	void setFreeRide(CarBrand selectedCar, Point position);
@@ -185,6 +194,7 @@ private:
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;
 	static std::vector<std::unique_ptr<MapObject>*> highBuildingSection;
 	static std::unique_ptr<MapObject>* background;
+	static std::vector<std::unique_ptr<MapObject>> extraObjects;
 
 
 	std::vector<Object3D> myMap;

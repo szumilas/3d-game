@@ -48,6 +48,7 @@ public:
 	~MapManager();
 
 	static void readMap(const char * fileName);
+	static void rereadMap();
 	static void calculateNodesPositions();
 	static void removeSkippedObjects();
 	void selectObject(float X, float Y, bool(MapManager::*objectChecker)(MapObject&) = nullptr);
@@ -60,6 +61,8 @@ public:
 	void generatePolygonsFile();
 	void loadPolygonsFromFile();
 	Point ConvertCoordinatesToLocalWorld(Point p);
+	static long long addNewExtraNode(Point& p);
+	static void saveExtraObjects();
 
 private:
 	static std::unique_ptr<char[]> fileToCharReader(const char * fileName);
@@ -125,8 +128,10 @@ private:
 
 	static rapidxml::xml_document <> document;
 	static rapidxml::xml_document <> overlays;
+	static rapidxml::xml_document <> extraObjects;
 
 	static std::unique_ptr<char[]> overlayContent;
+	static std::unique_ptr<char[]> extraOjectsContent;
 
 	static std::unordered_set<std::string> skippedTags;
 	static std::unordered_set<std::string> temporarySkippedTags;
@@ -135,9 +140,14 @@ private:
 	static std::map<std::string, std::string MapObject::*> tagPtrs;
 	static std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapObject&)>> objectDetector;
 
+	static std::string mapPath;
+
+	static long long lastExtraObjectId;
+
 public:
 
 	static std::map<long long, node> nodes;
+	static std::map<long long, node> extraNodes;
 	static std::vector<std::unique_ptr<MapObject>> mapObjects;
 	static std::vector<std::unique_ptr<MapObject>> raceObjects;
 	static std::vector<std::unique_ptr<Object3D>> polygonsObjects;

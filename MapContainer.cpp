@@ -10,6 +10,7 @@ std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer:
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapCollidableObjectSections;
 std::vector<std::unique_ptr<MapObject>*> MapContainer::highBuildingSection;
 std::unique_ptr<MapObject>* MapContainer::background;
+std::vector<std::unique_ptr<MapObject>> MapContainer::extraObjects;
 float MapContainer::deltaX;
 float MapContainer::deltaY;
 float MapContainer::maxX;
@@ -87,6 +88,14 @@ std::vector<std::vector<int>> MapContainer::createTools()
 	};
 	tools.push_back(CameraTools);
 
+	std::vector<int> NewObjectTools{
+		MapContainer::e_SaveNewObject,
+		MapContainer::e_AddTree,
+		MapContainer::e_AddStreetLamp,
+	};
+	tools.push_back(NewObjectTools);
+	tools.push_back({});
+
 	return tools;
 }
 
@@ -126,6 +135,9 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_ConvertCameraSplineToCarZero, &MapContainer::ConvertCameraSplineToCarZero },
 		{ e_PlayCameraSplineAroundCarZero, &MapContainer::PlayCameraSplineAroundCarZero },
 		{ e_SaveCameraSpline, &MapContainer::SaveCameraSpline },
+		{ e_SaveNewObject, &MapContainer::SaveNewObject },
+		{ e_AddTree, &MapContainer::AddTree },
+		{ e_AddStreetLamp, &MapContainer::AddStreetLamp },
 
 	};
 
@@ -976,6 +988,26 @@ void MapContainer::SaveCameraSpline(const Point& point)
 	}
 }
 
+void MapContainer::SaveNewObject(const Point& point)
+{
+	MapManager::Instance()->saveExtraObjects();
+}
+
+void MapContainer::AddTree(const Point& point)
+{
+	for (auto& point : currentPath)
+	{
+		auto newId = MapManager::Instance()->addNewExtraNode(point.center);
+		extraObjects.push_back(std::make_unique<Tree>(Tree(newId)));
+		extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
+	}
+}
+
+void MapContainer::AddStreetLamp(const Point& point)
+{
+
+}
+
 void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)
 {
 	if (!cars.empty())
@@ -1209,6 +1241,12 @@ void MapContainer::displayAIPoints()
 void MapContainer::displayMapEditorPoints()
 {
 	//return;
+	for (auto& extraObject : extraObjects)
+	{
+		extraObject->display();
+		extraObject->alreadyPrinted = false;
+	}
+
 	displayAIPoints();
 	displayCurrentPath();
 	displayCurrentSpline();
