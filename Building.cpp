@@ -303,3 +303,12 @@ std::vector<std::pair<char*, char*>> Building::getObjectXMLTags()
 
 	return XMLTags;
 }
+
+void Building::recalculateFinalGeometry()
+{
+	walls.clear();
+	generateWalls();
+
+	polygons.clear();
+	calculateFinalGeometry();
+}

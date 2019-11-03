@@ -40,6 +40,7 @@
 
 class MapManager
 {
+	friend class MapContainer;
 
 public:
 

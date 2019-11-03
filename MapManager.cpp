@@ -1288,16 +1288,16 @@ void MapManager::saveExtraObjects()
 			MapContainer::Instance()->extraObjects.erase(MapContainer::Instance()->extraObjects.begin() + nodeObjectPosition);
 		}
 
-		extraObjects.last_node()->append_node(newNode);
+		extraObjects.first_node()->append_node(newNode);
 	}
 
 	//objects
 	for (auto& extraObject : MapContainer::Instance()->extraObjects)
 	{
 
-		auto newNode = extraObjects.allocate_node(rapidxml::node_type::node_element, "way");
-		char* id = extraObjects.allocate_string(std::to_string(lastExtraObjectId).c_str());
-		newNode->append_attribute(extraObjects.allocate_attribute("id", id));
+		auto newWay = extraObjects.allocate_node(rapidxml::node_type::node_element, "way");
+		char* id = extraObjects.allocate_string(std::to_string(extraObject->getId()).c_str());
+		newWay->append_attribute(extraObjects.allocate_attribute("id", id));
 
 		for (auto& ref : extraObject.get()->refs)
 		{
@@ -1306,7 +1306,7 @@ void MapManager::saveExtraObjects()
 			char* refValue = extraObjects.allocate_string(std::to_string(ref).c_str());
 			subnode->append_attribute(extraObjects.allocate_attribute("ref", refValue));
 
-			newNode->append_node(subnode);
+			newWay->append_node(subnode);
 		}
 
 		{
@@ -1315,12 +1315,10 @@ void MapManager::saveExtraObjects()
 			{
 				subnode->append_attribute(extraObjects.allocate_attribute(attribute.first, attribute.second));
 			}
-			newNode->append_node(subnode);
+			newWay->append_node(subnode);
 		}
 
-		extraObjects.last_node()->append_node(newNode);
-
-		lastExtraObjectId--;
+		extraObjects.first_node()->append_node(newWay);
 	}
 
 

@@ -95,6 +95,22 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_AddBuilding,
 	};
 	tools.push_back(NewObjectTools);
+
+	std::vector<int> NewObjectSettingsTools{
+		MapContainer::e_NewObjectAddHeight,
+		MapContainer::e_NewObjectReduceHeight,
+		MapContainer::e_NewObjectAddMinHeight,
+		MapContainer::e_NewObjectReduceMinHeight,
+		MapContainer::e_NewObjectAddRed,
+		MapContainer::e_NewObjectReduceRed,
+		MapContainer::e_NewObjectAddGreen,
+		MapContainer::e_NewObjectReduceGreen,
+		MapContainer::e_NewObjectAddBlue,
+		MapContainer::e_NewObjectReduceBlue,
+	};
+	tools.push_back(NewObjectSettingsTools);
+	
+
 	tools.push_back({});
 
 	return tools;
@@ -140,6 +156,17 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_AddTree, &MapContainer::AddTree },
 		{ e_AddStreetLamp, &MapContainer::AddStreetLamp },
 		{ e_AddBuilding, &MapContainer::AddBuilding },
+
+		{ e_NewObjectAddHeight, &MapContainer::NewObjectAddHeight },
+		{ e_NewObjectReduceHeight, &MapContainer::NewObjectReduceHeight },
+		{ e_NewObjectAddMinHeight, &MapContainer::NewObjectAddMinHeight },
+		{ e_NewObjectReduceMinHeight, &MapContainer::NewObjectReduceMinHeight },
+		{ e_NewObjectAddRed, &MapContainer::NewObjectAddRed },
+		{ e_NewObjectReduceRed, &MapContainer::NewObjectReduceRed },
+		{ e_NewObjectAddGreen, &MapContainer::NewObjectAddGreen },
+		{ e_NewObjectReduceGreen, &MapContainer::NewObjectReduceGreen },
+		{ e_NewObjectAddBlue, &MapContainer::NewObjectAddBlue },
+		{ e_NewObjectReduceBlue, &MapContainer::NewObjectReduceBlue },
 
 	};
 
@@ -1017,7 +1044,9 @@ void MapContainer::AddStreetLamp(const Point& point)
 
 void MapContainer::AddBuilding(const Point& point)
 {
-	MapObject newObject(-1);
+	MapObject newObject(MapManager::Instance()->lastExtraObjectId);
+	MapManager::Instance()->lastExtraObjectId--;
+
 	for (auto& point : currentPath)
 	{
 		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
@@ -1028,6 +1057,79 @@ void MapContainer::AddBuilding(const Point& point)
 	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	extraObjects.back()->calculateFinalGeometry();
 }
+
+void MapContainer::NewObjectAddHeight(const Point& point)
+{
+	extraObjects.back()->_height += 1;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectReduceHeight(const Point& point)
+{
+	extraObjects.back()->_height -= 1;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectAddMinHeight(const Point& point)
+{
+	extraObjects.back()->_min_height += 1;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectReduceMinHeight(const Point& point)
+{
+	extraObjects.back()->_min_height -= 1;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectAddRed(const Point& point)
+{
+	extraObjects.back()->_color.red += 0.1;
+	if (extraObjects.back()->_color.red > 1)
+		extraObjects.back()->_color.red = 1;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectReduceRed(const Point& point)
+{
+	extraObjects.back()->_color.red -= 0.1;
+	if (extraObjects.back()->_color.red < 0)
+		extraObjects.back()->_color.red = 0;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectAddGreen(const Point& point)
+{
+	extraObjects.back()->_color.green += 0.1;
+	if (extraObjects.back()->_color.green > 1)
+		extraObjects.back()->_color.green = 1;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectReduceGreen(const Point& point)
+{
+	extraObjects.back()->_color.green -= 0.1;
+	if (extraObjects.back()->_color.green < 0)
+		extraObjects.back()->_color.green = 0;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectAddBlue(const Point& point)
+{
+	extraObjects.back()->_color.blue += 0.1;
+	if (extraObjects.back()->_color.blue > 1)
+		extraObjects.back()->_color.blue = 1;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectReduceBlue(const Point& point)
+{
+	extraObjects.back()->_color.blue -= 0.1;
+	if (extraObjects.back()->_color.blue < 0)
+		extraObjects.back()->_color.blue = 0;
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
 
 void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)
 {

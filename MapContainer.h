@@ -54,6 +54,16 @@ public:
 		e_AddTree,
 		e_AddStreetLamp,
 		e_AddBuilding,
+		e_NewObjectAddHeight,
+		e_NewObjectReduceHeight,
+		e_NewObjectAddMinHeight,
+		e_NewObjectReduceMinHeight,
+		e_NewObjectAddRed,
+		e_NewObjectReduceRed,
+		e_NewObjectAddGreen,
+		e_NewObjectReduceGreen,
+		e_NewObjectAddBlue,
+		e_NewObjectReduceBlue,
 	};
 
 
@@ -118,6 +128,16 @@ public:
 	void AddTree(const Point& point = Point());
 	void AddStreetLamp(const Point& point = Point());
 	void AddBuilding(const Point& point = Point());
+	void NewObjectAddHeight(const Point& point = Point());
+	void NewObjectReduceHeight(const Point& point = Point());
+	void NewObjectAddMinHeight(const Point& point = Point());
+	void NewObjectReduceMinHeight(const Point& point = Point());
+	void NewObjectAddRed(const Point& point = Point());
+	void NewObjectReduceRed(const Point& point = Point());
+	void NewObjectAddGreen(const Point& point = Point());
+	void NewObjectReduceGreen(const Point& point = Point());
+	void NewObjectAddBlue(const Point& point = Point());
+	void NewObjectReduceBlue(const Point& point = Point());
 
 
 	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);
