@@ -1,33 +1,17 @@
 #include "StreetLamp.h"
 
-StreetLamp::StreetLamp(long long ref)
+StreetLamp::StreetLamp(long long ref) : MapObject(ref)
 {
 	refs.push_back(ref);
 	_height = 4.0f;
-}
-
-void StreetLamp::display()
-{
-	glColor3f(0.6f, 0.6f, 0.6f);
-
-	for (size_t q = 0; q < points.size() - 1; q++)
-	{
-		Point& point = points[q];
-		Point& nextPoint = points[q + 1];
-
-		glBegin(GL_POLYGON);
-		glVertex3f(point.x, point.y, _min_height);
-		glVertex3f(nextPoint.x, nextPoint.y, _min_height);
-		glVertex3f(nextPoint.x, nextPoint.y, _height);
-		glVertex3f(point.x, point.y, _height);
-		glEnd();
-	}
+	size = 0.15;
+	_color = Color(ColorName::BLACK);
+	collidable = Collidable::point;
 }
 
 void StreetLamp::calculateXYfromRef(const std::map<long long, node> &nodes)
 {
 	Point newPoint;
-	float size = 0.15;
 
 	newPoint.x = nodes.at(refs[0]).posX + size / 2;
 	newPoint.y = nodes.at(refs[0]).posY + size / 2;
@@ -45,8 +29,32 @@ void StreetLamp::calculateXYfromRef(const std::map<long long, node> &nodes)
 	newPoint.y = nodes.at(refs[0]).posY + size / 2;
 	points.push_back(newPoint);
 
-	newPoint.x = nodes.at(refs[0]).posX + size / 2;
-	newPoint.y = nodes.at(refs[0]).posY + size / 2;
-	points.push_back(newPoint);
+	position = newPoint;
 
+	std::vector<std::pair<Point, Point>> lampPoints;
+	lampPoints.push_back({ points[0], points[1] });
+	lampPoints.push_back({ points[1], points[2] });
+	lampPoints.push_back({ points[2], points[3] });
+	lampPoints.push_back({ points[3], points[0] });
+
+	for (auto& line : lampPoints)
+	{
+		Polygon polygon;
+		polygon.points.push_back({ line.first.x, line.first.y, 0 });
+		polygon.points.push_back({ line.second.x, line.second.y, 0 });
+		polygon.points.push_back({ line.second.x, line.second.y, _height });
+		polygon.points.push_back({ line.first.x, line.first.y, _height });
+
+		polygon.texturePoints.push_back({ 0, 0 });
+		polygon.texturePoints.push_back({ 1, 0 });
+		polygon.texturePoints.push_back({ 1, 1 });
+		polygon.texturePoints.push_back({ 0, 1 });
+
+		polygon.noOfPoints = polygon.points.size();
+		polygon.color = _color;
+
+		polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(Textures::no_texture)].idTexture;
+
+		polygons.push_back(polygon);
+	}
 }
