@@ -293,3 +293,13 @@ void Building::applyGenericTextures()
 	}
 
 }
+
+std::vector<std::pair<char*, char*>> Building::getObjectXMLTags()
+{
+	static std::vector<std::pair<char*, char*>>XMLTags = {
+		{ "k", "building" },
+		{ "v", "yes" }
+	};
+
+	return XMLTags;
+}

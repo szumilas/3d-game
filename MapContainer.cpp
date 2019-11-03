@@ -92,6 +92,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_SaveNewObject,
 		MapContainer::e_AddTree,
 		MapContainer::e_AddStreetLamp,
+		MapContainer::e_AddBuilding,
 	};
 	tools.push_back(NewObjectTools);
 	tools.push_back({});
@@ -138,6 +139,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_SaveNewObject, &MapContainer::SaveNewObject },
 		{ e_AddTree, &MapContainer::AddTree },
 		{ e_AddStreetLamp, &MapContainer::AddStreetLamp },
+		{ e_AddBuilding, &MapContainer::AddBuilding },
 
 	};
 
@@ -997,8 +999,8 @@ void MapContainer::AddTree(const Point& point)
 {
 	for (auto& point : currentPath)
 	{
-		auto newId = MapManager::Instance()->addNewExtraNode(point.center);
-		extraObjects.push_back(std::make_unique<Tree>(Tree(newId)));
+		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
+		extraObjects.push_back(std::make_unique<Tree>(Tree(newNode.id)));
 		extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	}
 }
@@ -1007,10 +1009,24 @@ void MapContainer::AddStreetLamp(const Point& point)
 {
 	for (auto& point : currentPath)
 	{
-		auto newId = MapManager::Instance()->addNewExtraNode(point.center);
-		extraObjects.push_back(std::make_unique<StreetLamp>(StreetLamp(newId)));
+		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
+		extraObjects.push_back(std::make_unique<StreetLamp>(StreetLamp(newNode.id)));
 		extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	}
+}
+
+void MapContainer::AddBuilding(const Point& point)
+{
+	MapObject newObject(-1);
+	for (auto& point : currentPath)
+	{
+		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
+		newObject.refs.push_back(newNode.id);
+	}
+
+	extraObjects.push_back(std::make_unique<Building>(Building(newObject)));
+	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
+	extraObjects.back()->calculateFinalGeometry();
 }
 
 void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)

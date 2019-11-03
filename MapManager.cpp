@@ -30,6 +30,7 @@ const double MapManager::latitudeRatio = 111220.165038003;
 const double MapManager::minLat = 51.112663;
 const double MapManager::minLon = 17.056106;
 std::string MapManager::mapPath;
+long long MapManager::lastExtraNodeId;
 long long MapManager::lastExtraObjectId;
 
 std::map<long long, node> MapManager::nodes;
@@ -291,7 +292,7 @@ void MapManager::createNodesMap()
 {
 	std::vector<rapidxml::xml_node <>*> documents{ document.first_node(), extraObjects.first_node() };
 
-	long long lastExtraObjectId = 0;
+	long long lastExtraNodeId = 0;
 
 	for (auto& nodeCeo : documents)
 	{
@@ -306,8 +307,8 @@ void MapManager::createNodesMap()
 					if (!strcmp(a->name(), "id"))
 					{
 						newNode.id = std::stoll(a->value());
-						if (newNode.id < 0 && newNode.id < lastExtraObjectId)
-							lastExtraObjectId = newNode.id;
+						if (newNode.id < 0 && newNode.id < lastExtraNodeId)
+							lastExtraNodeId = newNode.id;
 					}
 					else if (!strcmp(a->name(), "lat"))
 					{
@@ -365,12 +366,14 @@ void MapManager::createNodesMap()
 		}
 	}
 
-	MapManager::lastExtraObjectId = lastExtraObjectId - 1;
+	MapManager::lastExtraNodeId = lastExtraNodeId - 1;
 }
 
 void MapManager::createMapObjectsArray()
 {
 	std::vector<rapidxml::xml_node <>*> documents{ document.first_node(), extraObjects.first_node() };
+
+	long long lastExtraObjectId = -100000;
 
 	for (auto& nodeCeo : documents)
 	{
@@ -378,7 +381,11 @@ void MapManager::createMapObjectsArray()
 		{
 			if (!strcmp(manager->name(), "way"))
 			{
-				MapObject mapObject(std::stoll(manager->first_attribute()->value()));
+				long long id = std::stoll(manager->first_attribute()->value());
+				MapObject mapObject(id);
+
+				if (id < 0 && id < lastExtraObjectId)
+					lastExtraObjectId = id;
 
 				for (rapidxml::xml_node <>* a = manager->first_node(); a; a = a->next_sibling())
 				{
@@ -414,6 +421,8 @@ void MapManager::createMapObjectsArray()
 			}
 		}
 	}
+
+	MapManager::lastExtraObjectId = lastExtraObjectId - 1;
 }
 
 void MapManager::addRelationalMapObjectsToArray()
@@ -652,10 +661,10 @@ void MapManager::calculateNodesPositions()
 	}
 }
 
-long long MapManager::addNewExtraNode(Point& p)
+node MapManager::addNewExtraNode(Point& p)
 {
 	node newExtraNode;
-	newExtraNode.id = lastExtraObjectId;
+	newExtraNode.id = lastExtraNodeId;
 	newExtraNode.posX = p.x;
 	newExtraNode.posY = p.y;
 	newExtraNode.lon = p.x / longituteRatio + minLon;
@@ -663,8 +672,8 @@ long long MapManager::addNewExtraNode(Point& p)
 
 	extraNodes.insert({ newExtraNode.id, newExtraNode });
 
-	lastExtraObjectId--;
-	return newExtraNode.id;
+	lastExtraNodeId--;
+	return newExtraNode;
 }
 
 void MapManager::removeSkippedObjects()
@@ -1242,8 +1251,10 @@ void MapManager::loadPolygonsFromFile()
 
 void MapManager::saveExtraObjects()
 {
+	//nodes
 	for (auto& extraNode : extraNodes)
 	{
+		int nodeObjectPosition = 0;
 		MapObject* nodeObject = nullptr;
 
 		for (auto& extraObject : MapContainer::Instance()->extraObjects)
@@ -1253,6 +1264,7 @@ void MapManager::saveExtraObjects()
 				nodeObject = extraObject.get();
 				break;
 			}
+			nodeObjectPosition++;
 		}
 
 		auto newNode = extraObjects.allocate_node(rapidxml::node_type::node_element, "node");
@@ -1273,12 +1285,46 @@ void MapManager::saveExtraObjects()
 			}
 
 			newNode->append_node(subnode);
+			MapContainer::Instance()->extraObjects.erase(MapContainer::Instance()->extraObjects.begin() + nodeObjectPosition);
+		}
+
+		extraObjects.last_node()->append_node(newNode);
+	}
+
+	//objects
+	for (auto& extraObject : MapContainer::Instance()->extraObjects)
+	{
+
+		auto newNode = extraObjects.allocate_node(rapidxml::node_type::node_element, "way");
+		char* id = extraObjects.allocate_string(std::to_string(lastExtraObjectId).c_str());
+		newNode->append_attribute(extraObjects.allocate_attribute("id", id));
+
+		for (auto& ref : extraObject.get()->refs)
+		{
+			rapidxml::xml_node<>* subnode = extraObjects.allocate_node(rapidxml::node_type::node_element, "nd");
+
+			char* refValue = extraObjects.allocate_string(std::to_string(ref).c_str());
+			subnode->append_attribute(extraObjects.allocate_attribute("ref", refValue));
+
+			newNode->append_node(subnode);
+		}
+
+		{
+			rapidxml::xml_node<>* subnode = extraObjects.allocate_node(rapidxml::node_type::node_element, "tag");
+			for (auto& attribute : extraObject->getObjectXMLTags())
+			{
+				subnode->append_attribute(extraObjects.allocate_attribute(attribute.first, attribute.second));
+			}
+			newNode->append_node(subnode);
 		}
 
 		extraObjects.last_node()->append_node(newNode);
 
+		lastExtraObjectId--;
 	}
 
+
+	//saving
 	std::filebuf fb;
 	fb.open("extraObjects.xml", std::ios::out);
 	std::ostream os(&fb);

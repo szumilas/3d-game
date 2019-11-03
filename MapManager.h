@@ -61,7 +61,7 @@ public:
 	void generatePolygonsFile();
 	void loadPolygonsFromFile();
 	Point ConvertCoordinatesToLocalWorld(Point p);
-	static long long addNewExtraNode(Point& p);
+	static node addNewExtraNode(Point& p);
 	static void saveExtraObjects();
 
 private:
@@ -142,6 +142,7 @@ private:
 
 	static std::string mapPath;
 
+	static long long lastExtraNodeId;
 	static long long lastExtraObjectId;
 
 public:

@@ -53,6 +53,7 @@ public:
 		e_SaveNewObject,
 		e_AddTree,
 		e_AddStreetLamp,
+		e_AddBuilding,
 	};
 
 
@@ -116,6 +117,7 @@ public:
 	void SaveNewObject(const Point& point = Point());
 	void AddTree(const Point& point = Point());
 	void AddStreetLamp(const Point& point = Point());
+	void AddBuilding(const Point& point = Point());
 
 
 	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);

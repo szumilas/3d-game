@@ -10,6 +10,7 @@ public:
 
 	//void display();
 	void calculateFinalGeometry();
+	std::vector<std::pair<char*, char*>> getObjectXMLTags();
 
 private:
 
