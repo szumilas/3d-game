@@ -58,3 +58,13 @@ void StreetLamp::calculateXYfromRef(const std::map<long long, node> &nodes)
 		polygons.push_back(polygon);
 	}
 }
+
+std::vector<std::pair<char*, char*>> StreetLamp::getObjectXMLTags()
+{
+	static std::vector<std::pair<char*, char*>>XMLTags = {
+		{ "k", "highway" },
+		{ "v", "street_lamp" }
+	};
+
+	return XMLTags;
+}

@@ -18,6 +18,7 @@ public:
 	virtual void calculateXYfromPoints(const std::vector<Point>& points);
 	virtual void calculateFinalGeometry();
 	void calculateBoundingCoordinates();
+	virtual std::vector<std::pair<char*, char*>> getObjectXMLTags() { return {}; };
 
 	void applyKnownValues();
 

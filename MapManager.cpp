@@ -1266,13 +1266,16 @@ void MapManager::saveExtraObjects()
 		if (nodeObject != nullptr)
 		{
 			rapidxml::xml_node<>* subnode = extraObjects.allocate_node(rapidxml::node_type::node_element, "tag");
-			subnode->append_attribute(extraObjects.allocate_attribute("k", "natural"));
-			subnode->append_attribute(extraObjects.allocate_attribute("v", "tree"));
+
+			for (auto& attribute : nodeObject->getObjectXMLTags())
+			{
+				subnode->append_attribute(extraObjects.allocate_attribute(attribute.first, attribute.second));
+			}
 
 			newNode->append_node(subnode);
 		}
 
-		extraObjects.first_node()->append_node(newNode);
+		extraObjects.last_node()->append_node(newNode);
 
 	}
 

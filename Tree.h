@@ -11,6 +11,7 @@ public:
 
 	//void display();
 	void calculateXYfromRef(const std::map<long long, node> &nodes);
+	std::vector<std::pair<char*, char*>> getObjectXMLTags();
 
 private:
 

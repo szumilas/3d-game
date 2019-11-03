@@ -1005,7 +1005,12 @@ void MapContainer::AddTree(const Point& point)
 
 void MapContainer::AddStreetLamp(const Point& point)
 {
-
+	for (auto& point : currentPath)
+	{
+		auto newId = MapManager::Instance()->addNewExtraNode(point.center);
+		extraObjects.push_back(std::make_unique<StreetLamp>(StreetLamp(newId)));
+		extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
+	}
 }
 
 void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)

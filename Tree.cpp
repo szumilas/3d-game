@@ -57,3 +57,13 @@ void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 		polygons.push_back(polygon);
 	}
 }
+
+std::vector<std::pair<char*, char*>>Tree::getObjectXMLTags()
+{
+	static std::vector<std::pair<char*, char*>>XMLTags = {
+		{ "k", "natural" },
+		{ "v", "tree" }
+	};
+
+	return XMLTags;
+}
