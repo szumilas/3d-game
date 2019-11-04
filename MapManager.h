@@ -63,6 +63,7 @@ public:
 	void loadPolygonsFromFile();
 	Point ConvertCoordinatesToLocalWorld(Point p);
 	static node addNewExtraNode(Point& p);
+	static void removeExtraNode(long long ref);
 	static void saveExtraObjects();
 
 private:

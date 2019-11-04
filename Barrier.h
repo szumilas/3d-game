@@ -9,6 +9,9 @@ public:
 	Barrier(MapObject& mapObject);
 
 	void calculateFinalGeometry();
+	void recalculateFinalGeometry();
+	std::vector<std::pair<char*, char*>> getObjectXMLTags();
+	std::vector<std::vector<std::pair<char*, std::string>>> getObjectXMLExtraTags();
 	
 private:
 	Textures textureName;

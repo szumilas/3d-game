@@ -27,6 +27,10 @@ Barrier::Barrier(MapObject& mapObject) : MapObject(mapObject)
 		else if (barrier == "fence") { _height = 1.5f; }
 		else { _height = 1.1f; }
 	}
+	if (!_custom_texture.empty())
+	{
+		textureName = Textures::grunwaldzki_bridge;
+	}
 
 	collidable = Collidable::polygon;
 };
@@ -58,8 +62,8 @@ void Barrier::calculateFinalGeometry()
 			auto& nextPoint = pointsToDraw[q + 1];
 
 			Polygon polygon;
-			polygon.points.push_back({ point.x, point.y, 0 });
-			polygon.points.push_back({ nextPoint.x, nextPoint.y, 0 });
+			polygon.points.push_back({ point.x, point.y, _min_height });
+			polygon.points.push_back({ nextPoint.x, nextPoint.y, _min_height });
 			polygon.points.push_back({ nextPoint.x, nextPoint.y, _height });
 			polygon.points.push_back({ point.x, point.y, _height });
 
@@ -129,4 +133,31 @@ void Barrier::calculateFinalGeometry()
 			polygons.push_back(polygon);
 		}
 	}
+}
+
+std::vector<std::pair<char*, char*>> Barrier::getObjectXMLTags()
+{
+	static std::vector<std::pair<char*, char*>>XMLTags = {
+		{ "k", "barrier" },
+		{ "v", "_custom" }
+	};
+
+	return XMLTags;
+}
+std::vector<std::vector<std::pair<char*, std::string>>> Barrier::getObjectXMLExtraTags()
+{
+	std::vector<std::vector<std::pair<char*, std::string>>>XMLExtraTags = {
+		{ { "k", "width" },{ "v", std::to_string(_width) } },
+		{ { "k", "height" },{ "v", std::to_string(_height) } },
+		{ { "k", "min_height" },{ "v", std::to_string(_min_height) } },
+		{ { "k", "_custom_texture" },{ "v", _custom_texture } },
+	};
+
+	return XMLExtraTags;
+}
+
+void Barrier::recalculateFinalGeometry()
+{
+	polygons.clear();
+	calculateFinalGeometry();
 }

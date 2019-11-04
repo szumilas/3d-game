@@ -90,9 +90,11 @@ std::vector<std::vector<int>> MapContainer::createTools()
 
 	std::vector<int> NewObjectTools{
 		MapContainer::e_SaveNewObject,
+		MapContainer::e_DeleteLastNewObject,
 		MapContainer::e_AddTree,
 		MapContainer::e_AddStreetLamp,
 		MapContainer::e_AddBuilding,
+		MapContainer::e_AddBarrier,
 	};
 	tools.push_back(NewObjectTools);
 
@@ -153,9 +155,11 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_PlayCameraSplineAroundCarZero, &MapContainer::PlayCameraSplineAroundCarZero },
 		{ e_SaveCameraSpline, &MapContainer::SaveCameraSpline },
 		{ e_SaveNewObject, &MapContainer::SaveNewObject },
+		{ e_DeleteLastNewObject, &MapContainer::DeleteLastNewObject },
 		{ e_AddTree, &MapContainer::AddTree },
 		{ e_AddStreetLamp, &MapContainer::AddStreetLamp },
 		{ e_AddBuilding, &MapContainer::AddBuilding },
+		{ e_AddBarrier, &MapContainer::AddBarrier },
 
 		{ e_NewObjectAddHeight, &MapContainer::NewObjectAddHeight },
 		{ e_NewObjectReduceHeight, &MapContainer::NewObjectReduceHeight },
@@ -1022,6 +1026,16 @@ void MapContainer::SaveNewObject(const Point& point)
 	MapManager::Instance()->saveExtraObjects();
 }
 
+void MapContainer::DeleteLastNewObject(const Point& point)
+{
+	for (auto& ref : extraObjects.back().get()->refs)
+	{
+		MapManager::Instance()->removeExtraNode(ref);
+	}
+
+	extraObjects.pop_back();
+}
+
 void MapContainer::AddTree(const Point& point)
 {
 	for (auto& point : currentPath)
@@ -1055,6 +1069,23 @@ void MapContainer::AddBuilding(const Point& point)
 	newObject.refs.push_back(newObject.refs[0]);
 
 	extraObjects.push_back(std::make_unique<Building>(Building(newObject)));
+	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
+	extraObjects.back()->calculateFinalGeometry();
+}
+
+void MapContainer::AddBarrier(const Point& point)
+{
+	MapObject newObject(MapManager::Instance()->lastExtraObjectId);
+	MapManager::Instance()->lastExtraObjectId--;
+
+	for (auto& point : currentPath)
+	{
+		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
+		newObject.refs.push_back(newNode.id);
+	}
+
+	newObject._custom_texture = "a";
+	extraObjects.push_back(std::make_unique<Barrier>(Barrier(newObject)));
 	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	extraObjects.back()->calculateFinalGeometry();
 }

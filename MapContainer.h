@@ -51,9 +51,11 @@ public:
 		e_PlayCameraSplineAroundCarZero,
 		e_SaveCameraSpline,
 		e_SaveNewObject,
+		e_DeleteLastNewObject,
 		e_AddTree,
 		e_AddStreetLamp,
 		e_AddBuilding,
+		e_AddBarrier,
 		e_NewObjectAddHeight,
 		e_NewObjectReduceHeight,
 		e_NewObjectAddMinHeight,
@@ -125,9 +127,11 @@ public:
 	void PlayCameraSplineAroundCarZero(const Point& point = Point());
 	void SaveCameraSpline(const Point& point = Point());
 	void SaveNewObject(const Point& point = Point());
+	void DeleteLastNewObject(const Point& point = Point());
 	void AddTree(const Point& point = Point());
 	void AddStreetLamp(const Point& point = Point());
 	void AddBuilding(const Point& point = Point());
+	void AddBarrier(const Point& point = Point());
 	void NewObjectAddHeight(const Point& point = Point());
 	void NewObjectReduceHeight(const Point& point = Point());
 	void NewObjectAddMinHeight(const Point& point = Point());

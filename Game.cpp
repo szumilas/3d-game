@@ -478,8 +478,6 @@ void Game::Update()
 		else if (rightMouseButtonDown)
 		{
 			orbit.changeAlpha();
-			if (F1Pressed)
-				MapContainer::Instance()->removePoints();
 		}
 		else if (scrollMouseButtonDown)
 		{

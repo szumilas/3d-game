@@ -95,6 +95,7 @@ std::unordered_set<std::string> MapManager::acceptedTags{
 	"width",
 	"type",
 	"footway",
+	"_custom_texture",
 };
 
 std::map<std::string, long MapObject::*> MapManager::tagLongPtrs{
@@ -123,6 +124,7 @@ std::map<std::string, std::string MapObject::*> MapManager::tagPtrs{
 	{ "width", &MapObject::width },
 	{ "type", &MapObject::type },
 	{ "footway", &MapObject::footway },
+	{ "_custom_texture", &MapObject::_custom_texture },
 };
 
 void printAttributes(rapidxml::xml_node <>* node)
@@ -150,9 +152,9 @@ void MapManager::Init()
 	//Instance()->readMap("grunwaldWithRiver.osm");
 	//Instance()->readMap("huge.osm");
 #else
-	Instance()->readMap("trees2.osm");
+	//Instance()->readMap("trees2.osm");
 	//Instance()->readMap("grunwaldWithRiver.osm");
-	//Instance()->readMap("huge.osm");
+	Instance()->readMap("huge.osm");
 #endif
 	std::cout << "...finished\n";
 	//mapManager.readMap("singlebuilding.osm");
@@ -674,6 +676,18 @@ node MapManager::addNewExtraNode(Point& p)
 
 	lastExtraNodeId--;
 	return newExtraNode;
+}
+
+void MapManager::removeExtraNode(long long ref)
+{
+	for (auto it = extraNodes.begin(); it != extraNodes.end(); it++)
+	{
+		if (it->first == ref)
+		{
+			extraNodes.erase(it);
+			break;
+		}
+	}
 }
 
 void MapManager::removeSkippedObjects()

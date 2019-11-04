@@ -44,6 +44,7 @@ void MapObject::applyKnownValues()
 {
 	if (!height.empty()) { _height = std::stof(height); };
 	if (!min_height.empty()) { _min_height = std::stof(min_height); };
+	if (!width.empty()) { _width = std::stof(width); };
 	if (!colour.empty())
 	{
 		if (colour[0] == '#')

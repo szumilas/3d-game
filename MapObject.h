@@ -96,6 +96,7 @@ public:
 	std::string width;
 	std::string type;
 	std::string footway;
+	std::string _custom_texture;
 
 
 	float _height;
