@@ -1360,7 +1360,7 @@ void MapManager::saveExtraObjects()
 
 	extraNodes.clear();
 	MapContainer::Instance()->extraObjects.clear();
-
+	extraObjects.clear();
 
 
 	rereadMap();

@@ -29,7 +29,7 @@ Barrier::Barrier(MapObject& mapObject) : MapObject(mapObject)
 	}
 	if (!_custom_texture.empty())
 	{
-		textureName = Textures::grunwaldzki_bridge;
+		textureName = getCustomTexture(_custom_texture);
 	}
 
 	collidable = Collidable::polygon;
@@ -68,7 +68,7 @@ void Barrier::calculateFinalGeometry()
 			polygon.points.push_back({ point.x, point.y, _height });
 
 			float xRatio = static_cast<int>(point.distance2D(nextPoint) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realWidth);
-			float yRatio = static_cast<int>(_height) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight;
+			float yRatio = static_cast<int>(_height - _min_height) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight;
 
 			if (!xRatio)
 				xRatio = 1.0f;

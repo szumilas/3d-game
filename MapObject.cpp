@@ -399,3 +399,19 @@ Color MapObject::getUniqueColorBasedOnId()
 
 	return uniqueColorBasedOnId;
 }
+
+Textures MapObject::getCustomTexture(std::string texturePath)
+{
+	Textures texture = Textures::no_texture;
+
+	for (auto& textureName : TextureManager::Instance()->textures)
+	{
+		if (texturePath == textureName.filePath)
+		{
+			texture = textureName.textureName;
+			break;
+		}
+	}
+
+	return texture;
+}

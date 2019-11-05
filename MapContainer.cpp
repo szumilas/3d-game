@@ -1084,7 +1084,7 @@ void MapContainer::AddBarrier(const Point& point)
 		newObject.refs.push_back(newNode.id);
 	}
 
-	newObject._custom_texture = "a";
+	newObject._custom_texture = "grunwaldzki_bridge.png";
 	extraObjects.push_back(std::make_unique<Barrier>(Barrier(newObject)));
 	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	extraObjects.back()->calculateFinalGeometry();
