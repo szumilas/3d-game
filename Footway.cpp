@@ -24,6 +24,18 @@ void Footway::calculateFinalGeometry()
 
 		polygons.push_back(newPolygon);
 	}
+
+	points.clear();
+
+	for (auto& point : finalLeftRail)
+	{
+		points.push_back(point);
+	}
+
+	for (int q = finalRightRail.size() - 1; q >= 0; --q)
+	{
+		points.push_back(finalRightRail[q]);
+	}
 }
 
 void Footway::calculateXYfromRef(const std::map<long long, node> &nodes)

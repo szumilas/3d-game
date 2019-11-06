@@ -1,5 +1,13 @@
 #include "Water.h"
 
+Water::Water(MapObject& mapObject) : MapObject(mapObject)
+{
+	for (auto& point : points)
+	{
+		point.z = _min_height;
+	}
+}
+
 void Water::calculateFinalGeometry()
 {
 	dividePointsPolygonIntoTriangles();

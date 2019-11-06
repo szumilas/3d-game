@@ -267,6 +267,7 @@ void MapObject::dividePointsPolygonIntoTriangles()
 
 				polygon.noOfPoints = polygon.points.size();
 				polygon.color = Color{ 1.0f, 1.0f, 1.0f };
+				polygon.additionalColor = Color{ 1.0f, 0.0f, 1.0f };
 
 				polygons.push_back(polygon);
 
@@ -292,8 +293,11 @@ void MapObject::dividePointsPolygonIntoTriangles()
 
 		polygon.noOfPoints = polygon.points.size();
 		polygon.color = Color{ 1.0f, 1.0f, 1.0f };
+		polygon.additionalColor = Color{ 1.0f, 0.0f, 1.0f };
 
 		polygons.push_back(polygon);
+
+		points = pointsCopy;
 	}
 }
 

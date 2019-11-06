@@ -833,6 +833,9 @@ bool MapManager::isRailwayCheck(MapObject& mapObject)
 
 bool MapManager::isRiverCheck(MapObject& mapObject)
 {
+	// river will be created manually
+	return false;
+
 	if (mapObject.waterway == "river" || mapObject.waterway == "canal")
 		return true;
 	else
@@ -872,7 +875,7 @@ void MapManager::selectObject(float X, float Y, bool(MapManager::*objectChecker)
 	{
 		if(objectChecker == nullptr || objectChecker != nullptr && (this->*objectChecker)(*mapObject))
 		{
-			if (detector.isInside(mapObject->points, selectedPoint))
+			if (detector.isInside(mapObject->points, selectedPoint) && mapObject->selectable && !mapObject->isHidden)
 			{
 				if (mapObject->isSelected)
 				{

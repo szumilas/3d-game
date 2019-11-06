@@ -43,7 +43,7 @@ public:
 		unsigned int noOfPoints;
 		unsigned int idTexture;
 		Color color;
-		Color additionalColor;
+		Color additionalColor = Color(1, 0, 1);
 	};
 
 

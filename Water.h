@@ -6,7 +6,7 @@ class Water : public MapObject
 {
 public:
 
-	Water(MapObject& mapObject) : MapObject(mapObject) {};
+	Water(MapObject& mapObject);
 
 	void calculateFinalGeometry();
 

@@ -61,6 +61,8 @@ public:
 	float maxY = -10000000.0f;
 	float minY =  10000000.0f;
 
+	bool selectable = true;
+
 private:
 
 	long long id;
