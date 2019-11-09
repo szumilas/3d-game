@@ -169,6 +169,7 @@
     <ClCompile Include="PwrC13.cpp" />
     <ClCompile Include="RaceTimer.cpp" />
     <ClCompile Include="Railway.cpp" />
+    <ClCompile Include="Ramp.cpp" />
     <ClCompile Include="RelationalMapObject.cpp" />
     <ClCompile Include="River.cpp" />
     <ClCompile Include="Riverbank.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="PwrC13.h" />
     <ClInclude Include="RaceTimer.h" />
     <ClInclude Include="Railway.h" />
+    <ClInclude Include="Ramp.h" />
     <ClInclude Include="RelationalMapObject.h" />
     <ClInclude Include="River.h" />
     <ClInclude Include="Riverbank.h" />

@@ -177,6 +177,9 @@
     <ClCompile Include="PlayList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ramp.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -337,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="PlayList.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ramp.h">
+      <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

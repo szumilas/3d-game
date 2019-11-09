@@ -60,6 +60,7 @@ std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapOb
 	{ &MapManager::isFootwayCheck, &MapManager::addObject<Footway> },
 	{ &MapManager::isWater, &MapManager::addObject<Water> },
 	{ &MapManager::isRiverbank, &MapManager::addObject<Riverbank> },
+	{ &MapManager::isRamp, &MapManager::addObject<Ramp> },
 };
 
 std::unordered_set<std::string> MapManager::skippedTags{
@@ -96,6 +97,7 @@ std::unordered_set<std::string> MapManager::acceptedTags{
 	"type",
 	"footway",
 	"_custom_texture",
+	"_custom_object",
 };
 
 std::map<std::string, long MapObject::*> MapManager::tagLongPtrs{
@@ -125,6 +127,7 @@ std::map<std::string, std::string MapObject::*> MapManager::tagPtrs{
 	{ "type", &MapObject::type },
 	{ "footway", &MapObject::footway },
 	{ "_custom_texture", &MapObject::_custom_texture },
+	{ "_custom_object", &MapObject::_custom_object },
 };
 
 void printAttributes(rapidxml::xml_node <>* node)
@@ -861,6 +864,14 @@ bool MapManager::isWater(MapObject& mapObject)
 bool MapManager::isRiverbank(MapObject& mapObject)
 {
 	if (mapObject.waterway == "riverbank")
+		return true;
+	else
+		return false;
+}
+
+bool MapManager::isRamp(MapObject& mapObject)
+{
+	if (mapObject._custom_object == "_ramp")
 		return true;
 	else
 		return false;

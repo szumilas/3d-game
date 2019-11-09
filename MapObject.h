@@ -99,6 +99,7 @@ public:
 	std::string type;
 	std::string footway;
 	std::string _custom_texture;
+	std::string _custom_object;
 
 
 	float _height;

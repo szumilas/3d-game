@@ -95,6 +95,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_AddStreetLamp,
 		MapContainer::e_AddBuilding,
 		MapContainer::e_AddBarrier,
+		MapContainer::e_AddRamp,
 	};
 	tools.push_back(NewObjectTools);
 
@@ -162,6 +163,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_AddStreetLamp, &MapContainer::AddStreetLamp },
 		{ e_AddBuilding, &MapContainer::AddBuilding },
 		{ e_AddBarrier, &MapContainer::AddBarrier },
+		{ e_AddRamp, &MapContainer::AddRamp },
 
 		{ e_NewObjectAddHeight, &MapContainer::NewObjectAddHeight },
 		{ e_NewObjectReduceHeight, &MapContainer::NewObjectReduceHeight },
@@ -1089,6 +1091,22 @@ void MapContainer::AddBarrier(const Point& point)
 	}
 
 	extraObjects.push_back(std::make_unique<Barrier>(Barrier(newObject)));
+	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
+	extraObjects.back()->calculateFinalGeometry();
+}
+
+void MapContainer::AddRamp(const Point& point)
+{
+	MapObject newObject(MapManager::Instance()->lastExtraObjectId);
+	MapManager::Instance()->lastExtraObjectId--;
+
+	for (auto& point : currentPath)
+	{
+		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
+		newObject.refs.push_back(newNode.id);
+	}
+
+	extraObjects.push_back(std::make_unique<Ramp>(Ramp(newObject)));
 	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	extraObjects.back()->calculateFinalGeometry();
 }

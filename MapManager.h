@@ -33,6 +33,7 @@
 #include "GrunwaldzkiCenter.h"
 #include "Sedesowiec.h"
 #include "PwrC13.h"
+#include "Ramp.h"
 
 #include "TextureManager.h"
 
@@ -96,6 +97,7 @@ private:
 	bool isFootwayCheck(MapObject& mapObject);
 	bool isWater(MapObject& mapObject);
 	bool isRiverbank(MapObject& mapObject);
+	bool isRamp(MapObject& mapObject);
 
 	template <typename T>
 	void addObject(MapObject& newMapObject)
