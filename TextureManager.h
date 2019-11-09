@@ -28,6 +28,8 @@ public:
 	static void DeInit();
 	static TextureManager* Instance();
 
+	static Textures getTextureFromFilePath(std::string filePath);
+
 	void readTextures();
 
 private:

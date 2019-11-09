@@ -177,9 +177,68 @@ void Building::generateWalls()
 			if (!_custom_texture.empty())
 			{
 				genericWallTexture = true;
-				emptyWallTextureName = Textures::no_texture;
-				smallWallTextureName = Textures::no_texture;
-				bigWallTextureName = Textures::no_texture;
+
+				auto textureName = TextureManager::Instance()->getTextureFromFilePath(_custom_texture);
+
+				switch (textureName)
+				{
+				case Textures::no_texture:
+					emptyWallTextureName = Textures::no_texture;
+					smallWallTextureName = Textures::no_texture;
+					bigWallTextureName = Textures::no_texture;
+					break;
+
+				case Textures::building_00_big:
+					emptyWallTextureName = Textures::building_00_empty;
+					smallWallTextureName = Textures::building_00_small;
+					bigWallTextureName = Textures::building_00_big;
+					break;
+
+				case Textures::building_01_big:
+					emptyWallTextureName = Textures::building_01_empty;
+					smallWallTextureName = Textures::building_01_small;
+					bigWallTextureName = Textures::building_01_big;
+					break;
+
+				case Textures::building_02_big:
+					emptyWallTextureName = Textures::building_02_empty;
+					smallWallTextureName = Textures::building_02_small;
+					bigWallTextureName = Textures::building_02_big;
+					break;
+
+				case Textures::building_03_big:
+					emptyWallTextureName = Textures::building_03_empty;
+					smallWallTextureName = Textures::building_03_small;
+					bigWallTextureName = Textures::building_03_big;
+					break;
+
+				case Textures::building_04_big:
+					emptyWallTextureName = Textures::building_04_empty;
+					smallWallTextureName = Textures::building_04_small;
+					bigWallTextureName = Textures::building_04_big;
+					break;
+
+				case Textures::building_05_big:
+					emptyWallTextureName = Textures::building_05_empty;
+					smallWallTextureName = Textures::building_05_small;
+					bigWallTextureName = Textures::building_05_big;
+					break;
+
+				case Textures::building_06_big:
+					emptyWallTextureName = Textures::building_06_empty;
+					smallWallTextureName = Textures::building_06_small;
+					bigWallTextureName = Textures::building_06_big;
+					break;
+
+				case Textures::building_07_big:
+					emptyWallTextureName = Textures::building_07_empty;
+					smallWallTextureName = Textures::building_07_small;
+					bigWallTextureName = Textures::building_07_big;
+					break;
+
+				default:
+					break;
+				}
 			}
 			else
 			{

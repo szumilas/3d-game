@@ -109,6 +109,8 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_NewObjectReduceGreen,
 		MapContainer::e_NewObjectAddBlue,
 		MapContainer::e_NewObjectReduceBlue,
+		MapContainer::e_NewObjectAddRemoveCustomTexture,
+		MapContainer::e_NewObjectNextTextrue,
 	};
 	tools.push_back(NewObjectSettingsTools);
 	
@@ -171,6 +173,8 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_NewObjectReduceGreen, &MapContainer::NewObjectReduceGreen },
 		{ e_NewObjectAddBlue, &MapContainer::NewObjectAddBlue },
 		{ e_NewObjectReduceBlue, &MapContainer::NewObjectReduceBlue },
+		{ e_NewObjectAddRemoveCustomTexture, &MapContainer::NewObjectAddRemoveCustomTexture },
+		{ e_NewObjectNextTextrue, &MapContainer::NewObjectNextTexture },
 
 	};
 
@@ -1084,7 +1088,6 @@ void MapContainer::AddBarrier(const Point& point)
 		newObject.refs.push_back(newNode.id);
 	}
 
-	newObject._custom_texture = "grunwaldzki_bridge.png";
 	extraObjects.push_back(std::make_unique<Barrier>(Barrier(newObject)));
 	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	extraObjects.back()->calculateFinalGeometry();
@@ -1160,6 +1163,52 @@ void MapContainer::NewObjectReduceBlue(const Point& point)
 	if (extraObjects.back()->_color.blue < 0)
 		extraObjects.back()->_color.blue = 0;
 	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectAddRemoveCustomTexture(const Point& point)
+{
+	if (extraObjects.back()->_custom_texture.empty())
+		extraObjects.back()->_custom_texture = "no_texture.png";
+	else
+		extraObjects.back()->_custom_texture.clear();
+
+	extraObjects.back()->recalculateFinalGeometry();
+}
+
+void MapContainer::NewObjectNextTexture(const Point& point)
+{
+	static std::vector<Textures> possibleCustomTextures
+	{
+		Textures::no_texture,
+		Textures::building_00_big,
+		Textures::building_01_big,
+		Textures::building_02_big,
+		Textures::building_03_big,
+		Textures::building_04_big,
+		Textures::building_05_big,
+		Textures::building_06_big,
+		Textures::building_07_big,
+	};
+
+	if (!extraObjects.back()->_custom_texture.empty())
+	{
+		int nextTextureId = 0;
+
+		auto textureName = TextureManager::Instance()->getTextureFromFilePath(extraObjects.back()->_custom_texture);
+
+		for (int q = 0; q < possibleCustomTextures.size(); q++)
+		{
+			if (textureName == possibleCustomTextures[q])
+			{
+				nextTextureId = (q + 1) % possibleCustomTextures.size();
+				break;
+			}
+		}
+
+		extraObjects.back()->_custom_texture = TextureManager::Instance()->textures[static_cast<long>(possibleCustomTextures[nextTextureId])].filePath;
+
+		extraObjects.back()->recalculateFinalGeometry();
+	}
 }
 
 

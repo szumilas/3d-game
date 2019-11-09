@@ -201,3 +201,19 @@ int TextureManager::LoadImageA(char *filename)
 
 	return image;
 }
+
+Textures TextureManager::getTextureFromFilePath(std::string filePath)
+{
+	Textures result = Textures::no_texture;
+
+	for (int q = 0; q < textures.size(); q++)
+	{
+		if (filePath == textures[q].filePath)
+		{
+			result = textures[q].textureName;
+			break;
+		}
+	}
+
+	return result;
+}

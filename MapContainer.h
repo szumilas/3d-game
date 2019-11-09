@@ -66,6 +66,8 @@ public:
 		e_NewObjectReduceGreen,
 		e_NewObjectAddBlue,
 		e_NewObjectReduceBlue,
+		e_NewObjectAddRemoveCustomTexture,
+		e_NewObjectNextTextrue
 	};
 
 
@@ -142,6 +144,8 @@ public:
 	void NewObjectReduceGreen(const Point& point = Point());
 	void NewObjectAddBlue(const Point& point = Point());
 	void NewObjectReduceBlue(const Point& point = Point());
+	void NewObjectAddRemoveCustomTexture(const Point& point = Point());
+	void NewObjectNextTexture(const Point& point = Point());
 
 
 	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);

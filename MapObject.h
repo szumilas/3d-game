@@ -42,7 +42,6 @@ protected:
 	Color selectedColor{ 1.0f, 0.0f, 1.0f };
 	void dividePointsPolygonIntoTriangles();
 	void createBothRailsForSymmetryAxis(const std::vector<Point>& axisPoints, std::vector<Point>& finalLeftRail, std::vector<Point>& finalRightRail, float gauge);
-	Textures getCustomTexture(std::string texturePath);
 
 	double epsilon = 0.1;
 	float shadePower = 0.5;
