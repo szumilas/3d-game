@@ -10,8 +10,6 @@ Crossing::Crossing(MapObject& mapObject) : Footway(mapObject)
 
 void Crossing::calculateFinalGeometry()
 {
-	Footway::calculateFinalGeometry();
-
 	auto& firstPoint = points[0];
 	auto& lastPoint = points.back();
 
@@ -22,6 +20,8 @@ void Crossing::calculateFinalGeometry()
 
 	angle *= -1;
 	angle += PI / 2;
+
+	Footway::calculateFinalGeometry();
 
 	for (auto& polygon : polygons)
 	{
