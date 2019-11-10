@@ -405,20 +405,26 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 
 	for (auto& sectionToDisplay : sectionsToDisplay)
 	{
-		if(sectionToDisplay.first < 100 && sectionToDisplay.second < 100 &&
-		   sectionToDisplay.first >= 0 && sectionToDisplay.second >= 0)
-		for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
+		if (sectionToDisplay.first < 100 && sectionToDisplay.second < 100 &&
+			sectionToDisplay.first >= 0 && sectionToDisplay.second >= 0)
 		{
-			if(!object->get()->isHidden)
-				object->get()->display();
+			for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
+			{
+				if (!object->get()->isHidden)
+					object->get()->display();
+			}
 		}
 	}
 
 	for (auto& sectionToDisplay : sectionsToDisplay)
 	{
-		for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
+		if (sectionToDisplay.first < 100 && sectionToDisplay.second < 100 &&
+			sectionToDisplay.first >= 0 && sectionToDisplay.second >= 0)
 		{
-			object->get()->alreadyPrinted = false;
+			for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
+			{
+				object->get()->alreadyPrinted = false;
+			}
 		}
 	}
 
