@@ -1247,6 +1247,7 @@ void MapContainer::NewObjectNextTexture(const Point& point)
 		Textures::building_05_big,
 		Textures::building_06_big,
 		Textures::building_07_big,
+		Textures::office_windows,
 	};
 
 	if (!extraObjects.back()->_custom_texture.empty())
@@ -1284,16 +1285,16 @@ void MapContainer::SaveMapObject(const Point& point)
 		if (buildingEdited.heightChanged)
 			MapManager::Instance()->addOverlayAttribute("height", std::to_string(buildingEdited.object->_height).c_str());
 		if (buildingEdited.colorChanged)
-			MapManager::Instance()->addOverlayAttribute("color", buildingEdited.object->_color.getColorHex().c_str());
+			MapManager::Instance()->addOverlayAttribute("colour", buildingEdited.object->_color.getColorHex().c_str());
 		if (buildingEdited.textureChanged)
 			MapManager::Instance()->addOverlayAttribute("_custom_texture", buildingEdited.object->_custom_texture.c_str());
 
 		buildingEdited.object->isSelected = false;
 
 		buildingEdited = BuildingEdited();
-
-		MapManager::Instance()->saveOverlays();
 	}
+
+	MapManager::Instance()->saveOverlays();
 }
 
 void MapContainer::EditMapObject(const Point& point)
@@ -1324,6 +1325,7 @@ void MapContainer::EditMapObjectNextBuildingTexture(const Point& point)
 		Textures::building_05_big,
 		Textures::building_06_big,
 		Textures::building_07_big,
+		Textures::office_windows,
 	};
 
 	if (buildingEdited.object != nullptr)

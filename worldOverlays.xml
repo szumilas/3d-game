@@ -137,7 +137,9 @@
 	</way>
 	<way id="449286081">
 		<tag k="height" v="20.00"/>
+		<tag k="min_height" v="6.6"/>
 		<tag k="roof:shape" v="flat"/>
+		<tag k="building" v="office"/>
 	</way>
 	<way id="101217936">
 		<tag k="roof:shape" v="flat"/>
@@ -156,9 +158,13 @@
 	</way>
 	<way id="440208116">
 		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#333333"/>
+		<tag k="_custom_texture" v="no_texture.png"/>
 	</way>
 	<way id="505932755">
 		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#191919"/>
+		<tag k="_custom_texture" v="no_texture.png"/>
 	</way>
 	<way id="304382155">
 		<tag k="_skip" v="yes"/>
@@ -738,6 +744,376 @@
 	</way>
 	<way id="501648241">
 		<tag k="amenity" v="shelter"/>
+	</way>
+	<way id="505932754">
+		<tag k="colour" v="#667e7e"/>
+	</way>
+	<way id="6548664">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="480163697">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="480148092">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="480148091">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="480148689">
+		<tag k="height" v="12.300000"/>
+		<tag k="min_height" v="0.0"/>
+	</way>
+	<way id="480148688">
+		<tag k="height" v="12.300000"/>
+		<tag k="min_height" v="0.0"/>
+	</way>
+	<way id="101192267">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="_custom_texture" v="building_07_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+	</way>
+	<way id="222946762">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="6.000000"/>
+		<tag k="_custom_texture" v="building_07_big.jpg"/>
+	</way>
+	<way id="101213254">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="_custom_texture" v="building_07_big.jpg"/>
+	</way>
+	<way id="101225853">
+		<tag k="height" v="6.000000"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="_custom_texture" v="building_07_big.jpg"/>
+	</way>
+	<way id="101196886">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101199651">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101208353">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101215635">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="408013522">
+		<tag k="height" v="8.000000"/>
+		<tag k="_custom_texture" v="building_06_big.jpg"/>
+	</way>
+	<way id="101191663">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="12.000000"/>
+		<tag k="min_height" v="8.000000"/>
+		<tag k="_custom_texture" v="building_00_big.jpg"/>
+	</way>
+	<way id="101206501">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="12.000000"/>
+		<tag k="min_height" v="8.000000"/>
+		<tag k="_custom_texture" v="building_00_big.jpg"/>
+	</way>
+	<way id="101192625">
+		<tag k="colour" v="#666666"/>
+		<tag k="_custom_texture" v="no_texture.png"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="433122134">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="292336504">
+		<tag k="height" v="13.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="306479908">
+		<tag k="height" v="10.500000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101215548">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101200534">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101194758">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101198278">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101200674">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101202279">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101209668">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101214984">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101216216">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="375365818">
+		<tag k="height" v="11.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+	</way>
+	<way id="101191880">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101225546">
+		<tag k="height" v="11.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101217867">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101214261">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101206265">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101212993">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101188016">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101193410">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101197967">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101201331">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101203099">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101206995">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101208566">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101211280">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101214380">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101216928">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101192421">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101189154">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="13.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+	</way>
+	<way id="101216077">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="6.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+	</way>
+	<way id="101213310">
+		<tag k="height" v="11.000000"/>
+		<tag k="colour" v="#ccccb2"/>
+		<tag k="_custom_texture" v="no_texture.png"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101189510">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101191981">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101192703">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101192778">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101194436">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101195553">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101196943">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101200791">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101201898">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101202625">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101202729">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101204359">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101206631">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101207460">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101208836">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101213971">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101215506">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101216451">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101225782">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101206570">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101197913">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101209179">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101212557">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101212729">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101226111">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101194665">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101202853">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101205897">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101207166">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101207299">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101210207">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101210842">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101191162">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101201486">
+		<tag k="height" v="23.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101217883">
+		<tag k="height" v="6.000000"/>
+		<tag k="min_height" v="5.500000"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101198411">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="11.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+	</way>
+	<way id="101193528">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101208434">
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101214238">
+		<tag k="height" v="6.000000"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101201283">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101211993">
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101214926">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="_custom_texture" v="no_texture.png"/>
+		<tag k="colour" v="#cbcbb2"/>
+	</way>
+	<way id="101206443">
+		<tag k="_custom_texture" v="no_texture.png"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#cbcbb2"/>
+	</way>
+	<way id="101198671">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="381959311">
+		<tag k="height" v="7.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="101195767">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101214903">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101214506">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="381959310">
+		<tag k="_custom_texture" v="no_texture.png"/>
+		<tag k="min_height" v="5.00"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#cbcbb2"/>
+		<tag k="height" v="15.000000"/>
+	</way>
+	<way id="101216911">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101208820">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="423690691">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="310688577">
+		<tag k="height" v="6.500000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="310688576">
+		<tag k="roof:shape" v="flat"/>
 	</way>
 </osm>
 
