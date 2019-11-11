@@ -114,6 +114,25 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_NewObjectNextTextrue,
 	};
 	tools.push_back(NewObjectSettingsTools);
+
+	std::vector<int> MapObjectSettingsTools{
+		MapContainer::e_ReloadMap,
+		MapContainer::e_SaveMapObject,
+		MapContainer::e_EditMapObject,
+		MapContainer::e_EditMapObjectNextBuildingTexture,
+		MapContainer::e_EditMapObjectNextRoofTexture,
+		MapContainer::e_EditMapObjectDoNotGenerateBottomRoof,
+		MapContainer::e_EditMapObjectChangeRoofType,
+		MapContainer::e_EditMapObjectAddHeight,
+		MapContainer::e_EditMapObjectReduceHeight,
+		MapContainer::e_EditMapObjectAddRed,
+		MapContainer::e_EditMapObjectReduceRed,
+		MapContainer::e_EditMapObjectAddGreen,
+		MapContainer::e_EditMapObjectReduceGreen,
+		MapContainer::e_EditMapObjectAddBlue,
+		MapContainer::e_EditMapObjectReduceBlue,
+	};
+	tools.push_back(MapObjectSettingsTools);
 	
 
 	tools.push_back({});
@@ -177,6 +196,22 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_NewObjectReduceBlue, &MapContainer::NewObjectReduceBlue },
 		{ e_NewObjectAddRemoveCustomTexture, &MapContainer::NewObjectAddRemoveCustomTexture },
 		{ e_NewObjectNextTextrue, &MapContainer::NewObjectNextTexture },
+
+		{ e_ReloadMap, &MapContainer::ReloadMap },
+		{ e_SaveMapObject, &MapContainer::SaveMapObject },
+		{ e_EditMapObject, &MapContainer::EditMapObject },
+		{ e_EditMapObjectNextBuildingTexture, &MapContainer::EditMapObjectNextBuildingTexture },
+		{ e_EditMapObjectNextRoofTexture, &MapContainer::EditMapObjectNextRoofTexture },
+		{ e_EditMapObjectDoNotGenerateBottomRoof, &MapContainer::EditMapObjectDoNotGenerateBottomRoof },
+		{ e_EditMapObjectChangeRoofType, &MapContainer::EditMapObjectChangeRoofType },
+		{ e_EditMapObjectAddHeight, &MapContainer::EditMapObjectAddHeight },
+		{ e_EditMapObjectReduceHeight, &MapContainer::EditMapObjectReduceHeight },
+		{ e_EditMapObjectAddRed, &MapContainer::EditMapObjectAddRed },
+		{ e_EditMapObjectReduceRed, &MapContainer::EditMapObjectReduceRed },
+		{ e_EditMapObjectAddGreen, &MapContainer::EditMapObjectAddGreen },
+		{ e_EditMapObjectReduceGreen, &MapContainer::EditMapObjectReduceGreen },
+		{ e_EditMapObjectAddBlue, &MapContainer::EditMapObjectAddBlue },
+		{ e_EditMapObjectReduceBlue, &MapContainer::EditMapObjectReduceBlue },
 
 	};
 
@@ -1235,6 +1270,197 @@ void MapContainer::NewObjectNextTexture(const Point& point)
 	}
 }
 
+void MapContainer::ReloadMap(const Point& point)
+{
+	MapManager::Instance()->rereadMap();
+}
+
+void MapContainer::SaveMapObject(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.object->isSelected = true;
+
+		if (buildingEdited.heightChanged)
+			MapManager::Instance()->addOverlayAttribute("height", std::to_string(buildingEdited.object->_height).c_str());
+		if (buildingEdited.colorChanged)
+			MapManager::Instance()->addOverlayAttribute("color", buildingEdited.object->_color.getColorHex().c_str());
+		if (buildingEdited.textureChanged)
+			MapManager::Instance()->addOverlayAttribute("_custom_texture", buildingEdited.object->_custom_texture.c_str());
+
+		buildingEdited.object->isSelected = false;
+
+		buildingEdited = BuildingEdited();
+
+		MapManager::Instance()->saveOverlays();
+	}
+}
+
+void MapContainer::EditMapObject(const Point& point)
+{
+	buildingEdited.object = nullptr;
+
+	for (auto& mapObject : MapManager::Instance()->mapObjects)
+	{
+		if (buildingEdited.object == nullptr && mapObject->isSelected && MapManager::Instance()->isBuildingCheck(*mapObject.get()))
+		{
+			buildingEdited.object = mapObject.get();
+		}
+
+		mapObject->deselect();
+	}
+}
+
+void MapContainer::EditMapObjectNextBuildingTexture(const Point& point)
+{
+	static std::vector<Textures> possibleCustomTextures
+	{
+		Textures::no_texture,
+		Textures::building_00_big,
+		Textures::building_01_big,
+		Textures::building_02_big,
+		Textures::building_03_big,
+		Textures::building_04_big,
+		Textures::building_05_big,
+		Textures::building_06_big,
+		Textures::building_07_big,
+	};
+
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.textureChanged = true;
+
+		int nextTextureId = 0;
+
+		auto textureName = TextureManager::Instance()->getTextureFromFilePath(buildingEdited.object->_custom_texture);
+
+		for (int q = 0; q < possibleCustomTextures.size(); q++)
+		{
+			if (textureName == possibleCustomTextures[q])
+			{
+				nextTextureId = (q + 1) % possibleCustomTextures.size();
+				break;
+			}
+		}
+
+		buildingEdited.object->_custom_texture = TextureManager::Instance()->textures[static_cast<long>(possibleCustomTextures[nextTextureId])].filePath;
+
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectNextRoofTexture(const Point& point)
+{
+
+}
+
+void MapContainer::EditMapObjectDoNotGenerateBottomRoof(const Point& point)
+{
+
+}
+
+void MapContainer::EditMapObjectChangeRoofType(const Point& point)
+{
+
+}
+
+void MapContainer::EditMapObjectAddHeight(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.heightChanged = true;
+		buildingEdited.object->_height += 1;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectReduceHeight(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.heightChanged = true;
+		buildingEdited.object->_height -= 1;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectAddRed(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.colorChanged = true;
+
+		buildingEdited.object->_color.red += 0.1;
+		if (buildingEdited.object->_color.red > 1)
+			buildingEdited.object->_color.red = 1;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectReduceRed(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.colorChanged = true;
+
+		buildingEdited.object->_color.red -= 0.1;
+		if (buildingEdited.object->_color.red < 0)
+			buildingEdited.object->_color.red = 0;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectAddGreen(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.colorChanged = true;
+
+		buildingEdited.object->_color.green += 0.1;
+		if (buildingEdited.object->_color.green > 1)
+			buildingEdited.object->_color.green = 1;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectReduceGreen(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.colorChanged = true;
+
+		buildingEdited.object->_color.green -= 0.1;
+		if (buildingEdited.object->_color.green < 0)
+			buildingEdited.object->_color.green = 0;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectAddBlue(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.colorChanged = true;
+
+		buildingEdited.object->_color.blue += 0.1;
+		if (buildingEdited.object->_color.blue > 1)
+			buildingEdited.object->_color.blue = 1;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
+
+void MapContainer::EditMapObjectReduceBlue(const Point& point)
+{
+	if (buildingEdited.object != nullptr)
+	{
+		buildingEdited.colorChanged = true;
+
+		buildingEdited.object->_color.blue -= 0.1;
+		if (buildingEdited.object->_color.blue < 0)
+			buildingEdited.object->_color.blue = 0;
+		buildingEdited.object->recalculateFinalGeometry();
+	}
+}
 
 void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)
 {

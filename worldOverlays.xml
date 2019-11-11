@@ -730,5 +730,14 @@
 	<way id="101215649">
 		<tag k="_skip" v="yes"/>
 	</way>
+	<way id="170459">
+		<tag k="min_height" v="-5.00"/>
+	</way>
+	<way id="501648240">
+		<tag k="amenity" v="shelter"/>
+	</way>
+	<way id="501648241">
+		<tag k="amenity" v="shelter"/>
+	</way>
 </osm>
 

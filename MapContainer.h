@@ -68,7 +68,23 @@ public:
 		e_NewObjectAddBlue,
 		e_NewObjectReduceBlue,
 		e_NewObjectAddRemoveCustomTexture,
-		e_NewObjectNextTextrue
+		e_NewObjectNextTextrue,
+
+		e_ReloadMap,
+		e_SaveMapObject,
+		e_EditMapObject,
+		e_EditMapObjectNextBuildingTexture,
+		e_EditMapObjectNextRoofTexture,
+		e_EditMapObjectDoNotGenerateBottomRoof,
+		e_EditMapObjectChangeRoofType,
+		e_EditMapObjectAddHeight,
+		e_EditMapObjectReduceHeight,
+		e_EditMapObjectAddRed,
+		e_EditMapObjectReduceRed,
+		e_EditMapObjectAddGreen,
+		e_EditMapObjectReduceGreen,
+		e_EditMapObjectAddBlue,
+		e_EditMapObjectReduceBlue,
 	};
 
 
@@ -149,6 +165,22 @@ public:
 	void NewObjectAddRemoveCustomTexture(const Point& point = Point());
 	void NewObjectNextTexture(const Point& point = Point());
 
+	void ReloadMap(const Point& point = Point());
+	void SaveMapObject(const Point& point = Point());
+	void EditMapObject(const Point& point = Point());
+	void EditMapObjectNextBuildingTexture(const Point& point = Point());
+	void EditMapObjectNextRoofTexture(const Point& point = Point());
+	void EditMapObjectDoNotGenerateBottomRoof(const Point& point = Point());
+	void EditMapObjectChangeRoofType(const Point& point = Point());
+	void EditMapObjectAddHeight(const Point& point = Point());
+	void EditMapObjectReduceHeight(const Point& point = Point());
+	void EditMapObjectAddRed(const Point& point = Point());
+	void EditMapObjectReduceRed(const Point& point = Point());
+	void EditMapObjectAddGreen(const Point& point = Point());
+	void EditMapObjectReduceGreen(const Point& point = Point());
+	void EditMapObjectAddBlue(const Point& point = Point());
+	void EditMapObjectReduceBlue(const Point& point = Point());
+
 
 	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);
 	void setFreeRide(CarBrand selectedCar, Point position);
@@ -188,6 +220,15 @@ public:
 
 private:
 
+	struct BuildingEdited
+	{
+		MapObject* object = nullptr;
+
+		bool heightChanged = false;
+		bool textureChanged = false;
+		bool colorChanged = false;
+	};
+
 	static void displayPath(const std::vector<PathStruct>& path, const Color& color);
 	static void displayMapEditorPoints();
 	static void displayAIPoints();
@@ -221,6 +262,7 @@ private:
 	static std::map<int, void (MapContainer::*)(const Point&)> toolsMap;
 
 	std::vector<std::unique_ptr<Object3D>>* polygonsObjects = nullptr;
+	BuildingEdited buildingEdited;
 
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapObjectSections;
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;

@@ -1085,6 +1085,8 @@ void MapManager::applyOverlays(MapObject& mapObject)
 
 void MapManager::addOverlayAttribute(const char* attribute, const char* value)
 {
+	char* allocatedValue = overlays.allocate_string(value);
+
 	for (auto& mapObject : mapObjects)
 	{
 		if (mapObject->isSelected)
@@ -1126,7 +1128,7 @@ void MapManager::addOverlayAttribute(const char* attribute, const char* value)
 									else if (!strcmp(b->name(), "v")) //attribute value
 									{
 										if(attributeFound)
-											b->value(value);
+											b->value(allocatedValue);
 									}
 								}
 							}
@@ -1156,7 +1158,7 @@ void MapManager::addOverlayAttribute(const char* attribute, const char* value)
 			{
 				rapidxml::xml_node<>* subnode = overlays.allocate_node(rapidxml::node_type::node_element, "tag");
 				subnode->append_attribute(overlays.allocate_attribute("k", attribute));
-				subnode->append_attribute(overlays.allocate_attribute("v", value));
+				subnode->append_attribute(overlays.allocate_attribute("v", allocatedValue));
 
 				node->append_node(subnode);
 			}

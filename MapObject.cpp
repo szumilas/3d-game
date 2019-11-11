@@ -83,10 +83,13 @@ void MapObject::select()
 
 void MapObject::deselect()
 {
-	isSelected = false;
-	for (auto& polygon : polygons)
+	if (isSelected)
 	{
-		std::swap(polygon.color, polygon.additionalColor);
+		isSelected = false;
+		for (auto& polygon : polygons)
+		{
+			std::swap(polygon.color, polygon.additionalColor);
+		}
 	}
 }
 
