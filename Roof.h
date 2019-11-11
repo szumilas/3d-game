@@ -163,7 +163,7 @@ private:
 	void createRoofLevelLongRoofLines();
 	void closeLongRoofLine(const long long& id);
 	void restartLongRoofPoint(const long long& id);
-	void generateFlatRoof();
+	void generateFlatRoof(float roofStartLevel);
 
 public:
 

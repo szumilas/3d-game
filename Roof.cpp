@@ -25,6 +25,8 @@ Roof::Roof(MapObject& mapObject) : MapObject(mapObject)
 
 void Roof::calculateFinalGeometry()
 {
+	polygons.clear();
+
 	for (auto& roofSurfaces : roofsSurfaces)
 	{
 		if (roofSurfaces.first == false)
@@ -36,7 +38,7 @@ void Roof::calculateFinalGeometry()
 				for (auto& point : roofSurface.points)
 				{
 					newPolygon.points.push_back({ point.x, point.y, point.z });
-					newPolygon.texturePoints.push_back({ point.x / TextureManager::Instance()->textures[static_cast<long>(Textures::roof)].realWidth, point.y / TextureManager::Instance()->textures[static_cast<long>(Textures::roof)].realHeight });
+					newPolygon.texturePoints.push_back({ point.x / TextureManager::Instance()->textures[static_cast<long>(Textures::roof_asphalt)].realWidth, point.y / TextureManager::Instance()->textures[static_cast<long>(Textures::roof_asphalt)].realHeight });
 				}
 
 				newPolygon.noOfPoints = newPolygon.texturePoints.size();
@@ -214,7 +216,7 @@ bool Roof::anyPointInTriangle(long long idA, long long idB, long long idC)
 	triangle.push_back(getRoofPoint(idB));
 	triangle.push_back(getRoofPoint(idC));
 
-	for(int i = nextIterator(idC, roofPoints); roofPoints[i].id != idA; i = (i + 1) % roofPoints.size())
+	for (int i = nextIterator(idC, roofPoints); roofPoints[i].id != idA; i = (i + 1) % roofPoints.size())
 	{
 		bool result = pointInsidePolygonDetector.isInside(triangle, getRoofPoint(roofPoints[i].id));
 		if (result)
@@ -280,7 +282,7 @@ void Roof::calculateSpeedOfPoint(long long IdcurrentPoint, long long IdnextPoint
 	vbisection.y /= tan(beta);
 
 	RoofPoint newRoofPoint;
-	newRoofPoint .point = getRoofPoint(IdcurrentPoint);
+	newRoofPoint.point = getRoofPoint(IdcurrentPoint);
 	newRoofPoint.id = IdcurrentPoint;
 	newRoofPoint.dx = vbisection.x;
 	newRoofPoint.dy = vbisection.y;
@@ -500,7 +502,7 @@ double Roof::futureDistance(long long idp1, long long idp2, double h)
 long long Roof::nextRoofPointid()
 {
 	long long maxId = -1;
-	
+
 	for (auto it = roofPoints.begin(); it != roofPoints.end(); it++)
 	{
 		if (it->id > maxId)
@@ -713,7 +715,7 @@ void Roof::calculateXYfromRef(const std::map<long long, node> &nodes)
 	MapObject::calculateXYfromRef(nodes);
 
 	generateRoof(_roof_level, 30);
-	if(_min_height)
+	if (_min_height)
 		generateRoof(_min_height, 0);
 
 }
@@ -754,7 +756,7 @@ void Roof::generateRoof(float roofStartLevel, float roofAngle)
 
 	if (roofAngle == 0)
 	{
-		generateFlatRoof();
+		generateFlatRoof(roofStartLevel);
 	}
 
 	auto roofPointsCopy = roofPoints;
@@ -876,7 +878,7 @@ void Roof::generateRoof(float roofStartLevel, float roofAngle)
 		|| getId() == 101217387 || getId() == 707341509
 		)
 	{
-		generateFlatRoof();
+		generateFlatRoof(roofStartLevel);
 	}
 	else
 	{
@@ -1137,7 +1139,7 @@ void Roof::generateRoof(float roofStartLevel, float roofAngle)
 			check--;
 			if (check < 0)
 			{
-				generateFlatRoof();
+				generateFlatRoof(roofStartLevel);
 				return;
 			}
 		}
@@ -1172,7 +1174,7 @@ void Roof::generateRoof(float roofStartLevel, float roofAngle)
 		{
 			if (!checker.isInside(points, Point(point)))
 			{
-				generateFlatRoof();
+				generateFlatRoof(roofStartLevel);
 				return;
 			}
 		}
@@ -1317,7 +1319,7 @@ void Roof::generateRoof(float roofStartLevel, float roofAngle)
 	roofsSurfaces.push_back({ true, roofSurfaces });
 }
 
-void Roof::generateFlatRoof()
+void Roof::generateFlatRoof(float roofStartLevel)
 {
 	std::vector<RoofSurface> roofSurfaces;
 
@@ -1327,12 +1329,20 @@ void Roof::generateFlatRoof()
 
 	longRoofLines.clear();
 
-	for (auto triangle : triangles)
+	polygons.clear();
+	auto pointsCopy = points;
+	dividePointsPolygonIntoTriangles();
+	points = pointsCopy;
+
+	for (auto& polygon : polygons)
 	{
 		std::vector<Point> roofSurface;
-		roofSurface.push_back(getRoofPoint(triangle.idp1));
-		roofSurface.push_back(getRoofPoint(triangle.idp2));
-		roofSurface.push_back(getRoofPoint(triangle.idp3));
+
+		for (auto& point : polygon.points)
+		{
+			roofSurface.push_back({ point.x, point.y, roofStartLevel });
+		}
+
 		roofSurfaces.push_back({ roofSurface, roofSurface, Color{ _color.red, _color.green, _color.blue } });
 	}
 
