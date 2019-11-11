@@ -98,6 +98,7 @@ enum class Textures : long
 	honda_cr_z,
 	logo,
 	grunwaldzki_bridge,
+	zwierzyniecki_bridge,
 };
 
 enum class Sounds : long

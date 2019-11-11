@@ -103,6 +103,7 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::honda_cr_z, -1.0f, -1.0f, "honda_cr_z.png" },
 	{ Textures::logo, -1.0f, -1.0f, "logo.png", false },
 	{ Textures::grunwaldzki_bridge, 160.0f, 15.0f, "grunwaldzki_bridge.png", false },
+	{ Textures::zwierzyniecki_bridge, 65, 15.0f, "zwierzyniecki_bridge.png", false },
 };
 
 void TextureManager::DeInit()

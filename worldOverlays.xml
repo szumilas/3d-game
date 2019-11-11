@@ -762,12 +762,18 @@
 		<tag k="_skip" v="yes"/>
 	</way>
 	<way id="480148689">
-		<tag k="height" v="12.300000"/>
+		<tag k="height" v="15.300000"/>
 		<tag k="min_height" v="0.0"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="colour" v="#b2b2b2"/>
 	</way>
 	<way id="480148688">
-		<tag k="height" v="12.300000"/>
+		<tag k="height" v="15.300000"/>
 		<tag k="min_height" v="0.0"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="colour" v="#b2b2b2"/>
 	</way>
 	<way id="101192267">
 		<tag k="roof:shape" v="flat"/>
@@ -2272,6 +2278,26 @@
 		<tag k="height" v="21.000000"/>
 		<tag k="_custom_texture" v="building_03_big.jpg"/>
 		<tag k="roof:shape" v="flat"/>
+	</way>
+	<way id="479882746">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="341146485">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="583231219">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="15.300000"/>
+		<tag k="min_height" v="0.0"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<way id="583232608">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="15.300000"/>
+		<tag k="min_height" v="0.0"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="colour" v="#b2b2b2"/>
 	</way>
 </osm>
 

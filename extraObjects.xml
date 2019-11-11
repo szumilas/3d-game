@@ -57,5 +57,229 @@
 		<tag k="_custom_texture" v="office.jpg"/>
 		<tag k="roof:shape" v="flat"/>
 	</way>
+	<node id="-18" lat="51.109144" lon="17.051462"/>
+	<node id="-17" lat="51.109665" lon="17.053720"/>
+	<way id="-100004">
+		<nd ref="-17"/>
+		<nd ref="-18"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.000000"/>
+		<tag k="height" v="13.100000"/>
+		<tag k="min_height" v="-0.5.000000"/>
+		<tag k="_custom_texture" v="grunwaldzki_bridge.png"/>
+	</way>
+	<node id="-20" lat="51.109860" lon="17.053650"/>
+	<node id="-19" lat="51.109326" lon="17.051387"/>
+	<way id="-100005">
+		<nd ref="-19"/>
+		<nd ref="-20"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.000000"/>
+		<tag k="height" v="13.100000"/>
+		<tag k="min_height" v="-0.5.000000"/>
+		<tag k="_custom_texture" v="grunwaldzki_bridge.png"/>
+	</way>
+	<node id="-29" lat="51.109771" lon="17.053384"/>
+	<node id="-28" lat="51.109758" lon="17.053321"/>
+	<node id="-27" lat="51.109615" lon="17.053406"/>
+	<node id="-26" lat="51.109630" lon="17.053469"/>
+	<way id="-100007">
+		<nd ref="-26"/>
+		<nd ref="-27"/>
+		<nd ref="-28"/>
+		<nd ref="-29"/>
+		<nd ref="-26"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="12.000000"/>
+		<tag k="min_height" v="9.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<node id="-33" lat="51.109375" lon="17.051693"/>
+	<node id="-32" lat="51.109361" lon="17.051630"/>
+	<node id="-31" lat="51.109222" lon="17.051714"/>
+	<node id="-30" lat="51.109238" lon="17.051777"/>
+	<way id="-100008">
+		<nd ref="-30"/>
+		<nd ref="-31"/>
+		<nd ref="-32"/>
+		<nd ref="-33"/>
+		<nd ref="-30"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="12.000000"/>
+		<tag k="min_height" v="9.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<node id="-37" lat="51.109335" lon="17.051356"/>
+	<node id="-36" lat="51.109306" lon="17.051373"/>
+	<node id="-35" lat="51.109318" lon="17.051420"/>
+	<node id="-34" lat="51.109346" lon="17.051403"/>
+	<way id="-100009">
+		<nd ref="-34"/>
+		<nd ref="-35"/>
+		<nd ref="-36"/>
+		<nd ref="-37"/>
+		<nd ref="-34"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="4.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<node id="-41" lat="51.109160" lon="17.051457"/>
+	<node id="-40" lat="51.109130" lon="17.051475"/>
+	<node id="-39" lat="51.109141" lon="17.051518"/>
+	<node id="-38" lat="51.109169" lon="17.051502"/>
+	<way id="-100010">
+		<nd ref="-38"/>
+		<nd ref="-39"/>
+		<nd ref="-40"/>
+		<nd ref="-41"/>
+		<nd ref="-38"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#000000"/>
+		<tag k="height" v="4.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<node id="-45" lat="51.109651" lon="17.053751"/>
+	<node id="-44" lat="51.109684" lon="17.053734"/>
+	<node id="-43" lat="51.109671" lon="17.053673"/>
+	<node id="-42" lat="51.109638" lon="17.053693"/>
+	<way id="-100011">
+		<nd ref="-42"/>
+		<nd ref="-43"/>
+		<nd ref="-44"/>
+		<nd ref="-45"/>
+		<nd ref="-42"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#000000"/>
+		<tag k="height" v="5.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<node id="-49" lat="51.109826" lon="17.053581"/>
+	<node id="-48" lat="51.109841" lon="17.053644"/>
+	<node id="-47" lat="51.109877" lon="17.053623"/>
+	<node id="-46" lat="51.109862" lon="17.053559"/>
+	<way id="-100012">
+		<nd ref="-46"/>
+		<nd ref="-47"/>
+		<nd ref="-48"/>
+		<nd ref="-49"/>
+		<nd ref="-46"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#000000"/>
+		<tag k="height" v="5.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<node id="-51" lat="51.108055" lon="17.070153"/>
+	<node id="-50" lat="51.108222" lon="17.069368"/>
+	<way id="-100013">
+		<nd ref="-50"/>
+		<nd ref="-51"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.000000"/>
+		<tag k="height" v="15.00000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="zwierzyniecki_bridge.png"/>
+	</way>
+	<node id="-53" lat="51.108151" lon="17.070199"/>
+	<node id="-52" lat="51.108321" lon="17.069424"/>
+	<way id="-100014">
+		<nd ref="-52"/>
+		<nd ref="-53"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.000000"/>
+		<tag k="height" v="15.00000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="zwierzyniecki_bridge.png"/>
+	</way>
+	<node id="-69" lat="51.108212" lon="17.069383"/>
+	<node id="-68" lat="51.108216" lon="17.069360"/>
+	<node id="-67" lat="51.108232" lon="17.069368"/>
+	<node id="-66" lat="51.108227" lon="17.069393"/>
+	<node id="-65" lat="51.108324" lon="17.069449"/>
+	<node id="-64" lat="51.108331" lon="17.069420"/>
+	<node id="-63" lat="51.108311" lon="17.069410"/>
+	<node id="-62" lat="51.108305" lon="17.069438"/>
+	<node id="-61" lat="51.108159" lon="17.070203"/>
+	<node id="-60" lat="51.108142" lon="17.070194"/>
+	<node id="-59" lat="51.108148" lon="17.070169"/>
+	<node id="-58" lat="51.108165" lon="17.070178"/>
+	<node id="-57" lat="51.108061" lon="17.070154"/>
+	<node id="-56" lat="51.108066" lon="17.070130"/>
+	<node id="-55" lat="51.108052" lon="17.070122"/>
+	<node id="-54" lat="51.108047" lon="17.070145"/>
+	<way id="-100015">
+		<nd ref="-54"/>
+		<nd ref="-55"/>
+		<nd ref="-56"/>
+		<nd ref="-57"/>
+		<nd ref="-54"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#000000"/>
+		<tag k="height" v="11.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<way id="-100016">
+		<nd ref="-58"/>
+		<nd ref="-59"/>
+		<nd ref="-60"/>
+		<nd ref="-61"/>
+		<nd ref="-58"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#000000"/>
+		<tag k="height" v="11.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<way id="-100017">
+		<nd ref="-62"/>
+		<nd ref="-63"/>
+		<nd ref="-64"/>
+		<nd ref="-65"/>
+		<nd ref="-62"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#000000"/>
+		<tag k="height" v="11.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
+	<way id="-100018">
+		<nd ref="-66"/>
+		<nd ref="-67"/>
+		<nd ref="-68"/>
+		<nd ref="-69"/>
+		<nd ref="-66"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#000000"/>
+		<tag k="height" v="11.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+		<tag k="colour" v="#b2b2b2"/>
+	</way>
 </osm>
 
