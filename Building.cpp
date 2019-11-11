@@ -236,13 +236,10 @@ void Building::generateWalls()
 					bigWallTextureName = Textures::building_07_big;
 					break;
 
-				case Textures::office_windows:
-					emptyWallTextureName = Textures::office_windows;
-					smallWallTextureName = Textures::office_windows;
-					bigWallTextureName = Textures::office_windows;
-					break;
-
 				default:
+					emptyWallTextureName = textureName;
+					smallWallTextureName = textureName;
+					bigWallTextureName = textureName;
 					break;
 				}
 			}

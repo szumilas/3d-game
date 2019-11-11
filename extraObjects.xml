@@ -1,0 +1,61 @@
+<osm version="0.6" generator="CGImap 0.6.1 (1997 thorn-03.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+	<node id="-4" lat="51.110280" lon="17.059553"/>
+	<node id="-3" lat="51.110216" lon="17.059337"/>
+	<node id="-2" lat="51.110356" lon="17.059234"/>
+	<node id="-1" lat="51.110422" lon="17.059451"/>
+	<way id="-100001">
+		<nd ref="-1"/>
+		<nd ref="-2"/>
+		<nd ref="-3"/>
+		<nd ref="-4"/>
+		<nd ref="-1"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="22.000000"/>
+		<tag k="min_height" v="5.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<node id="-8" lat="51.110151" lon="17.059088"/>
+	<node id="-7" lat="51.110216" lon="17.059337"/>
+	<node id="-6" lat="51.110356" lon="17.059234"/>
+	<node id="-5" lat="51.110293" lon="17.058997"/>
+	<way id="-100002">
+		<nd ref="-5"/>
+		<nd ref="-6"/>
+		<nd ref="-7"/>
+		<nd ref="-8"/>
+		<nd ref="-5"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="24.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<node id="-16" lat="51.110488" lon="17.059515"/>
+	<node id="-15" lat="51.110482" lon="17.059668"/>
+	<node id="-14" lat="51.110189" lon="17.059877"/>
+	<node id="-13" lat="51.110088" lon="17.059803"/>
+	<node id="-12" lat="51.110059" lon="17.059823"/>
+	<node id="-11" lat="51.110033" lon="17.059731"/>
+	<node id="-10" lat="51.110516" lon="17.059385"/>
+	<node id="-9" lat="51.110542" lon="17.059478"/>
+	<way id="-100003">
+		<nd ref="-9"/>
+		<nd ref="-10"/>
+		<nd ref="-11"/>
+		<nd ref="-12"/>
+		<nd ref="-13"/>
+		<nd ref="-14"/>
+		<nd ref="-15"/>
+		<nd ref="-16"/>
+		<nd ref="-9"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="32.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+</osm>
+
