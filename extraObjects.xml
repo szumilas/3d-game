@@ -281,5 +281,47 @@
 		<tag k="roof:shape" v="flat"/>
 		<tag k="colour" v="#b2b2b2"/>
 	</way>
+	<node id="-75" lat="51.114770" lon="17.067654"/>
+	<node id="-74" lat="51.114680" lon="17.067839"/>
+	<node id="-73" lat="51.114530" lon="17.067830"/>
+	<node id="-72" lat="51.114476" lon="17.067645"/>
+	<node id="-71" lat="51.114576" lon="17.067468"/>
+	<node id="-70" lat="51.114723" lon="17.067484"/>
+	<way id="-100019">
+		<nd ref="-70"/>
+		<nd ref="-71"/>
+		<nd ref="-72"/>
+		<nd ref="-73"/>
+		<nd ref="-74"/>
+		<nd ref="-75"/>
+		<nd ref="-70"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="80.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<node id="-81" lat="51.113957" lon="17.067508"/>
+	<node id="-80" lat="51.114049" lon="17.067324"/>
+	<node id="-79" lat="51.114198" lon="17.067333"/>
+	<node id="-78" lat="51.114246" lon="17.067500"/>
+	<node id="-77" lat="51.114154" lon="17.067684"/>
+	<node id="-76" lat="51.114004" lon="17.067675"/>
+	<way id="-100020">
+		<nd ref="-76"/>
+		<nd ref="-77"/>
+		<nd ref="-78"/>
+		<nd ref="-79"/>
+		<nd ref="-80"/>
+		<nd ref="-81"/>
+		<nd ref="-76"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#ffffff"/>
+		<tag k="height" v="65.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="office.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
 </osm>
 
