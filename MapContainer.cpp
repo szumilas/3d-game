@@ -1247,6 +1247,7 @@ void MapContainer::NewObjectNextTexture(const Point& point)
 		Textures::building_05_big,
 		Textures::building_06_big,
 		Textures::building_07_big,
+		Textures::building_08_big,
 		Textures::office_windows,
 	};
 
@@ -1325,6 +1326,7 @@ void MapContainer::EditMapObjectNextBuildingTexture(const Point& point)
 		Textures::building_05_big,
 		Textures::building_06_big,
 		Textures::building_07_big,
+		Textures::building_08_big,
 		Textures::office_windows,
 	};
 

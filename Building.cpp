@@ -236,6 +236,12 @@ void Building::generateWalls()
 					bigWallTextureName = Textures::building_07_big;
 					break;
 
+				case Textures::building_08_big:
+					emptyWallTextureName = Textures::building_08_empty;
+					smallWallTextureName = Textures::building_08_small;
+					bigWallTextureName = Textures::building_08_big;
+					break;
+
 				default:
 					emptyWallTextureName = textureName;
 					smallWallTextureName = textureName;
