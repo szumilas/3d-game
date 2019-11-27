@@ -439,5 +439,70 @@
 		<tag k="_custom_texture" v="concrete_wall.jpg"/>
 		<tag k="roof:shape" v="flat"/>
 	</way>
+	<node id="-131" lat="51.117134" lon="17.054284"/>
+	<node id="-130" lat="51.117624" lon="17.054360"/>
+	<node id="-129" lat="51.117596" lon="17.054798"/>
+	<node id="-128" lat="51.117106" lon="17.054717"/>
+	<way id="-100026">
+		<nd ref="-128"/>
+		<nd ref="-129"/>
+		<nd ref="-130"/>
+		<nd ref="-131"/>
+		<nd ref="-128"/>
+		<tag k="building" v="yes"/>
+		<tag k="building:colour" v="#cccce5"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="roof:shape" v="flat"/>
+	</way>
+	<node id="-135" lat="51.114201" lon="17.047166"/>
+	<node id="-134" lat="51.114339" lon="17.047116"/>
+	<node id="-133" lat="51.114151" lon="17.045992"/>
+	<node id="-132" lat="51.114042" lon="17.046024"/>
+	<way id="-100027">
+		<nd ref="-132"/>
+		<nd ref="-133"/>
+		<nd ref="-134"/>
+		<nd ref="-135"/>
+		<nd ref="-132"/>
+		<tag k="building" v="yes"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="colour" v="#ff987f"/>
+		<tag k="_custom_texture" v="building_02_big.jpg"/>
+	</way>
+	<node id="-143" lat="51.114211" lon="17.045969"/>
+	<node id="-142" lat="51.114151" lon="17.045993"/>
+	<node id="-141" lat="51.114169" lon="17.046099"/>
+	<node id="-140" lat="51.114228" lon="17.046070"/>
+	<way id="-100029">
+		<nd ref="-140"/>
+		<nd ref="-141"/>
+		<nd ref="-142"/>
+		<nd ref="-143"/>
+		<nd ref="-140"/>
+		<tag k="building" v="yes"/>
+		<tag k="height" v="30.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="colour" v="#ff987f"/>
+		<tag k="_custom_texture" v="building_02_big.jpg"/>
+	</way>
+	<node id="-147" lat="51.113980" lon="17.046049"/>
+	<node id="-146" lat="51.113997" lon="17.046156"/>
+	<node id="-145" lat="51.114056" lon="17.046132"/>
+	<node id="-144" lat="51.114042" lon="17.046024"/>
+	<way id="-100030">
+		<nd ref="-144"/>
+		<nd ref="-145"/>
+		<nd ref="-146"/>
+		<nd ref="-147"/>
+		<nd ref="-144"/>
+		<tag k="building" v="yes"/>
+		<tag k="height" v="30.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="colour" v="#ff987f"/>
+		<tag k="_custom_texture" v="building_02_big.jpg"/>
+	</way>
 </osm>
 

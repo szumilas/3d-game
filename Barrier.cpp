@@ -57,7 +57,7 @@ void Barrier::calculateFinalGeometry()
 
 			if (!xRatio)
 				xRatio = 1.0f;
-			if (!yRatio)
+			if (!yRatio || barrier == "hedge")
 				yRatio = 1.0f;
 
 			if (yRatio == 1.0f)
@@ -95,7 +95,7 @@ void Barrier::calculateFinalGeometry()
 			polygon.points.push_back({ rightSide[q].x, rightSide[q].y, _height });
 
 			float xRatio = static_cast<int>(leftSide[q].distance2D(leftSide[q + 1]) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realWidth);
-			float yRatio = 1;
+			float yRatio = _width / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight;
 
 			if (!xRatio)
 				xRatio = 1.0f;
@@ -103,12 +103,19 @@ void Barrier::calculateFinalGeometry()
 				yRatio = 1.0f;
 
 			if (barrier == "hedge")
-				yRatio *= 0.8;
-
-			polygon.texturePoints.push_back({ 0, 0 });
-			polygon.texturePoints.push_back({ xRatio, 0 });
-			polygon.texturePoints.push_back({ xRatio, yRatio });
-			polygon.texturePoints.push_back({ 0, yRatio });
+			{
+				polygon.texturePoints.push_back({ 0, 0.2 });
+				polygon.texturePoints.push_back({ xRatio, 0.2 });
+				polygon.texturePoints.push_back({ xRatio, yRatio });
+				polygon.texturePoints.push_back({ 0, yRatio });
+			}
+			else
+			{
+				polygon.texturePoints.push_back({ 0, 0 });
+				polygon.texturePoints.push_back({ xRatio, 0 });
+				polygon.texturePoints.push_back({ xRatio, yRatio });
+				polygon.texturePoints.push_back({ 0, yRatio });
+			}
 
 			polygon.noOfPoints = polygon.points.size();
 			polygon.color = Color{ 1.0f, 1.0f, 1.0f };

@@ -1304,7 +1304,8 @@ void MapContainer::EditMapObject(const Point& point)
 
 	for (auto& mapObject : MapManager::Instance()->mapObjects)
 	{
-		if (buildingEdited.object == nullptr && mapObject->isSelected && MapManager::Instance()->isBuildingCheck(*mapObject.get()))
+		if (buildingEdited.object == nullptr && mapObject->isSelected
+			&& (MapManager::Instance()->isBuildingCheck(*mapObject.get()) || MapManager::Instance()->isBarrierCheck(*mapObject.get())))
 		{
 			buildingEdited.object = mapObject.get();
 		}
