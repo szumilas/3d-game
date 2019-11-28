@@ -77,35 +77,51 @@ public:
 	static bool isInside(const std::vector<Point>& polygon, Point& p)
 	{
 		int n = polygon.size();
-		// There must be at least 3 vertices in polygon[] 
-		if (n < 3) return false;
 
-		// Create a point for line segment from p to infinite 
-		Point extreme = { INF, p.y };
-
-		// Count intersections of the above line with sides of polygon 
-		int count = 0, i = 0;
-		do
+		if (n >= 3)
 		{
-			int next = (i + 1) % n;
+			// Create a point for line segment from p to infinite 
+			Point extreme = { INF, p.y };
 
-			// Check if the line segment from 'p' to 'extreme' intersects 
-			// with the line segment from 'polygon[i]' to 'polygon[next]' 
-			if (doIntersect(polygon[i], polygon[next], p, extreme))
+			// Count intersections of the above line with sides of polygon 
+			int count = 0, i = 0;
+			do
 			{
-				// If the point 'p' is colinear with line segment 'i-next', 
-				// then check if it lies on segment. If it lies, return true, 
-				// otherwise false 
-				if (orientation(polygon[i], p, polygon[next]) == 0)
-					return onSegment(polygon[i], p, polygon[next]);
+				int next = (i + 1) % n;
 
-				count++;
-			}
-			i = next;
-		} while (i != 0);
+				// Check if the line segment from 'p' to 'extreme' intersects 
+				// with the line segment from 'polygon[i]' to 'polygon[next]' 
+				if (doIntersect(polygon[i], polygon[next], p, extreme))
+				{
+					// If the point 'p' is colinear with line segment 'i-next', 
+					// then check if it lies on segment. If it lies, return true, 
+					// otherwise false 
+					if (orientation(polygon[i], p, polygon[next]) == 0)
+						return onSegment(polygon[i], p, polygon[next]);
 
-		// Return true if count is odd, false otherwise 
-		return count & 1; // Same as (count%2 == 1) 
+					count++;
+				}
+				i = next;
+			} while (i != 0);
+
+			// Return true if count is odd, false otherwise 
+			return count & 1; // Same as (count%2 == 1) 
+		}
+		else if (n == 2)
+		{
+			const Point& p1 = polygon[0];
+			const Point& p2 = polygon[1];
+
+			Line2D line(p1, p2);
+
+			return line.pointDistance(p) < 0.05
+				&& (p1.x < p.x && p.x < p2.x || p1.x > p.x && p.x > p2.x)
+				&& (p1.y < p.y && p.y < p2.y || p1.y > p.y && p.y > p2.y);
+		}
+
+		// There must be at least 2 vertices in polygon[] 
+		return false;
+
 	}
 
 	static int countPointsInsidePolygon(const std::vector<Point>& polygon, std::vector<Point>& points)

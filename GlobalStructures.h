@@ -74,7 +74,7 @@ struct Line2D
 
 	Line2D();
 	Line2D(float A, float B, float C);
-	Line2D(Point& first, Point& second);
+	Line2D(const Point& first, const Point& second);
 
 	void calculateBisector(Line2D& firstLine, Line2D& secondLine, bool secondSolution = false);
 	Point calcuateIntersectionPoint(Line2D& secondLine);

@@ -50,6 +50,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_MovePoint,
 		MapContainer::e_SelectPoint,
 		MapContainer::e_RemovePoints,
+		MapContainer::e_RandomizePoints,
 		MapContainer::e_AddSplinePoint,
 		MapContainer::e_RemoveSplinePoint,
 		MapContainer::e_MoveSplinePoint,
@@ -59,6 +60,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_IncreaseSplineSubpoints,
 		MapContainer::e_DecreaseSplineSubpoints,
 		MapContainer::e_ConvertSplineToCurrentPath,
+		MapContainer::e_ConvertSplinePointsToCurrentPath,
 	};
 	tools.push_back(PathTools);
 
@@ -158,6 +160,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_ConvertPathToAIPoints, &MapContainer::ConvertPathToAIPoints },
 		{ e_ConvertAIPointsToPath, &MapContainer::ConvertAIPointsToPath },
 		{ e_RemovePoints, &MapContainer::removePoints },
+		{ e_RandomizePoints, &MapContainer::randomizePoints },
 		{ e_AddSplinePoint, &MapContainer::AddSplinePoint },
 		{ e_RemoveSplinePoint, &MapContainer::RemoveSplinePoint },
 		{ e_MoveSplinePoint, &MapContainer::MoveSplinePoint },
@@ -167,6 +170,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_IncreaseSplineSubpoints, &MapContainer::IncreaseSplineSubpoints },
 		{ e_DecreaseSplineSubpoints, &MapContainer::DecreaseSplineSubpoints },
 		{ e_ConvertSplineToCurrentPath, &MapContainer::ConvertSplineToCurrentPath },
+		{ e_ConvertSplinePointsToCurrentPath, &MapContainer::ConvertSplinePointsToCurrentPath },
 		{ e_ConvertPathToRaceBarriers, &MapContainer::ConvertPathToRaceBarriers },
 		{ e_ConvertPathToMeta, &MapContainer::ConvertPathToMeta },
 		{ e_AddCameraPoint, &MapContainer::AddCameraPoint },
@@ -958,7 +962,21 @@ void MapContainer::DecreaseSplineSubpoints(const Point& point)
 
 void MapContainer::ConvertSplineToCurrentPath(const Point& point)
 {
-	currentPath = generateSubsplinePath();
+	if (currentSpline.spline.points.size() > 3)
+	{
+		currentPath = generateSubsplinePath();
+		currentSpline = SplineStruct{};
+	}
+}
+
+void MapContainer::ConvertSplinePointsToCurrentPath(const Point& point)
+{
+	std::vector<PathStruct> futurePath;
+	auto& splinePoints = currentSpline.spline.points;
+
+	std::for_each(splinePoints.begin(), splinePoints.end(), [&](const Point& p) {futurePath.push_back({ p, splineSubointsColor, false }); });
+
+	currentPath = std::move(futurePath);
 	currentSpline = SplineStruct{};
 }
 
@@ -1658,6 +1676,38 @@ void MapContainer::AIPlay(const Point& point)
 void MapContainer::removePoints(const Point& point)
 {
 	currentPath.clear();
+}
+
+void MapContainer::randomizePoints(const Point& point)
+{
+	std::vector<Point>polygon;
+	std::transform(currentPath.begin(), currentPath.end(), std::back_inserter(polygon), [&](const auto& p) { return p.center; });
+
+	auto xMin = std::min_element(polygon.begin(), polygon.end(), [](const auto& p1, const auto& p2) { return p1.x < p2.x; });
+	auto xMax = std::max_element(polygon.begin(), polygon.end(), [](const auto& p1, const auto& p2) { return p1.x < p2.x; });
+	auto yMin = std::min_element(polygon.begin(), polygon.end(), [](const auto& p1, const auto& p2) { return p1.y < p2.y; });
+	auto yMax = std::max_element(polygon.begin(), polygon.end(), [](const auto& p1, const auto& p2) { return p1.y < p2.y; });
+	
+	Point middlePoint((xMin->x + xMax->x) / 2, (yMin->y + yMax->y) / 2);
+
+	const int numberOfRandomPoints = middlePoint.distance2D(point);
+
+	long xRange = xMax->x - xMin->x;
+	long yRange = yMax->y - yMin->y;
+
+	for (int q = 0; q < numberOfRandomPoints; q++)
+	{
+		Point newPoint(xMin->x + rand() % xRange, yMin->y + rand() % yRange);
+
+		if (PointInsidePolygonDetector::isInside(polygon, newPoint)
+			&& std::all_of(
+				currentSpline.spline.points.begin(),
+				currentSpline.spline.points.end(),
+				[&newPoint](const auto& p) { return p.distance2D(newPoint) > 1.0; }))
+		{
+			currentSpline.spline.push_back(newPoint);
+		}
+	}
 }
 
 void MapContainer::displayPath(const std::vector<PathStruct>& path, const Color& color)

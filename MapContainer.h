@@ -32,6 +32,7 @@ public:
 		e_ConvertPathToAIPoints,
 		e_ConvertAIPointsToPath,
 		e_RemovePoints,
+		e_RandomizePoints,
 		e_AddSplinePoint,
 		e_RemoveSplinePoint,
 		e_MoveSplinePoint,
@@ -41,6 +42,7 @@ public:
 		e_IncreaseSplineSubpoints,
 		e_DecreaseSplineSubpoints,
 		e_ConvertSplineToCurrentPath,
+		e_ConvertSplinePointsToCurrentPath,
 		e_ConvertPathToRaceBarriers,
 		e_ConvertPathToMeta,
 		e_AddCameraPoint,
@@ -136,6 +138,7 @@ public:
 	void IncreaseSplineSubpoints(const Point& point = Point());
 	void DecreaseSplineSubpoints(const Point& point = Point());
 	void ConvertSplineToCurrentPath(const Point& point = Point());
+	void ConvertSplinePointsToCurrentPath(const Point& point = Point());
 	void ConvertPathToRaceBarriers(const Point& point = Point());
 	void ConvertPathToMeta(const Point& point = Point());
 	void AddCameraPoint(const Point& point = Point());
@@ -190,6 +193,7 @@ public:
 	void resetCarPositionsToPoint(int idPoint);
 	void movePoint(const Point& point);
 	void removePoints(const Point& point = Point());
+	void randomizePoints(const Point& point = Point());
 	void AIPlay(const Point& point = Point());
 	bool getAIPathActive() { return AIPathActive; }
 	void AIPause(const Point& point = Point());

@@ -161,7 +161,7 @@ Line2D::Line2D(float A, float B, float C)
 
 };
 
-Line2D::Line2D(Point& first, Point& second)
+Line2D::Line2D(const Point& first, const Point& second)
 {
 	if (first.x == second.x)
 	{

@@ -16,12 +16,16 @@ void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)
 	newPoint.x = nodes.at(refs[0]).posX;
 	newPoint.y = nodes.at(refs[0]).posY;
 
-	auto random1 = static_cast<float>(static_cast<int>((abs(newPoint.x) * 100) + static_cast<int>(abs(newPoint.y) * 100)) % 100) / 100;
+	auto random1 = static_cast<float>(static_cast<int>((abs(newPoint.x) * 100) + static_cast<int>(abs(newPoint.y) * 1000)) % 100) / 100;
 	auto random2 = static_cast<float>(static_cast<int>((abs(newPoint.x) * 1000) + static_cast<int>(abs(newPoint.y) * 1000)) % 100) / 100;
 	auto random3 = static_cast<float>(static_cast<int>((abs(newPoint.x) * 10) + static_cast<int>(abs(newPoint.y) * 10)) % 100) / 100;
 	auto random4 = static_cast<int>(static_cast<int>((abs(newPoint.x) * 10) + static_cast<int>(abs(newPoint.y) * 100)) % 100);
 
-	if (_height == 0)
+	if (getId() < 0)
+	{
+		_height = 2.0 + (random1 + random2 + random3 + 0.01 * (abs(getId()) % 100)) / 4 * 10.0;
+	}
+	else if (_height == 0)
 	{
 		_height = 4.0 + random1 * 2.0;
 	}
