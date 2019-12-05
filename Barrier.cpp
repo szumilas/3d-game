@@ -69,7 +69,7 @@ void Barrier::calculateFinalGeometry()
 			polygon.texturePoints.push_back({ 0, yRatio });
 
 			polygon.noOfPoints = polygon.points.size();
-			polygon.color = Color{ 1.0f, 1.0f, 1.0f };
+			polygon.color = _color;
 
 			polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(textureName)].idTexture;
 
@@ -118,7 +118,7 @@ void Barrier::calculateFinalGeometry()
 			}
 
 			polygon.noOfPoints = polygon.points.size();
-			polygon.color = Color{ 1.0f, 1.0f, 1.0f };
+			polygon.color = _color;
 
 			polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(textureName)].idTexture;
 
@@ -170,15 +170,15 @@ void Barrier::setTexture()
 		else { _color.red = 128.0f / 256; _color.green = 128.0f / 256; _color.blue = 128.0f / 256; }
 	}
 
-	if (barrier == "wall") { textureName = Textures::concrete_wall; _width = 0.25f; }
-	else if (barrier == "kerb") { textureName = Textures::concrete_wall; _width = 0.1f; }
-	else if (barrier == "hedge") { textureName = Textures::hedge; _width = 0.5f; }
+	if (barrier == "wall") { textureName = Textures::concrete_wall; if(!_width) _width = 0.25f; }
+	else if (barrier == "kerb") { textureName = Textures::concrete_wall; if (!_width) _width = 0.1f; }
+	else if (barrier == "hedge") { textureName = Textures::hedge; if (!_width) _width = 0.5f; }
 	else if (barrier == "bollard") { textureName = Textures::bollard; }
-	else if (barrier == "retaining_wall") { textureName = Textures::retaining_wall; _width = 0.2f; }
+	else if (barrier == "retaining_wall") { textureName = Textures::retaining_wall; if (!_width) _width = 0.2f; }
 	else if (barrier == "guard_rail") { textureName = Textures::guard_rail; }
 	else if (barrier == "fence") { textureName = Textures::fence; }
 	else if (barrier == "race_barrier") { textureName = Textures::race_barrier; }
-	else { textureName = Textures::concrete_wall; _width = 0.2f; }
+	else { textureName = Textures::concrete_wall; if (!_width) _width = 0.2f; }
 
 	if (!_custom_texture.empty())
 	{

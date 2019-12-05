@@ -100,6 +100,7 @@ public:
 	std::string footway;
 	std::string _custom_texture;
 	std::string _custom_object;
+	std::string _custom_area;
 
 
 	float _height;

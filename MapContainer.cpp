@@ -46,6 +46,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 
 	std::vector<int> PathTools{
 		MapContainer::e_AddPoint,
+		MapContainer::e_AddPointInTheMiddle,
 		MapContainer::e_RemovePoint,
 		MapContainer::e_MovePoint,
 		MapContainer::e_SelectPoint,
@@ -98,6 +99,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_AddBuilding,
 		MapContainer::e_AddBarrier,
 		MapContainer::e_AddRamp,
+		MapContainer::e_AddCustomArea,
 	};
 	tools.push_back(NewObjectTools);
 
@@ -147,6 +149,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 	std::map<int, void (MapContainer::*)(const Point&)> map = {
 	
 		{ e_AddPoint, &MapContainer::addPoint },
+		{ e_AddPointInTheMiddle, &MapContainer::addPointInTheMiddle },
 		{ e_RemovePoint, &MapContainer::removePoint },
 		{ e_MovePoint, &MapContainer::movePoint },
 		{ e_SelectPoint, &MapContainer::selectPoint },
@@ -187,6 +190,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_AddBuilding, &MapContainer::AddBuilding },
 		{ e_AddBarrier, &MapContainer::AddBarrier },
 		{ e_AddRamp, &MapContainer::AddRamp },
+		{ e_AddCustomArea, &MapContainer::AddCustomArea },
 
 		{ e_NewObjectAddHeight, &MapContainer::NewObjectAddHeight },
 		{ e_NewObjectReduceHeight, &MapContainer::NewObjectReduceHeight },
@@ -827,6 +831,12 @@ void MapContainer::addPoint(const Point& point)
 		currentPath.push_back({ point, pointsColor, false });
 }
 
+void MapContainer::addPointInTheMiddle(const Point& point)
+{
+	if(currentPath.empty() || currentPath.back().center.distance2D(point) > 0.1)
+		currentPath.push_back({ CameraManager::Instance()->cameraViews[0]->getCameraLookAt(), pointsColor, false });
+}
+
 void MapContainer::removePoint(const Point& point)
 {
 	for (int q = 0; q < currentPath.size(); q++)
@@ -1166,6 +1176,22 @@ void MapContainer::AddRamp(const Point& point)
 	}
 
 	extraObjects.push_back(std::make_unique<Ramp>(Ramp(newObject)));
+	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
+	extraObjects.back()->calculateFinalGeometry();
+}
+
+void MapContainer::AddCustomArea(const Point& point)
+{
+	MapObject newObject(MapManager::Instance()->lastExtraObjectId);
+	MapManager::Instance()->lastExtraObjectId--;
+
+	for (auto& point : currentPath)
+	{
+		auto newNode = MapManager::Instance()->addNewExtraNode(point.center);
+		newObject.refs.push_back(newNode.id);
+	}
+
+	extraObjects.push_back(std::make_unique<CustomArea>(CustomArea(newObject)));
 	extraObjects.back()->calculateXYfromRef(MapManager::Instance()->extraNodes);
 	extraObjects.back()->calculateFinalGeometry();
 }

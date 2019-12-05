@@ -6,7 +6,7 @@ class GreenArea : public MapObject
 {
 public:
 
-	GreenArea(MapObject& mapObject) : MapObject(mapObject) {};
+	GreenArea(MapObject& mapObject);
 
 	void calculateFinalGeometry();
 

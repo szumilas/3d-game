@@ -53,6 +53,7 @@ std::vector<std::pair<bool(MapManager::*)(MapObject&), void(MapManager::*)(MapOb
 	{ &MapManager::isRiverCheck, &MapManager::addObject<River> },
 	{ &MapManager::isBridgeCheck, &MapManager::addObject<Bridge> },
 	{ &MapManager::isGreenAreaCheck, &MapManager::addObject<GreenArea> },
+	{ &MapManager::isCustomAreaCheck, &MapManager::addObject<CustomArea> },
 	{ &MapManager::isBarrierCheck, &MapManager::addObject<Barrier> },
 	{ &MapManager::isCommonCheck, &MapManager::addObject<Common> },
 	{ &MapManager::isParkingCheck, &MapManager::addObject<Parking> },
@@ -98,6 +99,7 @@ std::unordered_set<std::string> MapManager::acceptedTags{
 	"footway",
 	"_custom_texture",
 	"_custom_object",
+	"_custom_area",
 };
 
 std::map<std::string, long MapObject::*> MapManager::tagLongPtrs{
@@ -128,6 +130,7 @@ std::map<std::string, std::string MapObject::*> MapManager::tagPtrs{
 	{ "footway", &MapObject::footway },
 	{ "_custom_texture", &MapObject::_custom_texture },
 	{ "_custom_object", &MapObject::_custom_object },
+	{ "_custom_area", &MapObject::_custom_area },
 };
 
 void printAttributes(rapidxml::xml_node <>* node)
@@ -151,7 +154,7 @@ void MapManager::Init()
 
 	std::cout << "reading map...";
 #ifdef _DEBUG
-	Instance()->readMap("trees2.osm");
+	Instance()->readMap("huge.osm");
 	//Instance()->readMap("grunwaldWithRiver.osm");
 	//Instance()->readMap("huge.osm");
 #else
@@ -802,6 +805,14 @@ bool MapManager::isGreenAreaCheck(MapObject& mapObject)
 		return false;
 }
 
+bool MapManager::isCustomAreaCheck(MapObject& mapObject)
+{
+	if (mapObject._custom_area == "yes")
+		return true;
+	else
+		return false;
+}
+
 bool MapManager::isBarrierCheck(MapObject& mapObject)
 {
 	if (!mapObject.barrier.empty())
@@ -959,6 +970,10 @@ void MapManager::applyMapEditorKeys(Orbit& orbit)
 			currentCameraView++;
 			currentCameraView %= CameraManager::Instance()->cameraViews.size();
 		}
+	}
+	if (KeyboardManager::Instance()->checkKey('V'))
+	{
+		orbit.BirdsEyeView();
 	}
 	if (KeyboardManager::Instance()->checkKey('S'))
 	{

@@ -16,6 +16,7 @@ public:
 	void deactivateMovingXY() { moveOrbitXY = false; };
 	void rotate(int direction = 1) { rz += direction * 3.14159265f / 180.0f; };
 	void changeAlpha() { if (alpha < 3.14 / 2) alpha += 3.14159265f / 180.0f; else alpha = 3.14f / 36.0f; };
+	void BirdsEyeView() { alpha = 3.1 / 2; };
 	float getFlatCursorX() { return flatCursor.x; }
 	float getFlatCursorY() { return flatCursor.y; }
 	Point getFlatCursor() { return flatCursor; }

@@ -14,6 +14,7 @@
 #include "Street.h"
 #include "Building.h"
 #include "GreenArea.h"
+#include "CustomArea.h"
 #include "River.h"
 #include "HighlightedObject.h"
 #include "Barrier.h"
@@ -89,6 +90,7 @@ private:
 	bool isBuildingCheck(MapObject& mapObject);
 	bool isBridgeCheck(MapObject& mapObject);
 	bool isGreenAreaCheck(MapObject& mapObject);
+	bool isCustomAreaCheck(MapObject& mapObject);
 	bool isBarrierCheck(MapObject& mapObject);
 	bool isCommonCheck(MapObject& mapObject);
 	bool isParkingCheck(MapObject& mapObject);

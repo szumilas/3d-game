@@ -180,6 +180,9 @@
     <ClCompile Include="Ramp.cpp">
       <Filter>Source Files\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="CustomArea.cpp">
+      <Filter>Source Files\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Object3D.h">
@@ -342,6 +345,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ramp.h">
+      <Filter>Header Files\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomArea.h">
       <Filter>Header Files\MapObject</Filter>
     </ClInclude>
   </ItemGroup>

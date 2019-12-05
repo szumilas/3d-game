@@ -19,6 +19,7 @@ public:
 	enum Tools
 	{
 		e_AddPoint,
+		e_AddPointInTheMiddle,
 		e_RemovePoint,
 		e_MovePoint,
 		e_SelectPoint,
@@ -59,6 +60,8 @@ public:
 		e_AddBuilding,
 		e_AddBarrier,
 		e_AddRamp,
+		e_AddCustomArea,
+
 		e_NewObjectAddHeight,
 		e_NewObjectReduceHeight,
 		e_NewObjectAddMinHeight,
@@ -122,6 +125,7 @@ public:
 	static void useTool(const Point& point);
 
 	void addPoint(const Point& point);
+	void addPointInTheMiddle(const Point& point);
 	void removePoint(const Point& point = Point());
 	void selectPoint(const Point& point);
 	void AIStop(const Point& point = Point());
@@ -155,6 +159,7 @@ public:
 	void AddBuilding(const Point& point = Point());
 	void AddBarrier(const Point& point = Point());
 	void AddRamp(const Point& point = Point());
+	void AddCustomArea(const Point& point = Point());
 	void NewObjectAddHeight(const Point& point = Point());
 	void NewObjectReduceHeight(const Point& point = Point());
 	void NewObjectAddMinHeight(const Point& point = Point());

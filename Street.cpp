@@ -2,6 +2,8 @@
 
 void Street::calculateFinalGeometry()
 {
+	std::for_each(points.begin(), points.end(), [&](auto& p) { p.z = _height; });
+
 	dividePointsPolygonIntoTriangles();
 
 	for (auto& polygon : polygons)
