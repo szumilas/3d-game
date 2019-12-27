@@ -4927,5 +4927,71 @@
 	<way id="101213855">
 		<tag k="_skip" v="yes"/>
 	</way>
+	<way id="287612692">
+		<tag k="barrier" v="guard_rail"/>
+	</way>
+	<way id="287612693">
+		<tag k="barrier" v="guard_rail"/>
+	</way>
+	<way id="366219679">
+		<tag k="height" v="0.500000"/>
+	</way>
+	<way id="366219676">
+		<tag k="height" v="0.500000"/>
+	</way>
+	<way id="389858722">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="387903770">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="422829456">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="430597892">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="430597893">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="632489373">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="632489391">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="632489394">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="677218103">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="677218105">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="677218104">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101208475">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="8.000000"/>
+		<tag k="colour" v="#4c4c4c"/>
+		<tag k="_custom_texture" v="no_texture.png"/>
+	</way>
+	<way id="1442946">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="6.000000"/>
+	</way>
+	<way id="101217760">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="3.000000"/>
+		<tag k="colour" v="#e5ffff"/>
+		<tag k="_custom_texture" v="building_06_big.jpg"/>
+	</way>
+	<way id="101201426">
+		<tag k="roof:shape" v="flat"/>
+		<tag k="height" v="6.000000"/>
+		<tag k="colour" v="#e5ffff"/>
+	</way>
 </osm>
 

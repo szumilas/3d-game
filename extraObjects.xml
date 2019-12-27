@@ -1502,5 +1502,406 @@
 		<tag k="_custom_texture" v=""/>
 		<tag k="colour" v="#B8B8B8"/>
 	</way>
+	<node id="-492" lat="51.109397" lon="17.051670"/>
+	<node id="-491" lat="51.109220" lon="17.051778"/>
+	<node id="-490" lat="51.109599" lon="17.053417"/>
+	<node id="-489" lat="51.109780" lon="17.053312"/>
+	<way id="-100033">
+		<nd ref="-489"/>
+		<nd ref="-490"/>
+		<nd ref="-491"/>
+		<nd ref="-492"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="-0.100000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#B8B8B8"/>
+	</way>
+	<node id="-496" lat="51.111063" lon="17.048961"/>
+	<node id="-495" lat="51.111174" lon="17.048616"/>
+	<node id="-494" lat="51.112135" lon="17.049292"/>
+	<node id="-493" lat="51.112020" lon="17.049641"/>
+	<way id="-100034">
+		<nd ref="-493"/>
+		<nd ref="-494"/>
+		<nd ref="-495"/>
+		<nd ref="-496"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="-0.100000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#B8B8B8"/>
+	</way>
+	<node id="-498" lat="51.111174" lon="17.048616"/>
+	<node id="-497" lat="51.112135" lon="17.049292"/>
+	<way id="-100035">
+		<nd ref="-497"/>
+		<nd ref="-498"/>
+		<tag k="barrier" v="fence"/>
+		<tag k="height" v="1.100000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#1111B8"/>
+	</way>
+	<node id="-500" lat="51.111063" lon="17.048961"/>
+	<node id="-499" lat="51.112019" lon="17.049641"/>
+	<way id="-100036">
+		<nd ref="-499"/>
+		<nd ref="-500"/>
+		<tag k="barrier" v="fence"/>
+		<tag k="height" v="1.100000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#1111B8"/>
+	</way>
+	<node id="-511" lat="51.106951" lon="17.058654"/>
+	<node id="-510" lat="51.106898" lon="17.057792"/>
+	<node id="-509" lat="51.106909" lon="17.057591"/>
+	<node id="-508" lat="51.106999" lon="17.057124"/>
+	<node id="-507" lat="51.107291" lon="17.056086"/>
+	<node id="-506" lat="51.107579" lon="17.055324"/>
+	<node id="-505" lat="51.107722" lon="17.055049"/>
+	<node id="-504" lat="51.107864" lon="17.054825"/>
+	<node id="-503" lat="51.108132" lon="17.054517"/>
+	<node id="-502" lat="51.109221" lon="17.053639"/>
+	<node id="-501" lat="51.109582" lon="17.053383"/>
+	<way id="-100037">
+		<nd ref="-501"/>
+		<nd ref="-502"/>
+		<nd ref="-503"/>
+		<nd ref="-504"/>
+		<nd ref="-505"/>
+		<nd ref="-506"/>
+		<nd ref="-507"/>
+		<nd ref="-508"/>
+		<nd ref="-509"/>
+		<nd ref="-510"/>
+		<nd ref="-511"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.500000"/>
+		<tag k="height" v="1.100000"/>
+		<tag k="min_height" v="-5.000000"/>
+		<tag k="colour" v="#aabbff"/>
+		<tag k="_custom_texture" v="retaining_wall.jpg"/>
+	</way>
+	<node id="-525" lat="51.109782" lon="17.053330"/>
+	<node id="-524" lat="51.111866" lon="17.060860"/>
+	<node id="-523" lat="51.109107" lon="17.061676"/>
+	<node id="-522" lat="51.106951" lon="17.058654"/>
+	<node id="-521" lat="51.106898" lon="17.057792"/>
+	<node id="-520" lat="51.106909" lon="17.057591"/>
+	<node id="-519" lat="51.106999" lon="17.057124"/>
+	<node id="-518" lat="51.107291" lon="17.056086"/>
+	<node id="-517" lat="51.107579" lon="17.055324"/>
+	<node id="-516" lat="51.107722" lon="17.055049"/>
+	<node id="-515" lat="51.107864" lon="17.054825"/>
+	<node id="-514" lat="51.108132" lon="17.054517"/>
+	<node id="-513" lat="51.109221" lon="17.053639"/>
+	<node id="-512" lat="51.109582" lon="17.053383"/>
+	<way id="-100038">
+		<nd ref="-512"/>
+		<nd ref="-513"/>
+		<nd ref="-514"/>
+		<nd ref="-515"/>
+		<nd ref="-516"/>
+		<nd ref="-517"/>
+		<nd ref="-518"/>
+		<nd ref="-519"/>
+		<nd ref="-520"/>
+		<nd ref="-521"/>
+		<nd ref="-522"/>
+		<nd ref="-523"/>
+		<nd ref="-524"/>
+		<nd ref="-525"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="-0.10000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#B8B8B8"/>
+	</way>
+	<node id="-572" lat="51.106396" lon="17.060086"/>
+	<node id="-571" lat="51.106436" lon="17.060079"/>
+	<node id="-570" lat="51.106388" lon="17.059986"/>
+	<node id="-569" lat="51.106607" lon="17.060070"/>
+	<node id="-568" lat="51.106375" lon="17.059723"/>
+	<node id="-567" lat="51.106651" lon="17.059428"/>
+	<node id="-566" lat="51.106397" lon="17.059287"/>
+	<node id="-565" lat="51.106781" lon="17.059141"/>
+	<node id="-564" lat="51.106434" lon="17.058870"/>
+	<node id="-563" lat="51.106773" lon="17.058681"/>
+	<node id="-562" lat="51.106466" lon="17.058549"/>
+	<node id="-561" lat="51.106949" lon="17.058650"/>
+	<node id="-560" lat="51.106484" lon="17.058334"/>
+	<node id="-559" lat="51.106927" lon="17.058279"/>
+	<node id="-558" lat="51.106535" lon="17.058014"/>
+	<node id="-557" lat="51.106898" lon="17.057795"/>
+	<node id="-556" lat="51.106620" lon="17.057642"/>
+	<node id="-555" lat="51.106907" lon="17.057592"/>
+	<node id="-554" lat="51.106571" lon="17.057308"/>
+	<node id="-553" lat="51.106998" lon="17.057130"/>
+	<node id="-552" lat="51.106701" lon="17.056820"/>
+	<node id="-551" lat="51.107102" lon="17.056750"/>
+	<node id="-550" lat="51.106836" lon="17.056433"/>
+	<node id="-549" lat="51.107203" lon="17.056393"/>
+	<node id="-548" lat="51.106983" lon="17.056100"/>
+	<node id="-547" lat="51.107320" lon="17.056006"/>
+	<node id="-546" lat="51.107151" lon="17.055700"/>
+	<node id="-545" lat="51.107421" lon="17.055735"/>
+	<node id="-544" lat="51.107286" lon="17.055402"/>
+	<node id="-543" lat="51.107501" lon="17.055528"/>
+	<node id="-542" lat="51.107364" lon="17.055285"/>
+	<node id="-541" lat="51.107556" lon="17.055385"/>
+	<node id="-540" lat="51.107463" lon="17.055122"/>
+	<node id="-539" lat="51.107594" lon="17.055291"/>
+	<node id="-538" lat="51.107521" lon="17.055001"/>
+	<node id="-537" lat="51.107650" lon="17.055182"/>
+	<node id="-536" lat="51.107596" lon="17.054946"/>
+	<node id="-535" lat="51.107725" lon="17.055042"/>
+	<node id="-534" lat="51.107692" lon="17.054829"/>
+	<node id="-533" lat="51.107811" lon="17.054904"/>
+	<node id="-532" lat="51.107812" lon="17.054695"/>
+	<node id="-531" lat="51.107886" lon="17.054798"/>
+	<node id="-530" lat="51.107904" lon="17.054681"/>
+	<node id="-529" lat="51.107945" lon="17.054725"/>
+	<node id="-528" lat="51.107985" lon="17.054601"/>
+	<node id="-527" lat="51.107994" lon="17.054670"/>
+	<node id="-526" lat="51.108089" lon="17.054558"/>
+	<way id="-100039">
+		<nd ref="-526"/>
+		<nd ref="-527"/>
+		<nd ref="-528"/>
+		<nd ref="-529"/>
+		<nd ref="-530"/>
+		<nd ref="-531"/>
+		<nd ref="-532"/>
+		<nd ref="-533"/>
+		<nd ref="-534"/>
+		<nd ref="-535"/>
+		<nd ref="-536"/>
+		<nd ref="-537"/>
+		<nd ref="-538"/>
+		<nd ref="-539"/>
+		<nd ref="-540"/>
+		<nd ref="-541"/>
+		<nd ref="-542"/>
+		<nd ref="-543"/>
+		<nd ref="-544"/>
+		<nd ref="-545"/>
+		<nd ref="-546"/>
+		<nd ref="-547"/>
+		<nd ref="-548"/>
+		<nd ref="-549"/>
+		<nd ref="-550"/>
+		<nd ref="-551"/>
+		<nd ref="-552"/>
+		<nd ref="-553"/>
+		<nd ref="-554"/>
+		<nd ref="-555"/>
+		<nd ref="-556"/>
+		<nd ref="-557"/>
+		<nd ref="-558"/>
+		<nd ref="-559"/>
+		<nd ref="-560"/>
+		<nd ref="-561"/>
+		<nd ref="-562"/>
+		<nd ref="-563"/>
+		<nd ref="-564"/>
+		<nd ref="-565"/>
+		<nd ref="-566"/>
+		<nd ref="-567"/>
+		<nd ref="-568"/>
+		<nd ref="-569"/>
+		<nd ref="-570"/>
+		<nd ref="-571"/>
+		<nd ref="-572"/>
+		<tag k="_custom_object" v="_ramp"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="height" v="0.000000"/>
+		<tag k="min_height" v="-5.000000"/>
+		<tag k="_custom_texture" v="grass.jpg"/>
+	</way>
+	<node id="-592" lat="51.108169" lon="17.069346"/>
+	<node id="-591" lat="51.107606" lon="17.068820"/>
+	<node id="-590" lat="51.107388" lon="17.068544"/>
+	<node id="-589" lat="51.107000" lon="17.067815"/>
+	<node id="-588" lat="51.106823" lon="17.067230"/>
+	<node id="-587" lat="51.106719" lon="17.066589"/>
+	<node id="-586" lat="51.106677" lon="17.065585"/>
+	<node id="-585" lat="51.106544" lon="17.065489"/>
+	<node id="-584" lat="51.106515" lon="17.064383"/>
+	<node id="-583" lat="51.106623" lon="17.064237"/>
+	<node id="-582" lat="51.106815" lon="17.062856"/>
+	<node id="-581" lat="51.106796" lon="17.062087"/>
+	<node id="-580" lat="51.106550" lon="17.061389"/>
+	<node id="-579" lat="51.106420" lon="17.060497"/>
+	<node id="-578" lat="51.106398" lon="17.060081"/>
+	<node id="-577" lat="51.106608" lon="17.060068"/>
+	<node id="-576" lat="51.106652" lon="17.059426"/>
+	<node id="-575" lat="51.106780" lon="17.059139"/>
+	<node id="-574" lat="51.106773" lon="17.058678"/>
+	<node id="-573" lat="51.106948" lon="17.058650"/>
+	<way id="-100040">
+		<nd ref="-573"/>
+		<nd ref="-574"/>
+		<nd ref="-575"/>
+		<nd ref="-576"/>
+		<nd ref="-577"/>
+		<nd ref="-578"/>
+		<nd ref="-579"/>
+		<nd ref="-580"/>
+		<nd ref="-581"/>
+		<nd ref="-582"/>
+		<nd ref="-583"/>
+		<nd ref="-584"/>
+		<nd ref="-585"/>
+		<nd ref="-586"/>
+		<nd ref="-587"/>
+		<nd ref="-588"/>
+		<nd ref="-589"/>
+		<nd ref="-590"/>
+		<nd ref="-591"/>
+		<nd ref="-592"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.500000"/>
+		<tag k="height" v="1.100000"/>
+		<tag k="min_height" v="-5.000000"/>
+		<tag k="colour" v="#aabbff"/>
+		<tag k="_custom_texture" v="retaining_wall.jpg"/>
+	</way>
+	<node id="-615" lat="51.108693" lon="17.058542"/>
+	<node id="-614" lat="51.111524" lon="17.057782"/>
+	<node id="-613" lat="51.111866" lon="17.063440"/>
+	<node id="-612" lat="51.108169" lon="17.069346"/>
+	<node id="-611" lat="51.107606" lon="17.068820"/>
+	<node id="-610" lat="51.107388" lon="17.068544"/>
+	<node id="-609" lat="51.107000" lon="17.067815"/>
+	<node id="-608" lat="51.106823" lon="17.067230"/>
+	<node id="-607" lat="51.106719" lon="17.066589"/>
+	<node id="-606" lat="51.106677" lon="17.065585"/>
+	<node id="-605" lat="51.106544" lon="17.065489"/>
+	<node id="-604" lat="51.106515" lon="17.064383"/>
+	<node id="-603" lat="51.106623" lon="17.064237"/>
+	<node id="-602" lat="51.106815" lon="17.062856"/>
+	<node id="-601" lat="51.106796" lon="17.062087"/>
+	<node id="-600" lat="51.106550" lon="17.061389"/>
+	<node id="-599" lat="51.106420" lon="17.060497"/>
+	<node id="-598" lat="51.106398" lon="17.060081"/>
+	<node id="-597" lat="51.106608" lon="17.060068"/>
+	<node id="-596" lat="51.106652" lon="17.059426"/>
+	<node id="-595" lat="51.106780" lon="17.059139"/>
+	<node id="-594" lat="51.106773" lon="17.058678"/>
+	<node id="-593" lat="51.106948" lon="17.058650"/>
+	<way id="-100041">
+		<nd ref="-593"/>
+		<nd ref="-594"/>
+		<nd ref="-595"/>
+		<nd ref="-596"/>
+		<nd ref="-597"/>
+		<nd ref="-598"/>
+		<nd ref="-599"/>
+		<nd ref="-600"/>
+		<nd ref="-601"/>
+		<nd ref="-602"/>
+		<nd ref="-603"/>
+		<nd ref="-604"/>
+		<nd ref="-605"/>
+		<nd ref="-606"/>
+		<nd ref="-607"/>
+		<nd ref="-608"/>
+		<nd ref="-609"/>
+		<nd ref="-610"/>
+		<nd ref="-611"/>
+		<nd ref="-612"/>
+		<nd ref="-613"/>
+		<nd ref="-614"/>
+		<nd ref="-615"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="-0.10000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#B8B8B8"/>
+	</way>
+	<node id="-631" lat="51.114589" lon="17.071749"/>
+	<node id="-630" lat="51.113906" lon="17.071555"/>
+	<node id="-629" lat="51.112706" lon="17.070923"/>
+	<node id="-628" lat="51.111582" lon="17.070162"/>
+	<node id="-627" lat="51.111379" lon="17.070184"/>
+	<node id="-626" lat="51.111016" lon="17.070014"/>
+	<node id="-625" lat="51.110935" lon="17.070113"/>
+	<node id="-624" lat="51.110526" lon="17.069900"/>
+	<node id="-623" lat="51.110466" lon="17.070061"/>
+	<node id="-622" lat="51.110079" lon="17.069916"/>
+	<node id="-621" lat="51.110000" lon="17.069967"/>
+	<node id="-620" lat="51.109773" lon="17.069797"/>
+	<node id="-619" lat="51.109615" lon="17.069883"/>
+	<node id="-618" lat="51.109158" lon="17.069782"/>
+	<node id="-617" lat="51.108735" lon="17.069607"/>
+	<node id="-616" lat="51.108374" lon="17.069418"/>
+	<way id="-100042">
+		<nd ref="-616"/>
+		<nd ref="-617"/>
+		<nd ref="-618"/>
+		<nd ref="-619"/>
+		<nd ref="-620"/>
+		<nd ref="-621"/>
+		<nd ref="-622"/>
+		<nd ref="-623"/>
+		<nd ref="-624"/>
+		<nd ref="-625"/>
+		<nd ref="-626"/>
+		<nd ref="-627"/>
+		<nd ref="-628"/>
+		<nd ref="-629"/>
+		<nd ref="-630"/>
+		<nd ref="-631"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.500000"/>
+		<tag k="height" v="1.100000"/>
+		<tag k="min_height" v="-5.000000"/>
+		<tag k="colour" v="#aabbff"/>
+		<tag k="_custom_texture" v="retaining_wall.jpg"/>
+	</way>
+	<node id="-651" lat="51.108792" lon="17.067637"/>
+	<node id="-650" lat="51.110614" lon="17.061395"/>
+	<node id="-649" lat="51.112251" lon="17.060501"/>
+	<node id="-648" lat="51.114779" lon="17.069063"/>
+	<node id="-647" lat="51.114589" lon="17.071749"/>
+	<node id="-646" lat="51.113906" lon="17.071555"/>
+	<node id="-645" lat="51.112706" lon="17.070923"/>
+	<node id="-644" lat="51.111582" lon="17.070162"/>
+	<node id="-643" lat="51.111379" lon="17.070184"/>
+	<node id="-642" lat="51.111016" lon="17.070014"/>
+	<node id="-641" lat="51.110935" lon="17.070113"/>
+	<node id="-640" lat="51.110526" lon="17.069900"/>
+	<node id="-639" lat="51.110466" lon="17.070061"/>
+	<node id="-638" lat="51.110079" lon="17.069916"/>
+	<node id="-637" lat="51.110000" lon="17.069967"/>
+	<node id="-636" lat="51.109773" lon="17.069797"/>
+	<node id="-635" lat="51.109615" lon="17.069883"/>
+	<node id="-634" lat="51.109158" lon="17.069782"/>
+	<node id="-633" lat="51.108735" lon="17.069607"/>
+	<node id="-632" lat="51.108374" lon="17.069418"/>
+	<way id="-100043">
+		<nd ref="-632"/>
+		<nd ref="-633"/>
+		<nd ref="-634"/>
+		<nd ref="-635"/>
+		<nd ref="-636"/>
+		<nd ref="-637"/>
+		<nd ref="-638"/>
+		<nd ref="-639"/>
+		<nd ref="-640"/>
+		<nd ref="-641"/>
+		<nd ref="-642"/>
+		<nd ref="-643"/>
+		<nd ref="-644"/>
+		<nd ref="-645"/>
+		<nd ref="-646"/>
+		<nd ref="-647"/>
+		<nd ref="-648"/>
+		<nd ref="-649"/>
+		<nd ref="-650"/>
+		<nd ref="-651"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="-0.10000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#B8B8B8"/>
+	</way>
 </osm>
 
