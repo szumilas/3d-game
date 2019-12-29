@@ -4993,5 +4993,9 @@
 		<tag k="height" v="6.000000"/>
 		<tag k="colour" v="#e5ffff"/>
 	</way>
+	<way id="511290452">
+		<tag k="amenity" v="shelter"/>
+		<tag k="building" v="yes"/>
+	</way>
 </osm>
 

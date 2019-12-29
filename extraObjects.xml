@@ -1903,5 +1903,103 @@
 		<tag k="_custom_texture" v=""/>
 		<tag k="colour" v="#B8B8B8"/>
 	</way>
+	<node id="-657" lat="51.121689" lon="17.070753"/>
+	<node id="-656" lat="51.119542" lon="17.071284"/>
+	<node id="-655" lat="51.117075" lon="17.071073"/>
+	<node id="-654" lat="51.116216" lon="17.071272"/>
+	<node id="-653" lat="51.115390" lon="17.071626"/>
+	<node id="-652" lat="51.114789" lon="17.071716"/>
+	<way id="-100044">
+		<nd ref="-652"/>
+		<nd ref="-653"/>
+		<nd ref="-654"/>
+		<nd ref="-655"/>
+		<nd ref="-656"/>
+		<nd ref="-657"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.500000"/>
+		<tag k="height" v="1.100000"/>
+		<tag k="min_height" v="-5.000000"/>
+		<tag k="colour" v="#aabbff"/>
+		<tag k="_custom_texture" v="retaining_wall.jpg"/>
+	</way>
+	<node id="-667" lat="51.114542" lon="17.071210"/>
+	<node id="-666" lat="51.114309" lon="17.067637"/>
+	<node id="-665" lat="51.117571" lon="17.059633"/>
+	<node id="-664" lat="51.120464" lon="17.062818"/>
+	<node id="-663" lat="51.121689" lon="17.070753"/>
+	<node id="-662" lat="51.119542" lon="17.071284"/>
+	<node id="-661" lat="51.117075" lon="17.071073"/>
+	<node id="-660" lat="51.116216" lon="17.071272"/>
+	<node id="-659" lat="51.115390" lon="17.071626"/>
+	<node id="-658" lat="51.114789" lon="17.071716"/>
+	<way id="-100045">
+		<nd ref="-658"/>
+		<nd ref="-659"/>
+		<nd ref="-660"/>
+		<nd ref="-661"/>
+		<nd ref="-662"/>
+		<nd ref="-663"/>
+		<nd ref="-664"/>
+		<nd ref="-665"/>
+		<nd ref="-666"/>
+		<nd ref="-667"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="-0.10000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#B8B8B8"/>
+	</way>
+	<node id="-674" lat="51.113589" lon="17.043507"/>
+	<node id="-673" lat="51.113168" lon="17.044709"/>
+	<node id="-672" lat="51.112864" lon="17.046328"/>
+	<node id="-671" lat="51.112776" lon="17.047045"/>
+	<node id="-670" lat="51.112677" lon="17.047633"/>
+	<node id="-669" lat="51.112530" lon="17.047942"/>
+	<node id="-668" lat="51.112134" lon="17.049289"/>
+	<way id="-100046">
+		<nd ref="-668"/>
+		<nd ref="-669"/>
+		<nd ref="-670"/>
+		<nd ref="-671"/>
+		<nd ref="-672"/>
+		<nd ref="-673"/>
+		<nd ref="-674"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.500000"/>
+		<tag k="height" v="1.100000"/>
+		<tag k="min_height" v="-5.000000"/>
+		<tag k="colour" v="#aabbff"/>
+		<tag k="_custom_texture" v="retaining_wall.jpg"/>
+	</way>
+	<node id="-686" lat="51.112880" lon="17.049980"/>
+	<node id="-685" lat="51.116762" lon="17.051371"/>
+	<node id="-684" lat="51.117800" lon="17.047685"/>
+	<node id="-683" lat="51.116527" lon="17.044210"/>
+	<node id="-682" lat="51.114396" lon="17.042912"/>
+	<node id="-681" lat="51.113589" lon="17.043507"/>
+	<node id="-680" lat="51.113168" lon="17.044709"/>
+	<node id="-679" lat="51.112864" lon="17.046328"/>
+	<node id="-678" lat="51.112776" lon="17.047045"/>
+	<node id="-677" lat="51.112677" lon="17.047633"/>
+	<node id="-676" lat="51.112530" lon="17.047942"/>
+	<node id="-675" lat="51.112134" lon="17.049289"/>
+	<way id="-100047">
+		<nd ref="-675"/>
+		<nd ref="-676"/>
+		<nd ref="-677"/>
+		<nd ref="-678"/>
+		<nd ref="-679"/>
+		<nd ref="-680"/>
+		<nd ref="-681"/>
+		<nd ref="-682"/>
+		<nd ref="-683"/>
+		<nd ref="-684"/>
+		<nd ref="-685"/>
+		<nd ref="-686"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="-0.10000"/>
+		<tag k="_custom_texture" v=""/>
+		<tag k="colour" v="#B8B8B8"/>
+	</way>
 </osm>
 
