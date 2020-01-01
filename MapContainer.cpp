@@ -833,7 +833,7 @@ void MapContainer::addPoint(const Point& point)
 
 void MapContainer::addPointInTheMiddle(const Point& point)
 {
-	if(currentPath.empty() || currentPath.back().center.distance2D(point) > 0.1)
+	if(currentPath.empty() || currentPath.back().center.distance2D(CameraManager::Instance()->cameraViews[0]->getCameraLookAt()) > 0.1)
 		currentPath.push_back({ CameraManager::Instance()->cameraViews[0]->getCameraLookAt(), pointsColor, false });
 }
 
