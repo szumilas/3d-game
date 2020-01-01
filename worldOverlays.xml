@@ -4997,5 +4997,14 @@
 		<tag k="amenity" v="shelter"/>
 		<tag k="building" v="yes"/>
 	</way>
+	<way id="1442225">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101137264">
+		<tag k="_skip" v="yes"/>
+	</way>
+	<way id="101145326">
+		<tag k="_skip" v="yes"/>
+	</way>
 </osm>
 

@@ -2001,5 +2001,189 @@
 		<tag k="_custom_texture" v=""/>
 		<tag k="colour" v="#B8B8B8"/>
 	</way>
+	<node id="-694" lat="51.110224" lon="17.050273"/>
+	<node id="-693" lat="51.110121" lon="17.050118"/>
+	<node id="-692" lat="51.109604" lon="17.050858"/>
+	<node id="-691" lat="51.109671" lon="17.051027"/>
+	<node id="-690" lat="51.109800" lon="17.050881"/>
+	<node id="-689" lat="51.109488" lon="17.050199"/>
+	<node id="-688" lat="51.109361" lon="17.050345"/>
+	<node id="-687" lat="51.109671" lon="17.051027"/>
+	<way id="-100048">
+		<nd ref="-687"/>
+		<nd ref="-688"/>
+		<nd ref="-689"/>
+		<nd ref="-690"/>
+		<nd ref="-687"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<way id="-100049">
+		<nd ref="-691"/>
+		<nd ref="-692"/>
+		<nd ref="-693"/>
+		<nd ref="-694"/>
+		<nd ref="-691"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<node id="-726" lat="51.110314" lon="17.049782"/>
+	<node id="-725" lat="51.110129" lon="17.050136"/>
+	<node id="-724" lat="51.110201" lon="17.050242"/>
+	<node id="-723" lat="51.110381" lon="17.049877"/>
+	<node id="-722" lat="51.110108" lon="17.049537"/>
+	<node id="-721" lat="51.109935" lon="17.049880"/>
+	<node id="-720" lat="51.109851" lon="17.049742"/>
+	<node id="-719" lat="51.110024" lon="17.049418"/>
+	<node id="-718" lat="51.110010" lon="17.049435"/>
+	<node id="-717" lat="51.110073" lon="17.049267"/>
+	<node id="-716" lat="51.110467" lon="17.049732"/>
+	<node id="-715" lat="51.110398" lon="17.049889"/>
+	<node id="-714" lat="51.110450" lon="17.048690"/>
+	<node id="-713" lat="51.110111" lon="17.049544"/>
+	<node id="-712" lat="51.110000" lon="17.049431"/>
+	<node id="-711" lat="51.110331" lon="17.048586"/>
+	<node id="-710" lat="51.110706" lon="17.049115"/>
+	<node id="-709" lat="51.110265" lon="17.048781"/>
+	<node id="-708" lat="51.110327" lon="17.048575"/>
+	<node id="-707" lat="51.110776" lon="17.048944"/>
+	<node id="-706" lat="51.110315" lon="17.049800"/>
+	<node id="-705" lat="51.110685" lon="17.048851"/>
+	<node id="-704" lat="51.110786" lon="17.048940"/>
+	<node id="-703" lat="51.110401" lon="17.049922"/>
+	<node id="-702" lat="51.110110" lon="17.050393"/>
+	<node id="-701" lat="51.109758" lon="17.049847"/>
+	<node id="-700" lat="51.109845" lon="17.049721"/>
+	<node id="-699" lat="51.110199" lon="17.050267"/>
+	<node id="-698" lat="51.109448" lon="17.050503"/>
+	<node id="-697" lat="51.109940" lon="17.049856"/>
+	<node id="-696" lat="51.109842" lon="17.049693"/>
+	<node id="-695" lat="51.109366" lon="17.050344"/>
+	<way id="-100050">
+		<nd ref="-695"/>
+		<nd ref="-696"/>
+		<nd ref="-697"/>
+		<nd ref="-698"/>
+		<nd ref="-695"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<way id="-100057">
+		<nd ref="-723"/>
+		<nd ref="-724"/>
+		<nd ref="-725"/>
+		<nd ref="-726"/>
+		<nd ref="-723"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<node id="-730" lat="51.109751" lon="17.049841"/>
+	<node id="-729" lat="51.110108" lon="17.050403"/>
+	<node id="-728" lat="51.110202" lon="17.050274"/>
+	<node id="-727" lat="51.109836" lon="17.049730"/>
+	<way id="-100058">
+		<nd ref="-727"/>
+		<nd ref="-728"/>
+		<nd ref="-729"/>
+		<nd ref="-730"/>
+		<nd ref="-727"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<node id="-734" lat="51.109864" lon="17.049942"/>
+	<node id="-733" lat="51.110137" lon="17.049434"/>
+	<node id="-732" lat="51.110053" lon="17.049327"/>
+	<node id="-731" lat="51.109785" lon="17.049823"/>
+	<way id="-100059">
+		<nd ref="-731"/>
+		<nd ref="-732"/>
+		<nd ref="-733"/>
+		<nd ref="-734"/>
+		<nd ref="-731"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<node id="-738" lat="51.110398" lon="17.049897"/>
+	<node id="-737" lat="51.110463" lon="17.049717"/>
+	<node id="-736" lat="51.110080" lon="17.049293"/>
+	<node id="-735" lat="51.110023" lon="17.049420"/>
+	<way id="-100060">
+		<nd ref="-735"/>
+		<nd ref="-736"/>
+		<nd ref="-737"/>
+		<nd ref="-738"/>
+		<nd ref="-735"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<node id="-742" lat="51.110108" lon="17.049505"/>
+	<node id="-741" lat="51.110426" lon="17.048663"/>
+	<node id="-740" lat="51.110331" lon="17.048591"/>
+	<node id="-739" lat="51.110030" lon="17.049415"/>
+	<way id="-100061">
+		<nd ref="-739"/>
+		<nd ref="-740"/>
+		<nd ref="-741"/>
+		<nd ref="-742"/>
+		<nd ref="-739"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<node id="-746" lat="51.110765" lon="17.048957"/>
+	<node id="-745" lat="51.110666" lon="17.048876"/>
+	<node id="-744" lat="51.110303" lon="17.049762"/>
+	<node id="-743" lat="51.110395" lon="17.049886"/>
+	<way id="-100062">
+		<nd ref="-743"/>
+		<nd ref="-744"/>
+		<nd ref="-745"/>
+		<nd ref="-746"/>
+		<nd ref="-743"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
+	<node id="-750" lat="51.110279" lon="17.048756"/>
+	<node id="-749" lat="51.110694" lon="17.049113"/>
+	<node id="-748" lat="51.110759" lon="17.048962"/>
+	<node id="-747" lat="51.110332" lon="17.048606"/>
+	<way id="-100063">
+		<nd ref="-747"/>
+		<nd ref="-748"/>
+		<nd ref="-749"/>
+		<nd ref="-750"/>
+		<nd ref="-747"/>
+		<tag k="building" v="yes"/>
+		<tag k="colour" v="#ffffff"/>
+		<tag k="_custom_texture" v="building_03_big.jpg"/>
+		<tag k="height" v="15.000000"/>
+		<tag k="min_height" v="0.000000"/>
+	</way>
 </osm>
 
