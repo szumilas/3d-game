@@ -53,7 +53,7 @@ void Barrier::calculateFinalGeometry()
 			polygon.points.push_back({ point.x, point.y, _height });
 
 			float xRatio = static_cast<int>(point.distance2D(nextPoint) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realWidth);
-			float yRatio = static_cast<int>(_height - _min_height) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight;
+			float yRatio = static_cast<int>((_height - _min_height) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight);
 
 			if (!xRatio)
 				xRatio = 1.0f;
@@ -78,21 +78,25 @@ void Barrier::calculateFinalGeometry()
 		}
 	}
 
+	auto topLevel = _height;
+
 	if (barrier == "hedge")
-		_height *= 0.9;
+		topLevel *= 0.9;
 
 	if (sidesOfBarrier.size() == 2)
 	{
 		std::vector<Point>& leftSide = sidesOfBarrier[0];
 		std::vector<Point>& rightSide = sidesOfBarrier[1];
 
+		//top of barrier
+
 		for (size_t q = 0; q < leftSide.size() - 1; q++)
 		{
 			Polygon polygon;
-			polygon.points.push_back({ leftSide[q].x, leftSide[q].y, _height });
-			polygon.points.push_back({ leftSide[q + 1].x, leftSide[q + 1].y, _height });
-			polygon.points.push_back({ rightSide[q + 1].x, rightSide[q + 1].y, _height });
-			polygon.points.push_back({ rightSide[q].x, rightSide[q].y, _height });
+			polygon.points.push_back({ leftSide[q].x, leftSide[q].y, topLevel });
+			polygon.points.push_back({ leftSide[q + 1].x, leftSide[q + 1].y, topLevel });
+			polygon.points.push_back({ rightSide[q + 1].x, rightSide[q + 1].y, topLevel });
+			polygon.points.push_back({ rightSide[q].x, rightSide[q].y, topLevel });
 
 			float xRatio = static_cast<int>(leftSide[q].distance2D(leftSide[q + 1]) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realWidth);
 			float yRatio = _width / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight;
@@ -124,6 +128,42 @@ void Barrier::calculateFinalGeometry()
 
 			polygons.push_back(polygon);
 		}
+
+		//beginning and end of the barrier
+		{
+			for (std::pair<Point, Point>& points : std::vector<std::pair<Point, Point>>{ { leftSide.front(), rightSide.front() }, { leftSide.back(), rightSide.back() } })
+			{
+				Polygon polygon;
+				polygon.points.push_back({ points.first.x, points.first.y, _min_height });
+				polygon.points.push_back({ points.second.x, points.second.y, _min_height });
+				polygon.points.push_back({ points.second.x, points.second.y, _height });
+				polygon.points.push_back({ points.first.x, points.first.y, _height });
+
+				float xRatio = static_cast<int>(_width / TextureManager::Instance()->textures[static_cast<long>(textureName)].realWidth);
+				float yRatio = static_cast<int>((_height - _min_height) / TextureManager::Instance()->textures[static_cast<long>(textureName)].realHeight);
+
+				if (!xRatio)
+					xRatio = 1.0f;
+				if (!yRatio || barrier == "hedge")
+					yRatio = 1.0f;
+
+				if (yRatio == 1.0f)
+					yRatio = 0.95f;
+
+				polygon.texturePoints.push_back({ 0, 0 });
+				polygon.texturePoints.push_back({ xRatio, 0 });
+				polygon.texturePoints.push_back({ xRatio, yRatio });
+				polygon.texturePoints.push_back({ 0, yRatio });
+
+				polygon.noOfPoints = polygon.points.size();
+				polygon.color = _color;
+
+				polygon.idTexture = TextureManager::Instance()->textures[static_cast<unsigned int>(textureName)].idTexture;
+
+				polygons.push_back(polygon);
+			}
+		}
+
 	}
 }
 
