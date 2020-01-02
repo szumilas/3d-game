@@ -244,6 +244,7 @@ private:
 	static void displayCurrentPath();
 	static void displayCurrentSpline();
 	static void recalculateAIPointsDistances();
+	static void addGroundAreas(std::vector<std::unique_ptr<MapObject>>& mapObjects);
 
 public:
 
@@ -277,6 +278,7 @@ private:
 	static std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> mapCollidableObjectSections;
 	static std::vector<std::unique_ptr<MapObject>*> highBuildingSection;
 	static std::unique_ptr<MapObject>* background;
+	static std::vector<std::unique_ptr<MapObject>*> ground;
 	static std::vector<std::unique_ptr<MapObject>> extraObjects;
 
 

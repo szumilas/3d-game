@@ -10,6 +10,7 @@ std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer:
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapCollidableObjectSections;
 std::vector<std::unique_ptr<MapObject>*> MapContainer::highBuildingSection;
 std::unique_ptr<MapObject>* MapContainer::background;
+std::vector<std::unique_ptr<MapObject>*> MapContainer::ground;
 std::vector<std::unique_ptr<MapObject>> MapContainer::extraObjects;
 float MapContainer::deltaX;
 float MapContainer::deltaY;
@@ -533,6 +534,19 @@ void MapContainer::loadWorldIntoSections(std::vector<std::unique_ptr<MapObject>>
 	if(!mapObjects.empty())
 		background = &mapObjects.back();
 
+	addGroundAreas(mapObjects);
+}
+
+void MapContainer::addGroundAreas(std::vector<std::unique_ptr<MapObject>>& mapObjects)
+{
+	ground.clear();
+
+	for (auto& mapObject : mapObjects)
+	{
+		auto ID = mapObject.get()->getId();
+		if (ID == -100047 || ID == -100096 || ID == -100032 || ID == -100043 || ID == -100045 || ID == -100041 || ID == -100038)
+			ground.push_back(&mapObject);
+	}
 }
 
 void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>& mapObjects)
@@ -646,6 +660,12 @@ void MapContainer::displayBackground()
 	{
 		background->get()->display();
 		background->get()->alreadyPrinted = false;
+	}
+
+	for (const auto& groundArea : ground)
+	{
+		groundArea->get()->display();
+		groundArea->get()->alreadyPrinted = false;
 	}
 }
 

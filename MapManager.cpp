@@ -815,7 +815,7 @@ bool MapManager::isCustomAreaCheck(MapObject& mapObject)
 
 bool MapManager::isBarrierCheck(MapObject& mapObject)
 {
-	if (!mapObject.barrier.empty())
+	if (!mapObject.barrier.empty() && mapObject.barrier != "kerb")
 		return true;
 	else
 		return false;

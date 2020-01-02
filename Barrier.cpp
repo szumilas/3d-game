@@ -205,7 +205,7 @@ void Barrier::setTexture()
 		else if (barrier == "bollard") { _color.red = 234.0f / 256; _color.green = 207.0f / 256; _color.blue = 32.0f / 256; }
 		else if (barrier == "retaining_wall") { _color.red = 213.0f / 256; _color.green = 205.0f / 256; _color.blue = 195.0f / 256; }
 		else if (barrier == "guard_rail") { _color.red = 179.0f / 256; _color.green = 225.0f / 256; _color.blue = 251.0f / 256; }
-		else if (barrier == "fence") { _color.red = 171.0f / 256; _color.green = 187.0f / 256; _color.blue = 197.0f / 256; }
+		else if (barrier == "fence") { _color.red = 17.0f / 256; _color.green = 17.0f / 256; _color.blue = 17.0f / 256; }
 		else if (barrier == "race_barrier") { _color.red = 171.0f / 256; _color.green = 187.0f / 256; _color.blue = 197.0f / 256; }
 		else { _color.red = 128.0f / 256; _color.green = 128.0f / 256; _color.blue = 128.0f / 256; }
 	}
@@ -218,6 +218,7 @@ void Barrier::setTexture()
 	else if (barrier == "guard_rail") { textureName = Textures::guard_rail; }
 	else if (barrier == "fence") { textureName = Textures::fence; }
 	else if (barrier == "race_barrier") { textureName = Textures::race_barrier; }
+	else if (barrier == "_custom") { textureName = TextureManager::Instance()->getTextureFromFilePath(_custom_texture); }
 	else { textureName = Textures::concrete_wall; if (!_width) _width = 0.2f; }
 
 	if (!_custom_texture.empty())
