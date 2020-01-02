@@ -11,18 +11,29 @@ Ramp::Ramp(MapObject& mapObject) : MapObject(mapObject)
 		_min_height = 0.0f;
 	}
 
-	_color = Color(ColorName::WHITE);
+	if(colour.empty())
+		_color = Color(ColorName::WHITE);
 
 	if (_min_height < 0.5 && _min_height > -0.5f)
 		collidable = Collidable::polygon;
+
 }
 
-void Ramp::calculateFinalGeometry()
+void Ramp::calculateXYfromRef(const std::map<long long, node> &nodes)
 {
+	MapObject::calculateXYfromRef(nodes);
+
 	if (points.size() % 2 == 1)
 	{
 		points.pop_back();
 	}
+
+	originalPoints = points;
+}
+
+void Ramp::calculateFinalGeometry()
+{
+	points = originalPoints;
 
 	auto textureName = TextureManager::Instance()->getTextureFromFilePath(_custom_texture);
 
@@ -44,9 +55,11 @@ void Ramp::calculateFinalGeometry()
 				newPolygon.points.push_back({ t1.x, t1.y, _height });
 				newPolygon.points.push_back({ b2.x, b2.y, _min_height });
 
+				auto heightRatio = round(Point(b1.x, b1.y).distance2D(Point(t1.x, t1.y)) / TextureManager::Instance()->textures[static_cast<int>(textureName)].realHeight);
+				auto lengthRatio = round(Point(b1.x, b1.y).distance2D(Point(b2.x, b2.y)) / TextureManager::Instance()->textures[static_cast<int>(textureName)].realWidth);
 				newPolygon.texturePoints.push_back({ 0.0f, 0.0f });
-				newPolygon.texturePoints.push_back({ 0.5f, 1.0 });
-				newPolygon.texturePoints.push_back({ 1.0f, 0.0f });
+				newPolygon.texturePoints.push_back({ 0.0f, heightRatio });
+				newPolygon.texturePoints.push_back({ lengthRatio, 0.0f });
 
 				newPolygon.noOfPoints = newPolygon.texturePoints.size();
 				newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(textureName)].idTexture;
@@ -64,9 +77,11 @@ void Ramp::calculateFinalGeometry()
 				newPolygon.points.push_back({ b2.x, b2.y, _min_height });
 				newPolygon.points.push_back({ t2.x, t2.y, _height });
 
-				newPolygon.texturePoints.push_back({ 0.0f, 1.0f });
-				newPolygon.texturePoints.push_back({ 0.5f, 0.0 });
-				newPolygon.texturePoints.push_back({ 1.0f, 1.0f });
+				auto heightRatio = round(Point(t2.x, t2.y).distance2D(Point(b2.x, b2.y)) / TextureManager::Instance()->textures[static_cast<int>(textureName)].realHeight);
+				auto lengthRatio = round(Point(t1.x, t1.y).distance2D(Point(t2.x, t2.y)) / TextureManager::Instance()->textures[static_cast<int>(textureName)].realWidth);
+				newPolygon.texturePoints.push_back({ 0.0f, heightRatio });
+				newPolygon.texturePoints.push_back({ lengthRatio, 0.0 });
+				newPolygon.texturePoints.push_back({ lengthRatio, heightRatio });
 
 				newPolygon.noOfPoints = newPolygon.texturePoints.size();
 				newPolygon.idTexture = TextureManager::Instance()->textures[static_cast<int>(textureName)].idTexture;
@@ -77,6 +92,16 @@ void Ramp::calculateFinalGeometry()
 				polygons.push_back(newPolygon);
 			}
 		}
+	}
+
+	points.clear();
+	for (int q = 0; q < originalPoints.size(); q += 2)
+	{
+		points.push_back(originalPoints[q]);
+	}
+	for (int q = originalPoints.size() - 1; q > 0; q -= 2)
+	{
+		points.push_back(originalPoints[q]);
 	}
 }
 

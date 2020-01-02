@@ -607,9 +607,9 @@ void MapContainer::displaySector(const Point& point)
 	int xToDraw = static_cast<int>(100 * (point.x - minX) / deltaX);
 
 	std::vector<std::pair<int, int>> sectorsToDisplay;
-	for (int q = -5; q <= 5; q++)
+	for (int q = -10; q <= 10; q++)
 	{
-		for (int w = -5; w <= 5; w++)
+		for (int w = -10; w <= 10; w++)
 		{
 			if(xToDraw + q >= 0 && xToDraw + q < 100 && yToDraw + w >= 0 && yToDraw + w < 100)
 				sectorsToDisplay.push_back({ xToDraw + q, yToDraw + w });

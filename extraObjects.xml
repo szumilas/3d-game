@@ -8600,5 +8600,208 @@
 	<node id="-2806" lat="51.112799" lon="17.069170">
 		<tag k="natural" v="tree"/>
 	</node>
+	<node id="-2926" lat="51.111379" lon="17.058704"/>
+	<node id="-2925" lat="51.111401" lon="17.058787"/>
+	<node id="-2924" lat="51.111316" lon="17.058746"/>
+	<node id="-2923" lat="51.111339" lon="17.058831"/>
+	<way id="-100105">
+		<nd ref="-2923"/>
+		<nd ref="-2924"/>
+		<nd ref="-2925"/>
+		<nd ref="-2926"/>
+		<tag k="_custom_object" v="_ramp"/>
+		<tag k="colour" v="#cce5ff"/>
+		<tag k="height" v="2.300000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2930" lat="51.111766" lon="17.058187"/>
+	<node id="-2929" lat="51.111783" lon="17.058248"/>
+	<node id="-2928" lat="51.111615" lon="17.058299"/>
+	<node id="-2927" lat="51.111631" lon="17.058358"/>
+	<way id="-100106">
+		<nd ref="-2927"/>
+		<nd ref="-2928"/>
+		<nd ref="-2929"/>
+		<nd ref="-2930"/>
+		<tag k="_custom_object" v="_ramp"/>
+		<tag k="colour" v="#cce5ff"/>
+		<tag k="height" v="2.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2934" lat="51.111714" lon="17.057907"/>
+	<node id="-2933" lat="51.111745" lon="17.057884"/>
+	<node id="-2932" lat="51.111777" lon="17.058127"/>
+	<node id="-2931" lat="51.111811" lon="17.058103"/>
+	<way id="-100107">
+		<nd ref="-2931"/>
+		<nd ref="-2932"/>
+		<nd ref="-2933"/>
+		<nd ref="-2934"/>
+		<tag k="_custom_object" v="_ramp"/>
+		<tag k="colour" v="#cce5ff"/>
+		<tag k="height" v="2.000000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2938" lat="51.111292" lon="17.057508"/>
+	<node id="-2937" lat="51.111342" lon="17.057473"/>
+	<node id="-2936" lat="51.111344" lon="17.057696"/>
+	<node id="-2935" lat="51.111397" lon="17.057658"/>
+	<way id="-100108">
+		<nd ref="-2935"/>
+		<nd ref="-2936"/>
+		<nd ref="-2937"/>
+		<nd ref="-2938"/>
+		<tag k="_custom_object" v="_ramp"/>
+		<tag k="colour" v="#cce5ff"/>
+		<tag k="height" v="2.20000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2942" lat="51.110595" lon="17.056314"/>
+	<node id="-2941" lat="51.110573" lon="17.056242"/>
+	<node id="-2940" lat="51.110667" lon="17.056265"/>
+	<node id="-2939" lat="51.110647" lon="17.056189"/>
+	<way id="-100109">
+		<nd ref="-2939"/>
+		<nd ref="-2940"/>
+		<nd ref="-2941"/>
+		<nd ref="-2942"/>
+		<tag k="_custom_object" v="_ramp"/>
+		<tag k="colour" v="#cce5ff"/>
+		<tag k="height" v="2.20000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2945" lat="51.110647" lon="17.056190"/>
+	<node id="-2944" lat="51.110667" lon="17.056262"/>
+	<node id="-2943" lat="51.110776" lon="17.056183"/>
+	<way id="-100110">
+		<nd ref="-2943"/>
+		<nd ref="-2944"/>
+		<nd ref="-2945"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.500000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2953" lat="51.111339" lon="17.058830"/>
+	<node id="-2952" lat="51.111318" lon="17.058754"/>
+	<node id="-2951" lat="51.111297" lon="17.058771"/>
+	<node id="-2950" lat="51.110907" lon="17.057402"/>
+	<node id="-2949" lat="51.110917" lon="17.057394"/>
+	<node id="-2948" lat="51.110851" lon="17.057160"/>
+	<node id="-2947" lat="51.110839" lon="17.057168"/>
+	<node id="-2946" lat="51.110572" lon="17.056241"/>
+	<way id="-100111">
+		<nd ref="-2946"/>
+		<nd ref="-2947"/>
+		<nd ref="-2948"/>
+		<nd ref="-2949"/>
+		<nd ref="-2950"/>
+		<nd ref="-2951"/>
+		<nd ref="-2952"/>
+		<nd ref="-2953"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.500000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2960" lat="51.111592" lon="17.058390"/>
+	<node id="-2959" lat="51.111658" lon="17.058620"/>
+	<node id="-2958" lat="51.111610" lon="17.058656"/>
+	<node id="-2957" lat="51.111619" lon="17.058697"/>
+	<node id="-2956" lat="51.111418" lon="17.058841"/>
+	<node id="-2955" lat="51.111380" lon="17.058708"/>
+	<node id="-2954" lat="51.111383" lon="17.058708"/>
+	<way id="-100112">
+		<nd ref="-2954"/>
+		<nd ref="-2955"/>
+		<nd ref="-2956"/>
+		<nd ref="-2957"/>
+		<nd ref="-2958"/>
+		<nd ref="-2959"/>
+		<nd ref="-2960"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.500000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2964" lat="51.111631" lon="17.058358"/>
+	<node id="-2963" lat="51.111616" lon="17.058303"/>
+	<node id="-2962" lat="51.111574" lon="17.058333"/>
+	<node id="-2961" lat="51.111590" lon="17.058390"/>
+	<way id="-100113">
+		<nd ref="-2961"/>
+		<nd ref="-2962"/>
+		<nd ref="-2963"/>
+		<nd ref="-2964"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.200000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2969" lat="51.111811" lon="17.058104"/>
+	<node id="-2968" lat="51.111778" lon="17.058126"/>
+	<node id="-2967" lat="51.111792" lon="17.058174"/>
+	<node id="-2966" lat="51.111768" lon="17.058191"/>
+	<node id="-2965" lat="51.111783" lon="17.058248"/>
+	<way id="-100114">
+		<nd ref="-2965"/>
+		<nd ref="-2966"/>
+		<nd ref="-2967"/>
+		<nd ref="-2968"/>
+		<nd ref="-2969"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.200000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2971" lat="51.111695" lon="17.057919"/>
+	<node id="-2970" lat="51.111744" lon="17.057884"/>
+	<way id="-100115">
+		<nd ref="-2970"/>
+		<nd ref="-2971"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.200000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2973" lat="51.111338" lon="17.057706"/>
+	<node id="-2972" lat="51.111396" lon="17.057658"/>
+	<way id="-100116">
+		<nd ref="-2972"/>
+		<nd ref="-2973"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.500000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
+	<node id="-2978" lat="51.111169" lon="17.057126"/>
+	<node id="-2977" lat="51.111191" lon="17.057196"/>
+	<node id="-2976" lat="51.111251" lon="17.057152"/>
+	<node id="-2975" lat="51.111343" lon="17.057472"/>
+	<node id="-2974" lat="51.111294" lon="17.057508"/>
+	<way id="-100117">
+		<nd ref="-2974"/>
+		<nd ref="-2975"/>
+		<nd ref="-2976"/>
+		<nd ref="-2977"/>
+		<nd ref="-2978"/>
+		<tag k="barrier" v="_custom"/>
+		<tag k="width" v="0.200000"/>
+		<tag k="height" v="2.500000"/>
+		<tag k="min_height" v="0.000000"/>
+		<tag k="_custom_texture" v="concrete_wall.jpg"/>
+	</way>
 </osm>
 
