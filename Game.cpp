@@ -514,6 +514,9 @@ void Game::Update()
 			MapManager::Instance()->currentCameraView = 1;
 			MapContainer::Instance()->introFinished();
 		}
+
+		for (auto& car : MapContainer::Instance()->cars)
+			car.update();
 	}
 
 

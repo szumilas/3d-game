@@ -9,8 +9,16 @@
 
 enum TrackName
 {
-	SmallLoop = 1,
-	BigLoop = 2,
+	Grunwaldzki = 1,
+	CityDrift = 2,
+	AroundTheWorld = 3,
+	CenterPoint = 4,
+	GreenAreaTrack = 5,
+	TwoTowers = 6,
+	BigLoop = 7,
+	BotanicalGarden = 8,
+	TheMall = 9,
+	SmallLoop = 10,
 
 };
 
@@ -22,8 +30,16 @@ struct TrackDetails
 
 static std::map<TrackName, TrackDetails> trackDB
 {
+	{ TrackName::Grunwaldzki,{ "Grunwaldzki", "Hard" } },
+	{ TrackName::CityDrift,{ "City Drift", "Hard" } },
+	{ TrackName::AroundTheWorld,{ "Around The World", "Medium" } },
+	{ TrackName::CenterPoint,{ "Center Point", "Hard" } },
+	{ TrackName::GreenAreaTrack,{ "Green Area", "Hard" } },
+	{ TrackName::TwoTowers,{ "Two Towers", "Medium" } },
+	{ TrackName::BigLoop,{ "Big Loop", "Medium" } },
+	{ TrackName::BotanicalGarden,{ "Botanical Garden", "Medium" } },
+	{ TrackName::TheMall,{ "The Mall", "Medium" } },
 	{ TrackName::SmallLoop, {"Small Loop", "Easy" } },
-	{ TrackName::BigLoop, {"Big Loop", "Medium" } },
 
 };
 

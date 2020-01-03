@@ -4903,6 +4903,7 @@
 	<way id="61361695">
 		<tag k="_custom_texture" v="retaining_wall.jpg"/>
 		<tag k="width" v="0.3000000"/>
+		<tag k="colour" v="#ffffff"/>
 	</way>
 	<way id="236061692">
 		<tag k="_custom_texture" v="building_00_empty.jpg"/>

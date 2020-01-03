@@ -46,6 +46,8 @@ public:
 		e_ConvertSplinePointsToCurrentPath,
 		e_ConvertPathToRaceBarriers,
 		e_ConvertPathToMeta,
+		e_ConvertPathToRaceBarriersSaveAndClearPath,
+
 		e_AddCameraPoint,
 		e_RemoveCameraPoints,
 		e_ConvertCameraPointsToSpline,
@@ -144,6 +146,7 @@ public:
 	void ConvertSplineToCurrentPath(const Point& point = Point());
 	void ConvertSplinePointsToCurrentPath(const Point& point = Point());
 	void ConvertPathToRaceBarriers(const Point& point = Point());
+	void ConvertPathToRaceBarriersSaveAndClearPath(const Point& point = Point());
 	void ConvertPathToMeta(const Point& point = Point());
 	void AddCameraPoint(const Point& point = Point());
 	void RemoveCameraPoints(const Point& point = Point());

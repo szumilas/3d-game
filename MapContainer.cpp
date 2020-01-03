@@ -78,6 +78,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_StartRace,
 		MapContainer::e_ConvertPathToRaceBarriers,
 		MapContainer::e_ConvertPathToMeta,
+		MapContainer::e_ConvertPathToRaceBarriersSaveAndClearPath,
 	};
 	tools.push_back(AITools);
 
@@ -177,6 +178,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_ConvertSplinePointsToCurrentPath, &MapContainer::ConvertSplinePointsToCurrentPath },
 		{ e_ConvertPathToRaceBarriers, &MapContainer::ConvertPathToRaceBarriers },
 		{ e_ConvertPathToMeta, &MapContainer::ConvertPathToMeta },
+		{ e_ConvertPathToRaceBarriersSaveAndClearPath, &MapContainer::ConvertPathToRaceBarriersSaveAndClearPath },
 		{ e_AddCameraPoint, &MapContainer::AddCameraPoint },
 		{ e_RemoveCameraPoints, &MapContainer::RemoveCameraPoints },
 		{ e_ConvertCameraPointsToSpline, &MapContainer::ConvertCameraPointsToSpline },
@@ -671,6 +673,7 @@ void MapContainer::displayBackground()
 
 void MapContainer::displayLines()
 {
+	return;
 	glColor3f(0.0f, 0.0f, 0.0f);
 	for (int xx = 0; xx < 100; xx++)
 	{
@@ -1022,6 +1025,13 @@ void MapContainer::ConvertPathToRaceBarriers(const Point& point)
 			}
 		}
 	}
+}
+
+void MapContainer::ConvertPathToRaceBarriersSaveAndClearPath(const Point& point)
+{
+	ConvertPathToRaceBarriers();
+	SaveAIPoints();
+	removePoints();
 }
 
 void MapContainer::ConvertPathToMeta(const Point& point)
@@ -1710,6 +1720,7 @@ void MapContainer::AIPause(const Point& point)
 	AIPathActive = false;
 	for (auto& car : MapContainer::Instance()->cars)
 		car.stop();
+	MapContainer::Instance()->raceTimer.beforeRace = true;
 }
 
 void MapContainer::AIPlay(const Point& point)
@@ -1717,6 +1728,7 @@ void MapContainer::AIPlay(const Point& point)
 	AIPathActive = true;
 	raceTimer.startTimer();
 	raceTimer.state = RaceTimer::WaitingToDisappear;
+	MapContainer::Instance()->raceTimer.beforeRace = false;
 }
 
 void MapContainer::removePoints(const Point& point)
@@ -1955,6 +1967,8 @@ void MapContainer::LoadAIPoints(const Point& point)
 	std::for_each(AIPoints.begin(), AIPoints.end(), [&](const PathStruct& data) {AIpointsPositions.push_back(data.center); });
 
 	raceTimer.setAIpointsPosition(AIpointsPositions);
+
+	createRaceObjects();
 }
 
 void MapContainer::LoadRaceStartCameraPoints()
