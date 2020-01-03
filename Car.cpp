@@ -358,7 +358,7 @@ void Car::display()
 		{
 
 			glColor3f(0.0f, 1.0f, 0.0f);
-			myglDrawFillCircle( point, 0.1 );
+			//myglDrawFillCircle( point, 0.1 );
 		}
 		temporary.clear();
 
@@ -695,7 +695,7 @@ void Car::calculateCollisions()
 
 				collidingObjects.push_back({ &std::get<0>(obstacle), &carModelCircle, std::get<1>(obstacle) });
 
-				Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
+				//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 75, 50, "Collision!", &(Screen2D::Instance()->roboto_modo_regular));
 
 				float fDistance = sqrtf((globalCollisionCircle.center.x - std::get<0>(obstacle).center.x)*(globalCollisionCircle.center.x - std::get<0>(obstacle).center.x) + (globalCollisionCircle.center.y - std::get<0>(obstacle).center.y)*(globalCollisionCircle.center.y - std::get<0>(obstacle).center.y));
 

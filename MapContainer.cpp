@@ -1807,7 +1807,7 @@ void MapContainer::displayAIPoints()
 
 void MapContainer::displayMapEditorPoints()
 {
-	//return;
+	return;
 	for (auto& extraObject : extraObjects)
 	{
 		extraObject->display();
