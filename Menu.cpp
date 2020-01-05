@@ -384,9 +384,12 @@ void Menu::enterNextLevel()
 
 void Menu::enterPreviousLevel()
 {
-	currentMenuLevel = currentMenuLevel->previousLevel;
-	//currentMenuLevel->selected = 0;
-	floatingIndex = currentMenuLevel->selected;
+	if (currentMenuLevel->previousLevel != nullptr)
+	{
+		currentMenuLevel = currentMenuLevel->previousLevel;
+		//currentMenuLevel->selected = 0;
+		floatingIndex = currentMenuLevel->selected;
+	}
 }
 
 void Menu::enterQuickRaceLevel()
@@ -660,6 +663,11 @@ void Menu::startMapEditor()
 	menuResponse.menuState = StartMapEditor;
 }
 
+void Menu::exitGame()
+{
+	menuResponse.menuState = ExitGame;
+}
+
 void Menu::loadAfterRaceScreen()
 {
 	currentMenuLevel = &quickRaceAfterRaceScreen;
@@ -759,11 +767,12 @@ void Menu::highscoresPreview(int id)
 	display2DRectangleNoTexture(screenPoint(-55, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
 
 	ColorName colorName = ColorName::WHITE;
+	ColorName headerColorName = ColorName::YELLOW;
 
-	Screen2D::Instance()->addTestValueToPrint(colorName, -50, 75, "Track name", &(Screen2D::Instance()->squada_one_regular_big));
-	Screen2D::Instance()->addTestValueToPrint(colorName, -25, 75, "Lap time", &(Screen2D::Instance()->squada_one_regular_big));
-	Screen2D::Instance()->addTestValueToPrint(colorName, -5, 75, "Date", &(Screen2D::Instance()->squada_one_regular_big));
-	Screen2D::Instance()->addTestValueToPrint(colorName, 20, 75, "Car", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(headerColorName, -50, 75, "Track name", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(headerColorName, -25, 75, "Lap time", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(headerColorName, -5, 75, "Date", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(headerColorName, 20, 75, "Car", &(Screen2D::Instance()->squada_one_regular_big));
 
 	for (int trackNo = 1; trackNo <= trackDB.size(); trackNo++)
 	{

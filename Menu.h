@@ -19,6 +19,7 @@ public:
 		Resume,
 		ExitToMainMenu,
 		StartMapEditor,
+		ExitGame,
 	};
 
 	enum class MapDetails
@@ -60,6 +61,8 @@ public:
 		glColor3f(color.red, color.green, color.blue);
 	}
 
+	void enterPreviousLevel();
+
 private:
 
 	void createMenu();
@@ -74,13 +77,13 @@ private:
 	void selectThisNoOfOponents();
 	void selectThisNoOfLaps();
 	void selectThisFreeRidePosition();
-	void enterPreviousLevel();
 	void enterQuickRaceLevel();
 	void enterMainMenuLevel();
 	void resumeGame();
 	void startQuickRace();
 	void startFreeRide();
 	void startMapEditor();
+	void exitGame();
 
 	void preview2DNumber(int id);
 	void preview2DFreeRidePositions(int id);
@@ -153,7 +156,7 @@ private:
 	MenuLevel freeRide{ "Free Ride", &Menu::enterNextLevel };
 	MenuLevel highscores{ "Highscores", &Menu::enterNextLevel };
 	MenuLevel credits{ "Credits", &Menu::enterNextLevel };
-	MenuLevel quitGame{ "Quit Game" };
+	MenuLevel quitGame{ "Quit Game", &Menu::exitGame };
 
 	MenuLevel quickRaceStart{ "Start", &Menu::startQuickRace, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };
 	MenuLevel quickRaceSelectCar{ "Select Car", &Menu::enterNextLevel, &Menu::quickRace2Dpreview, &Menu::quickRace3Dpreview };

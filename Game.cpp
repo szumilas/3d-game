@@ -11,6 +11,8 @@ int Game::noOfFrames = 0;
 
 int Game::windowWidth = 1500;
 int Game::windowHeight = 750;
+//int Game::windowWidth = 1280;
+//int Game::windowHeight = 720;
 
 int Game::windowRealWidth;
 int Game::windowRealHeight;
@@ -210,13 +212,15 @@ void Game::keyboard(unsigned char key, int x, int y)
 	case 27: // Escape key
 		if (gameState == State::mainMenu)
 		{
-			orbit.savePosition();
+			/*orbit.savePosition();
 			if (!MapManager::Instance()->loadedFromPolygonsFile)
 				MapManager::Instance()->saveOverlays();
 
 			SoundManager::DeInit();
 			TextureManager::DeInit();
-			exit(0);
+			exit(0);*/
+			menu.enterPreviousLevel();
+			SoundManager::Instance()->playSample(Sounds::menu_click);
 		}
 		else if((gameState == State::race || gameState == State::freeRide) && MapContainer::Instance()->raceActive() || gameState == State::mapEditor)
 		{
@@ -662,5 +666,15 @@ void Game::handleMenuResponse()
 		gameState = State::mapEditor;
 		MapContainer::Instance()->loadWorldIntoSections(MapManager::Instance()->mapObjects);
 		PlayList::Instance()->mute();
+	}
+	else if (menu.menuResponse.menuState == Menu::ExitGame)
+	{
+		orbit.savePosition();
+		if (!MapManager::Instance()->loadedFromPolygonsFile)
+			MapManager::Instance()->saveOverlays();
+
+		SoundManager::DeInit();
+		TextureManager::DeInit();
+		exit(0);
 	}
 }
