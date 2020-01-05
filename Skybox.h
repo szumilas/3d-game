@@ -18,5 +18,6 @@ public:
 
 private:
 
+	float skyboxHeight = 1500;
 
 };
