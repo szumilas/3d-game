@@ -12,7 +12,7 @@ public:
 	}
 	Footway(MapObject& mapObject) : MapObject(mapObject)
 	{
-		_min_height = -0.05f;
+		_min_height = -0.025f;
 		_color.red = 1.0f;
 		_color.green = 1.0f;
 		_color.blue = 1.0f;

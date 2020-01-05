@@ -9792,5 +9792,19 @@
 		<tag k="colour" v="#dddddd"/>
 		<tag k="_custom_texture" v="race_barrier.png"/>
 	</way>
+	<node id="-3396" lat="51.115286" lon="17.064728"/>
+	<node id="-3395" lat="51.115272" lon="17.064819"/>
+	<node id="-3394" lat="51.114419" lon="17.064918"/>
+	<node id="-3393" lat="51.114399" lon="17.064790"/>
+	<way id="-100137">
+		<nd ref="-3393"/>
+		<nd ref="-3394"/>
+		<nd ref="-3395"/>
+		<nd ref="-3396"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="0.000000"/>
+		<tag k="_custom_texture" v="asphalt.jpg"/>
+		<tag k="colour" v="#ffffff"/>
+	</way>
 </osm>
 
