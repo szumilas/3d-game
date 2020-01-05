@@ -788,7 +788,7 @@ void Menu::highscoresPreview(int id)
 		if (carDB.find(trackRecordData.carBrand) != carDB.end())
 			carNameString = carDB.at(trackRecordData.carBrand).name;
 		else
-			carNameString = "unknown";
+			carNameString = "";
 
 		Screen2D::Instance()->addTestValueToPrint(colorName, 20, 75 - trackNo * 3.5, carNameString, &(Screen2D::Instance()->squada_one_regular));
 	}
