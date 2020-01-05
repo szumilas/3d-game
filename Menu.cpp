@@ -483,7 +483,7 @@ void Menu::preview2DTrack(int id)
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 52, "Difficulty: ", &(Screen2D::Instance()->squada_one_regular));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 48, trackDB.at(static_cast<TrackName>(id)).difficulty, &(Screen2D::Instance()->squada_one_regular_big));
 	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 43, "Lap record:", &(Screen2D::Instance()->squada_one_regular));
-	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, Timer::getString(previewTrack->getLapRecord()) + " s", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(ColorName::WHITE, -52, 39, Timer::getString(previewTrack->getLapRecord()), &(Screen2D::Instance()->squada_one_regular_big));
 }
 
 void Menu::preview3DTrack(int id)
@@ -750,6 +750,38 @@ void Menu::preview2DQuickRaceLaps(int id)
 		Screen2D::Instance()->addTestValueToPrint(colorName, 7, 75 - position * 4, std::to_string(position) + ".", &(Screen2D::Instance()->squada_one_regular_big));
 		Screen2D::Instance()->addTestValueToPrint(colorName, 12, 75 - position * 4, Timer::getString(raceResultRow), &(Screen2D::Instance()->squada_one_regular_big));
 		position++;
+	}
+}
+
+void Menu::highscoresPreview(int id)
+{
+	display2DRectangleNoTexture(screenPoint(-55, 38), screenPoint(55, 80), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(screenPoint(-55, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
+
+	ColorName colorName = ColorName::WHITE;
+
+	Screen2D::Instance()->addTestValueToPrint(colorName, -50, 75, "Track name", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -25, 75, "Lap time", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -5, 75, "Date", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(colorName, 20, 75, "Car", &(Screen2D::Instance()->squada_one_regular_big));
+
+	for (int trackNo = 1; trackNo <= trackDB.size(); trackNo++)
+	{
+		Screen2D::Instance()->addTestValueToPrint(colorName, -50, 75 - trackNo * 3.5, trackDB.at(static_cast<TrackName>(trackNo)).name, &(Screen2D::Instance()->squada_one_regular));
+
+		auto trackRecordData = Track::getLapRecordData(static_cast<TrackName>(trackNo));
+
+		Screen2D::Instance()->addTestValueToPrint(colorName, -25, 75 - trackNo * 3.5, Timer::getString(trackRecordData.lapRecord), &(Screen2D::Instance()->squada_one_regular));
+
+		Screen2D::Instance()->addTestValueToPrint(colorName, -5, 75 - trackNo * 3.5, trackRecordData.date, &(Screen2D::Instance()->squada_one_regular));
+
+		std::string carNameString;
+		if (carDB.find(trackRecordData.carBrand) != carDB.end())
+			carNameString = carDB.at(trackRecordData.carBrand).name;
+		else
+			carNameString = "unknown";
+
+		Screen2D::Instance()->addTestValueToPrint(colorName, 20, 75 - trackNo * 3.5, carNameString, &(Screen2D::Instance()->squada_one_regular));
 	}
 }
 

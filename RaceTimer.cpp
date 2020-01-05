@@ -284,7 +284,7 @@ void RaceTimer::checkRaceFinished()
 				carData.car->humanCar = 2;
 				carData.car->setFrontRightCamera();
 				state = State::Outro;
-				Track::updateLapRecordInTxtFile(trackName, lapRecord);
+				Track::updateLapRecordInTxtFile(trackName, lapRecord, carData.car->getCarBrand());
 				prepareFinalStats();
 			}
 		}

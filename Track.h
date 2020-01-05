@@ -6,6 +6,7 @@
 
 #include "GlobalStructures.h"
 #include "Footway.h"
+#include "carDB.h"
 
 enum TrackName
 {
@@ -26,6 +27,13 @@ struct TrackDetails
 {
 	std::string name;
 	std::string difficulty;
+};
+
+struct TrackRecordData
+{
+	long lapRecord;
+	CarBrand carBrand;
+	std::string date;
 };
 
 static std::map<TrackName, TrackDetails> trackDB
@@ -57,7 +65,9 @@ public:
 	std::vector<Point> getAIPoints() { return AIPoints; }
 	std::vector<std::pair<Point, Point>> getBarrierPoints() { return barrierPoints; }
 	int getLapRecord() { return lapRecord; }
-	static void updateLapRecordInTxtFile(TrackName trackName, int newRecord);
+	static void updateLapRecordInTxtFile(TrackName trackName, int newRecord, CarBrand carBrand);
+
+	static TrackRecordData getLapRecordData(TrackName trackName);
 
 private:
 

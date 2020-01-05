@@ -96,6 +96,7 @@ private:
 	void preview2DQuickRaceResults(int id);
 	void preview2DQuickRaceLaps(int id);
 	void pause2Dpreview(int id);
+	void highscoresPreview(int id = 0);
 
 	void printMap(MapDetails details);
 	void reloadQuickRaceData();
@@ -171,7 +172,7 @@ private:
 	MenuLevel freeRideSelectPosition{ "Select Position", &Menu::enterNextLevel, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
 	MenuLevel freeRideBack{ "Back", &Menu::enterPreviousLevel, &Menu::freeRide2Dpreview, &Menu::freeRide3Dpreview };
 
-	MenuLevel highscoresRideBack{ "Back", &Menu::enterPreviousLevel };
+	MenuLevel highscoresRideBack{ "Back", &Menu::enterPreviousLevel, &Menu::highscoresPreview };
 
 	MenuLevel creditsRideBack{ "Back", &Menu::enterPreviousLevel };
 

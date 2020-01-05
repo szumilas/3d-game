@@ -7,6 +7,19 @@
 #include <algorithm>
 #include <sstream>
 
+const std::string currentDateTime()
+{
+	time_t     now = time(0);
+	struct tm  tstruct;
+	char       buf[80];
+	tstruct = *localtime(&now);
+	// Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+	// for more information about date/time format
+	strftime(buf, sizeof(buf), "%Y.%m.%d-%X", &tstruct);
+
+	return buf;
+}
+
 Track::Track(TrackName trackName) : trackName(trackName)
 {
 	_color = Color(ColorName::YELLOW);
@@ -166,7 +179,7 @@ void Track::calculateLength()
 	}
 }
 
-void Track::updateLapRecordInTxtFile(TrackName trackName, int newRecord)
+void Track::updateLapRecordInTxtFile(TrackName trackName, int newRecord, CarBrand carBrand)
 {
 	auto fileName = "Track_" + (std::to_string(100 + static_cast<int>(trackName))).substr(1, 2) + ".txt";
 
@@ -189,7 +202,7 @@ void Track::updateLapRecordInTxtFile(TrackName trackName, int newRecord)
 
 			if (type == 'r')
 			{
-				line = "r " + std::to_string(newRecord);
+				line = "r " + std::to_string(newRecord) + " " + std::to_string(static_cast<long>(carBrand)) + " " + currentDateTime();
 				recordFound = true;
 			}
 
@@ -197,7 +210,7 @@ void Track::updateLapRecordInTxtFile(TrackName trackName, int newRecord)
 		}
 
 		if(!recordFound)
-			lines.push_back("r " + std::to_string(newRecord));
+			lines.push_back("r " + std::to_string(newRecord) + " " + std::to_string(static_cast<long>(carBrand)) + " " + currentDateTime());
 
 		file.clear();
 		file.seekg(0, std::ios::beg);
@@ -209,4 +222,45 @@ void Track::updateLapRecordInTxtFile(TrackName trackName, int newRecord)
 	}
 
 	file.close();
+}
+
+TrackRecordData Track::getLapRecordData(TrackName trackName)
+{
+	TrackRecordData trackRecordData;
+
+	trackRecordData.lapRecord = -1;
+	trackRecordData.carBrand = static_cast<CarBrand>(-1);
+	trackRecordData.date = "";
+
+	auto fileName = "Track_" + (std::to_string(100 + static_cast<int>(trackName))).substr(1, 2) + ".txt";
+
+	std::ifstream file;
+	file.open("Data/" + fileName, std::ios::out);
+
+	if (file)
+	{
+		char type;
+		std::string line;
+		while (getline(file, line))
+		{
+			std::stringstream sline(line);
+			sline >> type;
+
+			if (type == 'r')
+			{
+				int time, carBrand;
+				sline >> time;
+				trackRecordData.lapRecord = time;
+
+				sline >> carBrand;
+				trackRecordData.carBrand = static_cast<CarBrand>(carBrand);
+
+				sline >> trackRecordData.date;
+			}
+		}
+	}
+
+	file.close();
+
+	return trackRecordData;
 }
