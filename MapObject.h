@@ -21,6 +21,7 @@ public:
 	virtual std::vector<std::pair<char*, char*>> getObjectXMLTags() { return {}; };
 	virtual std::vector<std::vector<std::pair<char*, std::string>>> getObjectXMLExtraTags() { return {}; }
 	virtual void recalculateFinalGeometry() {}
+	virtual void display();
 
 	void applyKnownValues();
 
@@ -38,7 +39,7 @@ protected:
 
 	std::vector<Point> DouglasPeuckerAlgorithm(std::vector<Point>& l, float epsilon);
 	void optimizePoints();
-	void shadeTheWall(Color& color, const vector2D& wallLine, float shadePower);
+	float shadeTheWall(Color& color, const vector2D& wallLine, float shadePower);
 	Color selectedColor{ 1.0f, 0.0f, 1.0f };
 	void dividePointsPolygonIntoTriangles();
 	void createBothRailsForSymmetryAxis(const std::vector<Point>& axisPoints, std::vector<Point>& finalLeftRail, std::vector<Point>& finalRightRail, float gauge);
@@ -47,6 +48,17 @@ protected:
 	float shadePower = 0.5;
 
 public:
+
+	enum DrawingPriority
+	{
+		always = 0,
+		whenClose = 1,
+		notImportant = 2,
+		never = 3,
+	};
+
+	DrawingPriority drawingPriority = DrawingPriority::always;
+
 	//stats
 	long long polygonsCount = 0;
 	long long edgesCount = 0;

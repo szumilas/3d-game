@@ -1,5 +1,11 @@
 #include "Railway.h"
 
+Railway::Railway(MapObject& mapObject) : MapObject(mapObject)
+{
+	_min_height = 0.05f;
+	drawingPriority = DrawingPriority::whenClose;
+}
+
 void Railway::calculateFinalGeometry()
 {
 	struct Rail

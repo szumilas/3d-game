@@ -6,6 +6,8 @@ Water::Water(MapObject& mapObject) : MapObject(mapObject)
 	{
 		point.z = _min_height;
 	}
+
+	drawingPriority = DrawingPriority::whenClose;
 }
 
 void Water::calculateFinalGeometry()

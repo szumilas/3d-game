@@ -18,6 +18,8 @@ MetaLine::MetaLine(MapObject& mapObject) : Crossing(mapObject)
 	MapObject::createBothRailsForSymmetryAxis(points, finalLeftRail, finalRightRail, gauge);
 	Crossing::calculateFinalGeometry();
 	adjustTextures();
+
+	drawingPriority = DrawingPriority::notImportant;
 };
 
 void MetaLine::adjustTextures()

@@ -1,5 +1,10 @@
 #include "Street.h"
 
+Street::Street(MapObject& mapObject) : MapObject(mapObject)
+{
+	drawingPriority = DrawingPriority::whenClose;
+}
+
 void Street::calculateFinalGeometry()
 {
 	std::for_each(points.begin(), points.end(), [&](auto& p) { p.z = _height; });

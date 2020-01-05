@@ -5,6 +5,7 @@ Tree::Tree(long long ref) : MapObject(ref)
 	refs.push_back(ref);
 	_height = 0;
 	collidable = Collidable::point;
+	drawingPriority = DrawingPriority::whenClose;
 }
 
 void Tree::calculateXYfromRef(const std::map<long long, node> &nodes)

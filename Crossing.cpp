@@ -6,6 +6,7 @@ Crossing::Crossing(MapObject& mapObject) : Footway(mapObject)
 	Footway::gauge = 5.0f;
 
 	textureName = Textures::crossing;
+	drawingPriority = DrawingPriority::notImportant;
 };
 
 void Crossing::calculateFinalGeometry()

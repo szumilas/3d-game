@@ -18,6 +18,7 @@ Barrier::Barrier(MapObject& mapObject) : MapObject(mapObject)
 	setTexture();
 
 	collidable = Collidable::polygon;
+	drawingPriority = DrawingPriority::whenClose;
 };
 
 void Barrier::calculateFinalGeometry()

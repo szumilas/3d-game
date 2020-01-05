@@ -460,14 +460,32 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 	sectionsToDisplay.erase(unique(sectionsToDisplay.begin(), sectionsToDisplay.end()), sectionsToDisplay.end());
 
 	//std::cout << "section to display: " << sectionsToDisplay.size() << "                 \r";
+	
+	Building::setCameraAngleFlag(camera);
 
 	for (auto& sectionToDisplay : sectionsToDisplay)
 	{
 		if (sectionToDisplay.first < 100 && sectionToDisplay.second < 100 &&
 			sectionToDisplay.first >= 0 && sectionToDisplay.second >= 0)
 		{
+			auto dist = (xToDraw - sectionToDisplay.first) * (xToDraw - sectionToDisplay.first) + (yToDraw - sectionToDisplay.second) * (yToDraw - sectionToDisplay.second);
+
+			MapObject::DrawingPriority priorityOfSection = MapObject::DrawingPriority::always;
+			
+			//if (dist < 256)
+			//{
+			//	priorityOfSection = MapObject::DrawingPriority::notImportant;
+			//}
+			if (dist < 500)
+			{
+				priorityOfSection = MapObject::DrawingPriority::whenClose;
+			}
+
 			for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
 			{
+				if (object->get()->drawingPriority > priorityOfSection)
+					break;
+
 				if (!object->get()->isHidden)
 					object->get()->display();
 			}
@@ -609,6 +627,15 @@ void MapContainer::addObjectsToSections(std::vector<std::unique_ptr<MapObject>>&
 			}
 		}
 	}
+
+	for (int q = 0; q < 100; q++)
+	{
+		for (int w = 0; w < 100; w++)
+		{
+			std::sort(mapObjectSections[q][w].begin(), mapObjectSections[q][w].end(), [&](const auto& a, const auto& b) { return a->get()->drawingPriority < b->get()->drawingPriority; });
+		}
+	}
+	
 }
 
 void MapContainer::displayAllWorld()

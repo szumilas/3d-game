@@ -1,5 +1,10 @@
 #include "Common.h"
 
+Common::Common(MapObject& mapObject) : MapObject(mapObject)
+{
+	drawingPriority = DrawingPriority::whenClose;
+}
+
 void Common::calculateFinalGeometry()
 {
 	for (auto& point : points)

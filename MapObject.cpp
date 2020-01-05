@@ -22,6 +22,11 @@ void MapObject::calculateFinalGeometry()
 
 }
 
+void MapObject::display()
+{
+	Object3D::display();
+}
+
 void MapObject::calculateBoundingCoordinates()
 {
 	for (auto& polygon : polygons)
@@ -198,7 +203,7 @@ std::vector<Point> MapObject::DouglasPeuckerAlgorithm(std::vector<Point>& PointL
 	return res;
 }
 
-void MapObject::shadeTheWall(Color& color, const vector2D& wallLine, float shadePower)
+float MapObject::shadeTheWall(Color& color, const vector2D& wallLine, float shadePower)
 {
 	vector2D equator(Point(0.0, 0.0), Point(1.0, 0.0));
 
@@ -220,6 +225,8 @@ void MapObject::shadeTheWall(Color& color, const vector2D& wallLine, float shade
 		color.green = ratio * (1 - color.green) * shadePower + color.green;
 		color.blue = ratio * (1 - color.blue) * shadePower + color.blue;
 	}
+
+	return vector2D::directedAngle(equator, wallLine);;
 }
 
 void MapObject::dividePointsPolygonIntoTriangles()

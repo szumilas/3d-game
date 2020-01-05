@@ -40,7 +40,7 @@ private:
 
 	float idSpecialCameraPath = 0;
 	Car* carZero = nullptr;
-	double specialCameraSpeed = 50;
+	double specialCameraSpeed = 100;
 
 	static std::unique_ptr<CameraManager> _instance;
 

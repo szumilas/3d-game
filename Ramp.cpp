@@ -17,6 +17,7 @@ Ramp::Ramp(MapObject& mapObject) : MapObject(mapObject)
 	if (_min_height < 0.5 && _min_height > -0.5f)
 		collidable = Collidable::polygon;
 
+	drawingPriority = DrawingPriority::whenClose;
 }
 
 void Ramp::calculateXYfromRef(const std::map<long long, node> &nodes)

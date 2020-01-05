@@ -8,6 +8,7 @@ BusShelter::BusShelter(MapObject& mapObject) : Building(mapObject)
 	roof_shape = "flat";
 
 	roofNeeded = false;
+	drawingPriority = DrawingPriority::whenClose;
 };
 
 void BusShelter::calculateFinalGeometry()
@@ -50,4 +51,9 @@ void BusShelter::generateWalls()
 	walls[0].yRatio = 1.0f;
 	walls[1].yRatio = 1.0f;
 
+}
+
+void BusShelter::display()
+{
+	Object3D::display();
 }

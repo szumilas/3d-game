@@ -8,6 +8,8 @@ Riverbank::Riverbank(MapObject& mapObject) : MapObject(mapObject)
 	_color.red = 0.8f;
 	_color.green = 0.8f;
 	_color.blue = 0.8f;
+
+	drawingPriority = DrawingPriority::whenClose;
 };
 
 void Riverbank::calculateXYfromRef(const std::map<long long, node> &nodes)

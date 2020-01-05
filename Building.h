@@ -8,11 +8,12 @@ public:
 
 	Building(MapObject& mapObject);
 
-	//void display();
+	virtual void display();
 	void calculateFinalGeometry();
 	void recalculateFinalGeometry();
 	std::vector<std::pair<char*, char*>> getObjectXMLTags();
 	std::vector<std::vector<std::pair<char*, std::string>>> getObjectXMLExtraTags();
+	static void setCameraAngleFlag(std::pair<Point, Point>& camera);
 
 private:
 
@@ -30,10 +31,20 @@ public:
 
 private:
 
+	static long cameraAngleFlag;
+
 	bool genericWallTexture = false;
 	Textures emptyWallTextureName;
 	Textures smallWallTextureName;
 	Textures bigWallTextureName;
+
+	struct ConditionalPolygon
+	{
+		unsigned int idPolygon = 0;
+		int angle;
+	};
+
+	std::vector<ConditionalPolygon> conditionalPolygons;
 
 
 protected:
@@ -48,6 +59,7 @@ protected:
 		float wallLenght;
 		float xRatio = 0.0f;
 		float yRatio = 0.0f;
+		int angle;
 	};
 
 	std::vector<Wall> walls;

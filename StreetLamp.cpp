@@ -7,6 +7,7 @@ StreetLamp::StreetLamp(long long ref) : MapObject(ref)
 	size = 0.1;
 	_color = Color(ColorName::BLACK);
 	collidable = Collidable::point;
+	drawingPriority = DrawingPriority::whenClose;
 }
 
 void StreetLamp::calculateXYfromRef(const std::map<long long, node> &nodes)

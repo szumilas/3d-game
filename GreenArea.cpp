@@ -4,6 +4,8 @@ GreenArea::GreenArea(MapObject& mapObject) : MapObject(mapObject)
 {
 	if (height.empty())
 		_height = -0.05;
+
+	drawingPriority = DrawingPriority::whenClose;
 }
 
 void GreenArea::calculateFinalGeometry()

@@ -134,7 +134,8 @@ void Building::calculateFinalGeometry()
 		auto newColor = wall.color.mixColor(selectedColor);
 		newPolygon.additionalColor = wall.color.mixColor(newColor);
 
-		polygons.push_back(newPolygon);
+		polygons.push_back( newPolygon );
+		conditionalPolygons.push_back({ polygons.size() - 1, wall.angle });
 	}
 }
 
@@ -153,7 +154,7 @@ void Building::generateWalls()
 		newWall.color.blue = _color.blue;
 
 		vector2D wallLine(newWall.p1, newWall.p2);
-		shadeTheWall(newWall.color, wallLine, shadePower);
+		newWall.angle = pow(2, static_cast<int>(shadeTheWall(newWall.color, wallLine, shadePower) / (2 * PI) * 12) % 12);
 
 		newWall.wallLenght = wallLine.length();
 
@@ -398,5 +399,64 @@ void Building::recalculateFinalGeometry()
 	generateWalls();
 
 	polygons.clear();
+	conditionalPolygons.clear();
 	calculateFinalGeometry();
+}
+
+void Building::display()
+{
+	if (!alreadyPrinted)
+	{
+		alreadyPrinted = true;
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_TEXTURE_2D);
+
+		for (auto& conditionalPolygon : conditionalPolygons)
+		{
+			if (!conditionalPolygon.angle & cameraAngleFlag)
+				continue;
+
+			auto* polygon = &polygons[conditionalPolygon.idPolygon];
+			
+
+			glBindTexture(GL_TEXTURE_2D, polygon->idTexture);
+
+			glBegin(GL_POLYGON);
+			glColor3f(polygon->color.red, polygon->color.green, polygon->color.blue);
+
+			for (unsigned int i = 0; i < polygon->noOfPoints; i++)
+			{
+				glTexCoord2f(polygon->texturePoints[i].x, polygon->texturePoints[i].y);
+				glVertex3f(polygon->points[i].x, polygon->points[i].y, polygon->points[i].z);
+			}
+			glEnd();
+		}
+
+		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
+	}
+}
+
+long Building::cameraAngleFlag;
+
+void Building::setCameraAngleFlag(std::pair<Point, Point>& camera)
+{
+	Point& center = camera.first;
+	Point& lookAt = camera.second;
+
+	vector2D line(center, lookAt);
+
+	auto directedAngle = vector2D::directedAngle(line, vector2D({ 0, 0 }, { 1, 0 }));
+	
+	auto origin12Angle = static_cast<int>(directedAngle / (2 * PI) * 12);
+	origin12Angle %= 12;
+
+	cameraAngleFlag = 0;
+
+	for (int q = (origin12Angle - 3 + 12) % 12; q != (origin12Angle + 4) % 12; q = (q + 1) % 12)
+	{
+		cameraAngleFlag += pow(2, q);
+	}
 }

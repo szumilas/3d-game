@@ -1,5 +1,21 @@
 #include "Footway.h"
 
+Footway::Footway()
+{
+	_min_height = 0.0f;
+	drawingPriority = DrawingPriority::whenClose;
+}
+
+Footway::Footway(MapObject& mapObject) : MapObject(mapObject)
+{
+	_min_height = -0.025f;
+	_color.red = 1.0f;
+	_color.green = 1.0f;
+	_color.blue = 1.0f;
+	textureName = Textures::paving;
+	drawingPriority = DrawingPriority::whenClose;
+};
+
 void Footway::calculateFinalGeometry()
 {
 	for (size_t q = 0, limit = finalLeftRail.size() - 1; q < limit; q++)

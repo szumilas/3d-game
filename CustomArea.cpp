@@ -2,7 +2,7 @@
 
 CustomArea::CustomArea(MapObject& mapObject) : MapObject(mapObject)
 {
-	
+	drawingPriority = DrawingPriority::whenClose;
 }
 
 void CustomArea::calculateFinalGeometry()

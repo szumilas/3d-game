@@ -6,7 +6,7 @@ class Street : public MapObject
 {
 public:
 
-	Street(MapObject& mapObject) : MapObject(mapObject) {};
+	Street(MapObject& mapObject);
 
 	void calculateFinalGeometry();
 

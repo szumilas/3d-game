@@ -6,7 +6,7 @@ class Common : public MapObject
 {
 public:
 
-	Common(MapObject& mapObject) : MapObject(mapObject) {};
+	Common(MapObject& mapObject);
 
 	void calculateFinalGeometry();
 
