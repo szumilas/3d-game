@@ -31,6 +31,8 @@ public:
 	static Textures getTextureFromFilePath(std::string filePath);
 
 	void readTextures();
+	void readLoadingTexture();
+	unsigned int getLoadingTextureId() { return loadingTexture.idTexture; }
 
 private:
 
@@ -39,6 +41,7 @@ private:
 public:
 	
 	static std::vector<TextureData> textures;
+	static TextureData loadingTexture;
 
 
 private:

@@ -66,6 +66,7 @@ private:
 	static void SpecialKeysUp(int key, int x, int y);
 	static void Update();
 	static bool checkKey(Key key);
+	static void displayLoadingTexture();
 
 	static void handleMenuResponse();
 

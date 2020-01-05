@@ -109,10 +109,14 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::zwierzyniecki_bridge, 65, 15.0f, "zwierzyniecki_bridge.png", false },
 };
 
+TextureManager::TextureData TextureManager::loadingTexture;
+
 void TextureManager::DeInit()
 {
 	for (auto& texture : textures)
 		glDeleteTextures(1, &texture.idTexture);
+
+	glDeleteTextures(1, &loadingTexture.idTexture);
 }
 
 void TextureManager::Init()
@@ -123,6 +127,37 @@ void TextureManager::Init()
 TextureManager* TextureManager::Instance()
 {
 	return _instance;
+}
+
+void TextureManager::readLoadingTexture()
+{
+	ilEnable(IL_ORIGIN_SET);
+	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+
+	int image = LoadImageA(const_cast<char*>("Data/Textures/loading.png"));
+	if (image == -1)
+	{
+		throw Exceptions::ERR_WHILE_LOADING_IMAGE;
+	}
+
+	auto textureIdCreated = static_cast<unsigned int>(image);
+
+	/* OpenGL texture binding of the image loaded by DevIL  */
+	glGenTextures(1, &textureIdCreated); /* Texture name generation */
+	glBindTexture(GL_TEXTURE_2D, textureIdCreated); /* Binding of texture name */
+
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); /* We will use linear interpolation for magnification filter */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); /* We will use linear interpolation for minifying filter */
+
+	glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+		0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE, ilGetData());
+
+
+	loadingTexture.idTexture = textureIdCreated;
+	//textureIds.({ texturePath.first.textureName, { texturePath.first.textureName, texturePath.first.realWidth, texturePath.first.realHeight, textureName} });
+	ilDeleteImages(1, &textureIdCreated); /* Because we have already copied image data into texture data we can release memory used by image. */
+
 }
 
 void TextureManager::readTextures()

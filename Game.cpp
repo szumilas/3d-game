@@ -572,8 +572,62 @@ Game::Game(int argc, char**agrv)
 
 }
 
+void Game::displayLoadingTexture()
+{
+	glViewport(0, 0, windowRealWidth, windowRealHeight);
+	glMatrixMode(GL_PROJECTION);
+
+	glLoadIdentity();
+	gluPerspective(angle, static_cast<float>(windowRealWidth) / windowRealHeight, 0.5, 10000);
+	glMatrixMode(GL_MODELVIEW);
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPushMatrix();
+	gluLookAt(10, 0, 2.68, //eye
+		0, 0, 0, //center
+		0, 0, 1); //up
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, TextureManager::Instance()->getLoadingTextureId());
+	glEnable(GL_TEXTURE_2D);
+
+	glBegin(GL_POLYGON);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glTexCoord2f(0, 0);
+	glVertex3f(-9.78, -30, -18.15);
+	glTexCoord2f(1, 0);
+	glVertex3f(-9.78, 30, -18.15);
+	glTexCoord2f(1, 1);
+	glVertex3f(-17.54, 30, 10.83);
+	glTexCoord2f(0, 1);
+	glVertex3f(-17.54, -30, 10.83);
+
+	glEnd();
+
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
+
+	glPopMatrix();
+
+	glFlush();
+
+	glutSwapBuffers();
+}
+
 void Game::play()
 {
+#ifdef FULLSCREEN  
+	glutFullScreen();
+#endif
+	glutShowWindow();
+
+	TextureManager::Instance()->readLoadingTexture();
+
+	displayLoadingTexture();
+
 	try
 	{
 		std::cout << "reading textures...\n";
@@ -593,9 +647,6 @@ void Game::play()
 		menu.Init(windowRealWidth, windowRealHeight);
 
 
-#ifdef FULLSCREEN  
-		glutFullScreen();
-#endif
 
 		std::cout << "main loop...\n";
 		PlayList::Instance()->start();
