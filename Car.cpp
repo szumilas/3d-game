@@ -500,10 +500,13 @@ void Car::setLastWheelPosition()
 
 void Car::calculateCarDrift()
 {
-	wheelsTrace.push_back(lastWheelsPosition[0]);
-	wheelsTrace.push_back(lastWheelsPosition[1]);
-	wheelsTrace.push_back(lastWheelsPosition[2]);
-	wheelsTrace.push_back(lastWheelsPosition[3]);
+	if (pacejkaModel.carDrifting)
+	{
+		wheelsTrace.push_back(lastWheelsPosition[0]);
+		wheelsTrace.push_back(lastWheelsPosition[1]);
+		wheelsTrace.push_back(lastWheelsPosition[2]);
+		wheelsTrace.push_back(lastWheelsPosition[3]);
+	}
 
 	if (wheelsTrace.size() > 1000)
 	{
