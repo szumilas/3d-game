@@ -97,6 +97,7 @@ private:
 	void preview2DQuickRaceLaps(int id);
 	void pause2Dpreview(int id);
 	void highscoresPreview(int id = 0);
+	void creditsPreview(int id = 0);
 
 	void printMap(MapDetails details);
 	void reloadQuickRaceData();
@@ -174,7 +175,7 @@ private:
 
 	MenuLevel highscoresRideBack{ "Back", &Menu::enterPreviousLevel, &Menu::highscoresPreview };
 
-	MenuLevel creditsRideBack{ "Back", &Menu::enterPreviousLevel };
+	MenuLevel creditsRideBack{ "Back", &Menu::enterPreviousLevel, &Menu::creditsPreview };
 
 	MenuLevel pause{ "Pause" };
 	MenuLevel pauseResume{ "Resume", &Menu::resumeGame, &Menu::pause2Dpreview };

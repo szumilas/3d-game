@@ -785,6 +785,22 @@ void Menu::highscoresPreview(int id)
 	}
 }
 
+void Menu::creditsPreview(int id)
+{
+	display2DRectangleNoTexture(screenPoint(-55, 38), screenPoint(55, 62), ColorName::MENU_GRAY);
+	display2DRectangleNoTexture(screenPoint(-55, 35), screenPoint(55, 38), ColorName::MENU_BLUE);
+
+	ColorName colorName = ColorName::WHITE;
+
+	Screen2D::Instance()->addTestValueToPrint(ColorName::YELLOW, -50, 57, "WroclawVelocity", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -50, 50, "Author:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -50, 45, "Map from:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -50, 40, "Car models from:", &(Screen2D::Instance()->squada_one_regular));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -41, 50, "(C) Piotr Szumilas 2020", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -38, 45, "https://www.openstreetmap.org/", &(Screen2D::Instance()->squada_one_regular_big));
+	Screen2D::Instance()->addTestValueToPrint(colorName, -32, 40, "https://3dwarehouse.sketchup.com/by/cyruskhan", &(Screen2D::Instance()->squada_one_regular_big));
+}
+
 void Menu::setPause()
 {
 	for (auto& car : MapContainer::Instance()->cars)
