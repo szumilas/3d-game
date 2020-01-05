@@ -8558,9 +8558,6 @@
 	<node id="-2820" lat="51.109900" lon="17.067729">
 		<tag k="natural" v="tree"/>
 	</node>
-	<node id="-2819" lat="51.110867" lon="17.061601">
-		<tag k="natural" v="tree"/>
-	</node>
 	<node id="-2818" lat="51.111232" lon="17.066185">
 		<tag k="natural" v="tree"/>
 	</node>
@@ -9801,6 +9798,20 @@
 		<nd ref="-3394"/>
 		<nd ref="-3395"/>
 		<nd ref="-3396"/>
+		<tag k="_custom_area" v="yes"/>
+		<tag k="height" v="0.000000"/>
+		<tag k="_custom_texture" v="asphalt.jpg"/>
+		<tag k="colour" v="#ffffff"/>
+	</way>
+	<node id="-3400" lat="51.114220" lon="17.070272"/>
+	<node id="-3399" lat="51.114322" lon="17.070550"/>
+	<node id="-3398" lat="51.114372" lon="17.070479"/>
+	<node id="-3397" lat="51.114296" lon="17.070214"/>
+	<way id="-100138">
+		<nd ref="-3397"/>
+		<nd ref="-3398"/>
+		<nd ref="-3399"/>
+		<nd ref="-3400"/>
 		<tag k="_custom_area" v="yes"/>
 		<tag k="height" v="0.000000"/>
 		<tag k="_custom_texture" v="asphalt.jpg"/>
