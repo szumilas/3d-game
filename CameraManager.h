@@ -22,6 +22,9 @@ public:
 	void setCarZero(Car* car) { carZero = car; }
 	Car* getCarZero() { return carZero; }
 
+	void increaseSpecialCameraSpeed() { specialCameraSpeed *= 1.1; }
+	void decreaseSpecialCameraSpeed() { specialCameraSpeed /= 1.1; }
+
 private:
 
 
@@ -37,6 +40,7 @@ private:
 
 	float idSpecialCameraPath = 0;
 	Car* carZero = nullptr;
+	double specialCameraSpeed = 50;
 
 	static std::unique_ptr<CameraManager> _instance;
 

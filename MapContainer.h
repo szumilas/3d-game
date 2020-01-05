@@ -55,6 +55,10 @@ public:
 		e_ConvertCameraSplineToCarZero,
 		e_PlayCameraSplineAroundCarZero,
 		e_SaveCameraSpline,
+		e_LoadCameraSpline,
+		e_IncreaseSpecialCameraSpeed,
+		e_DecreaseSpecialCameraSpeed,
+
 		e_SaveNewObject,
 		e_DeleteLastNewObject,
 		e_AddTree,
@@ -155,6 +159,9 @@ public:
 	void ConvertCameraSplineToCarZero(const Point& point = Point());
 	void PlayCameraSplineAroundCarZero(const Point& point = Point());
 	void SaveCameraSpline(const Point& point = Point());
+	void LoadCameraSpline(const Point& point = Point());
+	void IncreaseSpecialCameraSpeed(const Point& point = Point());
+	void DecreaseSpecialCameraSpeed(const Point& point = Point());
 	void SaveNewObject(const Point& point = Point());
 	void DeleteLastNewObject(const Point& point = Point());
 	void AddTree(const Point& point = Point());
@@ -230,6 +237,9 @@ public:
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 
+	void showMapEditorPanel() { mapEditorPanelVisible = true; }
+	void hideMapEditorPanel() { mapEditorPanelVisible = false; }
+
 private:
 
 	struct BuildingEdited
@@ -271,6 +281,8 @@ private:
 	static int mapEditorSelectedTool;
 	static int currentToolId;
 
+	static bool mapEditorPanelVisible;
+
 	static std::vector<std::vector<int>> tools;
 	static std::map<int, void (MapContainer::*)(const Point&)> toolsMap;
 
@@ -306,5 +318,7 @@ private:
 	static Color splineSubointsColor;
 
 	static std::unique_ptr<MapContainer> _instance;
+
+	static double displayWorldCameraHeight;
 
 };

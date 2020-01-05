@@ -467,6 +467,17 @@ void Game::Update()
 	}
 	else if (gameState == State::mapEditor)
 	{
+		if (upPressed)
+			MapContainer::Instance()->cars[0].accelerate();
+		if (downPressed)
+			MapContainer::Instance()->cars[0].slow();
+		if (leftPressed)
+			MapContainer::Instance()->cars[0].turnLeft();
+		if (rightPressed)
+			MapContainer::Instance()->cars[0].turnRight();
+		if (KeyboardManager::Instance()->checkKey(' '))
+			MapContainer::Instance()->cars[0].breakPressed();
+
 		if (leftMouseButtonDown && rightMouseButtonDown)
 		{
 			orbit.rotate(-1);
@@ -515,7 +526,9 @@ void Game::Update()
 
 		if (MapManager::Instance()->currentCameraView == -1 && !CameraManager::Instance()->updateSpecialCameraPathPosition())
 		{
-			MapManager::Instance()->currentCameraView = 1;
+			MapManager::Instance()->currentCameraView = 0;
+			glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
+			MapContainer::Instance()->showMapEditorPanel();
 			MapContainer::Instance()->introFinished();
 		}
 
@@ -566,6 +579,7 @@ Game::Game(int argc, char**agrv)
 	glutMotionFunc(look);
 	//glutIdleFunc(Update);
 	glutTimerFunc(0, timer, 0);
+	//glutSetCursor(GLUT_CURSOR_NONE);
 
 	init();
 	ilInit();
@@ -717,6 +731,7 @@ void Game::handleMenuResponse()
 		gameState = State::mapEditor;
 		MapContainer::Instance()->loadWorldIntoSections(MapManager::Instance()->mapObjects);
 		PlayList::Instance()->mute();
+		MapContainer::Instance()->raceTimer.beforeRace = false;
 	}
 	else if (menu.menuResponse.menuState == Menu::ExitGame)
 	{

@@ -40,6 +40,8 @@ Color MapContainer::AIPointsColor = Color(ColorName::ORANGE);
 Color MapContainer::pointsColor = Color(ColorName::BLUE);
 Color MapContainer::splinePointsColor = Color(ColorName::PINK);
 Color MapContainer::splineSubointsColor = Color(ColorName::BLACK);
+bool MapContainer::mapEditorPanelVisible = true;
+double MapContainer::displayWorldCameraHeight = 0;
 
 std::vector<std::vector<int>> MapContainer::createTools()
 {
@@ -90,6 +92,9 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_ConvertCameraSplineToCarZero,
 		MapContainer::e_PlayCameraSplineAroundCarZero,
 		MapContainer::e_SaveCameraSpline,
+		MapContainer::e_LoadCameraSpline,
+		MapContainer::e_IncreaseSpecialCameraSpeed,
+		MapContainer::e_DecreaseSpecialCameraSpeed,
 	};
 	tools.push_back(CameraTools);
 
@@ -179,6 +184,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_ConvertPathToRaceBarriers, &MapContainer::ConvertPathToRaceBarriers },
 		{ e_ConvertPathToMeta, &MapContainer::ConvertPathToMeta },
 		{ e_ConvertPathToRaceBarriersSaveAndClearPath, &MapContainer::ConvertPathToRaceBarriersSaveAndClearPath },
+
 		{ e_AddCameraPoint, &MapContainer::AddCameraPoint },
 		{ e_RemoveCameraPoints, &MapContainer::RemoveCameraPoints },
 		{ e_ConvertCameraPointsToSpline, &MapContainer::ConvertCameraPointsToSpline },
@@ -186,6 +192,10 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_ConvertCameraSplineToCarZero, &MapContainer::ConvertCameraSplineToCarZero },
 		{ e_PlayCameraSplineAroundCarZero, &MapContainer::PlayCameraSplineAroundCarZero },
 		{ e_SaveCameraSpline, &MapContainer::SaveCameraSpline },
+		{ e_LoadCameraSpline, &MapContainer::LoadCameraSpline },
+		{ e_IncreaseSpecialCameraSpeed, &MapContainer::IncreaseSpecialCameraSpeed },
+		{ e_DecreaseSpecialCameraSpeed, &MapContainer::DecreaseSpecialCameraSpeed },
+
 		{ e_SaveNewObject, &MapContainer::SaveNewObject },
 		{ e_DeleteLastNewObject, &MapContainer::DeleteLastNewObject },
 		{ e_AddTree, &MapContainer::AddTree },
@@ -303,7 +313,7 @@ long long MapContainer::shootRay(std::vector<std::pair<int, int>>& sectionsToDis
 		
 		for (auto& object : mapObjectSections[sectionsToDisplay.back().first][sectionsToDisplay.back().second])
 		{
-			if (!object->get()->building.empty() && object->get()->_min_height == 0 && object->get()->_height >= 10)
+			if (!object->get()->building.empty() && object->get()->_min_height == 0 && object->get()->_height >= displayWorldCameraHeight + 5)
 			{
 				if (PointInsidePolygonDetector::isInside(object->get()->points, currenPoint))
 				{
@@ -349,6 +359,8 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 
 	Point& center = camera.first;
 	Point& lookAt = camera.second;
+
+	displayWorldCameraHeight = center.z;
 
 	displayLines();
 
@@ -693,75 +705,78 @@ void MapContainer::displayLines()
 
 void MapContainer::displayMapEditorPanel()
 {
+	if (mapEditorPanelVisible)
+	{
 
-	glEnable(GL_BLEND);
+		glEnable(GL_BLEND);
 
-	glLineWidth(3);
+		glLineWidth(3);
 
-	glBegin(GL_LINE_LOOP);
+		glBegin(GL_LINE_LOOP);
 
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedPanel * 0.05 * h, 0.95 * h);
-	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedPanel + 1) * 0.05 * h, 0.95 * h);
-	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedPanel + 1) * 0.05 * h, h);
-	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedPanel * 0.05 * h, h);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedPanel * 0.05 * h, 0.95 * h);
+		glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedPanel + 1) * 0.05 * h, 0.95 * h);
+		glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedPanel + 1) * 0.05 * h, h);
+		glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedPanel * 0.05 * h, h);
 
-	glEnd();
+		glEnd();
 
-	glBegin(GL_LINE_LOOP);
+		glBegin(GL_LINE_LOOP);
 
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedTool * 0.05 * h, 0.9 * h);
-	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedTool + 1) * 0.05 * h, 0.9 * h);
-	glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedTool + 1) * 0.05 * h, 0.95 * h);
-	glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedTool * 0.05 * h, 0.95 * h);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedTool * 0.05 * h, 0.9 * h);
+		glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedTool + 1) * 0.05 * h, 0.9 * h);
+		glVertex2f(0.5 * w - 0.5 * h + (mapEditorSelectedTool + 1) * 0.05 * h, 0.95 * h);
+		glVertex2f(0.5 * w - 0.5 * h + mapEditorSelectedTool * 0.05 * h, 0.95 * h);
 
-	glEnd();
+		glEnd();
 
-	glLineWidth(1.0);
+		glLineWidth(1.0);
 
-	glDisable(GL_BLEND);
-
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_TEXTURE_2D);
-	
-	static int idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::map_editor_panel)].idTexture;
-
-	glBindTexture(GL_TEXTURE_2D, idTexture);
-	glBegin(GL_POLYGON);
-
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glTexCoord2f(0, static_cast<float>(tools.size()) / (tools.size() + 1));
-	glVertex2f(0.5 * w - 0.5 * h, 0.95 * h);
-	glTexCoord2f(1, static_cast<float>(tools.size()) / (tools.size() + 1));
-	glVertex2f(0.5 * w + 0.5 * h, 0.95 * h);
-	glTexCoord2f(1, 1);
-	glVertex2f(0.5 * w + 0.5 * h, h);
-	glTexCoord2f(0, 1);
-	glVertex2f(0.5 * w - 0.5 * h, h);
-
-	glEnd();
+		glDisable(GL_BLEND);
 
 
-	glBegin(GL_POLYGON);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_TEXTURE_2D);
 
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glTexCoord2f(0, static_cast<float>(tools.size() - 1 - mapEditorSelectedPanel) / (tools.size() + 1));
-	glVertex2f(0.5 * w - 0.5 * h, 0.9 * h);
-	glTexCoord2f(1, static_cast<float>(tools.size() - 1 - mapEditorSelectedPanel) / (tools.size() + 1));
-	glVertex2f(0.5 * w + 0.5 * h, 0.9 * h);
-	glTexCoord2f(1, static_cast<float>(tools.size() - mapEditorSelectedPanel) / (tools.size() + 1));
-	glVertex2f(0.5 * w + 0.5 * h, 0.95 * h);
-	glTexCoord2f(0, static_cast<float>(tools.size() - mapEditorSelectedPanel) / (tools.size() + 1));
-	glVertex2f(0.5 * w - 0.5 * h, 0.95 * h);
+		static int idTexture = TextureManager::Instance()->textures[static_cast<int>(Textures::map_editor_panel)].idTexture;
 
-	glEnd();
+		glBindTexture(GL_TEXTURE_2D, idTexture);
+		glBegin(GL_POLYGON);
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glTexCoord2f(0, static_cast<float>(tools.size()) / (tools.size() + 1));
+		glVertex2f(0.5 * w - 0.5 * h, 0.95 * h);
+		glTexCoord2f(1, static_cast<float>(tools.size()) / (tools.size() + 1));
+		glVertex2f(0.5 * w + 0.5 * h, 0.95 * h);
+		glTexCoord2f(1, 1);
+		glVertex2f(0.5 * w + 0.5 * h, h);
+		glTexCoord2f(0, 1);
+		glVertex2f(0.5 * w - 0.5 * h, h);
+
+		glEnd();
 
 
-	glDisable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+		glBegin(GL_POLYGON);
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glTexCoord2f(0, static_cast<float>(tools.size() - 1 - mapEditorSelectedPanel) / (tools.size() + 1));
+		glVertex2f(0.5 * w - 0.5 * h, 0.9 * h);
+		glTexCoord2f(1, static_cast<float>(tools.size() - 1 - mapEditorSelectedPanel) / (tools.size() + 1));
+		glVertex2f(0.5 * w + 0.5 * h, 0.9 * h);
+		glTexCoord2f(1, static_cast<float>(tools.size() - mapEditorSelectedPanel) / (tools.size() + 1));
+		glVertex2f(0.5 * w + 0.5 * h, 0.95 * h);
+		glTexCoord2f(0, static_cast<float>(tools.size() - mapEditorSelectedPanel) / (tools.size() + 1));
+		glVertex2f(0.5 * w - 0.5 * h, 0.95 * h);
+
+		glEnd();
+
+
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+	}
 }
 
 void MapContainer::displayCounter()
@@ -1062,6 +1077,7 @@ void MapContainer::RemoveCameraPoints(const Point& point)
 {
 	cameraSpline.first.points.clear();
 	cameraSpline.second.points.clear();
+	CameraManager::Instance()->specialCameraPath.clear();
 }
 
 void MapContainer::ConvertCameraPointsToSpline(const Point& point)
@@ -1089,6 +1105,8 @@ void MapContainer::ConvertCameraPointsToSpline(const Point& point)
 
 void MapContainer::PlayCameraSpline(const Point& point)
 {
+	glutSetCursor(GLUT_CURSOR_NONE);
+	hideMapEditorPanel();
 	CameraManager::Instance()->setCarZero(nullptr);
 	MapManager::Instance()->currentCameraView = -1;
 }
@@ -1107,6 +1125,36 @@ void MapContainer::ConvertCameraSplineToCarZero(const Point& point)
 			Point::rotate(cameraSet.second, Point(), -CameraManager::Instance()->getCarZero()->rz);
 		}
 	}
+}
+
+void MapContainer::IncreaseSpecialCameraSpeed(const Point& point)
+{
+	CameraManager::Instance()->increaseSpecialCameraSpeed();
+}
+
+void MapContainer::DecreaseSpecialCameraSpeed(const Point& point)
+{
+	CameraManager::Instance()->decreaseSpecialCameraSpeed();
+}
+
+void MapContainer::LoadCameraSpline(const Point& point)
+{
+	std::ifstream file;
+	file.open("Data/CameraPoints.txt", std::ios::in);
+
+	if (file)
+	{
+		CameraManager::Instance()->specialCameraPath.clear();
+
+		double x1, y1, z1, x2, y2, z2;
+		while (file >> x1 >> y1 >> z1 >> x2 >> y2 >> z2)
+		{
+			CameraManager::Instance()->specialCameraPath.push_back({ {x1, y1, z1 }, { x2, y2, z2 } });
+		}
+
+	}
+
+	file.close();
 }
 
 void MapContainer::SaveCameraSpline(const Point& point)
@@ -1543,6 +1591,8 @@ void MapContainer::EditMapObjectReduceBlue(const Point& point)
 
 void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)
 {
+	glutSetCursor(GLUT_CURSOR_NONE);
+	hideMapEditorPanel();
 	if (!cars.empty())
 	{
 		CameraManager::Instance()->setCarZero(&cars[0]);
@@ -1998,11 +2048,11 @@ void MapContainer::LoadRaceStartCameraPoints()
 void MapContainer::initCars()
 {
 	cars = {
-		Car(CarBrand::ToyotaHilux, 0, 0, true),
-		Car(CarBrand::SuzukiVitara, -5, -5),
-		Car(CarBrand::SubaruBRZ, -10, -10),
-		Car(CarBrand::RollsRoycePhantom, -15, -15),
-		Car(CarBrand::LamborghiniHuracan, -20, -20)
+		Car(CarBrand::SubaruBRZ, 0, 0, true),
+		//Car(CarBrand::SuzukiVitara, -5, -5),
+		//Car(CarBrand::SubaruBRZ, -10, -10),
+		//Car(CarBrand::RollsRoycePhantom, -15, -15),
+		//Car(CarBrand::LamborghiniHuracan, -20, -20)
 	};
 
 	for (auto& car : cars)
