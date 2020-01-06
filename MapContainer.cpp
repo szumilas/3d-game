@@ -89,6 +89,7 @@ std::vector<std::vector<int>> MapContainer::createTools()
 		MapContainer::e_AddCameraPoint,
 		MapContainer::e_RemoveCameraPoints,
 		MapContainer::e_ConvertCameraPointsToSpline,
+		MapContainer::e_ConvertCameraPointsToSplineVariousDistances,
 		MapContainer::e_PlayCameraSpline,
 		MapContainer::e_ConvertCameraSplineToCarZero,
 		MapContainer::e_PlayCameraSplineAroundCarZero,
@@ -189,6 +190,7 @@ std::map<int, void (MapContainer::*)(const Point&)> MapContainer::createToolsMap
 		{ e_AddCameraPoint, &MapContainer::AddCameraPoint },
 		{ e_RemoveCameraPoints, &MapContainer::RemoveCameraPoints },
 		{ e_ConvertCameraPointsToSpline, &MapContainer::ConvertCameraPointsToSpline },
+		{ e_ConvertCameraPointsToSplineVariousDistances, &MapContainer::ConvertCameraPointsToSplineVariouosDistances },
 		{ e_PlayCameraSpline, &MapContainer::PlayCameraSpline },
 		{ e_ConvertCameraSplineToCarZero, &MapContainer::ConvertCameraSplineToCarZero },
 		{ e_PlayCameraSplineAroundCarZero, &MapContainer::PlayCameraSplineAroundCarZero },
@@ -1094,8 +1096,8 @@ void MapContainer::AddCameraPoint(const Point& point)
 	auto& currentCameraLookAt = CameraManager::Instance()->getCurrentCameraPoints().second;
 
 	if (cameraSpline.first.points.empty()
-		|| cameraSpline.first.points.back().distance2D(currentCameraCenter) > 0.1
-		|| cameraSpline.second.points.back().distance2D(currentCameraLookAt) > 0.1
+		|| cameraSpline.first.points.back().distance3D(currentCameraCenter) > 0.01
+		|| cameraSpline.second.points.back().distance3D(currentCameraLookAt) > 0.01
 		)
 	{
 		cameraSpline.first.points.push_back(currentCameraCenter);
@@ -1112,13 +1114,34 @@ void MapContainer::RemoveCameraPoints(const Point& point)
 
 void MapContainer::ConvertCameraPointsToSpline(const Point& point)
 {
+	ConvertCameraPointsToSpline(false);
+}
+
+void MapContainer::ConvertCameraPointsToSplineVariouosDistances(const Point& point)
+{
+	ConvertCameraPointsToSpline(true);
+}
+
+void MapContainer::ConvertCameraPointsToSpline(bool variousDistances)
+{
 	if (cameraSpline.first.points.size() >= 4)
 	{
 		cameraSpline.first.calculateLengths();
 		cameraSpline.second.calculateLengths();
 
-		auto splineSubpointsCenter = cameraSpline.first.generateSubpoints(cameraSpline.first.length() / 500);
-		auto splineSubpointsLookAt = cameraSpline.second.generateSubpoints(cameraSpline.second.length() / 500);
+		std::vector<Point> splineSubpointsCenter;
+		std::vector<Point> splineSubpointsLookAt;
+
+		if (variousDistances)
+		{
+			splineSubpointsCenter = cameraSpline.first.generateSubpointsVariousDistances(cameraSpline.first.length() / 500);
+			splineSubpointsLookAt = cameraSpline.second.generateSubpointsVariousDistances(cameraSpline.second.length() / 500);
+		}
+		else
+		{
+			splineSubpointsCenter = cameraSpline.first.generateSubpoints(cameraSpline.first.length() / 500);
+			splineSubpointsLookAt = cameraSpline.second.generateSubpoints(cameraSpline.second.length() / 500);
+		}
 
 		std::vector<std::pair<Point, Point>> newSpecialCameraPath;
 

@@ -51,6 +51,7 @@ public:
 		e_AddCameraPoint,
 		e_RemoveCameraPoints,
 		e_ConvertCameraPointsToSpline,
+		e_ConvertCameraPointsToSplineVariousDistances,
 		e_PlayCameraSpline,
 		e_ConvertCameraSplineToCarZero,
 		e_PlayCameraSplineAroundCarZero,
@@ -155,6 +156,7 @@ public:
 	void AddCameraPoint(const Point& point = Point());
 	void RemoveCameraPoints(const Point& point = Point());
 	void ConvertCameraPointsToSpline(const Point& point = Point());
+	void ConvertCameraPointsToSplineVariouosDistances(const Point& point = Point());
 	void PlayCameraSpline(const Point& point = Point());
 	void ConvertCameraSplineToCarZero(const Point& point = Point());
 	void PlayCameraSplineAroundCarZero(const Point& point = Point());
@@ -199,6 +201,8 @@ public:
 	void EditMapObjectAddBlue(const Point& point = Point());
 	void EditMapObjectReduceBlue(const Point& point = Point());
 
+
+	void ConvertCameraPointsToSpline(bool variousDistances);
 
 	void setRaceDetails(CarBrand selectedCar, TrackName selectedTrack, int noOfLaps, int noOfOponents);
 	void setFreeRide(CarBrand selectedCar, Point position);

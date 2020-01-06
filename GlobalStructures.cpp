@@ -513,6 +513,34 @@ std::vector<Point> Spline::generateSubpoints(float subpointsDistance, bool keepO
 	return subsplinePath;
 }
 
+std::vector<Point> Spline::generateSubpointsVariousDistances(float subpointsDistance, bool keepOriginalPoints)
+{
+	std::vector<Point> subsplinePath;
+	float approximateDistance = 0.0f;
+
+	int previousIndex = -1;
+	for (float t = subpointsDistance; t < static_cast<float>(points.size() - 3); t += subpointsDistance)
+	{
+		if (static_cast<int>(t) > previousIndex)
+		{
+			subsplinePath.push_back( points[static_cast<int>(t) + 1] );
+			previousIndex = static_cast<int>(t);
+		}
+
+		if (subsplinePath.size() == 2)
+		{
+			approximateDistance = subsplinePath.front().distance2D(subsplinePath.back());
+		}
+
+		Point p = getSplineSubpoint(t);
+		subsplinePath.push_back(p);
+	}
+	if (keepOriginalPoints)
+		subsplinePath.push_back(points[size() - 2]);
+
+	return subsplinePath;
+}
+
 std::string Timer::getString(int miliseconds)
 {
 	if (miliseconds < 0)
