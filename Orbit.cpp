@@ -94,8 +94,8 @@ void Orbit::calculateFlatCursorPosition(int windowWidth, int windowHeight, int m
 		}
 		if (moveLookAt && !previouslyRenderedLookAt)
 		{
-			lookAtX = flatCursor.x;
-			lookAtY = flatCursor.y;
+			lookAtX += (-flatCursor.x + previousFlatCursor.x) * 2;
+			lookAtY += (-flatCursor.y + previousFlatCursor.y) * 2;
 
 			calculateNewRzAlphaDistance(eyePoint);
 
@@ -144,17 +144,26 @@ void Orbit::displayFlatCursor()
 void Orbit::cameraCenterUp()
 {
 	auto eyePoint = getCameraCenter();
-	eyePoint.z += 0.5;
+
+	if (eyePoint.z < 5)
+		eyePoint.z *= 1.03;
+	else
+		eyePoint.z += 0.5;
+
 	calculateNewRzAlphaDistance(eyePoint);
 }
 
 void Orbit::cameraCenterDown()
 {
 	auto eyePoint = getCameraCenter();
-	eyePoint.z -= 0.5;
+
+	if (eyePoint.z < 5)
+		eyePoint.z /= 1.03;
+	else
+		eyePoint.z -= 0.5;
 
 	if (eyePoint.z < 0.1)
-		eyePoint.z = 0.5;
+		eyePoint.z = 0.1;
 
 	calculateNewRzAlphaDistance(eyePoint);
 }

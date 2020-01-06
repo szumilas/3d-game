@@ -519,7 +519,7 @@ void Game::Update()
 				orbit.cameraCenterUp();
 		}
 
-		if (!F1Pressed && leftMouseButtonClicked)
+		if (!F1Pressed && !F2Pressed && !F3Pressed && leftMouseButtonClicked)
 		{
 			if (1.0 - static_cast<float>(mouseYPos) / windowRealHeight > 0.9)
 				MapContainer::Instance()->pickTool((static_cast<float>(mouseXPos) / windowRealWidth - 0.5) * windowRealWidth / windowRealHeight, 1.0 - static_cast<float>(mouseYPos) / windowRealHeight);
