@@ -92,6 +92,15 @@ void Orbit::calculateFlatCursorPosition(int windowWidth, int windowHeight, int m
 			lookAtY += (-flatCursor.y + previousFlatCursor.y)*2;
 			previouslyRendered = true;
 		}
+		if (moveLookAt && !previouslyRenderedLookAt)
+		{
+			lookAtX = flatCursor.x;
+			lookAtY = flatCursor.y;
+
+			calculateNewRzAlphaDistance(eyePoint);
+
+			previouslyRenderedLookAt = true;
+		}
 	}
 }
 
@@ -130,4 +139,34 @@ void Orbit::displayFlatCursor()
 	glVertex3f(getLookAtX(), getLookAtY() - 1, 0);
 	glVertex3f(getLookAtX(), getLookAtY() + 1, 0);
 	glEnd();
+}
+
+void Orbit::cameraCenterUp()
+{
+	auto eyePoint = getCameraCenter();
+	eyePoint.z += 0.5;
+	calculateNewRzAlphaDistance(eyePoint);
+}
+
+void Orbit::cameraCenterDown()
+{
+	auto eyePoint = getCameraCenter();
+	eyePoint.z -= 0.5;
+
+	if (eyePoint.z < 0.1)
+		eyePoint.z = 0.5;
+
+	calculateNewRzAlphaDistance(eyePoint);
+}
+
+void Orbit::calculateNewRzAlphaDistance(const Point& eyePoint)
+{
+	auto newDistance = eyePoint.distance3D({ lookAtX, lookAtY });
+	auto newAlpha = asin(eyePoint.z / newDistance);
+	vector2D line({ lookAtX, lookAtY }, eyePoint);
+	auto newrz = vector2D::directedAngle({ { 0,0 },{ 1,0 } }, line );
+	
+	rz = newrz;
+	alpha = newAlpha;
+	distance = newDistance;
 }

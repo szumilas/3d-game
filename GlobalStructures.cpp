@@ -91,6 +91,11 @@ double Point::distance2D(const Point& second) const
 	return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2));
 }
 
+double Point::distance3D(const Point& second) const
+{
+	return sqrt(pow(x - second.x, 2) + pow(y - second.y, 2) + pow(z - second.z, 2));
+}
+
 void Point::rotate(Point& p, const Point& refP, float angle)
 {
 	double newX = refP.x + (p.x - refP.x) * cos(angle) - (p.y - refP.y) * sin(angle);

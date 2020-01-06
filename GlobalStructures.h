@@ -44,8 +44,9 @@ struct Point
 	Point();
 	Point(double x, double y, double z);
 	Point(double x, double y);
-	
+
 	double distance2D(const Point& second) const;
+	double distance3D(const Point& second) const;
 	static void rotate(Point& p, const Point& refP, float angle);
 	void move2D(double dx, double dy);
 

@@ -212,13 +212,13 @@ void Game::keyboard(unsigned char key, int x, int y)
 	case 27: // Escape key
 		if (gameState == State::mainMenu)
 		{
-			/*orbit.savePosition();
+			orbit.savePosition();
 			if (!MapManager::Instance()->loadedFromPolygonsFile)
 				MapManager::Instance()->saveOverlays();
 
 			SoundManager::DeInit();
 			TextureManager::DeInit();
-			exit(0);*/
+			exit(0);
 			menu.enterPreviousLevel();
 			SoundManager::Instance()->playSample(Sounds::menu_click);
 		}
@@ -425,6 +425,7 @@ void Game::Update()
 		scrollUpMouse = false;
 		scrollDownMouse = false;
 		orbit.deactivateMovingXY();
+		orbit.deactivateMovingLookAt();
 
 		if (MapManager::Instance()->currentCameraView == -1 && !CameraManager::Instance()->updateSpecialCameraPathPosition())
 		{
@@ -478,10 +479,6 @@ void Game::Update()
 		if (KeyboardManager::Instance()->checkKey(' '))
 			MapContainer::Instance()->cars[0].breakPressed();
 
-		if (leftMouseButtonDown && rightMouseButtonDown)
-		{
-			orbit.rotate(-1);
-		}
 		else if (scrollUpMouse)
 		{
 			orbit.zoomIn();
@@ -492,11 +489,19 @@ void Game::Update()
 		}
 		else if (rightMouseButtonDown)
 		{
-			orbit.changeAlpha();
+			if (F3Pressed)
+				orbit.cameraCenterDown();
+			else if(F2Pressed)
+				orbit.changeAlpha(-1);
+			else
+				orbit.changeAlpha();
 		}
 		else if (scrollMouseButtonDown)
 		{
-			orbit.rotate();
+			if(F2Pressed)
+				orbit.rotate(-1);
+			else
+				orbit.rotate();
 		}
 		if (F2Pressed && F3Pressed)
 		{
@@ -507,6 +512,10 @@ void Game::Update()
 		{
 			if (F1Pressed)
 				orbit.activateMovingXY();
+			else if (F2Pressed)
+				orbit.activateMovingLookAt();
+			else if (F3Pressed)
+				orbit.cameraCenterUp();
 		}
 
 		if (!F1Pressed && leftMouseButtonClicked)
@@ -523,6 +532,7 @@ void Game::Update()
 		scrollUpMouse = false;
 		scrollDownMouse = false;
 		orbit.deactivateMovingXY();
+		orbit.deactivateMovingLookAt();
 
 		if (MapManager::Instance()->currentCameraView == -1 && !CameraManager::Instance()->updateSpecialCameraPathPosition())
 		{
