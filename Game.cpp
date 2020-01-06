@@ -92,7 +92,8 @@ void Game::displayWorld()
 			car.stop();
 	}
 
-	orbit.displayFlatCursor();
+	if(MapContainer::Instance()->getCursorVisibility())
+		orbit.displayFlatCursor();
 
 	glPopMatrix();
 }
@@ -539,6 +540,7 @@ void Game::Update()
 			MapManager::Instance()->currentCameraView = 0;
 			glutSetCursor(GLUT_CURSOR_RIGHT_ARROW);
 			MapContainer::Instance()->showMapEditorPanel();
+			MapContainer::Instance()->showCursors();
 			MapContainer::Instance()->introFinished();
 		}
 

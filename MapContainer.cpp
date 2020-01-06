@@ -41,6 +41,7 @@ Color MapContainer::pointsColor = Color(ColorName::BLUE);
 Color MapContainer::splinePointsColor = Color(ColorName::PINK);
 Color MapContainer::splineSubointsColor = Color(ColorName::BLACK);
 bool MapContainer::mapEditorPanelVisible = true;
+bool MapContainer::cursorsVisible = true;
 double MapContainer::displayWorldCameraHeight = 0;
 
 std::vector<std::vector<int>> MapContainer::createTools()
@@ -470,20 +471,20 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 		{
 			auto dist = (xToDraw - sectionToDisplay.first) * (xToDraw - sectionToDisplay.first) + (yToDraw - sectionToDisplay.second) * (yToDraw - sectionToDisplay.second);
 
-			MapObject::DrawingPriority priorityOfSection = MapObject::DrawingPriority::always;
+			MapObject::DrawingPriority priorityToSkip = MapObject::DrawingPriority::never;
 			
 			//if (dist < 256)
 			//{
 			//	priorityOfSection = MapObject::DrawingPriority::notImportant;
 			//}
-			if (dist < 500)
+			if (dist > 300)
 			{
-				priorityOfSection = MapObject::DrawingPriority::whenClose;
+				priorityToSkip = MapObject::DrawingPriority::notImportant;
 			}
 
 			for (auto& object : mapObjectSections[sectionToDisplay.first][sectionToDisplay.second])
 			{
-				if (object->get()->drawingPriority > priorityOfSection)
+				if (object->get()->drawingPriority >= priorityToSkip)
 					break;
 
 				if (!object->get()->isHidden)
@@ -712,7 +713,9 @@ void MapContainer::displayBackground()
 
 void MapContainer::displayLines()
 {
-	return;
+	if (!mapEditorPanelVisible)
+		return;
+
 	glColor3f(0.0f, 0.0f, 0.0f);
 	for (int xx = 0; xx < 100; xx++)
 	{
@@ -1134,6 +1137,7 @@ void MapContainer::PlayCameraSpline(const Point& point)
 {
 	glutSetCursor(GLUT_CURSOR_NONE);
 	hideMapEditorPanel();
+	hideCursors();
 	CameraManager::Instance()->setCarZero(nullptr);
 	MapManager::Instance()->currentCameraView = -1;
 }
@@ -1884,7 +1888,9 @@ void MapContainer::displayAIPoints()
 
 void MapContainer::displayMapEditorPoints()
 {
-	return;
+	if(!mapEditorPanelVisible)
+		return;
+
 	for (auto& extraObject : extraObjects)
 	{
 		extraObject->display();

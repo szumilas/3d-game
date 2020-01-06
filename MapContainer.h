@@ -240,6 +240,10 @@ public:
 	void showMapEditorPanel() { mapEditorPanelVisible = true; }
 	void hideMapEditorPanel() { mapEditorPanelVisible = false; }
 
+	void showCursors() { cursorsVisible = true; }
+	void hideCursors() { cursorsVisible = false; }
+	bool getCursorVisibility() { return cursorsVisible; }
+
 private:
 
 	struct BuildingEdited
@@ -282,6 +286,7 @@ private:
 	static int currentToolId;
 
 	static bool mapEditorPanelVisible;
+	static bool cursorsVisible;
 
 	static std::vector<std::vector<int>> tools;
 	static std::map<int, void (MapContainer::*)(const Point&)> toolsMap;
