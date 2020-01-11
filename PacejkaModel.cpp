@@ -278,6 +278,8 @@ void PacejkaModel::stop()
 	for (auto& wheel : allWheels)
 	{
 		wheel.angularVelocity = 0;
+		wheel.longitudinalForce = 0;
+		wheel.lateralForce = 0;
 	}
 
 }

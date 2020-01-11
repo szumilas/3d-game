@@ -9,10 +9,10 @@ int Game::current_time;
 int Game::previos_time = time(NULL);
 int Game::noOfFrames = 0;
 
-int Game::windowWidth = 1500;
-int Game::windowHeight = 750;
-//int Game::windowWidth = 1280;
-//int Game::windowHeight = 720;
+//int Game::windowWidth = 1500;
+//int Game::windowHeight = 750;
+int Game::windowWidth = 1280;
+int Game::windowHeight = 720;
 
 int Game::windowRealWidth;
 int Game::windowRealHeight;
@@ -469,6 +469,23 @@ void Game::Update()
 	}
 	else if (gameState == State::mapEditor)
 	{
+		if (KeyboardManager::Instance()->checkKey('Q'))
+		{
+			MapContainer::Instance()->PlayCameraSpline();
+		}
+		else if (KeyboardManager::Instance()->checkKey('W'))
+		{
+			MapContainer::Instance()->PlayCameraSplineAroundCarZero();
+		}
+		if (KeyboardManager::Instance()->checkKey('E'))
+		{
+			MapContainer::Instance()->AIPlay();
+		}
+		if (KeyboardManager::Instance()->checkKey('R'))
+		{
+			MapContainer::Instance()->ApplySpecialKey();
+		}
+
 		if (upPressed)
 			MapContainer::Instance()->cars[0].accelerate();
 		if (downPressed)

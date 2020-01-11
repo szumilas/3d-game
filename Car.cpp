@@ -123,7 +123,7 @@ void Car::move()
 
 	engine.setRPM(Engine::calculateRMP(gearBox.getCurrentTransmission() * gearBox.getMainTransmission(), rd, v.length()));
 
-	if (!MapContainer::Instance()->raceTimer.beforeRace)
+	if (!MapContainer::Instance()->raceTimer.beforeRace || MapContainer::Instance()->mapEditorPanelVisible && humanCar)
 	{
 		forces = pacejkaModel.calculateForces(drivingDir, tryAccelerate, trySlow, tryBreak, getGlobalVector(v), v, acceleration, angularVelocity, steeringWheelAngle, rz);
 	}
@@ -961,4 +961,13 @@ void Car::updateGhostCarAbility()
 void Car::AIPathResetCounter()
 {
 	AIcurrentPointTimer = GameClock::Instance()->getClock();
+}
+
+void Car::updateVelocity(float scale)
+{
+
+	setLocalV({ { 0,0 },{ v.x * scale, v.y * scale } });
+
+	pacejkaModel.recalculateWheelAngularVelocity(drivingDir * v.length(), true);
+
 }

@@ -48,7 +48,7 @@ public:
 	void accelerate();
 	void slow();
 	void breakPressed();
-	void stop() { a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; pacejkaModel.stop(); }
+	void stop() { wheelsTrace.clear();  forces.clear(); netForce = { {0, 0}, {0, 0} }; acceleration = { 0, 0 };  a = 0; v = { 0, 0 }; velocity = 0; angularVelocity = 0; pacejkaModel.stop(); AIcurrentPointTimer = 999999999; }
 	void setAIcurrentPoint(int newAIcurrentPoint) { AIcurrentPoint = newAIcurrentPoint; }
 	int getAIcurrentPoint() { return AIcurrentPoint; }
 	void turnRight();
@@ -70,6 +70,9 @@ public:
 	void setFrontRightCamera() { cameraCenter = Point{ 5, 2, 2 }; cameraLookAt = Point{0, 0, 1}; }
 	bool isHumanCar() { return humanCar; }
 	void mute();
+	void setLocalV(const vector2D& newV) { v.x = newV.x; v.y = newV.y; }
+	void updateVelocity(float scale = 1.0f);
+	void updateAngularVelocity(float a) { angularVelocity = a; }
 
 private:
 

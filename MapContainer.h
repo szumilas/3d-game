@@ -238,6 +238,8 @@ public:
 	void introFinished() { raceTimer.state = RaceTimer::State::Red4; }
 	bool raceActive() { return raceTimer.state == RaceTimer::State::Inactive; }
 	bool timerActive() { return raceTimer.state != RaceTimer::State::Intro && raceTimer.state != RaceTimer::State::Outro; }
+	void updateVelocityOfCars(float scale = 1.0f);
+	void ApplySpecialKey();
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 
@@ -280,6 +282,8 @@ public:
 
 	static RaceTimer raceTimer;
 
+	static bool mapEditorPanelVisible;
+
 private:
 
 	static int w;
@@ -289,7 +293,6 @@ private:
 	static int mapEditorSelectedTool;
 	static int currentToolId;
 
-	static bool mapEditorPanelVisible;
 	static bool cursorsVisible;
 
 	static std::vector<std::vector<int>> tools;
