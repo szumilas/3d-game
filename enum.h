@@ -102,6 +102,19 @@ enum class Textures : long
 	logo,
 	grunwaldzki_bridge,
 	zwierzyniecki_bridge,
+	nissan_qashqai,
+	toyota_fj_cruiser,
+	toyota_auris,
+	volkswagen_beetle,
+	volkswagen_polo,
+	hyundai_creta_ix25,
+	hyundai_i30,
+	seat_leon,
+	dacia_logan,
+	bmw_x5,
+	renault_twingo,
+	renault_clio,
+
 };
 
 enum class Sounds : long

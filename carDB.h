@@ -24,6 +24,18 @@ struct CarDetails
 
 enum class CarBrand : long
 {
+	RenaultClio,
+	RenaultTwingo,
+	BMWX5,
+	DaciaLogan,
+	SeatLeon,
+	Hyundaii30,
+	HyundaiCretaix25,
+	VolkswagenBeetle,
+	VolkswagenPolo,
+	ToyotaAuris,
+	ToyotaFJCruiser,
+	NissanQashqai,
 	HondaCRZ,
 	AudiA4,
 	JaguarSType,
@@ -48,7 +60,31 @@ enum class CarBrand : long
 };
 
 static std::map<CarBrand, CarDetails> carDB
-{
+{ 
+	{ CarBrand::RenaultClio,{ "Renault Clio", "Data/Cars/renault_clio/", Textures::renault_clio, Sounds::engine, 4.03f, 1065.00f, 184.00f, 74.00f, 11.00f, 3.88f, std::vector<float>{3.73f, 2.05f, 1.39f, 1.03f, 0.82f}, 3.55f } }, // https://www.cars-data.com/en/renault-clio-tce-100-expression-specs/37758
+	
+	{ CarBrand::RenaultTwingo,{ "Renault Twingo", "Data/Cars/renault_twingo/", Textures::renault_twingo, Sounds::engine, 3.69f, 955.00f, 185.00f, 63.00f, 11.20f, 3.44f, std::vector<float>{3.73f, 2.05f, 1.32f, 0.94f, 0.69f}, 3.55f } }, // https://www.cars-data.com/en/renault-twingo-1.5-dci-eco2-authentique-specs/40821
+	
+	{ CarBrand::BMWX5,{ "BMW X5", "Data/Cars/bmw_x5/", Textures::bmw_x5, Sounds::engine, 4.89f, 1940.00f, 220.00f, 160.00f, 8.20f, 3.39f, std::vector<float>{4.71f, 3.14f, 2.11f, 1.67f, 1.29f, 1.00f, 0.84f, 0.67f}, 3.30f } }, // https://www.cars-data.com/en/bmw-x5-xdrive25d-high-executive-specs/62484
+	
+	{ CarBrand::DaciaLogan,{ "Dacia Logan", "Data/Cars/dacia_logan/", Textures::dacia_logan, Sounds::engine, 4.25f, 1015.00f, 183.00f, 77.00f, 10.20f, 3.16f, std::vector<float>{3.78f, 2.12f, 1.27f, 0.87f, 0.66f}, 3.60f } }, // https://www.cars-data.com/en/dacia-logan-1.6-16v-prestige-specs/11013
+
+	{ CarBrand::SeatLeon,{ "Seat Leon", "Data/Cars/seat_leon/", Textures::seat_leon, Sounds::engine, 4.26f, 1186.00f, 192.00f, 77.00f, 10.70f, 3.65f, std::vector<float>{3.78f, 1.94f, 1.19f, 0.82f, 0.63f}, 3.60f } }, // https://www.cars-data.com/en/seat-leon-1.6-tdi-reference-specs/59498
+
+	{ CarBrand::Hyundaii30,{ "Hyundai i30", "Data/Cars/hyundai_i30/", Textures::hyundai_i30, Sounds::engine, 4.30f, 1265.00f, 188.00f, 94.00f, 10.90f, 3.47f, std::vector<float>{3.77f, 2.05f, 1.19f, 0.84f, 0.70f, 0.60f}, 3.58f } }, // https://www.cars-data.com/en/hyundai-i30-1.6-crdi-i-catcher-specs/17578/tech
+
+	{ CarBrand::HyundaiCretaix25,{ "Hyundai Creta ix25", "Data/Cars/hyundai_creta_ix25/", Textures::hyundai_creta_ix25, Sounds::engine, 4.41f, 1280.00f, 178.00f, 99.00f, 11.10f, 4.00f, std::vector<float>{3.73f, 2.05f, 1.90f, 1.10f, 0.89f}, 3.55f } }, // https://www.cars-data.com/en/hyundai-ix35-1.6-gdi-i-magine-2wd-specs/60830
+
+	{ CarBrand::VolkswagenBeetle,{ "Volkswagen Beetle", "Data/Cars/volkswagen_beetle/", Textures::volkswagen_beetle, Sounds::engine, 4.27f, 1174.00f, 180.00f, 77.00f, 10.90f, 4.35f, std::vector<float>{3.62f, 1.95f, 1.28f, 0.97f, 0.78f, 0.65f}, 3.18f } }, // https://www.cars-data.com/en/volkswagen-beetle-1.2-tsi-design-specs/49144/tech
+
+	{ CarBrand::VolkswagenPolo,{ "Volkswagen Polo", "Data/Cars/volkswagen_polo/", Textures::volkswagen_polo, Sounds::engine, 3.97f, 1065.00f, 190.00f, 77.00f, 10.40f, 3.16f, std::vector<float>{3.78f, 2.12f, 1.27f, 0.87f, 0.66f}, 3.60f } }, // https://www.cars-data.com/en/volkswagen-polo-1.6-tdi-105hp-highline-specs/52994
+
+	{ CarBrand::ToyotaAuris,{ "Toyota Auris", "Data/Cars/toyota_auris/", Textures::toyota_auris, Sounds::engine, 4.28f, 1125.00f, 175.00f, 73.00f, 12.60f, 3.94f, std::vector<float>{3.55f, 1.90f, 1.23f, 0.86f, 0.69f}, 3.25f } }, // https://www.cars-data.com/en/toyota-auris-1.3-vvt-i-aspiration-specs/59540
+
+	{ CarBrand::ToyotaFJCruiser,{ "Toyota FJ Cruiser", "Data/Cars/toyota_fj_cruiser/", Textures::toyota_fj_cruiser, Sounds::engine, 4.81f, 1860.00f, 175.00f, 183.00f, 9.50f, 3.91f, std::vector<float>{2.80f, 1.54f, 1.00f, 0.71f}, 2.39f } }, // https://www.cars-data.com/en/toyota-land-cruiser-4.0-v6-vvt-i-lx-specs/48604#
+
+	{ CarBrand::NissanQashqai,{ "Nissan Qashqai", "Data/Cars/nissan_qashqai/", Textures::nissan_qashqai, Sounds::engine, 4.33f, 1225.00f, 181.00f, 86.00f, 11.90f, 4.00f, std::vector<float>{3.73f, 2.05f, 1.90f, 1.10f, 0.89f}, 3.55f } }, // https://www.cars-data.com/en/nissan-qashqai-1.6-connect-edition-specs/28003/tech
+
 	{ CarBrand::HondaCRZ,{ "Honda CR-Z", "Data/Cars/honda_cr_z/", Textures::honda_cr_z, Sounds::engine, 4.08f, 1119.00f, 200.00f, 91.00f, 9.90f, 4.13f, std::vector<float>{3.70f, 2.12f, 1.43f, 1.03f, 0.79f, 0.70f}, 3.44f } }, // https://www.cars-data.com/en/honda-cr-z-1.5-s-specs/17013
 
 	{ CarBrand::AudiA4,{ "Audi A4", "Data/Cars/audi_a4/", Textures::audi_a4, Sounds::engine, 4.55f, 1285.00f, 212.00f, 96.00f, 9.90f, 4.13f, std::vector<float>{3.50f, 2.12f, 1.43f, 1.03f, 0.79f}, 3.44f } }, // https://www.cars-data.com/en/audi-a4-2.0-5v-specs/2500

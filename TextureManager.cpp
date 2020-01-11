@@ -1,4 +1,4 @@
-#define NOMIPMAPPING
+#define MIPMAPPING
 
 #include "TextureManager.h"
 #include <algorithm>
@@ -107,6 +107,19 @@ std::vector<TextureManager::TextureData> TextureManager::textures
 	{ Textures::logo, -1.0f, -1.0f, "logo.png", false },
 	{ Textures::grunwaldzki_bridge, 160.0f, 15.0f, "grunwaldzki_bridge.png", false },
 	{ Textures::zwierzyniecki_bridge, 65, 15.0f, "zwierzyniecki_bridge.png", false },
+	{ Textures::nissan_qashqai, -1.0f, -1.0f, "nissan_qashqai.png" },
+	{ Textures::toyota_fj_cruiser, -1.0f, -1.0f, "toyota_fj_cruiser.png" },
+	{ Textures::toyota_auris, -1.0f, -1.0f, "toyota_auris.png" },
+	{ Textures::volkswagen_beetle, -1.0f, -1.0f, "volkswagen_beetle.png" },
+	{ Textures::volkswagen_polo, -1.0f, -1.0f, "volkswagen_polo.png" },
+	{ Textures::seat_leon, -1.0f, -1.0f, "seat_leon.png" },
+	{ Textures::hyundai_i30, -1.0f, -1.0f, "hyundai_i30.png" },
+	{ Textures::hyundai_creta_ix25, -1.0f, -1.0f, "hyundai_creta_ix25.png" },
+	{ Textures::dacia_logan, -1.0f, -1.0f, "dacia_logan.png" },
+	{ Textures::bmw_x5, -1.0f, -1.0f, "bmw_x5.png" },
+	{ Textures::renault_twingo, -1.0f, -1.0f, "renault_twingo.png" },
+	{ Textures::renault_clio, -1.0f, -1.0f, "renault_clio.png" },
+
 };
 
 TextureManager::TextureData TextureManager::loadingTexture;
