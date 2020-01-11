@@ -5,6 +5,7 @@
 #include "MetaLine.h"
 #include <fstream>
 #include <algorithm>
+#include "KeyboardManager.h"
 
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapObjectSections;
 std::vector<std::vector<std::vector<std::unique_ptr<MapObject>*>>> MapContainer::mapCollidableObjectSections;
@@ -41,8 +42,10 @@ Color MapContainer::pointsColor = Color(ColorName::BLUE);
 Color MapContainer::splinePointsColor = Color(ColorName::PINK);
 Color MapContainer::splineSubointsColor = Color(ColorName::BLACK);
 bool MapContainer::mapEditorPanelVisible = true;
+bool MapContainer::linesVisible = true;
 bool MapContainer::cursorsVisible = true;
 double MapContainer::displayWorldCameraHeight = 0;
+int MapContainer::trailerScenery = 0;
 
 std::vector<std::vector<int>> MapContainer::createTools()
 {
@@ -489,6 +492,8 @@ void MapContainer::displayWorld(std::pair<Point, Point>& camera)
 				if (object->get()->drawingPriority >= priorityToSkip)
 					break;
 
+				//updateScenery(*object->get(), sqrt(dist));
+				
 				if (!object->get()->isHidden)
 					object->get()->display();
 			}
@@ -702,12 +707,17 @@ void MapContainer::displayBackground()
 {
 	if (background != nullptr)
 	{
+		//background->get()->printObject = true;
+		//background->get()->printTexture = true;
 		background->get()->display();
 		background->get()->alreadyPrinted = false;
 	}
 
 	for (const auto& groundArea : ground)
 	{
+		//groundArea->get()->printObject = true;
+		//groundArea->get()->printTexture = true;
+
 		groundArea->get()->display();
 		groundArea->get()->alreadyPrinted = false;
 	}
@@ -715,7 +725,7 @@ void MapContainer::displayBackground()
 
 void MapContainer::displayLines()
 {
-	if (!mapEditorPanelVisible)
+	if (!linesVisible)
 		return;
 
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -1054,10 +1064,13 @@ void MapContainer::ConvertSplinePointsToCurrentPath(const Point& point)
 	std::vector<PathStruct> futurePath;
 	auto& splinePoints = currentSpline.spline.points;
 
-	std::for_each(splinePoints.begin(), splinePoints.end(), [&](const Point& p) {futurePath.push_back({ p, splineSubointsColor, false }); });
+	if (!splinePoints.empty())
+	{
+		std::for_each(splinePoints.begin(), splinePoints.end(), [&](const Point& p) {futurePath.push_back({ p, splineSubointsColor, false }); });
 
-	currentPath = std::move(futurePath);
-	currentSpline = SplineStruct{};
+		currentPath = std::move(futurePath);
+		currentSpline = SplineStruct{};
+	}
 }
 
 void MapContainer::ConvertPathToRaceBarriers(const Point& point)
@@ -2202,8 +2215,177 @@ void MapContainer::updateVelocityOfCars(float scale)
 
 void MapContainer::ApplySpecialKey()
 {
+
+
 	//updateVelocityOfCars(0.5f);
-	std::swap(cars[0], cars[1]);
-	std::swap(cars[1], cars[2]);
-	std::swap(cars[2], cars[3]);
+	//std::swap(cars[0], cars[1]);
+	//std::swap(cars[1], cars[2]);
+	//std::swap(cars[2], cars[3]);
+}
+
+void MapContainer::updateScenery(MapObject& mapObject, float dist)
+{
+	if (trailerScenery > 24)
+		trailerScenery = 24;
+
+
+	static bool x11 = true;
+
+	switch (trailerScenery)
+	{
+
+	case 24:
+		linesVisible = false;
+
+	case 23:
+		mapObject.printObject = true;
+		mapObject.printTexture = true;
+		break;
+
+	case 22:
+		if (mapObject.highway == "street_lamp" && dist < 100)
+		{
+			mapObject.printObject = true;
+			mapObject.printTexture = true;
+		}
+
+	case 21:
+		if (mapObject.natural == "tree" && dist < 100)
+		{
+			mapObject.printObject = true;
+			mapObject.printTexture = true;
+		}
+
+	case 20:
+		if (MapManager::Instance()->isBusShelterCheck(mapObject) && dist < 100)
+		{
+			mapObject.printObject = true;
+			mapObject.printTexture = true;
+		}
+
+	case 19:
+		if (MapManager::Instance()->isGreenAreaCheck(mapObject) && dist < 100)
+		{
+			mapObject.printObject = true;
+			mapObject.printTexture = true;
+		}
+
+	case 18:
+		if (mapObject.building == "roof_generated" && dist < 100)
+		{
+			mapObject.printTexture = true;
+		}
+
+	case 17:
+		if (mapObject.building == "roof_generated" && dist < 5)
+		{
+			mapObject.printTexture = true;
+		}
+
+	case 16:
+		if (MapManager::Instance()->isBuildingCheck(mapObject) && dist < 100)
+		{
+			mapObject.printTexture = true;
+		}
+
+	case 15:
+		if (MapManager::Instance()->isBuildingCheck(mapObject) && dist < 5)
+		{
+			mapObject.printTexture = true;
+		}
+
+	case 14:
+		if (MapManager::Instance()->isBuildingCheck(mapObject) && dist < 3)
+		{
+			mapObject.printTexture = true;
+		}
+
+	case 13:
+		cars[0].prin3DtModel = true;
+
+	case 12:
+		cars[0].printWheels = true;
+
+	case 11:
+		if(x11)
+			std::cout << "11";
+		x11 = false;
+		
+	case 10:
+		if (MapManager::Instance()->isFootwayCheck(mapObject) && !MapManager::Instance()->isCrossingCheck(mapObject) && dist < 100)
+		{
+			mapObject.printObject = true;
+		}
+
+	case 9:
+		if (MapManager::Instance()->isBarrierCheck(mapObject) && dist < 100)
+		{
+			mapObject.printObject = true;
+		}
+
+	case 8:
+		if (MapManager::Instance()->isStreetCheck(mapObject) && dist < 100)
+		{
+			mapObject.printObject = true;
+		}
+
+	case 7:
+		if (mapObject.building == "roof_generated" && dist < 100
+			|| MapManager::Instance()->isBuildingCheck(mapObject) && dist < 100)
+		{
+			mapObject.printObject = true;
+		}
+		break;
+
+	case 6:
+		if (mapObject.building == "roof_generated" && dist < 10
+			|| MapManager::Instance()->isBuildingCheck(mapObject) && dist < 10)
+		{
+			mapObject.printObject = true;
+		}
+		break;
+
+	case 5:
+		if (mapObject.building == "roof_generated" && dist < 4)
+		{
+			mapObject.printObject = true;
+		}
+
+	case 4:
+		if (MapManager::Instance()->isBuildingCheck(mapObject) && dist < 4)
+		{
+			mapObject.printObject = true;
+		}
+		break;
+
+	case 3:
+		if (MapManager::Instance()->isBuildingCheck(mapObject) && dist < 3)
+		{
+			mapObject.printObject = true;
+		}
+		break;
+
+	case 2:
+		if (MapManager::Instance()->isBuildingCheck(mapObject) && dist < 2)
+		{
+			mapObject.printObject = true;
+		}
+		break;
+
+	case 1:
+		if (MapManager::Instance()->isBuildingCheck(mapObject) && dist < 1)
+		{
+			mapObject.printObject = true;
+		}
+
+		break;
+	case 0:
+		mapObject.printObject = false;
+		mapObject.printTexture = false;
+
+		cars[0].prin3DtModel = false;
+		cars[0].printWheels = false;
+
+	}
+	
 }

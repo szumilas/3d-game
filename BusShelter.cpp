@@ -55,5 +55,5 @@ void BusShelter::generateWalls()
 
 void BusShelter::display()
 {
-	Object3D::display();
+	MapObject::display();
 }

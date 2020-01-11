@@ -11,6 +11,9 @@ Skybox::Skybox(float minX, float maxX, float minY, float maxY)
 	calculateFinalGeometry();
 
 	selectable = false;
+
+	printTexture = true;
+	printObject = true;
 }
 
 void Skybox::calculateXYfromRef()

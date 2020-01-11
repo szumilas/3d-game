@@ -235,8 +235,7 @@ void Car::display()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_TEXTURE_2D);
-
-		bool prin3DtModel = true;
+		
 		if(prin3DtModel)
 		{
 			if (!ghostCar || (ghostCarCounter / 20) % 2 == 0)
@@ -259,29 +258,12 @@ void Car::display()
 					}
 					glEnd();
 				}
-
-				leftWheel.rz = steeringWheelAngle;
-				rightWheel.rz = steeringWheelAngle;
-
-				for (auto currentWheel :
-					std::vector<std::pair<Wheel*, float>>
-				{ {&backWheels, pacejkaModel.allWheels[rearLeftWheel].angularVelocity },
-				  {&leftWheel,  pacejkaModel.allWheels[frontLeftWheel].angularVelocity },
-				  {&rightWheel,  pacejkaModel.allWheels[frontRightWheel].angularVelocity } }
-					)
-				{
-					currentWheel.first->setCarPosition(position.x, position.y, position.z);
-					currentWheel.first->setCarAngle(rz);
-
-					currentWheel.first->rotate(currentWheel.second * !GameClock::Instance()->isPause());
-					currentWheel.first->display();
-				}
 			}
 		}
 		else
 		{
 
-
+			glColor3f(1.0f, 0.5f, 0.0f);
 			glBegin(GL_POLYGON);
 
 			cretateGlobalVertex({ length / 2,  width / 2, 0.5 });
@@ -300,7 +282,7 @@ void Car::display()
 				globalCollisionCircleCenter.y = position.y + carModelCircle.center.y;
 				globalCollisionCircleCenter.z = carModelCircle.center.z;
 				Point::rotate(globalCollisionCircleCenter, position, rz);
-				myglDrawFillCircle({ globalCollisionCircleCenter }, carModelCircle.r);
+				//myglDrawFillCircle({ globalCollisionCircleCenter }, carModelCircle.r);
 			}
 
 			//glDisable(GL_BLEND);
@@ -333,12 +315,35 @@ void Car::display()
 			}
 
 			glLineWidth(5);
-			glColor3f(1.0f, 0.5f, 0.0f);
+			glColor3f(0.0f, 0.7f, 0.1f);
 			glBegin(GL_LINES);
 			cretateGlobalVertex({ 0, 0, 0.53 });
-			cretateGlobalVertex({ v.x * 10, v.y * 10, 0.53 });
+			cretateGlobalVertex({ v.x * 3, v.y * 3, 0.53 });
 			glEnd();
 			glLineWidth(1);
+
+			
+		}
+
+		if (printWheels)
+		{
+			leftWheel.rz = steeringWheelAngle;
+			rightWheel.rz = steeringWheelAngle;
+
+			for (auto currentWheel :
+				std::vector<std::pair<Wheel*, float>>
+			{ { &backWheels, pacejkaModel.allWheels[rearLeftWheel].angularVelocity },
+			{ &leftWheel,  pacejkaModel.allWheels[frontLeftWheel].angularVelocity },
+			{ &rightWheel,  pacejkaModel.allWheels[frontRightWheel].angularVelocity } }
+				)
+			{
+				currentWheel.first->setCarPosition(position.x, position.y, position.z);
+				currentWheel.first->setCarAngle(rz);
+
+				currentWheel.first->rotate(currentWheel.second * !GameClock::Instance()->isPause());
+				currentWheel.first->display();
+			}
+
 		}
 
 		glColor3f(0.1f, 0.1f, 0.1f);
@@ -909,6 +914,7 @@ void Car::AImove()
 	else
 	{
 		//Screen2D::Instance()->addTestValueToPrint(ColorName::RED, 25, 90, "accelerate", &(Screen2D::Instance()->roboto_modo_regular));
+		//if(v.length() < speedLimit)
 		accelerate();
 	}
 }

@@ -2,6 +2,7 @@
 
 StreetLamp::StreetLamp(long long ref) : MapObject(ref)
 {
+	highway = "street_lamp";
 	refs.push_back(ref);
 	_height = 5.0f;
 	size = 0.1;

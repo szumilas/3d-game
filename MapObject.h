@@ -31,6 +31,9 @@ public:
 	void select();
 	void deselect();
 
+	bool printTexture = false;
+	bool printObject = false;
+
 private:
 
 	Color uniqueColorBasedOnId{-1, -1, -1};

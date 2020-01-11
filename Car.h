@@ -73,6 +73,7 @@ public:
 	void setLocalV(const vector2D& newV) { v.x = newV.x; v.y = newV.y; }
 	void updateVelocity(float scale = 1.0f);
 	void updateAngularVelocity(float a) { angularVelocity = a; }
+	void setCarLimit(int newSpeedLimit) { speedLimit = newSpeedLimit; }
 
 private:
 
@@ -101,6 +102,9 @@ private:
 
 public:
 
+	bool prin3DtModel = false;
+	bool printWheels = false;
+
 private:
 
 	CarBrand carBrand;
@@ -123,6 +127,8 @@ private:
 	float vMax; //[m / s]
 	float resistanceRatio; //[kN / (m / s)^2]
 	float nm = 0.8; //[-]
+
+	int speedLimit = 999;
 
 	int drivingDir = 0;
 

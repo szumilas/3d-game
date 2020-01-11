@@ -2,6 +2,7 @@
 
 Tree::Tree(long long ref) : MapObject(ref)
 {
+	natural = "tree";
 	refs.push_back(ref);
 	_height = 0;
 	collidable = Collidable::point;

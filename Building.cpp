@@ -405,6 +405,9 @@ void Building::recalculateFinalGeometry()
 
 void Building::display()
 {
+	//if (!printObject)
+	//	return;
+
 	if (!alreadyPrinted)
 	{
 		alreadyPrinted = true;
@@ -421,7 +424,10 @@ void Building::display()
 			auto* polygon = &polygons[conditionalPolygon.idPolygon];
 			
 
-			glBindTexture(GL_TEXTURE_2D, polygon->idTexture);
+			//if (printTexture)
+				glBindTexture(GL_TEXTURE_2D, polygon->idTexture);
+			//else
+			//	glBindTexture(GL_TEXTURE_2D, TextureManager::Instance()->textures[static_cast<int>(Textures::no_texture)].idTexture);
 
 			glBegin(GL_POLYGON);
 			glColor3f(polygon->color.red, polygon->color.green, polygon->color.blue);

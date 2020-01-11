@@ -243,8 +243,8 @@ public:
 
 	static std::vector<std::vector<std::unique_ptr<MapObject>*>*> getCollidableObjectsInPosition(const Point& position);
 
-	void showMapEditorPanel() { mapEditorPanelVisible = true; }
-	void hideMapEditorPanel() { mapEditorPanelVisible = false; }
+	void showMapEditorPanel() { mapEditorPanelVisible = true; glutSetCursor(GLUT_CURSOR_RIGHT_ARROW); showCursors(); }
+	void hideMapEditorPanel() { mapEditorPanelVisible = false; glutSetCursor(GLUT_CURSOR_NONE); hideCursors(); }
 
 	void showCursors() { cursorsVisible = true; }
 	void hideCursors() { cursorsVisible = false; }
@@ -268,6 +268,7 @@ private:
 	static void displayCurrentSpline();
 	static void recalculateAIPointsDistances();
 	static void addGroundAreas(std::vector<std::unique_ptr<MapObject>>& mapObjects);
+	static void updateScenery(MapObject& mapObject, float dist);
 
 public:
 
@@ -283,6 +284,9 @@ public:
 	static RaceTimer raceTimer;
 
 	static bool mapEditorPanelVisible;
+	static bool linesVisible;
+
+	static int trailerScenery;
 
 private:
 

@@ -469,6 +469,77 @@ void Game::Update()
 	}
 	else if (gameState == State::mapEditor)
 	{
+		/*
+		if (KeyboardManager::Instance()->checkKey('I'))
+		{
+			int speedLimit;
+			std::cin >> speedLimit;
+			MapContainer::Instance()->cars[0].setCarLimit(speedLimit);
+		}
+
+		if (KeyboardManager::Instance()->checkKey('0'))
+		{
+			MapContainer::Instance()->hideMapEditorPanel();
+		}
+		if (KeyboardManager::Instance()->checkKey('9'))
+		{
+			MapContainer::Instance()->showMapEditorPanel();
+		}
+
+		if (KeyboardManager::Instance()->checkKey('1'))
+		{
+			if(MapContainer::Instance()->trailerScenery % 2 == 0)
+				MapContainer::Instance()->trailerScenery++;
+		}
+		if (KeyboardManager::Instance()->checkKey('2'))
+		{
+			if (MapContainer::Instance()->trailerScenery % 2 == 1)
+				MapContainer::Instance()->trailerScenery++;
+		}
+
+		if (KeyboardManager::Instance()->checkKey('3'))
+		{
+			if (MapContainer::Instance()->trailerScenery % 2 == 0)
+				MapContainer::Instance()->trailerScenery--;
+		}
+		if (KeyboardManager::Instance()->checkKey('4'))
+		{
+			if (MapContainer::Instance()->trailerScenery % 2 == 1)
+				MapContainer::Instance()->trailerScenery--;
+		}
+
+		if (KeyboardManager::Instance()->checkKey('5'))
+		{
+			MapContainer::Instance()->trailerScenery = 0;
+
+			for (auto& object : MapManager::Instance()->mapObjects)
+			{
+				object->printObject = false;
+				object->printTexture = false;
+			}
+
+			MapContainer::Instance()->cars[0].prin3DtModel = false;
+			MapContainer::Instance()->cars[0].printWheels = false;
+			MapContainer::Instance()->linesVisible = true;
+		}
+
+		if (KeyboardManager::Instance()->checkKey('6'))
+		{
+			MapContainer::Instance()->trailerScenery = 100;
+
+			for (auto& object : MapManager::Instance()->mapObjects)
+			{
+				object->printObject = true;
+				object->printTexture = true;
+			}
+
+			MapContainer::Instance()->cars[0].prin3DtModel = true;
+			MapContainer::Instance()->cars[0].printWheels = true;
+			MapContainer::Instance()->linesVisible = false;
+		}
+		*/
+
+		
 		if (KeyboardManager::Instance()->checkKey('Q'))
 		{
 			MapContainer::Instance()->PlayCameraSpline();

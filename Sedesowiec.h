@@ -8,7 +8,7 @@ class Sedesowiec : public Building
 public:
 
 	Sedesowiec(MapObject& mapObject);
-	void display() { Object3D::display(); }
+	void display() { MapObject::display(); }
 
 private:
 

@@ -9,7 +9,7 @@ public:
 
 	PasazGrunwaldzki(MapObject& mapObject);
 	void calculateFinalGeometry();
-	void display() { Object3D::display(); }
+	void display() { MapObject::display(); }
 
 private:
 
