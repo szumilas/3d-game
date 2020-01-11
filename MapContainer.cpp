@@ -1647,6 +1647,7 @@ void MapContainer::PlayCameraSplineAroundCarZero(const Point& point)
 {
 	glutSetCursor(GLUT_CURSOR_NONE);
 	hideMapEditorPanel();
+	hideCursors();
 	if (!cars.empty())
 	{
 		CameraManager::Instance()->setCarZero(&cars[0]);
@@ -1823,12 +1824,25 @@ void MapContainer::AIPause(const Point& point)
 {
 	AIPathActive = false;
 	for (auto& car : MapContainer::Instance()->cars)
+	{
 		car.stop();
+	}
+	MapContainer::Instance()->raceTimer.resetTimer();
 	MapContainer::Instance()->raceTimer.beforeRace = true;
 }
 
 void MapContainer::AIPlay(const Point& point)
 {
+	MapContainer::Instance()->cars[0].setLocalV({ 50, 0 });
+	//MapContainer::Instance()->cars[0].updateAngularVelocity(-2);
+
+	//MapContainer::Instance()->cars[1].setLocalV({ 40, 0});
+
+	updateVelocityOfCars();
+
+	//MapContainer::Instance()->cars[0].setPosition({ MapContainer::Instance()->cars[0].position.x - 1, MapContainer::Instance()->cars[0].position.y - 1 }, MapContainer::Instance()->cars[1].rz);
+	//MapContainer::Instance()->cars[1].setPosition({0,0}, MapContainer::Instance()->cars[1].rz);
+
 	AIPathActive = true;
 	raceTimer.startTimer();
 	raceTimer.state = RaceTimer::WaitingToDisappear;
@@ -1911,8 +1925,8 @@ void MapContainer::displayAIPoints()
 
 void MapContainer::displayMapEditorPoints()
 {
-	if(!mapEditorPanelVisible)
-		return;
+	//if(!mapEditorPanelVisible)
+	//	return;
 
 	for (auto& extraObject : extraObjects)
 	{
@@ -2104,10 +2118,10 @@ void MapContainer::LoadRaceStartCameraPoints()
 void MapContainer::initCars()
 {
 	cars = {
-		Car(CarBrand::SubaruBRZ, 0, 0, true),
-		//Car(CarBrand::SuzukiVitara, -5, -5),
-		//Car(CarBrand::SubaruBRZ, -10, -10),
-		//Car(CarBrand::RollsRoycePhantom, -15, -15),
+		Car(CarBrand::SubaruBRZ, 0, 0, false),
+		//Car(CarBrand::VolkswagenGolf, -5, -5, true),
+		//Car(CarBrand::CitroenC3, -10, -10, true),
+		//Car(CarBrand::HondaJazz, -15, -15, true),
 		//Car(CarBrand::LamborghiniHuracan, -20, -20)
 	};
 
@@ -2176,4 +2190,20 @@ void MapContainer::updateRaceTimer()
 void MapContainer::displayRaceTimer()
 {
 	raceTimer.display();
+}
+
+void MapContainer::updateVelocityOfCars(float scale)
+{
+	for (auto& car : MapContainer::Instance()->cars)
+	{
+		car.updateVelocity(scale);
+	}
+}
+
+void MapContainer::ApplySpecialKey()
+{
+	//updateVelocityOfCars(0.5f);
+	std::swap(cars[0], cars[1]);
+	std::swap(cars[1], cars[2]);
+	std::swap(cars[2], cars[3]);
 }
